@@ -10,10 +10,10 @@
     "min": "9.22",
     "max": "9.25",
     "wa": "9.23",
-    "vol": "76.81"
+    "vol": "777"
   },
   "liquidity": {
-    "current": "50",
+    "current": "60",
     "previous": "59.18",
     "labels": [
       "4-Jun",
