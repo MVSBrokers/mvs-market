@@ -7,93 +7,63 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;min-height:100vh}
-#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#060f1e,#0d1e38)}
-.card{background:#0d1e38;border:1px solid #c8a84b;border-radius:12px;padding:44px 36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.card-logo{text-align:center;margin-bottom:22px;font-size:28px}
-.card h2{color:#c8a84b;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-bottom:22px}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:10px;color:#7fa3c8;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
-.field input{width:100%;background:#091525;border:1px solid #1a3050;border-radius:6px;padding:10px 13px;color:#d4e4f4;font-size:13px;outline:none;transition:border-color .2s}
-.field input:focus{border-color:#c8a84b}
-.login-btn{width:100%;background:#c8a84b;color:#0a1628;border:none;border-radius:6px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px;letter-spacing:.5px;transition:background .2s}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;min-height:100vh}
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#060f1e,#0d1e38)}
+.login-card{background:#0d1e38;border:1px solid #c8a84b;border-radius:12px;padding:44px 36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.login-card h2{color:#c8a84b;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-bottom:20px}
+.login-card .field{margin-bottom:14px}
+.login-card .field label{display:block;font-size:10px;color:#7fa3c8;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
+.login-card .field input{width:100%;background:#091525;border:1px solid #1a3050;border-radius:6px;padding:10px;color:#d4e4f4;font-size:13px;outline:none}
+.login-card .field input:focus{border-color:#c8a84b}
+.login-btn{width:100%;background:#c8a84b;color:#0a1628;border:none;border-radius:6px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px;transition:background .2s}
 .login-btn:hover{background:#e0c060}
-.err{color:#e87a4d;font-size:11px;text-align:center;margin-top:8px;min-height:16px}
-.foot{text-align:center;font-size:10px;color:#2a4060;margin-top:20px}
+.login-err{color:#e87a4d;font-size:11px;text-align:center;margin-top:8px}
 
-#app{display:none;padding:10px;min-height:100vh}
-.hdr{display:flex;justify-content:space-between;align-items:center;background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:8px 14px;margin-bottom:10px}
+#dashboard{display:none;padding:10px;min-height:100vh}
+.hdr{display:flex;justify-content:space-between;align-items:center;background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:10px 14px;margin-bottom:12px}
 .hdr-left{display:flex;align-items:center;gap:10px}
-.logo-circle{width:44px;height:44px;background:#c8a84b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0a1628;flex-shrink:0}
+.logo{width:44px;height:44px;background:#c8a84b;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0a1628}
 .hdr-title h1{font-size:16px;font-weight:700;color:#fff}
 .hdr-title p{font-size:11px;color:#7fa3c8}
-.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-right{display:flex;gap:8px;align-items:center}
 .hdr-date{font-size:12px;color:#c8a84b;font-weight:700}
-.btn-ghost{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:5px 10px;font-size:11px;cursor:pointer;transition:all .2s}
-.btn-ghost:hover{border-color:#c8a84b;color:#c8a84b}
+.btn{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:5px 10px;font-size:11px;cursor:pointer}
+.btn:hover{border-color:#c8a84b;color:#c8a84b}
 .badge{background:#1a3a1a;border:1px solid #2a5a2a;color:#6dd4a0;border-radius:10px;padding:2px 10px;font-size:10px;font-weight:700}
-
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .panel{background:#0d1e38;border:1px solid #1a3050;border-radius:7px;padding:10px 12px}
 .ptitle{font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:1px;text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid #1a3050;margin-bottom:8px}
-table.t{width:100%;border-collapse:collapse;font-size:12px}
-table.t th{color:#7fa3c8;font-weight:500;text-align:right;padding:3px 6px;font-size:10px}
-table.t th:first-child{text-align:left}
-table.t td{padding:4px 6px;text-align:right;color:#d4e4f4;border-top:1px solid #1a3050}
-table.t td:first-child{text-align:left;color:#7fa3c8;font-size:11px}
-table.t tr:hover td{background:#132540}
+table{width:100%;border-collapse:collapse;font-size:12px}
+table th{color:#7fa3c8;font-weight:500;text-align:right;padding:3px 6px;font-size:10px}
+table th:first-child{text-align:left}
+table td{padding:4px 6px;text-align:right;color:#d4e4f4;border-top:1px solid #1a3050}
+table td:first-child{text-align:left;color:#7fa3c8;font-size:11px}
 .liq-box{display:flex;justify-content:space-around;background:#091525;border-radius:5px;padding:8px;margin-top:8px}
 .liq-item{text-align:center}
 .liq-label{font-size:10px;color:#7fa3c8;margin-bottom:2px}
 .liq-val{font-size:16px;font-weight:700;color:#4da3e8}
-table.sw{width:100%;border-collapse:collapse;font-size:12px}
-table.sw th{color:#7fa3c8;font-size:10px;padding:3px 8px;text-align:right;border-bottom:1px solid #1a3050}
-table.sw th:first-child{text-align:left}
-table.sw td{padding:4px 8px;text-align:right;color:#d4e4f4;border-top:1px solid #1a3050}
-table.sw td:first-child{text-align:left;color:#7fa3c8}
-table.sw tr:hover td{background:#132540}
-table.tb{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed}
-table.tb th{color:#7fa3c8;font-size:10px;padding:3px 5px;text-align:right;border-bottom:1px solid #1a3050}
-table.tb th:first-child{text-align:left;width:44%}
-table.tb td{padding:3px 5px;text-align:right;color:#d4e4f4;border-top:1px solid #1a3050;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-table.tb td:first-child{color:#c8a84b;font-size:10px;text-align:left}
-table.tb tr:hover td{background:#132540}
-table.bd{width:100%;border-collapse:collapse;font-size:9.5px;table-layout:fixed}
-table.bd th{background:#091525;color:#7fa3c8;padding:4px 3px;text-align:center;font-size:9px;border-bottom:1px solid #1a3050}
-table.bd th:first-child{width:18%;text-align:left}
-table.bd td{padding:3px;text-align:center;color:#d4e4f4;border-top:1px solid #1a3050;white-space:nowrap;overflow:hidden}
-table.bd td:first-child{text-align:left;color:#c8a84b;font-size:9px}
-table.bd tr:hover td{background:#132540}
 .exec{background:#0d1e38;border:1px solid #1a3050;border-radius:7px;padding:10px 16px;margin-bottom:10px}
 .exec ul{list-style:disc;padding-left:20px;font-size:13px;color:#d4e4f4;line-height:2.3}
 .exec ul li strong{color:#fff}
-.bond-legend{display:flex;flex-wrap:wrap;gap:5px 10px;margin-top:5px}
-.bond-legend span{display:flex;align-items:center;gap:4px;font-size:10px;color:#7fa3c8}
-.bond-legend i{display:inline-block;width:16px;height:3px;border-radius:2px}
-.loading{text-align:center;color:#7fa3c8;font-size:13px;padding:40px}
 @media(max-width:800px){.grid2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login-page">
-  <div class="card">
-    <div class="card-logo">💹</div>
-    <h2>MVS Money Brokers<br>Market Report — Secure Access</h2>
-    <div class="field"><label>Username</label><input id="u" type="text" placeholder="Username"></div>
-    <div class="field"><label>Password</label><input id="p" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')login()"></div>
-    <button class="login-btn" onclick="login()">Sign In</button>
-    <div class="err" id="err"></div>
-    <div class="foot">Restricted access — authorised personnel only</div>
+<div id="login">
+  <div class="login-card">
+    <h2>MVS Money Brokers<br>Daily Market Report</h2>
+    <div class="field"><label>Username</label><input id="user" type="text" placeholder="Username"></div>
+    <div class="field"><label>Password</label><input id="pass" type="password" placeholder="Password" onkeydown="if(event.key==='Enter')signin()"></div>
+    <button class="login-btn" onclick="signin()">Sign In</button>
+    <div class="login-err" id="err"></div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="app">
+<div id="dashboard">
   <div class="hdr">
     <div class="hdr-left">
-      <div class="logo-circle">MVS</div>
+      <div class="logo">MVS</div>
       <div class="hdr-title">
         <h1>Daily Market Report</h1>
         <p>FX · Government Securities · Money Markets</p>
@@ -101,229 +71,138 @@ table.bd tr:hover td{background:#132540}
     </div>
     <div class="hdr-right">
       <span class="badge">LIVE</span>
-      <div class="hdr-date" id="hdr-date">—</div>
-      <button class="btn-ghost" onclick="logout()">Sign Out</button>
+      <div class="hdr-date" id="dateDisplay">—</div>
+      <button class="btn" onclick="signout()">Sign Out</button>
     </div>
   </div>
 
-  <div id="loading" class="loading">⏳ Loading market data…</div>
-  <div id="content" style="display:none">
-
-    <!-- Row 1 -->
-    <div class="grid2">
-      <div class="panel">
-        <div class="ptitle">Money &amp; Repo Market</div>
-        <table class="t">
-          <thead><tr><th></th><th>Call Market</th><th>Repo Market</th></tr></thead>
-          <tbody>
-            <tr><td>Min Rate (%)</td><td id="cm-min">—</td><td id="rm-min">—</td></tr>
-            <tr><td>Max Rate (%)</td><td id="cm-max">—</td><td id="rm-max">—</td></tr>
-            <tr><td>W.A Yield (%)</td><td id="cm-wa">—</td><td id="rm-wa">—</td></tr>
-            <tr><td>Gross Vol (Rs.Bn)</td><td id="cm-vol">—</td><td id="rm-vol">—</td></tr>
-          </tbody>
-        </table>
-        <div class="liq-box">
-          <div class="liq-item"><div class="liq-label">Liquidity Current (Rs.Bn)</div><div class="liq-val" id="liq-cur">—</div></div>
-          <div class="liq-item"><div class="liq-label">Previous (Rs.Bn)</div><div class="liq-val" id="liq-prev">—</div></div>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="ptitle">Market Liquidity Trend</div>
-        <div style="position:relative;height:185px"><canvas id="liqChart"></canvas></div>
+  <div class="grid2">
+    <div class="panel">
+      <div class="ptitle">Money &amp; Repo Market</div>
+      <table>
+        <tr><td>Call Min (%)</td><td id="cmmin">9.15</td><td id="rmmin">9.22</td></tr>
+        <tr><td>Call Max (%)</td><td id="cmmax">9.25</td><td id="rmmax">9.25</td></tr>
+        <tr><td>Call W.A (%)</td><td id="cmwa">9.19</td><td id="rmwa">9.23</td></tr>
+        <tr><td>Vol (Rs.Bn)</td><td id="cmvol">41</td><td id="rmvol">76.81</td></tr>
+      </table>
+      <div class="liq-box">
+        <div class="liq-item"><div class="liq-label">Current (Rs.Bn)</div><div class="liq-val" id="liqcur">57.38</div></div>
+        <div class="liq-item"><div class="liq-label">Previous (Rs.Bn)</div><div class="liq-val" id="liqprev">59.18</div></div>
       </div>
     </div>
-
-    <!-- Row 2 -->
-    <div class="grid2">
-      <div class="panel">
-        <div class="ptitle">FX Swaps — per day</div>
-        <table class="sw">
-          <thead><tr><th>Tenor</th><th>Sell/Buy</th><th>Buy/Sell</th></tr></thead>
-          <tbody id="swaps-body"></tbody>
-        </table>
-      </div>
-      <div class="panel">
-        <div class="ptitle">USD/LKR Movement</div>
-        <div style="position:relative;height:205px"><canvas id="fxChart"></canvas></div>
-      </div>
+    <div class="panel">
+      <div class="ptitle">Market Liquidity</div>
+      <canvas id="liqChart" style="max-height:200px"></canvas>
     </div>
+  </div>
 
-    <!-- Row 3 -->
-    <div class="panel" style="margin-bottom:10px">
-      <div class="ptitle">Government Securities</div>
-      <div class="grid2" style="margin-bottom:0">
-        <div>
-          <div style="text-align:center;font-size:12px;font-weight:700;color:#d4e4f4;margin-bottom:7px;text-decoration:underline;text-underline-offset:3px">Treasury Bills</div>
-          <div style="position:relative;height:140px;margin-bottom:8px"><canvas id="tbillChart"></canvas></div>
-          <table class="tb">
-            <thead><tr><th>Auction Date</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
-            <tbody id="tbill-body"></tbody>
-          </table>
-        </div>
-        <div>
-          <div style="text-align:center;font-size:12px;font-weight:700;color:#d4e4f4;margin-bottom:7px;text-decoration:underline;text-underline-offset:3px">Treasury Bonds</div>
-          <div style="overflow-x:auto"><table class="bd"><thead id="bond-head"></thead><tbody id="bond-body"></tbody></table></div>
-          <div id="bond-legend" class="bond-legend"></div>
-          <div style="position:relative;height:180px;margin-top:4px"><canvas id="bondChart"></canvas></div>
-        </div>
-      </div>
+  <div class="grid2">
+    <div class="panel">
+      <div class="ptitle">FX Swaps (per day)</div>
+      <table>
+        <tr><td>1W</td><td>6.00</td><td>6.50</td></tr>
+        <tr><td>1M</td><td>5.75</td><td>6.25</td></tr>
+        <tr><td>3M</td><td>5.50</td><td>6.00</td></tr>
+        <tr><td>6M</td><td>5.50</td><td>6.00</td></tr>
+        <tr><td>1Y</td><td>5.15</td><td>6.00</td></tr>
+      </table>
     </div>
+    <div class="panel">
+      <div class="ptitle">USD/LKR</div>
+      <canvas id="fxChart" style="max-height:200px"></canvas>
+    </div>
+  </div>
 
-    <!-- Exec Summary -->
-    <div class="exec">
-      <div class="ptitle">Executive Summary</div>
-      <ul id="exec-list"></ul>
-    </div>
+  <div class="exec">
+    <div class="ptitle">Executive Summary</div>
+    <ul>
+      <li>USD/LKR Closed at <strong id="exusd">332.00/333.00</strong></li>
+      <li>Liquidity <strong id="exdir">decreased</strong> by <strong id="exdelta">1.80</strong> bn</li>
+    </ul>
+  </div>
 
-    <div style="text-align:center;font-size:10px;color:#2a4060;padding-bottom:14px">
-      MVS Money Brokers Limited — Confidential. For authorised recipients only.
-    </div>
+  <div style="text-align:center;font-size:10px;color:#2a4060;padding-bottom:14px">
+    MVS Money Brokers Limited — Confidential
   </div>
 </div>
 
 <script>
-// ════════════════════════════════
-// CONFIG — change these if needed
-// ════════════════════════════════
-const DASH_USER = 'MVSmoney';
-const DASH_PASS = 'MVS1234@';
+// ═══════════════════════════════════════════
+// SIMPLE DASHBOARD — NO EXTERNAL DATA LOADING
+// ═══════════════════════════════════════════
 
-// ⚠️ IMPORTANT: Replace with YOUR GitHub username and repo name
-const DATA_URL = 'https://YOUR-GITHUB-USERNAME.github.io/mvs-market/data.json';
-// Example: 'https://mvsmoneybrokers.github.io/mvs-market/data.json'
+const USER = 'MVSmoney';
+const PASS = 'MVS1234@';
 
-const BOND_COLORS = ['#4da3e8','#c8a84b','#6dd4a0','#e87a4d','#c06de8','#e84d7a','#4de8d4','#e8d44d','#7a7ae8','#a8e87a','#4de883','#e84dc8'];
+// Sample data — update this manually or from editor
+const data = {
+  date: '11th June 2026',
+  callMarket: {min:'9.15', max:'9.25', wa:'9.19', vol:'41'},
+  repoMarket: {min:'9.22', max:'9.25', wa:'9.23', vol:'76.81'},
+  liq: {cur:'57.38', prev:'59.18', labels:['4-Jun','5-Jun','6-Jun','9-Jun','10-Jun'], vals:[111.94,105.04,63.25,59.18,57.38]},
+  fx: {labels:['2-Jun','3-Jun','4-Jun','5-Jun','6-Jun','8-Jun','10-Jun'], vals:[332.50,334.50,337.00,336.07,335.00,337.15,332.00], close:'332.00/333.00'},
+  exec: {usd:'332.00/333.00', dir:'decreased', delta:'1.80'}
+};
 
-// ── AUTH ──
-function login(){
-  const u=document.getElementById('u').value.trim();
-  const p=document.getElementById('p').value;
-  if(u===DASH_USER && p===DASH_PASS){
-    sessionStorage.setItem('mvs_d','1');
-    document.getElementById('login-page').style.display='none';
-    document.getElementById('app').style.display='block';
-    loadData();
+function signin(){
+  const u = document.getElementById('user').value.trim();
+  const p = document.getElementById('pass').value;
+  if(u === USER && p === PASS){
+    sessionStorage.setItem('mvs_auth', '1');
+    showDash();
   } else {
-    document.getElementById('err').textContent='Incorrect username or password.';
+    document.getElementById('err').textContent = 'Invalid credentials';
   }
 }
-function logout(){
-  sessionStorage.removeItem('mvs_d');
+
+function signout(){
+  sessionStorage.removeItem('mvs_auth');
   location.reload();
 }
-if(sessionStorage.getItem('mvs_d')==='1'){
-  document.getElementById('login-page').style.display='none';
-  document.getElementById('app').style.display='block';
-  loadData();
+
+function showDash(){
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  render();
 }
 
-// ── LOAD DATA FROM GITHUB ──
-async function loadData(){
-  try{
-    // Add cache-busting so clients always get fresh data
-    const res = await fetch(DATA_URL + '?v=' + Date.now());
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    const d = await res.json();
-    renderAll(d);
-  } catch(e){
-    document.getElementById('loading').innerHTML =
-      '⚠️ Could not load data. Check your DATA_URL setting.<br><small style="color:#e87a4d">' + e.message + '</small>';
+function render(){
+  document.getElementById('dateDisplay').textContent = data.date;
+  document.getElementById('cmmin').textContent = data.callMarket.min;
+  document.getElementById('cmmax').textContent = data.callMarket.max;
+  document.getElementById('cmwa').textContent = data.callMarket.wa;
+  document.getElementById('cmvol').textContent = data.callMarket.vol;
+  document.getElementById('rmmin').textContent = data.repoMarket.min;
+  document.getElementById('rmmax').textContent = data.repoMarket.max;
+  document.getElementById('rmwa').textContent = data.repoMarket.wa;
+  document.getElementById('rmvol').textContent = data.repoMarket.vol;
+  document.getElementById('liqcur').textContent = data.liq.cur;
+  document.getElementById('liqprev').textContent = data.liq.prev;
+  document.getElementById('exusd').textContent = data.exec.usd;
+  document.getElementById('exdir').textContent = data.exec.dir;
+  document.getElementById('exdelta').textContent = data.exec.delta;
+  
+  // Charts
+  if(document.getElementById('liqChart').getContext){
+    new Chart(document.getElementById('liqChart'), {
+      type:'line',
+      data:{labels:data.liq.labels, datasets:[{label:'Rs.Bn', data:data.liq.vals, borderColor:'#4da3e8', fill:true, backgroundColor:'rgba(77,163,232,0.1)', tension:0.3}]},
+      options:{responsive:true, maintainAspectRatio:true, plugins:{legend:{display:false}}, scales:{y:{ticks:{color:'#7fa3c8'}, grid:{color:'rgba(26,48,80,.5)'}}, x:{ticks:{color:'#7fa3c8'}, grid:{color:'rgba(26,48,80,.5)'}}}}
+    });
+  }
+  
+  if(document.getElementById('fxChart').getContext){
+    new Chart(document.getElementById('fxChart'), {
+      type:'line',
+      data:{labels:data.fx.labels, datasets:[{label:'LKR', data:data.fx.vals, borderColor:'#c8a84b', fill:true, backgroundColor:'rgba(200,168,75,0.1)', tension:0.3}]},
+      options:{responsive:true, maintainAspectRatio:true, plugins:{legend:{display:false}}, scales:{y:{ticks:{color:'#7fa3c8'}, grid:{color:'rgba(26,48,80,.5)'}}, x:{ticks:{color:'#7fa3c8'}, grid:{color:'rgba(26,48,80,.5)'}}}}
+    });
   }
 }
 
-// ── RENDER ALL ──
-function renderAll(d){
-  document.getElementById('loading').style.display='none';
-  document.getElementById('content').style.display='block';
-
-  // Header date
-  document.getElementById('hdr-date').textContent = d.date || '—';
-
-  // Money market
-  const cm=d.callMarket||{}, rm=d.repoMarket||{};
-  set('cm-min',cm.min); set('rm-min',rm.min);
-  set('cm-max',cm.max); set('rm-max',rm.max);
-  set('cm-wa', cm.wa);  set('rm-wa', rm.wa);
-  set('cm-vol',cm.vol); set('rm-vol',rm.vol);
-
-  // Liquidity
-  const liq=d.liquidity||{};
-  set('liq-cur',liq.current); set('liq-prev',liq.previous);
-
-  // FX Swaps table
-  const swaps=d.fxSwaps||{};
-  const tenors=[['1w','1 Week'],['1m','1 Month'],['2m','2 Months'],['3m','3 Months'],['6m','6 Months'],['1y','1 Year']];
-  document.getElementById('swaps-body').innerHTML = tenors.map(([k,label])=>{
-    const s=swaps[k]||{};
-    return `<tr><td>${label}</td><td>${s.sell||'—'}</td><td>${s.buy||'—'}</td></tr>`;
-  }).join('');
-
-  // T-Bills
-  const tbills=d.tbills||[];
-  document.getElementById('tbill-body').innerHTML = tbills.map(r=>
-    `<tr><td>${r.date}</td><td>${r.m3}</td><td>${r.m6}</td><td>${r.m12}</td></tr>`
-  ).join('') || '<tr><td colspan="4" style="text-align:center;color:#3a5270">No data</td></tr>';
-
-  // T-Bonds
-  const bonds=d.bonds||{};
-  const bHeaders=bonds.headers||[];
-  const bRows=bonds.rows||[];
-  document.getElementById('bond-head').innerHTML =
-    '<tr>' + ['Bond',...bHeaders].map(h=>`<th>${h}</th>`).join('') + '</tr>';
-  document.getElementById('bond-body').innerHTML = bRows.map(r=>
-    `<tr><td>${r.bond}</td>${(r.values||[]).map(v=>`<td>${v}</td>`).join('')}</tr>`
-  ).join('');
-
-  // Exec summary
-  const ex=d.execSummary||{};
-  document.getElementById('exec-list').innerHTML = `
-    <li>USD/LKR Closed at <strong>${ex.usdlkr||'—'}</strong></li>
-    <li>System liquidity <strong>${ex.liqDir||'—'}</strong> by <strong>${ex.liqDelta||'—'}</strong> bn.</li>
-  `;
-
-  // Charts
-  buildLineChart('liqChart', liq.labels||[], liq.values||[], '#4da3e8', 'Rs.Bn', true);
-  const fx=d.usdlkr||{};
-  buildLineChart('fxChart', fx.labels||[], fx.values||[], '#c8a84b', 'LKR', false, 329, 342);
-  buildTbillChart(tbills);
-  buildBondChart(bHeaders, bRows);
-}
-
-function set(id,v){ const el=document.getElementById(id); if(el) el.textContent=v||'—'; }
-
-// ── CHARTS ──
-const charts={};
-function buildLineChart(id, labels, data, color, unit, fill, mn, mx){
-  const ctx=document.getElementById(id).getContext('2d');
-  if(charts[id]) charts[id].destroy();
-  const cfg={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.raw+' '+unit}}},scales:{x:{ticks:{color:'#7fa3c8',font:{size:9}},grid:{color:'rgba(26,48,80,.5)'}},y:{ticks:{color:'#7fa3c8',font:{size:9}},grid:{color:'rgba(26,48,80,.5)'}}}}; 
-  if(mn!==undefined){cfg.scales.y.suggestedMin=mn;cfg.scales.y.suggestedMax=mx;}
-  charts[id]=new Chart(ctx,{type:'line',data:{labels,datasets:[{data,borderColor:color,backgroundColor:fill?color.replace(')',',0.1)').replace('rgb','rgba'):'transparent',tension:0.35,pointRadius:3,borderWidth:2,fill}]},options:cfg});
-}
-
-function buildTbillChart(tbills){
-  const rows=[...tbills].reverse();
-  const labels=rows.map(r=>r.date);
-  const ctx=document.getElementById('tbillChart').getContext('2d');
-  if(charts.tbill) charts.tbill.destroy();
-  charts.tbill=new Chart(ctx,{type:'line',data:{labels,datasets:[
-    {label:'3M',data:rows.map(r=>parseFloat(r.m3)),borderColor:'#4da3e8',tension:0.2,pointRadius:2,borderWidth:1.5,fill:false},
-    {label:'6M',data:rows.map(r=>parseFloat(r.m6)),borderColor:'#c8a84b',tension:0.2,pointRadius:2,borderWidth:1.5,fill:false},
-    {label:'12M',data:rows.map(r=>parseFloat(r.m12)),borderColor:'#6dd4a0',tension:0.2,pointRadius:2,borderWidth:1.5,fill:false}
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#7fa3c8',font:{size:9},boxWidth:8,padding:5}}},scales:{x:{ticks:{color:'#7fa3c8',font:{size:9},maxRotation:35},grid:{color:'rgba(26,48,80,.5)'}},y:{ticks:{color:'#7fa3c8',font:{size:9}},grid:{color:'rgba(26,48,80,.5)'}}}}}); 
-}
-
-function buildBondChart(headers, rows){
-  const datasets=rows.map((r,i)=>({
-    label:r.bond,
-    data:(r.values||[]).map(v=>{ const p=parseFloat((v||'').split('/')[0]); return isNaN(p)?null:p; }),
-    borderColor:BOND_COLORS[i%BOND_COLORS.length],
-    tension:0.2,pointRadius:2,borderWidth:1.5,fill:false
-  }));
-  const ctx=document.getElementById('bondChart').getContext('2d');
-  if(charts.bond) charts.bond.destroy();
-  charts.bond=new Chart(ctx,{type:'line',data:{labels:headers,datasets},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#7fa3c8',font:{size:9}},grid:{color:'rgba(26,48,80,.5)'}},y:{ticks:{color:'#7fa3c8',font:{size:9}},grid:{color:'rgba(26,48,80,.5)'}}}}});
-  document.getElementById('bond-legend').innerHTML=datasets.map((d,i)=>`<span><i style="background:${BOND_COLORS[i%BOND_COLORS.length]}"></i>${d.label}</span>`).join('');
+// Check if logged in
+if(sessionStorage.getItem('mvs_auth') === '1'){
+  showDash();
 }
 </script>
 </body>
