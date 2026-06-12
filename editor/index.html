@@ -362,79 +362,136 @@ function exportJSON(){
   showToast('✓ data.json downloaded! Now upload it to GitHub.');
 }
 
-// ── EXCEL IMPORT ──
+// ── EXCEL IMPORT - AUTO DETECT ALL SHEETS ──
 function importExcel(event){
   const file=event.target.files[0]; if(!file) return;
   const reader=new FileReader();
   reader.onload=function(e){
     try{
       const wb=XLSX.read(e.target.result,{type:'binary'});
-      const ws=wb.Sheets[wb.SheetNames[0]];
-      const d=XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
-      applyExcel(d);
-      showToast('✓ Excel imported! Review data then click Save data.json');
-    }catch(err){ showToast('⚠ Error: '+err.message); }
+      console.log('Found sheets:', wb.SheetNames);
+      
+      // Read all sheets (user can have 1-5 sheets, we handle all)
+      const allSheets = [];
+      wb.SheetNames.forEach(sheetName => {
+        const ws = wb.Sheets[sheetName];
+        const data = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+        allSheets.push(data);
+      });
+      
+      applyExcelAuto(allSheets);
+      showToast('✓ Excel imported successfully! Review and click Save data.json');
+    }catch(err){ 
+      showToast('⚠ Error reading Excel: '+err.message);
+      console.error(err);
+    }
     event.target.value='';
   };
   reader.readAsBinaryString(file);
 }
 
-function applyExcel(d){
-  function find(label){ return d.find(r=>String(r[0]||'').trim().toLowerCase()===label.toLowerCase()); }
-  function sv(id,val){ if(val!==undefined&&val!=='') document.getElementById(id).value=String(val); }
-
-  const dateR=find('Date'); if(dateR) sv('f-date',dateR[1]);
-  const cmMinR=find('Call Min Rate'); if(cmMinR){sv('cm-min',cmMinR[1]);sv('rm-min',cmMinR[2]);}
-  const cmMaxR=find('Call Max Rate'); if(cmMaxR){sv('cm-max',cmMaxR[1]);sv('rm-max',cmMaxR[2]);}
-  const cmWaR=find('Call WA Yield'); if(cmWaR){sv('cm-wa',cmWaR[1]);sv('rm-wa',cmWaR[2]);}
-  const cmVoR=find('Call Vol'); if(cmVoR){sv('cm-vol',cmVoR[1]);sv('rm-vol',cmVoR[2]);}
-  const liqR=find('Liquidity Cur'); if(liqR){sv('liq-cur',liqR[1]);sv('liq-prev',liqR[2]);}
-
-  // Liquidity trend
-  const lvR=find('Liq Values'), llR=find('Liq Labels');
-  if(lvR&&llR){
-    document.getElementById('liq-rows').innerHTML='';
-    const vals=lvR.slice(1).filter(v=>v!==''), lbls=llR.slice(1).filter(v=>v!=='');
-    vals.forEach((v,i)=>addRow('liq-rows',[lbls[i]||'',v]));
+function applyExcelAuto(sheets){
+  // Use first sheet for main data
+  const d = sheets[0] || [];
+  
+  function find(data, label){ 
+    if(!data) return null;
+    return data.find(r=>String(r[0]||'').trim().toLowerCase().includes(label.toLowerCase()));
+  }
+  function sv(id,val){ 
+    if(val!==undefined&&val!=='') {
+      const el = document.getElementById(id);
+      if(el) el.value=String(val);
+    }
   }
 
-  // FX Swaps
-  [['1w','FX 1W'],['1m','FX 1M'],['2m','FX 2M'],['3m','FX 3M'],['6m','FX 6M'],['1y','FX 1Y']].forEach(([k,lbl])=>{
-    const r=find(lbl); if(r){sv('sw-'+k+'-s',r[1]);sv('sw-'+k+'-b',r[2]);}
+  // ── Parse Money Market & Basic Info ──
+  console.log('Processing sheet 1:', d.length, 'rows');
+  
+  d.forEach(row => {
+    if(!row || !row[0]) return;
+    const label = String(row[0]).trim().toLowerCase();
+    
+    // Date
+    if(label.includes('date') && !label.includes('auction')) sv('f-date', row[1]);
+    
+    // Call Market
+    if(label.includes('call') && label.includes('min')) { sv('cm-min', row[1]); sv('rm-min', row[2]); }
+    if(label.includes('call') && label.includes('max')) { sv('cm-max', row[1]); sv('rm-max', row[2]); }
+    if(label.includes('call') && label.includes('w.a')) { sv('cm-wa', row[1]); sv('rm-wa', row[2]); }
+    if(label.includes('call') && label.includes('gross')) { sv('cm-vol', row[1]); sv('rm-vol', row[2]); }
+    
+    // Repo Market
+    if(label.includes('repo') && label.includes('min')) { sv('rm-min', row[1]); }
+    if(label.includes('repo') && label.includes('max')) { sv('rm-max', row[1]); }
+    if(label.includes('repo') && label.includes('w.a')) { sv('rm-wa', row[1]); }
+    if(label.includes('repo') && label.includes('volume')) { sv('rm-vol', row[1]); }
+    
+    // Liquidity
+    if(label.includes('liquidity') && label.includes('current')) { sv('liq-cur', row[1]); sv('liq-prev', row[2]); }
+    if(label.includes('liquidity') && (label.includes('previous') || label.includes('prev'))) { sv('liq-prev', row[1]); }
+    
+    // FX Swaps
+    if(label.includes('1 week') || label.includes('1w')) { sv('sw-1w-s', row[1]); sv('sw-1w-b', row[2]); }
+    if(label.includes('1 month') || label.includes('1m')) { sv('sw-1m-s', row[1]); sv('sw-1m-b', row[2]); }
+    if(label.includes('2 month') || label.includes('2m')) { sv('sw-2m-s', row[1]); sv('sw-2m-b', row[2]); }
+    if(label.includes('3 month') || label.includes('3m')) { sv('sw-3m-s', row[1]); sv('sw-3m-b', row[2]); }
+    if(label.includes('6 month') || label.includes('6m')) { sv('sw-6m-s', row[1]); sv('sw-6m-b', row[2]); }
+    if(label.includes('1 year') || label.includes('1y')) { sv('sw-1y-s', row[1]); sv('sw-1y-b', row[2]); }
+    
+    // USD/LKR
+    if(label.includes('usd/lkr') && label.includes('close')) { sv('fx-close', row[1]); }
+    
+    // Executive Summary
+    if(label.includes('exec') && label.includes('usd')) { sv('ex-usdlkr', row[1]); }
+    if(label.includes('exec') && label.includes('liq')) { sv('ex-delta', row[1]); }
+    if(label.includes('exec') && label.includes('dir')) { 
+      const sel = document.getElementById('ex-dir'); 
+      if(sel) sel.value = String(row[1]).toLowerCase().includes('inc') ? 'increased' : 'decreased';
+    }
   });
 
-  // USD/LKR
-  const uvR=find('USDLKR Values'), ulR=find('USDLKR Labels');
-  if(uvR&&ulR){
-    document.getElementById('fx-rows').innerHTML='';
-    const vals=uvR.slice(1).filter(v=>v!==''), lbls=ulR.slice(1).filter(v=>v!=='');
-    vals.forEach((v,i)=>addRow('fx-rows',[lbls[i]||'',v]));
-  }
-  const fxClR=find('FX Close'); if(fxClR) sv('fx-close',fxClR[1]);
-
-  // T-Bills
-  const tbRows=d.filter(r=>String(r[0]||'').startsWith('TBILL_'));
-  if(tbRows.length){
-    document.getElementById('tbill-rows').innerHTML='';
-    tbRows.forEach(r=>addRow('tbill-rows',[r[1],r[2],r[3],r[4]]));
+  // ── Parse T-Bills (find TBILL rows) ──
+  const tbillRows = d.filter(r => String(r[0]||'').startsWith('TBILL'));
+  if(tbillRows.length > 0) {
+    document.getElementById('tbill-rows').innerHTML = '';
+    tbillRows.forEach(r => {
+      if(r[1] && r[2]) addRow('tbill-rows', [r[1], r[2], r[3]||'', r[4]||'']);
+    });
   }
 
-  // T-Bonds headers
-  const bhR=find('Bond Headers');
-  if(bhR){ bondHeaders=bhR.slice(1,7).map(String); renderBondHeaders(); }
-
-  // T-Bond rows
-  const bdRows=d.filter(r=>String(r[0]||'').startsWith('BOND_'));
-  if(bdRows.length){
-    document.getElementById('bond-rows').innerHTML='';
-    bdRows.forEach(r=>addRow('bond-rows',[r[1],r[2],r[3],r[4],r[5],r[6],r[7]]));
+  // ── Parse T-Bonds (find BOND rows) ──
+  const bondRows = d.filter(r => String(r[0]||'').startsWith('BOND'));
+  if(bondRows.length > 0) {
+    document.getElementById('bond-rows').innerHTML = '';
+    bondRows.forEach(r => {
+      if(r[1]) addRow('bond-rows', [r[1], r[2]||'', r[3]||'', r[4]||'', r[5]||'', r[6]||'', r[7]||'']);
+    });
   }
 
-  // Exec
-  const exU=find('Exec USDLKR'); if(exU) sv('ex-usdlkr',exU[1]);
-  const exD=find('Exec Liq Delta'); if(exD) sv('ex-delta',exD[1]);
-  const exDr=find('Exec Liq Dir');
-  if(exDr){ const sel=document.getElementById('ex-dir'); sel.value=String(exDr[1]).toLowerCase().includes('inc')?'increased':'decreased'; }
+  // ── Parse Liquidity Trend ──
+  const liqRow = d.find(r => String(r[0]||'').toLowerCase().includes('liq') && String(r[0]||'').toLowerCase().includes('values'));
+  if(liqRow) {
+    document.getElementById('liq-rows').innerHTML = '';
+    for(let i=1; i<liqRow.length; i+=2) {
+      if(liqRow[i] && liqRow[i+1]) {
+        addRow('liq-rows', [String(liqRow[i]), String(liqRow[i+1])]);
+      }
+    }
+  }
+
+  // ── Parse FX Movement ──
+  const fxRow = d.find(r => String(r[0]||'').toLowerCase().includes('usdlkr') && String(r[0]||'').toLowerCase().includes('values'));
+  if(fxRow) {
+    document.getElementById('fx-rows').innerHTML = '';
+    for(let i=1; i<fxRow.length; i+=2) {
+      if(fxRow[i] && fxRow[i+1]) {
+        addRow('fx-rows', [String(fxRow[i]), String(fxRow[i+1])]);
+      }
+    }
+  }
+
+  console.log('Import complete!');
 }
 
 // ── DOWNLOAD TEMPLATE ──
