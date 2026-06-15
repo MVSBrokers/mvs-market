@@ -327,15 +327,33 @@ async function publishData(){
   const cfg=loadCfg();
   if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Complete GitHub setup first.','err');document.getElementById('setup-box').style.display='block';return;}
   const st=document.getElementById('save-status');
-  st.className='save-status saving';st.textContent='Publishing… fetching SHA…';
-  try{
-    const cur=await ghGet(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token);
-    st.textContent='Committing to GitHub…';
-    await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,JSON.stringify(buildData(),null,2),cur.sha||null);
-    st.className='save-status ok';
-    st.textContent='✓ Published at '+new Date().toLocaleTimeString()+' — dashboard updates in ~30 sec.';
-    showToast('✓ Published to GitHub!');
-  }catch(e){st.className='save-status fail';st.textContent='✗ '+e.message;showToast(e.message,'err');}
+  st.className='save-status saving';st.textContent='Publishing…';
+  const content=JSON.stringify(buildData(),null,2);
+  // Retry up to 3 times — each attempt fetches a FRESH SHA immediately before PUT
+  for(let attempt=1;attempt<=3;attempt++){
+    try{
+      st.textContent='Publishing… fetching latest SHA (attempt '+attempt+')…';
+      // Always fetch fresh SHA right before writing — never use a cached value
+      const cur=await ghGet(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token);
+      st.textContent='Committing to GitHub…';
+      await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,content,cur.sha||null);
+      st.className='save-status ok';
+      st.textContent='✓ Published at '+new Date().toLocaleTimeString()+' — dashboard updates in ~30 sec.';
+      showToast('✓ Published to GitHub!');
+      return;
+    }catch(e){
+      // SHA mismatch = someone else wrote between our GET and PUT — retry immediately
+      if(e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'))&&attempt<3){
+        st.textContent='SHA conflict — retrying ('+attempt+'/3)…';
+        await new Promise(r=>setTimeout(r,600));
+        continue;
+      }
+      st.className='save-status fail';
+      st.textContent='✗ '+e.message;
+      showToast(e.message,'err');
+      return;
+    }
+  }
 }
 
 // ── DATA BUILD ────────────────────────────────────────────
