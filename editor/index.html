@@ -527,38 +527,317 @@ function importExcel(event){
   const reader=new FileReader();
   reader.onload=function(e){
     try{
-      const wb=XLSX.read(e.target.result,{type:'binary'});
-      const d=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''});
-      applyExcel(d);
+      const wb=XLSX.read(e.target.result,{type:'binary',cellDates:true});
+      applyMVSExcel(wb);
       showToast('✓ Excel imported! Review then click Publish.');
-    }catch(err){ showToast('⚠ Error: '+err.message,'err'); }
+    }catch(err){ showToast('⚠ Error: '+err.message,'err'); console.error(err); }
     event.target.value='';
   };
   reader.readAsBinaryString(file);
 }
-function applyExcel(d){
-  function find(lbl){ return d.find(r=>String(r[0]||'').trim().toLowerCase()===lbl.toLowerCase()); }
-  function sv(id,val){ if(val!==undefined&&val!=='') document.getElementById(id).value=String(val); }
-  const dateR=find('Date'); if(dateR) sv('f-date',dateR[1]);
-  const cmMinR=find('Call Min Rate'); if(cmMinR){sv('cm-min',cmMinR[1]);sv('rm-min',cmMinR[2]);}
-  const cmMaxR=find('Call Max Rate'); if(cmMaxR){sv('cm-max',cmMaxR[1]);sv('rm-max',cmMaxR[2]);}
-  const cmWaR=find('Call WA Yield');  if(cmWaR){sv('cm-wa',cmWaR[1]);sv('rm-wa',cmWaR[2]);}
-  const cmVoR=find('Call Vol');       if(cmVoR){sv('cm-vol',cmVoR[1]);sv('rm-vol',cmVoR[2]);}
-  const liqR=find('Liquidity Cur');   if(liqR){sv('liq-cur',liqR[1]);sv('liq-prev',liqR[2]);}
-  const lvR=find('Liq Values'),llR=find('Liq Labels');
-  if(lvR&&llR){ document.getElementById('liq-rows').innerHTML=''; lvR.slice(1).filter(v=>v!=='').forEach((v,i)=>addRow('liq-rows',[llR[i+1]||'',v])); }
-  [['1w','FX 1W'],['1m','FX 1M'],['2m','FX 2M'],['3m','FX 3M'],['6m','FX 6M'],['1y','FX 1Y']].forEach(([k,lbl])=>{ const r=find(lbl); if(r){sv('sw-'+k+'-s',r[1]);sv('sw-'+k+'-b',r[2]);} });
-  const uvR=find('USDLKR Values'),ulR=find('USDLKR Labels');
-  if(uvR&&ulR){ document.getElementById('fx-rows').innerHTML=''; uvR.slice(1).filter(v=>v!=='').forEach((v,i)=>addRow('fx-rows',[ulR[i+1]||'',v])); }
-  const fxClR=find('FX Close'); if(fxClR) sv('fx-close',fxClR[1]);
-  const tbRows=d.filter(r=>String(r[0]||'').startsWith('TBILL_'));
-  if(tbRows.length){ document.getElementById('tbill-rows').innerHTML=''; tbRows.forEach(r=>addRow('tbill-rows',[r[1],r[2],r[3],r[4]])); }
-  const bhR=find('Bond Headers'); if(bhR){ bondHeaders=bhR.slice(1,7).map(String); renderBondHeaders(); }
-  const bdRows=d.filter(r=>String(r[0]||'').startsWith('BOND_'));
-  if(bdRows.length){ document.getElementById('bond-rows').innerHTML=''; bdRows.forEach(r=>addRow('bond-rows',[r[1],r[2],r[3],r[4],r[5],r[6],r[7]])); }
-  const exU=find('Exec USDLKR');     if(exU) sv('ex-usdlkr',exU[1]);
-  const exD=find('Exec Liq Delta');  if(exD) sv('ex-delta',exD[1]);
-  const exDr=find('Exec Liq Dir');   if(exDr) document.getElementById('ex-dir').value=String(exDr[1]).toLowerCase().includes('inc')?'increased':'decreased';
+
+function fmtDate(d){
+  if(!d) return '';
+  const dt = (d instanceof Date) ? d : new Date(d);
+  if(isNaN(dt)) return String(d);
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return dt.getDate()+'-'+months[dt.getMonth()];
+}
+function fmtDateFull(d){
+  if(!d) return '';
+  const dt = (d instanceof Date) ? d : new Date(d);
+  if(isNaN(dt)) return String(d);
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const day=dt.getDate();
+  const sfx=day===1?'st':day===2?'nd':day===3?'rd':'th';
+  return day+sfx+' '+months[dt.getMonth()]+' '+dt.getFullYear();
+}
+function sv(id,val){ if(val!==undefined&&val!==''&&val!==null) document.getElementById(id).value=String(val); }
+function n2(v){ return (typeof v==='number')?v.toFixed(2):String(v||''); }
+
+function applyMVSExcel(wb){
+  // ── READ FROM get_data SHEET ──────────────────────────
+  // get_data row0 header:
+  // col0=FX Date, col1=FX Rate, col2=blank
+  // col3=Liq Date, col4=Market Liquidity, col5=blank
+  // col6=TBill AuctionDate, col7=3M, col8=6M, col9=12M, col10=blank
+  // col11=Label(Min/Max/WA/Vol), col12=call, col13=repo, col14=blank
+  // col15=Bond Maturity, col16..21=bond cols (8-Jun..15-Jun)
+
+  const ws = wb.Sheets['get_data'];
+  if(!ws){ showToast('⚠ Sheet "get_data" not found!','err'); return; }
+  const rows = XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:false,dateNF:'yyyy-mm-dd'});
+  const rowsRaw = XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
+
+  // Bond headers from row0: cols 16-21
+  const hdrRow = rows[0];
+  if(hdrRow){
+    const bh = [hdrRow[16],hdrRow[17],hdrRow[18],hdrRow[19],hdrRow[20],hdrRow[21]].filter(h=>h);
+    if(bh.length){ bondHeaders=bh.map(String); renderBondHeaders(); }
+  }
+
+  // FX rates: col0=date, col1=rate (rows 1-7, skip if rate=0 or null)
+  const fxData=[];
+  for(let i=1;i<rows.length;i++){
+    const d=rows[i][0], r=rowsRaw[i][1];
+    if(d && r && typeof r==='number' && r>100){
+      fxData.push([fmtDate(new Date(d)), n2(r)]);
+    }
+  }
+  if(fxData.length){
+    document.getElementById('fx-rows').innerHTML='';
+    fxData.forEach(r=>addRow('fx-rows',r));
+    // closing rate = last valid rate shown as bid/offer (same value both sides)
+    const lastFX = fxData[fxData.length-1][1];
+    sv('fx-close', lastFX+'/'+lastFX);
+    sv('ex-usdlkr', lastFX+'/'+lastFX);
+  }
+
+  // Liquidity trend: col3=date, col4=value (rows 1-7)
+  const liqData=[];
+  for(let i=1;i<rows.length;i++){
+    const d=rows[i][3], v=rowsRaw[i][4];
+    if(d && v && typeof v==='number' && v>0){
+      liqData.push([fmtDate(new Date(d)), n2(v)]);
+    }
+  }
+  if(liqData.length){
+    document.getElementById('liq-rows').innerHTML='';
+    liqData.forEach(r=>addRow('liq-rows',r));
+    // current = last, previous = second last
+    sv('liq-cur',  liqData[liqData.length-1][1]);
+    sv('liq-prev', liqData.length>1?liqData[liqData.length-2][1]:'');
+  }
+
+  // T-Bills: col6=date, col7=3M, col8=6M, col9=12M (rows 1-7)
+  const tbData=[];
+  for(let i=1;i<rows.length;i++){
+    const d=rows[i][6], m3=rowsRaw[i][7], m6=rowsRaw[i][8], m12=rowsRaw[i][9];
+    if(d && m3){
+      tbData.push([fmtDate(new Date(d)), n2(m3), n2(m6), n2(m12)]);
+    }
+  }
+  if(tbData.length){
+    document.getElementById('tbill-rows').innerHTML='';
+    tbData.forEach(r=>addRow('tbill-rows',r));
+  }
+
+  // Money market: col11=label, col12=call, col13=repo (rows 1-4)
+  for(let i=1;i<rows.length;i++){
+    const lbl=String(rows[i][11]||'').toLowerCase();
+    const call=rowsRaw[i][12], repo=rowsRaw[i][13];
+    if(lbl.includes('minimum')){  sv('cm-min',n2(call)); sv('rm-min',n2(repo)); }
+    if(lbl.includes('maximum')){  sv('cm-max',n2(call)); sv('rm-max',n2(repo)); }
+    if(lbl.includes('w.a')||lbl.includes('yield')){ sv('cm-wa',n2(call)); sv('rm-wa',n2(repo)); }
+    if(lbl.includes('gross')){    sv('cm-vol',n2(call)); sv('rm-vol',n2(repo)); }
+  }
+
+  // T-Bonds: col15=maturity, col16-21=values (rows 1 onwards)
+  const bondData=[];
+  for(let i=1;i<rows.length;i++){
+    const mat=rows[i][15];
+    if(mat && String(mat).match(/^\d{2}\.\d{2}\.\d{4}$/)){
+      const vals=[16,17,18,19,20,21].map(c=>{
+        const v=rowsRaw[i][c];
+        if(v===null||v===undefined) return '0';
+        if(v===0||v==='0') return '0';
+        if(String(v)==='-') return '0';
+        return String(v);
+      });
+      bondData.push([String(mat),...vals]);
+    }
+  }
+  if(bondData.length){
+    document.getElementById('bond-rows').innerHTML='';
+    bondData.forEach(r=>addRow('bond-rows',r));
+  }
+
+  // ── EXECUTIVE SUMMARY SHEET ───────────────────────────
+  const execWs = wb.Sheets['Executive summary'];
+  if(execWs){
+    const execRows = XLSX.utils.sheet_to_json(execWs,{header:1,defval:''});
+    execRows.forEach(r=>{
+      const txt=String(r[0]||'').trim();
+      const usdM=txt.match(/USD\/LKR\s+Closed\s+at\s+([\d.\/]+)/i);
+      if(usdM){ sv('ex-usdlkr',usdM[1]); sv('fx-close',usdM[1]); }
+      const liqM=txt.match(/liquidity\s+(increased|decreased)\s+by\s+([\d.]+)/i);
+      if(liqM){
+        document.getElementById('ex-dir').value=liqM[1].toLowerCase();
+        sv('ex-delta',liqM[2]);
+      }
+    });
+  }
+
+  // ── SUMMARY SHEET — FX Swaps + Report Date ───────────
+  const sumWs = wb.Sheets['Summary'];
+  if(sumWs){
+    const sumRows = XLSX.utils.sheet_to_json(sumWs,{header:1,defval:null,raw:true});
+    // Report date from row2 col7 (text like "20th May") — use latest liq date instead
+    if(liqData.length){
+      // Build full date from last liq entry
+      const lastLiqRaw = rowsRaw[liqData.length][3];
+    }
+    // Try to get date label from row2
+    const dateLabel = sumRows[2] && sumRows[2][7] ? String(sumRows[2][7]) : '';
+    if(dateLabel) sv('f-date', dateLabel+' 2026');
+
+    // FX Swaps — rows 6,8,10,12,14,16 cols 14,15,16
+    const swapKeys=['1w','1m','2m','3m','6m','1y'];
+    const swapRows=[6,8,10,12,14,16];
+    swapRows.forEach((ri,i)=>{
+      const r=sumRows[ri];
+      if(r){
+        const sell=r[15], buy=r[16];
+        if(sell) sv('sw-'+swapKeys[i]+'-s', typeof sell==='number'?sell.toFixed(2):sell);
+        if(buy)  sv('sw-'+swapKeys[i]+'-b', typeof buy==='number'?buy.toFixed(2):buy);
+      }
+    });
+  }
+}
+
+function _oldApplyMVSExcel_DISABLED(wb){
+  const sheetNames = wb.SheetNames.map(s=>s.toLowerCase());
+
+  // ── SUMMARY SHEET ──
+  const summaryName = wb.SheetNames.find(s=>s.toLowerCase().includes('summary'));
+  if(summaryName){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[summaryName],{header:1,defval:''});
+
+    // Report date — look for a date serial in first few rows
+    for(let i=0;i<5;i++){
+      for(let j=0;j<rows[i].length;j++){
+        const v=rows[i][j];
+        if(typeof v==='number'&&v>40000&&v<60000){
+          sv('f-date', excelDateToFull(v));
+          break;
+        }
+      }
+    }
+
+    // Money market rows — find by keyword
+    const findRow=(kw)=>rows.find(r=>String(r[1]||r[0]||'').toLowerCase().includes(kw.toLowerCase()));
+    const minR  = findRow('Minimum');
+    const maxR  = findRow('Maximum');
+    const waR   = findRow('W.A');
+    const volR  = findRow('Gross');
+    const liqR  = findRow('Market Liquidity');
+
+    if(minR){
+      // Find numeric cols
+      const nums=minR.map((v,i)=>({i,v})).filter(x=>typeof x.v==='number'&&x.v>0&&x.v<20);
+      if(nums.length>=2){ sv('cm-min',nums[0].v.toFixed(2)); sv('rm-min',nums[1].v.toFixed(2)); }
+    }
+    if(maxR){
+      const nums=maxR.map((v,i)=>({i,v})).filter(x=>typeof x.v==='number'&&x.v>0&&x.v<20);
+      if(nums.length>=2){ sv('cm-max',nums[0].v.toFixed(2)); sv('rm-max',nums[1].v.toFixed(2)); }
+    }
+    if(waR){
+      const nums=waR.map((v,i)=>({i,v})).filter(x=>typeof x.v==='number'&&x.v>0&&x.v<20);
+      if(nums.length>=2){ sv('cm-wa',nums[0].v.toFixed(2)); sv('rm-wa',nums[1].v.toFixed(2)); }
+    }
+    if(volR){
+      const nums=volR.map((v,i)=>({i,v})).filter(x=>typeof x.v==='number'&&x.v>0&&x.v<9999);
+      if(nums.length>=2){ sv('cm-vol',nums[0].v.toFixed(2)); sv('rm-vol',nums[1].v.toFixed(2)); }
+    }
+    if(liqR){
+      const nums=liqR.map((v,i)=>({i,v})).filter(x=>typeof x.v==='number'&&x.v>0&&x.v<9999);
+      if(nums.length>=2){ sv('liq-cur',nums[0].v.toFixed(2)); sv('liq-prev',nums[1].v.toFixed(2)); }
+    }
+
+    // FX Swaps — find SWAPS section
+    const swapMap={'1 week':'1w','1 month':'1m','2 month':'2m','3 month':'3m','6 month':'6m','1 year':'1y'};
+    rows.forEach(r=>{
+      const label=String(r[0]||r[1]||'').toLowerCase().trim();
+      Object.entries(swapMap).forEach(([kw,key])=>{
+        if(label.includes(kw)){
+          const nums=r.map((v,i)=>({i,v})).filter(x=>typeof x.v==='number'&&x.v>0&&x.v<50);
+          if(nums.length>=2){
+            sv('sw-'+key+'-s', nums[0].v.toFixed(2));
+            sv('sw-'+key+'-b', nums[1].v.toFixed(2));
+          }
+        }
+      });
+    });
+  }
+
+  // ── MONEY AND REPO SHEET — liquidity trend ──
+  const moneyName = wb.SheetNames.find(s=>s.toLowerCase().includes('money'));
+  if(moneyName){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[moneyName],{header:1,defval:''});
+    // Find rows where col0 is a date serial and col1 is liquidity value
+    const liqTrend = rows.filter(r=>typeof r[0]==='number'&&r[0]>40000&&r[0]<60000&&typeof r[1]==='number'&&r[1]>0);
+    if(liqTrend.length){
+      document.getElementById('liq-rows').innerHTML='';
+      liqTrend.forEach(r=>addRow('liq-rows',[excelDateToLabel(r[0]), r[1].toFixed(2)]));
+    }
+  }
+
+  // ── FOREIGN EXCHANGE SHEET ──
+  const fxName = wb.SheetNames.find(s=>s.toLowerCase().includes('foreign')||s.toLowerCase().includes('exchange')||s.toLowerCase()==='fx');
+  if(fxName){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[fxName],{header:1,defval:''});
+    const fxRows = rows.filter(r=>typeof r[0]==='number'&&r[0]>40000&&r[0]<60000&&typeof r[1]==='number'&&r[1]>100);
+    if(fxRows.length){
+      document.getElementById('fx-rows').innerHTML='';
+      fxRows.forEach(r=>addRow('fx-rows',[excelDateToLabel(r[0]), r[1].toFixed(2)]));
+    }
+  }
+
+  // ── T BILLS SHEET ──
+  const tbillName = wb.SheetNames.find(s=>s.toLowerCase().includes('bill'));
+  if(tbillName){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[tbillName],{header:1,defval:''});
+    const tbRows = rows.filter(r=>typeof r[0]==='number'&&r[0]>40000&&r[0]<60000&&typeof r[1]==='number');
+    if(tbRows.length){
+      document.getElementById('tbill-rows').innerHTML='';
+      tbRows.forEach(r=>{
+        const dateStr = excelDateToLabel(r[0]);
+        addRow('tbill-rows',[dateStr, r[1]?r[1].toFixed(2):'', r[2]?r[2].toFixed(2):'', r[3]?r[3].toFixed(2):'']);
+      });
+    }
+  }
+
+  // ── T BONDS SHEET ──
+  const tbondName = wb.SheetNames.find(s=>s.toLowerCase().includes('bond'));
+  if(tbondName){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[tbondName],{header:1,defval:''});
+    // Find header row — has date serials or date strings across columns
+    const hdrRow = rows.find(r=>String(r[0]||'').toLowerCase().includes('matur'));
+    if(hdrRow){
+      const hdrs = hdrRow.slice(1).filter(h=>h!=='').map(h=>typeof h==='number'&&h>40000?excelDateToLabel(h):String(h));
+      if(hdrs.length){
+        bondHeaders = hdrs.slice(0,6);
+        renderBondHeaders();
+      }
+      // Bond data rows — maturity date in col0 like "15.12.2026"
+      const bondDataRows = rows.filter(r=>String(r[0]||'').match(/^\d{2}\.\d{2}\.\d{4}$/));
+      if(bondDataRows.length){
+        document.getElementById('bond-rows').innerHTML='';
+        bondDataRows.forEach(r=>{
+          const vals = r.slice(1,7).map(v=>v===''||v===0?'0':String(v));
+          addRow('bond-rows',[r[0],...vals]);
+        });
+      }
+    }
+  }
+
+  // ── EXECUTIVE SUMMARY SHEET ──
+  const execName = wb.SheetNames.find(s=>s.toLowerCase().includes('exec')||s.toLowerCase().includes('summary'));
+  if(execName){
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[execName],{header:1,defval:''});
+    rows.forEach(r=>{
+      const txt = String(r[0]||'').trim();
+      // USD/LKR close
+      const usdMatch = txt.match(/USD\/LKR\s+Closed\s+at\s+([\d.\/]+)/i);
+      if(usdMatch) sv('ex-usdlkr', usdMatch[1]);
+      // Liquidity direction & delta
+      const liqMatch = txt.match(/liquidity\s+(increased|decreased)\s+by\s+([\d.]+)/i);
+      if(liqMatch){
+        document.getElementById('ex-dir').value = liqMatch[1].toLowerCase();
+        sv('ex-delta', liqMatch[2]);
+      }
+    });
+  }
 }
 
 // ── TEMPLATE DOWNLOAD ───────────────────────────────────
