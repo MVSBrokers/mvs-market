@@ -169,12 +169,11 @@ table tr:hover td{background:#132540}
 
 <script>
 // ── CONFIG ─────────────────────────────────────────────
-const VIEWER_USER = 'MVSmoney';
-const VIEWER_PASS = 'MVS1234@';
+const VIEWER_USER  = 'MVSmoney';
+const VIEWER_PASS  = 'MVS1234@';
 
-// Fill this in after creating your JSONbin (see editor.html instructions)
-const JSONBIN_BIN_ID  = 'PASTE_BIN_ID_HERE';
-const JSONBIN_API_KEY = 'PASTE_API_KEY_HERE';
+// GitHub raw URL — data.json is at root of your repo
+const DATA_URL = 'https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-market/main/data.json';
 // ───────────────────────────────────────────────────────
 
 let charts = {};
@@ -198,32 +197,21 @@ function signout() {
 }
 
 async function loadData() {
-  const bar = document.getElementById('loading-bar');
+  const bar   = document.getElementById('loading-bar');
   const errEl = document.getElementById('load-err');
-  bar.style.display = 'block';
+  bar.style.display   = 'block';
   errEl.style.display = 'none';
-
-  // Check config
-  if (JSONBIN_BIN_ID === 'PASTE_BIN_ID_HERE') {
-    bar.style.display = 'none';
-    errEl.style.display = 'block';
-    errEl.innerHTML = '⚙️ Dashboard not configured yet. Open <strong>editor.html</strong> and follow the setup steps to connect your JSONbin.';
-    return;
-  }
-
   try {
-    const res = await fetch(
-      `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`,
-      { headers: { 'X-Master-Key': JSONBIN_API_KEY } }
-    );
-    if (!res.ok) throw new Error('API returned ' + res.status);
-    const json = await res.json();
+    // Add timestamp to bust GitHub's CDN cache
+    const res = await fetch(DATA_URL + '?t=' + Date.now());
+    if (!res.ok) throw new Error('Could not fetch data.json (HTTP ' + res.status + ')');
+    const d = await res.json();
     bar.style.display = 'none';
-    render(json.record);
+    render(d);
   } catch (e) {
-    bar.style.display = 'none';
+    bar.style.display   = 'none';
     errEl.style.display = 'block';
-    errEl.textContent = '⚠ Could not load market data — ' + e.message;
+    errEl.textContent   = '⚠ Could not load market data — ' + e.message;
   }
 }
 
