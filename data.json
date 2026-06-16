@@ -77,7 +77,7 @@
       336.75,
       334
     ],
-    "close": ""
+    "close": "80/25"
   },
   "tbills": [
     {
@@ -268,8 +268,8 @@
     ]
   },
   "execSummary": {
-    "usdlkr": "",
-    "liqDelta": "",
+    "usdlkr": "355/365",
+    "liqDelta": "27",
     "liqDir": "decreased"
   },
   "marketSummary": ""
