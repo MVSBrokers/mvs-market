@@ -27,7 +27,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 .hdr-right{text-align:right}
 .hdr-date{font-size:14px;color:#c8a84b;font-weight:700;margin-bottom:4px}
 .hdr-live{display:inline-block;background:#1a3a1a;border:1px solid #2a5a2a;color:#6dd4a0;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;margin-right:8px}
-.sign-out{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:5px 10px;font-size:11px;cursor:pointer;transition:all .2s}
+.sign-out{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:5px 10px;font-size:11px;cursor:pointer}
 .sign-out:hover{border-color:#c8a84b;color:#c8a84b}
 .grid-2x2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .panel{background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:12px 14px}
@@ -48,6 +48,7 @@ table tr:hover td{background:#132540}
 .exec-summary .panel-title{margin-bottom:8px}
 .exec-summary ul{list-style:disc;padding-left:20px;font-size:13px;color:#d4e4f4;line-height:2.2}
 .exec-summary ul li strong{color:#fff}
+.market-summary-text{font-size:12px;color:#b8cfe8;margin-top:12px;line-height:1.9;padding:10px 14px;background:#091525;border-radius:6px;border-left:3px solid #c8a84b;white-space:pre-wrap;display:none}
 #load-err{display:none;background:#1a0808;border:1px solid #5a2020;border-radius:8px;padding:14px;color:#e87a4d;font-size:12px;margin-bottom:14px;text-align:center}
 #loading-bar{height:3px;background:linear-gradient(90deg,#c8a84b,#4da3e8);border-radius:2px;margin-bottom:14px;animation:slide 1.2s ease-in-out infinite;display:none}
 @keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
@@ -71,15 +72,12 @@ table tr:hover td{background:#132540}
 <div id="dashboard">
   <div class="report-hdr">
     <div class="hdr-left">
-      <div class="logo">MVS</div>
-      <div class="hdr-info">
-        <h1>Daily Market Report</h1>
-        <p>FX | Government Securities | Money Markets</p>
-      </div>
+      <div class="logo" style="background:none;padding:0;overflow:hidden;"><img src="data:image/jpeg;base64,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" style="height:48px;width:auto;border-radius:4px;display:block;"></div>
+      <div class="hdr-info"><h1>Daily Market Report</h1><p>FX | Government Securities | Money Markets</p></div>
     </div>
     <div class="hdr-right">
       <div class="hdr-date" id="dateDisplay">—</div>
-      <span class="hdr-live">LIVE</span>
+      <span class="hdr-live" id="last-updated">—</span>
       <button class="sign-out" onclick="signout()">Sign Out</button>
     </div>
   </div>
@@ -87,6 +85,7 @@ table tr:hover td{background:#132540}
   <div id="loading-bar"></div>
   <div id="load-err"></div>
 
+  <!-- MONEY MARKET + LIQUIDITY CHART -->
   <div class="grid-2x2">
     <div class="panel">
       <div class="panel-title">Money &amp; Repo Market</div>
@@ -110,6 +109,7 @@ table tr:hover td{background:#132540}
     </div>
   </div>
 
+  <!-- FX SWAPS + USD/LKR CHART -->
   <div class="grid-2x2">
     <div class="panel">
       <div class="panel-title">FX Swaps (per day)</div>
@@ -131,10 +131,10 @@ table tr:hover td{background:#132540}
     </div>
   </div>
 
-  <div class="panel full-width">
-    <div class="panel-title">Government Securities</div>
-  </div>
+  <!-- GOVERNMENT SECURITIES HEADER -->
+  <div class="panel full-width"><div class="panel-title">Government Securities</div></div>
 
+  <!-- T-BILLS + T-BONDS -->
   <div class="full-grid">
     <div class="panel">
       <div class="panel-title">Treasury Bill</div>
@@ -156,215 +156,183 @@ table tr:hover td{background:#132540}
     </div>
   </div>
 
+  <!-- EXECUTIVE SUMMARY + MARKET SUMMARY -->
   <div class="exec-summary">
     <div class="panel-title">Executive Summary</div>
     <ul>
       <li>USD/LKR Closed at <strong id="exusd">—</strong></li>
       <li>System liquidity <strong id="exdir">—</strong> by <strong id="exdelta">—</strong> bn.</li>
     </ul>
+    <!-- MARKET SUMMARY FREE TEXT — shown when editor has text -->
+    <div class="market-summary-text" id="marketSummaryBox"></div>
   </div>
 
   <div class="footer">MVS Money Brokers Limited — Confidential. For authorised recipients only.</div>
 </div>
 
 <script>
-// ── CONFIG ─────────────────────────────────────────────
-const VIEWER_USER  = 'MVSmoney';
-const VIEWER_PASS  = 'MVS1234@';
+const VIEWER_USER="MVSmoney", VIEWER_PASS="MVS1234@";
+const DATA_URL="https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvsdailyreport/main/data.json";
+let charts={};
 
-// GitHub raw URL — data.json is at root of your repo
-const DATA_URL = 'https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-market/main/data.json';
-// ───────────────────────────────────────────────────────
-
-let charts = {};
-
-function signin() {
-  const u = document.getElementById('user').value.trim();
-  const p = document.getElementById('pass').value;
-  if (u === VIEWER_USER && p === VIEWER_PASS) {
-    sessionStorage.setItem('mvs_auth','1');
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
+function signin(){
+  if(document.getElementById("user").value.trim()===VIEWER_USER&&document.getElementById("pass").value===VIEWER_PASS){
+    sessionStorage.setItem("mvs_auth","1");
+    document.getElementById("login").style.display="none";
+    document.getElementById("dashboard").style.display="block";
     loadData();
-  } else {
-    document.getElementById('err').textContent = 'Invalid credentials';
+  }else document.getElementById("err").textContent="Invalid credentials";
+}
+function signout(){sessionStorage.removeItem("mvs_auth");location.reload();}
+
+async function loadData(){
+  const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
+  bar.style.display="block";errEl.style.display="none";
+  try{
+    const res=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    render(await res.json());
+    bar.style.display="none";
+  }catch(e){
+    bar.style.display="none";errEl.style.display="block";
+    errEl.textContent="Could not load data — "+e.message;
   }
 }
 
-function signout() {
-  sessionStorage.removeItem('mvs_auth');
-  location.reload();
-}
+function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=(val!=null&&val!=="")? val:"—";}
 
-async function loadData() {
-  const bar   = document.getElementById('loading-bar');
-  const errEl = document.getElementById('load-err');
-  bar.style.display   = 'block';
-  errEl.style.display = 'none';
-  try {
-    // Add timestamp to bust GitHub's CDN cache
-    const res = await fetch(DATA_URL + '?t=' + Date.now());
-    if (!res.ok) throw new Error('Could not fetch data.json (HTTP ' + res.status + ')');
-    const d = await res.json();
-    bar.style.display = 'none';
-    render(d);
-  } catch (e) {
-    bar.style.display   = 'none';
-    errEl.style.display = 'block';
-    errEl.textContent   = '⚠ Could not load market data — ' + e.message;
+// Auto-set report date from the latest date in the data
+function autoDate(d){
+  // Use latest USD/LKR label or liquidity label as the report date
+  const fxLabels=d.usdlkr?.labels||[];
+  const liqLabels=d.liquidity?.labels||[];
+  const allLabels=[...fxLabels,...liqLabels];
+  if(allLabels.length>0){
+    const last=allLabels[allLabels.length-1];
+    // Convert "15-Jun" → "15th June 2026"  (year from d.date if available)
+    const yearMatch=(d.date||'').match(/\d{4}/);
+    const year=yearMatch?yearMatch[0]:new Date().getFullYear();
+    const m=String(last).match(/(\d+)-([A-Za-z]+)/);
+    if(m){
+      const day=parseInt(m[1]);
+      const sfx=day===1||day===21||day===31?'st':day===2||day===22?'nd':day===3||day===23?'rd':'th';
+      const months={Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',
+                    Jul:'July',Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December'};
+      return day+sfx+' '+(months[m[2]]||m[2])+' '+year;
+    }
   }
+  return d.date||'—';
 }
 
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = (val !== undefined && val !== '' && val !== null) ? val : '—';
-}
-
-function render(d) {
-  // Date: derive from last liquidity label (e.g. "15-Jun" → "15th June 2026")
-  const liqLabels = d.liquidity?.labels||[];
-  const lastLabel = liqLabels.length ? liqLabels[liqLabels.length-1] : '';
-  const yearMatch = (d.date||'').match(/\d{4}/);
-  const yr = yearMatch ? yearMatch[0] : new Date().getFullYear();
-  const MON_LONG = {Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July',Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December'};
-  const lm = String(lastLabel).match(/(\d+)-([A-Za-z]+)/);
-  if(lm){
-    const dy=parseInt(lm[1]);
-    const sfx=dy===1||dy===21||dy===31?'st':dy===2||dy===22?'nd':dy===3||dy===23?'rd':'th';
-    setText('dateDisplay', dy+sfx+' '+(MON_LONG[lm[2]]||lm[2])+' '+yr);
-  } else {
-    setText('dateDisplay', d.date);
-  }
-
-  // Money market
-  setText('cmmin', d.callMarket.min); setText('rmmin', d.repoMarket.min);
-  setText('cmmax', d.callMarket.max); setText('rmmax', d.repoMarket.max);
-  setText('cmwa',  d.callMarket.wa);  setText('rmwa',  d.repoMarket.wa);
-  setText('cmvol', d.callMarket.vol); setText('rmvol', d.repoMarket.vol);
-  setText('liqcur',  d.liquidity.current);
-  setText('liqprev', d.liquidity.previous);
-
+function render(d){
+  // Auto-set report date from latest chart date label
+  setText("dateDisplay", autoDate(d));
+  // Show when data was last published
+  const lu=document.getElementById("last-updated");
+  if(lu) lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  // Money & Repo
+  setText("cmmin",d.callMarket?.min); setText("rmmin",d.repoMarket?.min);
+  setText("cmmax",d.callMarket?.max); setText("rmmax",d.repoMarket?.max);
+  setText("cmwa", d.callMarket?.wa);  setText("rmwa", d.repoMarket?.wa);
+  setText("cmvol",d.callMarket?.vol); setText("rmvol",d.repoMarket?.vol);
+  // Liquidity
+  setText("liqcur",d.liquidity?.current); setText("liqprev",d.liquidity?.previous);
   // FX Swaps
-  setText('sw1ws', d.fxSwaps['1w'].sell); setText('sw1wb', d.fxSwaps['1w'].buy);
-  setText('sw1ms', d.fxSwaps['1m'].sell); setText('sw1mb', d.fxSwaps['1m'].buy);
-  setText('sw2ms', d.fxSwaps['2m'].sell); setText('sw2mb', d.fxSwaps['2m'].buy);
-  setText('sw3ms', d.fxSwaps['3m'].sell); setText('sw3mb', d.fxSwaps['3m'].buy);
-  setText('sw6ms', d.fxSwaps['6m'].sell); setText('sw6mb', d.fxSwaps['6m'].buy);
-  setText('sw1ys', d.fxSwaps['1y'].sell); setText('sw1yb', d.fxSwaps['1y'].buy);
-
-  // T-Bill table
-  const tb = document.getElementById('tbillRows');
-  tb.innerHTML = '';
-  (d.tbills || []).forEach(r => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${r.date}</td><td>${r.m3}</td><td>${r.m6}</td><td>${r.m12}</td>`;
-    tb.appendChild(tr);
-  });
-
+  setText("sw1ws",d.fxSwaps?.["1w"]?.sell); setText("sw1wb",d.fxSwaps?.["1w"]?.buy);
+  setText("sw1ms",d.fxSwaps?.["1m"]?.sell); setText("sw1mb",d.fxSwaps?.["1m"]?.buy);
+  setText("sw2ms",d.fxSwaps?.["2m"]?.sell); setText("sw2mb",d.fxSwaps?.["2m"]?.buy);
+  setText("sw3ms",d.fxSwaps?.["3m"]?.sell); setText("sw3mb",d.fxSwaps?.["3m"]?.buy);
+  setText("sw6ms",d.fxSwaps?.["6m"]?.sell); setText("sw6mb",d.fxSwaps?.["6m"]?.buy);
+  setText("sw1ys",d.fxSwaps?.["1y"]?.sell); setText("sw1yb",d.fxSwaps?.["1y"]?.buy);
+  // T-Bills table
+  const tb=document.getElementById("tbillRows"); tb.innerHTML="";
+  (d.tbills||[]).forEach(r=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${r.date}</td><td>${r.m3}</td><td>${r.m6}</td><td>${r.m12}</td>`;tb.appendChild(tr);});
   // Bond table
-  const bhr = document.getElementById('bondHeaderRow');
-  bhr.innerHTML = '<th>Bond</th>';
-  (d.bonds.headers || []).forEach(h => {
-    const th = document.createElement('th'); th.textContent = h; bhr.appendChild(th);
-  });
-  const bb = document.getElementById('bondRows');
-  bb.innerHTML = '';
-  (d.bonds.rows || []).forEach(r => {
-    const tr = document.createElement('tr');
-    let c = `<td>${r.bond}</td>`;
-    (r.values || []).forEach(v => { c += `<td>${v || '—'}</td>`; });
-    tr.innerHTML = c; bb.appendChild(tr);
-  });
-
+  const bhr=document.getElementById("bondHeaderRow"); bhr.innerHTML="<th>Bond</th>";
+  (d.bonds?.headers||[]).forEach(h=>{const th=document.createElement("th");th.textContent=h;bhr.appendChild(th);});
+  const bb=document.getElementById("bondRows"); bb.innerHTML="";
+  (d.bonds?.rows||[]).forEach(r=>{const tr=document.createElement("tr");let c=`<td>${r.bond}</td>`;(r.values||[]).forEach(v=>{c+=`<td>${v&&v!=="0"?v:"—"}</td>`;});tr.innerHTML=c;bb.appendChild(tr);});
   // Exec summary
-  setText('exusd',  d.execSummary.usdlkr);
-  setText('exdir',  d.execSummary.liqDir);
-  setText('exdelta',d.execSummary.liqDelta);
-
+  setText("exusd",d.execSummary?.usdlkr);
+  setText("exdir",d.execSummary?.liqDir);
+  setText("exdelta",d.execSummary?.liqDelta);
+  // Market Summary free text — show box only if there is text
+  const msBox=document.getElementById("marketSummaryBox");
+  if(msBox){
+    const txt=(d.marketSummary||"").trim();
+    if(txt){
+      msBox.textContent=txt;
+      msBox.style.display="block";
+    }else{
+      msBox.style.display="none";
+    }
+  }
   buildCharts(d);
 }
 
-function destroyChart(k) {
-  if (charts[k]) { charts[k].destroy(); delete charts[k]; }
-}
+function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
 
-function buildCharts(d) {
-  const gc = 'rgba(26,48,80,.5)', tc = '#7fa3c8', tf = {size:10};
+function buildCharts(d){
+  const gc="rgba(26,48,80,.5)",tc="#7fa3c8",tf={size:10};
 
-  destroyChart('liq');
-  charts.liq = new Chart(document.getElementById('liqChart'), {
-    type:'line',
-    data:{ labels:d.liquidity.labels,
-      datasets:[{label:'Rs.Bn',data:d.liquidity.values,borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.2)',tension:0.4,pointRadius:3,borderWidth:2,fill:true}]},
-    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},
-      scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:tf},grid:{color:gc}}}}
+  // Liquidity chart
+  destroyChart("liq");
+  charts.liq=new Chart(document.getElementById("liqChart"),{
+    type:"line",
+    data:{labels:d.liquidity?.labels||[],datasets:[{label:"Rs.Bn",data:d.liquidity?.values||[],borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.4,pointRadius:3,borderWidth:2,fill:true}]},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:tf},grid:{color:gc}}}}
   });
 
-  destroyChart('fx');
-  const fv = d.usdlkr.values.filter(v=>v>0);
-  charts.fx = new Chart(document.getElementById('fxChart'), {
-    type:'line',
-    data:{ labels:d.usdlkr.labels,
-      datasets:[{label:'LKR',data:d.usdlkr.values,borderColor:'#4da3e8',backgroundColor:'rgba(77,163,232,0.1)',tension:0.3,pointRadius:2,borderWidth:2,fill:true}]},
-    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},
-      scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},
-        x:{ticks:{color:tc,font:tf},grid:{color:gc}}}}
+  // FX chart
+  destroyChart("fx");
+  const fv=(d.usdlkr?.values||[]).filter(v=>v>0);
+  charts.fx=new Chart(document.getElementById("fxChart"),{
+    type:"line",
+    data:{labels:d.usdlkr?.labels||[],datasets:[{label:"LKR",data:d.usdlkr?.values||[],borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:2,borderWidth:2,fill:true}]},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},x:{ticks:{color:tc,font:tf},grid:{color:gc}}}}
   });
 
-  destroyChart('tbill');
-  const tbr = [...(d.tbills||[])].reverse();
-  charts.tbill = new Chart(document.getElementById('tbillChart'), {
-    type:'line',
-    data:{ labels:tbr.map(r=>r.date),
-      datasets:[
-        {label:'3M', data:tbr.map(r=>parseFloat(r.m3)||null), borderColor:'#4da3e8',tension:0.3,pointRadius:2,borderWidth:1.5,fill:false},
-        {label:'6M', data:tbr.map(r=>parseFloat(r.m6)||null), borderColor:'#c8a84b',tension:0.3,pointRadius:2,borderWidth:1.5,fill:false},
-        {label:'12M',data:tbr.map(r=>parseFloat(r.m12)||null),borderColor:'#6dd4a0',tension:0.3,pointRadius:2,borderWidth:1.5,fill:false}
-      ]},
-    options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},
-      scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}
+  // T-Bill chart
+  destroyChart("tbill");
+  const tbr=[...(d.tbills||[])].reverse();
+  charts.tbill=new Chart(document.getElementById("tbillChart"),{
+    type:"line",
+    data:{labels:tbr.map(r=>r.date),datasets:[
+      {label:"3M",data:tbr.map(r=>parseFloat(r.m3)||null),borderColor:"#4da3e8",tension:0.3,pointRadius:2,borderWidth:1.5,fill:false},
+      {label:"6M",data:tbr.map(r=>parseFloat(r.m6)||null),borderColor:"#c8a84b",tension:0.3,pointRadius:2,borderWidth:1.5,fill:false},
+      {label:"12M",data:tbr.map(r=>parseFloat(r.m12)||null),borderColor:"#6dd4a0",tension:0.3,pointRadius:2,borderWidth:1.5,fill:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}
   });
 
-  destroyChart('yield');
-  const today = new Date();
-  const yRows = (d.bonds.rows||[]).filter(r => {
-    const vals = (r.values||[]).filter(v=>v&&v!=='0');
-    return vals.length > 0;
-  });
-  const yData = yRows.map(r => {
-    const last = (r.values||[]).filter(v=>v&&v!=='0').pop();
-    if (!last) return null;
-    const parts = last.split('/');
-    if (parts.length===2) {
-      const a=parseFloat(parts[0]),b=parseFloat(parts[1]);
-      return (!isNaN(a)&&!isNaN(b)) ? +((a+b)/2).toFixed(3) : null;
-    }
-    return parseFloat(last)||null;
+  // Yield curve chart — use latest non-zero value per bond
+  destroyChart("yield");
+  const yRows=(d.bonds?.rows||[]).filter(r=>(r.values||[]).some(v=>v&&v!=="0"));
+  const yData=yRows.map(r=>{
+    const last=(r.values||[]).filter(v=>v&&v!=="0").pop();
+    if(!last)return null;
+    const p=last.split("/");
+    return p.length===2?+((parseFloat(p[0])+parseFloat(p[1]))/2).toFixed(3):parseFloat(last)||null;
   }).filter(v=>v!==null);
-
-  const yLabels = yRows.map(r => {
-    const p = r.bond.split('.');
-    if (p.length===3) {
-      const diff = (new Date(parseInt(p[2]),parseInt(p[1])-1,parseInt(p[0])) - today)/(1000*60*60*24*365);
-      if (diff > 0) return diff < 1 ? Math.round(diff*12)+'M' : parseFloat(diff.toFixed(1))+'Y';
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const yLabels=yRows.map(r=>{
+    const p=r.bond.split(".");
+    if(p.length===3){
+      const m=parseInt(p[1])-1, y=parseInt(p[2]);
+      if(!isNaN(m)&&!isNaN(y)&&m>=0&&m<=11) return MON[m]+" "+y;
     }
     return r.bond;
   });
-
-  charts.yield = new Chart(document.getElementById('yieldChart'), {
-    type:'line',
-    data:{ labels:yLabels.slice(0,yData.length),
-      datasets:[{label:'Avg Yield %',data:yData,borderColor:'#c8a84b',backgroundColor:'rgba(200,168,75,0.2)',tension:0.4,pointRadius:4,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5,fill:true}]},
-    options:{responsive:true,maintainAspectRatio:true,
-      plugins:{legend:{display:true,labels:{color:tc,font:{size:9}}}},
-      scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}
+  charts.yield=new Chart(document.getElementById("yieldChart"),{
+    type:"line",
+    data:{labels:yLabels.slice(0,yData.length),datasets:[{label:"Avg Yield %",data:yData,borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.4,pointRadius:4,pointBorderColor:"#fff",pointBorderWidth:2,borderWidth:2.5,fill:true}]},
+    options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9}}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}
   });
 }
 
-if (sessionStorage.getItem('mvs_auth')==='1') {
-  document.getElementById('login').style.display='none';
-  document.getElementById('dashboard').style.display='block';
+if(sessionStorage.getItem("mvs_auth")==="1"){
+  document.getElementById("login").style.display="none";
+  document.getElementById("dashboard").style.display="block";
   loadData();
 }
 </script>
