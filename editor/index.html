@@ -390,50 +390,59 @@ function renderBondHeaders(){
 function updateBH(){bondHeaders.forEach((h,i)=>{const e=document.getElementById('bh'+i);if(e)e.textContent=h||'—';});}
 
 // ── DATE HELPERS ──────────────────────────────────────────
-// Date helpers — use LOCAL date parts (getDate/getMonth/getFullYear) so that
-// JS Date objects from cellDates:true (which are already in local time) give
-// the correct day number. e.g. 15-Jun not 14-Jun.
+// Date helpers — XLSX.js cellDates:true produces UTC midnight Date objects.
+// We must ALWAYS use UTC methods (getUTCDate etc.) to avoid timezone shift.
+// e.g. 2026-06-15 00:00 UTC → getUTCDate()=15 ✓  getDate() in UTC+5:30 = 15 ✓
+// BUT xlsx.js in browser may parse as local time, so we normalise via ISO string.
+function xlsxDateToUTC(v){
+  // v is a JS Date from cellDates:true
+  // xlsx.js sets it to UTC midnight: 2026-06-15T00:00:00.000Z
+  // Safest: read the ISO string and parse the date part directly
+  const iso=v.toISOString(); // "2026-06-15T00:00:00.000Z"
+  const parts=iso.split('T')[0].split('-');
+  return {y:parseInt(parts[0]),m:parseInt(parts[1])-1,d:parseInt(parts[2])};
+}
+const MON_SHORT=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MON_LONG=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
 function toShortDate(v){
-  const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  let d=null;
-  if(v instanceof Date)d=v;
-  else if(typeof v==='number'){
-    // Excel serial → interpret as plain calendar date, no timezone shift
-    const ms=(v-25569)*86400000;
-    d=new Date(ms);
-    // Use UTC parts for serial numbers to avoid DST shift
-    const M2=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return d.getUTCDate()+'-'+M2[d.getUTCMonth()];
+  if(!v)return'';
+  if(v instanceof Date){
+    const {m,d}=xlsxDateToUTC(v);
+    return d+'-'+MON_SHORT[m];
   }
-  if(!d||isNaN(d.getTime()))return String(v||'').trim();
-  // JS Date from cellDates:true — use LOCAL parts (browser already localised it)
-  return d.getDate()+'-'+M[d.getMonth()];
+  if(typeof v==='number'){
+    // Excel serial number
+    const d=new Date((v-25569)*86400000);
+    const {m,d:dy}=xlsxDateToUTC(d);
+    return dy+'-'+MON_SHORT[m];
+  }
+  return String(v).trim();
 }
 function toUSDate(v){
-  let d=null;
-  if(v instanceof Date)d=v;
-  else if(typeof v==='number'){
-    const ms=(v-25569)*86400000; d=new Date(ms);
-    return (d.getUTCMonth()+1)+'/'+d.getUTCDate()+'/'+d.getUTCFullYear();
+  if(!v)return'';
+  if(v instanceof Date){
+    const {y,m,d}=xlsxDateToUTC(v);
+    return (m+1)+'/'+d+'/'+y;
   }
-  if(!d||isNaN(d.getTime()))return String(v||'').trim();
-  return (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear();
+  if(typeof v==='number'){
+    const dt=new Date((v-25569)*86400000);
+    const {y,m,d}=xlsxDateToUTC(dt);
+    return (m+1)+'/'+d+'/'+y;
+  }
+  return String(v).trim();
 }
 function toOrdinalDate(v){
-  let d=null;
-  if(v instanceof Date)d=v;
-  else if(typeof v==='number'){
-    const ms=(v-25569)*86400000; d=new Date(ms);
-    const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
-    const day=d.getUTCDate();
-    const sfx=day===1||day===21||day===31?'st':day===2||day===22?'nd':day===3||day===23?'rd':'th';
-    return day+sfx+' '+M[d.getUTCMonth()]+' '+d.getUTCFullYear();
+  if(!v)return'';
+  let parts=null;
+  if(v instanceof Date) parts=xlsxDateToUTC(v);
+  else if(typeof v==='number'){const dt=new Date((v-25569)*86400000);parts=xlsxDateToUTC(dt);}
+  if(parts){
+    const {y,m,d}=parts;
+    const sfx=d===1||d===21||d===31?'st':d===2||d===22?'nd':d===3||d===23?'rd':'th';
+    return d+sfx+' '+MON_LONG[m]+' '+y;
   }
-  if(!d||isNaN(d.getTime()))return String(v||'').trim();
-  const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const day=d.getDate();
-  const sfx=day===1||day===21||day===31?'st':day===2||day===22?'nd':day===3||day===23?'rd':'th';
-  return day+sfx+' '+M[d.getMonth()]+' '+d.getFullYear();
+  return String(v).trim();
 }
 function ns(v){if(v===null||v===undefined||v==='')return'';if(typeof v==='number')return String(Math.round(v*10000)/10000);return String(v).trim();}
 function cleanBond(v){if(v===null||v===undefined||v==='')return'0';if(typeof v==='number'&&v===0)return'0';const s=String(v).trim();if(s===''||s==='-'||s.startsWith('#'))return'0';return s;}
