@@ -7,9 +7,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden;width:100%}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;min-height:100vh}
 #login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#060f1e,#0d1e38)}
-.login-card{background:#0d1e38;border:2px solid #c8a84b;border-radius:12px;padding:44px 36px;width:380px;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+.login-card{background:#0d1e38;border:2px solid #c8a84b;border-radius:12px;padding:44px 36px;width:380px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.8)}
 .login-card h2{color:#c8a84b;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:24px}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:10px;color:#7fa3c8;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
@@ -18,7 +19,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 .login-btn{width:100%;background:#c8a84b;color:#0a1628;border:none;border-radius:6px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;transition:background .2s}
 .login-btn:hover{background:#e0c060}
 .login-err{color:#e87a4d;font-size:11px;text-align:center;margin-top:10px;min-height:18px}
-#dashboard{display:none;padding:14px;min-height:100vh;background:#060f1e}
+#dashboard{display:none;padding:14px;min-height:100vh;background:#060f1e;max-width:100%;overflow-x:hidden}
 .report-hdr{background:linear-gradient(90deg,#0d1e38,#1a3050);border:2px solid #c8a84b;border-radius:8px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .hdr-left{display:flex;align-items:center;gap:12px}
 .logo{width:48px;height:48px;background:#c8a84b;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#0a1628;flex-shrink:0}
@@ -30,7 +31,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 .sign-out{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:5px 10px;font-size:11px;cursor:pointer}
 .sign-out:hover{border-color:#c8a84b;color:#c8a84b}
 .grid-2x2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.panel{background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:12px 14px}
+.grid-2x2>*{min-width:0}
+.panel{background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:12px 14px;min-width:0;overflow:hidden;max-width:100%}
 .panel-title{font-size:11px;font-weight:700;color:#c8a84b;letter-spacing:1px;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #1a3050;margin-bottom:10px}
 table{width:100%;border-collapse:collapse;font-size:11px}
 table th{color:#7fa3c8;font-weight:600;text-align:right;padding:5px 6px;font-size:10px;border-bottom:1px solid #1a3050}
@@ -44,6 +46,7 @@ table tr:hover td{background:#132540}
 .liq-val{font-size:18px;font-weight:700;color:#4da3e8}
 .full-width{margin-bottom:14px}
 .full-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.full-grid>*{min-width:0}
 .exec-summary{background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:12px 14px;margin-bottom:14px}
 .exec-summary .panel-title{margin-bottom:8px}
 .exec-summary ul{list-style:disc;padding-left:20px;font-size:13px;color:#d4e4f4;line-height:2.2}
@@ -53,6 +56,7 @@ table tr:hover td{background:#132540}
 #loading-bar{height:3px;background:linear-gradient(90deg,#c8a84b,#4da3e8);border-radius:2px;margin-bottom:14px;animation:slide 1.2s ease-in-out infinite;display:none}
 @keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
 .footer{text-align:center;font-size:9px;color:#2a4060;padding-bottom:14px}
+canvas{max-width:100%!important}
 @media(max-width:1024px){.grid-2x2,.full-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.report-hdr{flex-direction:column;text-align:center}.hdr-right{text-align:center}}
 </style>
@@ -138,7 +142,7 @@ table tr:hover td{background:#132540}
     <div class="panel">
       <div class="panel-title">Treasury Bond (Yield Curve)</div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
-      <div style="overflow-x:auto">
+      <div style="overflow-x:auto;max-width:100%">
         <table style="font-size:9px">
           <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
           <tbody id="bondRows"></tbody>
