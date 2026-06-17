@@ -1,35 +1,35 @@
 {
-  "date": "15th June 2026",
+  "date": "16th June 2026",
   "callMarket": {
     "min": "8.4",
     "max": "9.25",
     "wa": "9.19",
-    "vol": "22.6"
+    "vol": "34"
   },
   "repoMarket": {
     "min": "9.22",
     "max": "9.25",
     "wa": "9.24",
-    "vol": "69.05"
+    "vol": "45.79"
   },
   "liquidity": {
-    "current": "39.36",
-    "previous": "62.57",
+    "current": "40.07",
+    "previous": "39.36",
     "labels": [
-      "8-Jun",
       "9-Jun",
       "10-Jun",
       "11-Jun",
       "12-Jun",
-      "15-Jun"
+      "15-Jun",
+      "16-Jun"
     ],
     "values": [
-      63.25,
       59.18,
       57.38,
       66.62,
       62.57,
-      39.36
+      39.36,
+      40.07
     ]
   },
   "fxSwaps": {
@@ -270,7 +270,7 @@
   "execSummary": {
     "usdlkr": "",
     "liqDelta": "",
-    "liqDir": "decreased"
+    "liqDir": "increased"
   },
   "marketSummary": ""
 }
