@@ -92,6 +92,8 @@ canvas{max-width:100%!important}
   <div id="loading-bar"></div>
   <div id="load-err"></div>
 
+  <div class="panel full-width"><div class="panel-title">Money Market</div></div>
+
   <div class="grid-2x2">
     <div class="panel">
       <div class="panel-title">Money &amp; Repo Market</div>
@@ -112,26 +114,6 @@ canvas{max-width:100%!important}
     <div class="panel"><div class="panel-title">Market Liquidity (Rs.Bn)</div><canvas id="liqChart" style="max-height:200px"></canvas></div>
   </div>
 
-  <div class="grid-2x2">
-    <div class="panel">
-      <div class="panel-title">FX Swaps (per day)</div>
-      <table>
-        <thead><tr><th>Tenor</th><th>Sell/Buy</th><th>Buy/Sell</th></tr></thead>
-        <tbody>
-          <tr><td>1 Week</td><td id="sw1ws">—</td><td id="sw1wb">—</td></tr>
-          <tr><td>1 Month</td><td id="sw1ms">—</td><td id="sw1mb">—</td></tr>
-          <tr><td>2 Months</td><td id="sw2ms">—</td><td id="sw2mb">—</td></tr>
-          <tr><td>3 Months</td><td id="sw3ms">—</td><td id="sw3mb">—</td></tr>
-          <tr><td>6 Months</td><td id="sw6ms">—</td><td id="sw6mb">—</td></tr>
-          <tr><td>1 Year</td><td id="sw1ys">—</td><td id="sw1yb">—</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="panel"><div class="panel-title">USD/LKR Movement</div><canvas id="fxChart" style="max-height:200px"></canvas></div>
-  </div>
-
-  <div class="panel full-width"><div class="panel-title">Government Securities</div></div>
-
   <div class="full-grid">
     <div class="panel">
       <div class="panel-title">Treasury Bill</div>
@@ -150,6 +132,26 @@ canvas{max-width:100%!important}
           <tbody id="bondRows"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <div class="panel full-width"><div class="panel-title">USD / FX Market</div></div>
+
+  <div class="grid-2x2">
+    <div class="panel"><div class="panel-title">USD/LKR Movement</div><canvas id="fxChart" style="max-height:200px"></canvas></div>
+    <div class="panel">
+      <div class="panel-title">FX Swaps (per day)</div>
+      <table>
+        <thead><tr><th>Tenor</th><th>Sell/Buy</th><th>Buy/Sell</th></tr></thead>
+        <tbody>
+          <tr><td>1 Week</td><td id="sw1ws">—</td><td id="sw1wb">—</td></tr>
+          <tr><td>1 Month</td><td id="sw1ms">—</td><td id="sw1mb">—</td></tr>
+          <tr><td>2 Months</td><td id="sw2ms">—</td><td id="sw2mb">—</td></tr>
+          <tr><td>3 Months</td><td id="sw3ms">—</td><td id="sw3mb">—</td></tr>
+          <tr><td>6 Months</td><td id="sw6ms">—</td><td id="sw6mb">—</td></tr>
+          <tr><td>1 Year</td><td id="sw1ys">—</td><td id="sw1yb">—</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
