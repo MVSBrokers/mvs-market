@@ -19,7 +19,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 .login-btn{width:100%;background:#c8a84b;color:#0a1628;border:none;border-radius:6px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;transition:background .2s}
 .login-btn:hover{background:#e0c060}
 .login-err{color:#e87a4d;font-size:11px;text-align:center;margin-top:10px;min-height:18px}
-#dashboard{display:none;padding:14px;min-height:100vh;background:#060f1e;max-width:100%;overflow-x:hidden}
+#dashboard{display:block;padding:14px;min-height:100vh;background:#060f1e;max-width:100%;overflow-x:hidden}
 .report-hdr{background:linear-gradient(90deg,#0d1e38,#1a3050);border:2px solid #c8a84b;border-radius:8px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
 .hdr-left{display:flex;align-items:center;gap:12px}
 .logo{width:48px;height:48px;background:#c8a84b;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#0a1628;flex-shrink:0}
@@ -81,23 +81,19 @@ table tr:hover td{background:#132540}
 @keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
 .footer{text-align:center;font-size:9px;color:#2a4060;padding-bottom:14px}
 canvas{max-width:100%!important}
+/* per-chart interval selector */
+.pt-row{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.mini-gran{display:inline-flex;gap:3px}
+.mg-btn{background:#0d1e38;border:1px solid #1a3050;color:#7fa3c8;border-radius:4px;padding:2px 7px;font-size:9px;font-weight:600;cursor:pointer;letter-spacing:0;text-transform:none;line-height:1.5}
+.mg-btn:hover{border-color:#c8a84b;color:#c8a84b}
+.mg-btn.active{background:#c8a84b;color:#0a1628;border-color:#c8a84b}
+/* top news ribbon */
+.news-ribbon{margin-top:0!important;margin-bottom:14px!important;height:38px}
 @media(max-width:1024px){.grid-2x2,.full-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.report-hdr{flex-direction:column;text-align:center}.hdr-right{text-align:center}.hdr-left{flex-direction:column;justify-content:center}.logo{width:68px;height:68px}.logo-img{height:68px}}
 </style>
 </head>
 <body>
-
-<div id="login">
-  <div class="login-card">
-    <h2>MVS Money Brokers<br>Daily Market Report</h2>
-    <form id="loginForm" autocomplete="on">
-      <div class="field"><label>Username</label><input id="user" type="text" placeholder="Username" autocomplete="username" name="username"></div>
-      <div class="field"><label>Password</label><input id="pass" type="password" placeholder="Password" autocomplete="current-password" name="password"></div>
-      <button type="submit" class="login-btn">Sign In</button>
-    </form>
-    <div class="login-err" id="err"></div>
-  </div>
-</div>
 
 <div id="dashboard">
   <div class="report-hdr">
@@ -109,8 +105,13 @@ canvas{max-width:100%!important}
       <div class="hdr-date" id="dateDisplay">—</div>
       <span class="hdr-live">LIVE</span>
       <span id="last-updated" style="font-size:10px;color:#7fa3c8;margin-right:8px"></span>
-      <button class="sign-out" onclick="signout()">Sign Out</button>
     </div>
+  </div>
+
+  <!-- LIVE MARKET NEWS RIBBON -->
+  <div class="ticker-wrap news-ribbon" id="tickerWrap">
+    <div class="ticker-label">Live Market News</div>
+    <div class="ticker-track"><div class="ticker-inner" id="tickerInner"></div></div>
   </div>
 
   <div id="loading-bar"></div>
@@ -136,13 +137,23 @@ canvas{max-width:100%!important}
         <div class="liq-item"><div class="liq-label">Previous Liquidity</div><div class="liq-val" id="liqprev">—</div></div>
       </div>
     </div>
-    <div class="panel"><div class="panel-title">Market Liquidity (Rs.Bn)</div><canvas id="liqChart" style="max-height:200px"></canvas></div>
+    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq','weekly',this)" title="Past week (daily points)">W</button><button class="mg-btn" onclick="setChartGran('liq','monthly',this)" title="Past month (daily points)">M</button><button class="mg-btn active" onclick="setChartGran('liq','yearly',this)" title="Year to date (daily points)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas></div>
+  </div>
+
+  <!-- CBSL HOLDINGS -->
+  <div class="full-width">
+    <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl','weekly',this)" title="Past week (daily points)">W</button><button class="mg-btn" onclick="setChartGran('cbsl','monthly',this)" title="Past month (daily points)">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','yearly',this)" title="Year to date (daily points)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas></div>
+  </div>
+
+  <!-- FOREIGN HOLDINGS -->
+  <div class="full-width">
+    <div class="panel"><div class="panel-title pt-row"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh','weekly',this)" title="Past week (daily points)">W</button><button class="mg-btn" onclick="setChartGran('fh','monthly',this)" title="Past month (daily points)">M</button><button class="mg-btn active" onclick="setChartGran('fh','yearly',this)" title="Year to date (daily points)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas></div>
   </div>
 
   <!-- GOVT SECURITIES SECTION -->
   <div class="full-grid">
     <div class="panel">
-      <div class="panel-title">Treasury Bill</div>
+      <div class="panel-title pt-row"><span>Treasury Bill</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('tbill','weekly',this)" title="Past week (daily points)">W</button><button class="mg-btn" onclick="setChartGran('tbill','monthly',this)" title="Past month (daily points)">M</button><button class="mg-btn active" onclick="setChartGran('tbill','yearly',this)" title="Year to date (daily points)">Y</button></span></div>
       <canvas id="tbillChart" style="max-height:160px;margin-bottom:10px"></canvas>
       <table style="font-size:10px;margin-bottom:12px">
         <thead><tr><th>Auction Date</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
@@ -185,7 +196,7 @@ canvas{max-width:100%!important}
   <div class="panel full-width"><div class="panel-title">USD / FX Market</div></div>
 
   <div class="grid-2x2">
-    <div class="panel"><div class="panel-title">USD/LKR Movement</div><canvas id="fxChart" style="max-height:200px"></canvas></div>
+    <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx','weekly',this)" title="Past week (daily points)">W</button><button class="mg-btn" onclick="setChartGran('fx','monthly',this)" title="Past month (daily points)">M</button><button class="mg-btn active" onclick="setChartGran('fx','yearly',this)" title="Year to date (daily points)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas></div>
     <div class="panel">
       <div class="panel-title">FX Swaps (per day)</div>
       <table>
@@ -202,40 +213,84 @@ canvas{max-width:100%!important}
     </div>
   </div>
 
+  <!-- GLOBAL MARKET HEADER -->
+  <div class="panel full-width"><div class="panel-title">Global Market</div></div>
+
+  <div class="full-width">
+    <div class="panel"><div class="panel-title pt-row"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10','weekly',this)" title="Past week (daily points)">W</button><button class="mg-btn" onclick="setChartGran('g10','monthly',this)" title="Past month (daily points)">M</button><button class="mg-btn active" onclick="setChartGran('g10','yearly',this)" title="Year to date (daily points)">Y</button></span></div><canvas id="g10Chart" style="max-height:240px"></canvas></div>
+  </div>
+
   <div class="exec-summary">
     <div class="panel-title">Executive Summary</div>
     <ul>
       <li>USD/LKR Closed at <strong id="exusd">—</strong></li>
       <li>System liquidity <strong id="exdir">—</strong> by <strong id="exdelta">—</strong> bn.</li>
     </ul>
-    <div class="ticker-wrap" id="tickerWrap">
-      <div class="ticker-label">MARKET NEWS</div>
-      <div class="ticker-track">
-        <div class="ticker-inner" id="tickerInner"></div>
-      </div>
-    </div>
   </div>
 
   <div class="footer">MVS Money Brokers Limited — Confidential. For authorised recipients only.</div>
 </div>
 
 <script>
-const VIEWER_USER="MVSmoney", VIEWER_PASS="MVS1234@";
 const DATA_URL="https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-market/main/data.json";
 const POLL_INTERVAL = 30000;
 let charts={}, pollTimer=null;
+let GRANS={liq:"yearly",cbsl:"yearly",fh:"yearly",fx:"yearly",tbill:"yearly",g10:"yearly"};  // per-chart window (weekly|monthly|yearly), all show daily points
+let lastData=null;       // most recent dataset, for re-render on interval change
 
-function signin(){
-  if(document.getElementById("user").value.trim()===VIEWER_USER&&document.getElementById("pass").value===VIEWER_PASS){
-    sessionStorage.setItem("mvs_auth","1");
-    document.getElementById("login").style.display="none";
-    document.getElementById("dashboard").style.display="block";
-    loadData();
-    startPolling();
-  }else document.getElementById("err").textContent="Invalid credentials";
+// Tooltips: show the value when the cursor is near any point (no need to hit it exactly)
+if(window.Chart){
+  Chart.defaults.interaction.mode="index";
+  Chart.defaults.interaction.intersect=false;
+  Chart.defaults.plugins.tooltip.enabled=true;
+  Chart.defaults.elements.point.hoverRadius=5;
+  Chart.defaults.elements.point.hitRadius=10;
 }
-document.getElementById("loginForm").addEventListener("submit",function(e){e.preventDefault();signin();});
-function signout(){stopPolling();sessionStorage.removeItem("mvs_auth");location.reload();}
+
+// ── Time-interval aggregation ───────────────────────────
+const MON_=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function parseLabel(lb){
+  if(lb==null)return null;
+  const s=String(lb).trim();
+  let m=s.match(/^(\d{1,2})[\s-]([A-Za-z]{3})/);            // "1 Jan" or "4-Jun"
+  if(m){const idx=MON_.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());
+        if(idx>=0)return new Date(2026,idx,parseInt(m[1]));}
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);              // "6/17/2026"
+  if(m)return new Date(+m[3],+m[1]-1,+m[2]);
+  const d=new Date(s); return isNaN(d)?null:d;
+}
+function bucketKey(d,gran){
+  const y=d.getFullYear();
+  if(gran==="yearly")return ""+y;
+  if(gran==="monthly")return y+"-"+d.getMonth();
+  if(gran==="weekly"){const st=new Date(y,0,1);const doy=Math.floor((d-st)/86400000);return y+"-W"+Math.floor(doy/7);}
+  return null;
+}
+// Window filter: keep DAILY points, but only those within the chosen window
+// (weekly = latest ~7 days, monthly = latest ~1 month, yearly = latest ~12 months).
+function aggregateIdx(labels,win){
+  const all={labels:labels||[],idx:(labels||[]).map((_,i)=>i)};
+  if(!labels||!labels.length)return all;
+  const dates=labels.map(parseLabel);
+  let latest=null; dates.forEach(d=>{if(d&&(!latest||d>latest))latest=d;});
+  if(!latest)return all;
+  let cutoff;
+  if(win==="weekly")cutoff=new Date(latest.getTime()-6*86400000);
+  else if(win==="monthly")cutoff=new Date(latest.getFullYear(),latest.getMonth()-1,latest.getDate());
+  else cutoff=new Date(latest.getFullYear()-1,latest.getMonth(),latest.getDate());
+  const idx=[];
+  dates.forEach((d,i)=>{if(d&&d>=cutoff)idx.push(i);});
+  if(!idx.length)return all;
+  return{labels:idx.map(i=>labels[i]),idx};
+}
+function pick(values,idx){return idx.map(i=>(values&&values[i]!==undefined)?values[i]:null);}
+
+function setChartGran(key,g,btn){
+  GRANS[key]=g;
+  if(btn&&btn.parentNode){btn.parentNode.querySelectorAll(".mg-btn").forEach(b=>b.classList.toggle("active",b===btn));}
+  if(lastData)buildCharts(lastData);
+}
+
 function startPolling(){stopPolling();pollTimer=setInterval(()=>loadData(true),POLL_INTERVAL);}
 function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
 
@@ -307,6 +362,7 @@ function renderTbillAuction(data){
 }
 
 function render(d){
+  lastData=d;
   const td=new Date(),dy=td.getDate();
   const sx=dy===1||dy===21||dy===31?'st':dy===2||dy===22?'nd':dy===3||dy===23?'rd':'th';
   const ml=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -349,28 +405,48 @@ function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
 
 function buildCharts(d){
   const gc="rgba(26,48,80,.5)",tc="#7fa3c8",tf={size:10};
+  const xt={color:tc,font:{size:8},autoSkip:true,maxTicksLimit:12,maxRotation:0};
   destroyChart("liq");
-  charts.liq=new Chart(document.getElementById("liqChart"),{type:"line",data:{labels:d.liquidity?.labels||[],datasets:[{label:"Rs.Bn",data:d.liquidity?.values||[],borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.4,pointRadius:3,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:tf},grid:{color:gc}}}}});
+  const liqAg=aggregateIdx(d.liquidity?.labels||[],GRANS.liq);
+  charts.liq=new Chart(document.getElementById("liqChart"),{type:"line",data:{labels:liqAg.labels,datasets:[{label:"Rs.Bn",data:pick(d.liquidity?.values||[],liqAg.idx),borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  destroyChart("cbsl");
+  const cbAg=aggregateIdx(d.cbsl?.labels||[],GRANS.cbsl);
+  const cbv=pick(d.cbsl?.values||[],cbAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
+  const cbn=cbv.filter(v=>v!=null);
+  charts.cbsl=new Chart(document.getElementById("cbslChart"),{type:"line",data:{labels:cbAg.labels,datasets:[{label:"Rs.Bn",data:cbv,borderColor:"#e08a3c",backgroundColor:"rgba(224,138,60,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:cbn.length?(Math.min(...cbn)-2):undefined,max:cbn.length?(Math.max(...cbn)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  destroyChart("fh");
+  const fhAg=aggregateIdx(d.foreign?.labels||[],GRANS.fh);
+  const fhv=pick(d.foreign?.values||[],fhAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
+  const fhn=fhv.filter(v=>v!=null);
+  charts.fh=new Chart(document.getElementById("fhChart"),{type:"line",data:{labels:fhAg.labels,datasets:[{label:"Rs.Mn",data:fhv,borderColor:"#3cb6a8",backgroundColor:"rgba(60,182,168,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fhn.length?(Math.min(...fhn)-500):undefined,max:fhn.length?(Math.max(...fhn)+500):undefined},x:{ticks:xt,grid:{color:gc}}}}});
   destroyChart("fx");
-  const fv=(d.usdlkr?.values||[]).filter(v=>v>0);
-  charts.fx=new Chart(document.getElementById("fxChart"),{type:"line",data:{labels:d.usdlkr?.labels||[],datasets:[{label:"LKR",data:d.usdlkr?.values||[],borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:2,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},x:{ticks:{color:tc,font:tf},grid:{color:gc}}}}});
+  const fxAg=aggregateIdx(d.usdlkr?.labels||[],GRANS.fx);
+  const fxData=pick(d.usdlkr?.values||[],fxAg.idx);
+  const fv=fxData.filter(v=>v>0);
+  charts.fx=new Chart(document.getElementById("fxChart"),{type:"line",data:{labels:fxAg.labels,datasets:[{label:"LKR",data:fxData,borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
   destroyChart("tbill");
   const tbr=[...(d.tbills||[])].reverse();
-  charts.tbill=new Chart(document.getElementById("tbillChart"),{type:"line",data:{labels:tbr.map(r=>r.date),datasets:[{label:"3M",data:tbr.map(r=>parseFloat(r.m3)||null),borderColor:"#4da3e8",tension:0.3,pointRadius:2,borderWidth:1.5,fill:false},{label:"6M",data:tbr.map(r=>parseFloat(r.m6)||null),borderColor:"#c8a84b",tension:0.3,pointRadius:2,borderWidth:1.5,fill:false},{label:"12M",data:tbr.map(r=>parseFloat(r.m12)||null),borderColor:"#6dd4a0",tension:0.3,pointRadius:2,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
+  const tbAg=aggregateIdx(tbr.map(r=>r.date),GRANS.tbill);
+  charts.tbill=new Chart(document.getElementById("tbillChart"),{type:"line",data:{labels:tbAg.labels,datasets:[{label:"3M",data:pick(tbr.map(r=>parseFloat(r.m3)||null),tbAg.idx),borderColor:"#4da3e8",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"6M",data:pick(tbr.map(r=>parseFloat(r.m6)||null),tbAg.idx),borderColor:"#c8a84b",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"12M",data:pick(tbr.map(r=>parseFloat(r.m12)||null),tbAg.idx),borderColor:"#6dd4a0",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
   destroyChart("yield");
   const yRows=(d.bonds?.rows||[]).filter(r=>(r.values||[]).some(v=>v&&v!=="0"));
   const yData=yRows.map(r=>{const last=(r.values||[]).filter(v=>v&&v!=="0").pop();if(!last)return null;const p=last.split("/");return p.length===2?+((parseFloat(p[0])+parseFloat(p[1]))/2).toFixed(3):parseFloat(last)||null;}).filter(v=>v!==null);
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const yLabels=yRows.map(r=>{const p=r.bond.split(".");if(p.length===3){const m=parseInt(p[1])-1,y=parseInt(p[2]);if(!isNaN(m)&&!isNaN(y)&&m>=0&&m<=11)return MON[m]+" "+y;}return r.bond;});
   charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels.slice(0,yData.length),datasets:[{label:"Avg Yield %",data:yData,borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.4,pointRadius:4,pointBorderColor:"#fff",pointBorderWidth:2,borderWidth:2.5,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9}}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
+
+  // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
+  destroyChart("g10");
+  const gAg=aggregateIdx(d.global10y?.labels||[],GRANS.g10);
+  const g10raw=pick(d.global10y?.values||[],gAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
+  const g10n=g10raw.filter(v=>v!=null);
+  charts.g10=new Chart(document.getElementById("g10Chart"),{type:"line",data:{labels:gAg.labels,datasets:[{label:"US 10Y %",data:g10raw,borderColor:"#a77ad4",backgroundColor:"rgba(167,122,212,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:g10n.length?(Math.min(...g10n)-0.1):undefined,max:g10n.length?(Math.max(...g10n)+0.1):undefined},x:{ticks:xt,grid:{color:gc}}}}});
 }
 
-if(sessionStorage.getItem("mvs_auth")==="1"){
-  document.getElementById("login").style.display="none";
-  document.getElementById("dashboard").style.display="block";
-  loadData();
-  startPolling();
-}
+// no login required — load immediately
+loadData();
+startPolling();
+
 </script>
 </body>
 </html>
