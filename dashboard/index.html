@@ -49,23 +49,32 @@ table tr:hover td{background:#132540}
 .full-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .full-grid>*{min-width:0}
 
+/* ── TBILL AUCTION TABLE ───────────────────────────────── */
+.tbill-auction-wrap{overflow-x:auto;max-width:100%}
+.tbill-auction-table{width:100%;border-collapse:collapse;font-size:11px;min-width:480px}
+.tbill-auction-table th{color:#7fa3c8;font-weight:600;text-align:center;padding:6px 8px;font-size:10px;border-bottom:2px solid #1a3050;background:#091525;white-space:nowrap}
+.tbill-auction-table th:first-child{text-align:left}
+.tbill-auction-table td{padding:5px 8px;text-align:center;color:#d4e4f4;border-top:1px solid #0d2040;vertical-align:middle}
+.tbill-auction-table td:first-child{text-align:left;color:#c8a84b;font-weight:700;font-size:11px}
+.tbill-auction-table td.mat-cell{color:#7fa3c8;font-size:10px;font-weight:500;text-align:center}
+.tbill-auction-table tr:hover td{background:#132540}
+.tbill-auction-table .date-row td{background:#0a1828}
+.tbill-auction-table .date-row td:first-child{color:#c8a84b;font-weight:700}
+/* Merged date cell styling */
+.tbill-auction-table td[rowspan]{font-weight:700;color:#c8a84b;border-right:1px solid #1a3050}
+
 /* ── EXECUTIVE SUMMARY WITH TICKER ─────────────────────── */
 .exec-summary{background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:12px 14px;margin-bottom:14px}
 .exec-summary .panel-title{margin-bottom:8px}
 .exec-summary ul{list-style:disc;padding-left:20px;font-size:13px;color:#d4e4f4;line-height:2.2}
 .exec-summary ul li strong{color:#fff}
-
-/* Ticker ribbon */
 .ticker-wrap{overflow:hidden;background:#091525;border:1px solid #1a3050;border-left:3px solid #c8a84b;border-radius:4px;margin-top:12px;height:34px;display:none;align-items:center;position:relative}
 .ticker-wrap.visible{display:flex}
 .ticker-label{flex-shrink:0;background:#c8a84b;color:#0a1628;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:100%;display:flex;align-items:center;white-space:nowrap}
 .ticker-track{flex:1;overflow:hidden;position:relative;height:100%}
 .ticker-inner{display:inline-flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-scroll linear infinite}
 .ticker-inner span{font-size:12px;color:#b8cfe8;padding:0 60px 0 0}
-@keyframes ticker-scroll{
-  0%{transform:translateX(0)}
-  100%{transform:translateX(-50%)}
-}
+@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 #load-err{display:none;background:#1a0808;border:1px solid #5a2020;border-radius:8px;padding:14px;color:#e87a4d;font-size:12px;margin-bottom:14px;text-align:center}
 #loading-bar{height:3px;background:linear-gradient(90deg,#c8a84b,#4da3e8);border-radius:2px;margin-bottom:14px;animation:slide 1.2s ease-in-out infinite;display:none}
@@ -107,6 +116,7 @@ canvas{max-width:100%!important}
   <div id="loading-bar"></div>
   <div id="load-err"></div>
 
+  <!-- MONEY MARKET HEADER -->
   <div class="panel full-width"><div class="panel-title">Money Market</div></div>
 
   <div class="grid-2x2">
@@ -129,6 +139,7 @@ canvas{max-width:100%!important}
     <div class="panel"><div class="panel-title">Market Liquidity (Rs.Bn)</div><canvas id="liqChart" style="max-height:200px"></canvas></div>
   </div>
 
+  <!-- GOVT SECURITIES SECTION -->
   <div class="full-grid">
     <div class="panel">
       <div class="panel-title">Treasury Bill</div>
@@ -150,6 +161,28 @@ canvas{max-width:100%!important}
     </div>
   </div>
 
+  <!-- ══ NEW: TREASURY BILL AUCTION TABLE ══ -->
+  <div class="panel full-width" style="margin-bottom:14px">
+    <div class="panel-title">Treasury Bill — Auction Details</div>
+    <div class="tbill-auction-wrap">
+      <table class="tbill-auction-table" id="tbillAuctionTable">
+        <thead>
+          <tr>
+            <th>Auction Date</th>
+            <th>Maturity</th>
+            <th>Amount Offered (Rs.Mn)</th>
+            <th>Amount Accepted (Rs.Mn)</th>
+            <th>Yield (%)</th>
+          </tr>
+        </thead>
+        <tbody id="tbillAuctionBody">
+          <tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:14px">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FX MARKET HEADER -->
   <div class="panel full-width"><div class="panel-title">USD / FX Market</div></div>
 
   <div class="grid-2x2">
@@ -176,13 +209,10 @@ canvas{max-width:100%!important}
       <li>USD/LKR Closed at <strong id="exusd">—</strong></li>
       <li>System liquidity <strong id="exdir">—</strong> by <strong id="exdelta">—</strong> bn.</li>
     </ul>
-    <!-- Scrolling ticker ribbon for market summary -->
     <div class="ticker-wrap" id="tickerWrap">
       <div class="ticker-label">MARKET NEWS</div>
       <div class="ticker-track">
-        <div class="ticker-inner" id="tickerInner">
-          <!-- duplicate spans filled by JS for seamless loop -->
-        </div>
+        <div class="ticker-inner" id="tickerInner"></div>
       </div>
     </div>
   </div>
@@ -205,108 +235,113 @@ function signin(){
     startPolling();
   }else document.getElementById("err").textContent="Invalid credentials";
 }
-document.getElementById("loginForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  signin();
-});
-function signout(){
-  stopPolling();
-  sessionStorage.removeItem("mvs_auth");
-  location.reload();
-}
-
-function startPolling(){
-  stopPolling();
-  pollTimer = setInterval(()=>loadData(true), POLL_INTERVAL);
-}
-function stopPolling(){
-  if(pollTimer){ clearInterval(pollTimer); pollTimer=null; }
-}
+document.getElementById("loginForm").addEventListener("submit",function(e){e.preventDefault();signin();});
+function signout(){stopPolling();sessionStorage.removeItem("mvs_auth");location.reload();}
+function startPolling(){stopPolling();pollTimer=setInterval(()=>loadData(true),POLL_INTERVAL);}
+function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
 
 async function loadData(silent=false){
-  const bar=document.getElementById("loading-bar");
-  const errEl=document.getElementById("load-err");
-  if(!silent){ bar.style.display="block"; errEl.style.display="none"; }
+  const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
+  if(!silent){bar.style.display="block";errEl.style.display="none";}
   try{
     const res=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
-    if(!res.ok) throw new Error("HTTP "+res.status);
+    if(!res.ok)throw new Error("HTTP "+res.status);
     const d=await res.json();
     bar.style.display="none";
     render(d);
   }catch(e){
     bar.style.display="none";
-    if(!silent){
-      errEl.style.display="block";
-      errEl.textContent="Could not load data — "+e.message;
-    }
+    if(!silent){errEl.style.display="block";errEl.textContent="Could not load data — "+e.message;}
   }
 }
 
 function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=(val!=null&&val!=="")? val:"—";}
 
-// ── TICKER BUILDER ────────────────────────────────────────
 function buildTicker(text){
-  const wrap = document.getElementById("tickerWrap");
-  const inner = document.getElementById("tickerInner");
-  if(!text || !text.trim()){
-    wrap.classList.remove("visible");
+  const wrap=document.getElementById("tickerWrap"),inner=document.getElementById("tickerInner");
+  if(!text||!text.trim()){wrap.classList.remove("visible");return;}
+  inner.innerHTML="";
+  const s1=document.createElement("span");s1.textContent=text.trim();
+  const s2=document.createElement("span");s2.textContent=text.trim();
+  inner.appendChild(s1);inner.appendChild(s2);
+  wrap.classList.add("visible");
+  requestAnimationFrame(()=>{
+    const w=s1.offsetWidth+60;
+    inner.style.animationDuration=Math.max(12,w/80)+"s";
+  });
+}
+
+// ── RENDER TBILL AUCTION TABLE ──────────────────────────
+function renderTbillAuction(data){
+  const tbody=document.getElementById("tbillAuctionBody");
+  tbody.innerHTML="";
+  if(!data||!data.length){
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:14px">No auction data available</td></tr>';
     return;
   }
-  // Clear old content
-  inner.innerHTML = "";
-  // We duplicate the text so the animation loops seamlessly
-  // Each copy is wrapped in a span; CSS animates translateX(-50%)
-  const s1 = document.createElement("span"); s1.textContent = text.trim();
-  const s2 = document.createElement("span"); s2.textContent = text.trim();
-  inner.appendChild(s1);
-  inner.appendChild(s2);
-
-  // Calculate speed: ~80px per second, minimum 12s
-  // We need the width of one copy to set the right duration
-  wrap.classList.add("visible");
-  // Use rAF to measure after paint
-  requestAnimationFrame(()=>{
-    const w = s1.offsetWidth + 60; // 60px = padding-right
-    const duration = Math.max(12, w / 80);
-    inner.style.animationDuration = duration + "s";
+  data.forEach(entry=>{
+    const mats=entry.maturities||[];
+    const rowCount=mats.length||1;
+    mats.forEach((m,mi)=>{
+      const tr=document.createElement("tr");
+      if(mi===0){
+        // Date cell spans all maturity rows
+        const dateTd=document.createElement("td");
+        dateTd.rowSpan=rowCount;
+        dateTd.textContent=entry.date||"—";
+        dateTd.style.fontWeight="700";
+        dateTd.style.color="#c8a84b";
+        dateTd.style.borderRight="1px solid #1a3050";
+        dateTd.style.verticalAlign="middle";
+        tr.appendChild(dateTd);
+      }
+      const matTd=document.createElement("td");matTd.className="mat-cell";matTd.textContent=m.maturity||"—";
+      const offTd=document.createElement("td");offTd.textContent=m.offered||"—";
+      const accTd=document.createElement("td");accTd.textContent=m.accepted||"—";
+      const yldTd=document.createElement("td");
+      yldTd.textContent=m.yield||"—";
+      if(m.yield&&m.yield!=="—"){yldTd.style.color="#6dd4a0";yldTd.style.fontWeight="600";}
+      tr.appendChild(matTd);tr.appendChild(offTd);tr.appendChild(accTd);tr.appendChild(yldTd);
+      tbody.appendChild(tr);
+    });
   });
 }
 
 function render(d){
-  const td=new Date(), dy=td.getDate();
+  const td=new Date(),dy=td.getDate();
   const sx=dy===1||dy===21||dy===31?'st':dy===2||dy===22?'nd':dy===3||dy===23?'rd':'th';
   const ml=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  setText("dateDisplay", dy+sx+' '+ml[td.getMonth()]+' '+td.getFullYear());
-
+  setText("dateDisplay",dy+sx+' '+ml[td.getMonth()]+' '+td.getFullYear());
   const lu=document.getElementById("last-updated");
-  if(lu) lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  if(lu)lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
-  setText("cmmin",d.callMarket?.min); setText("rmmin",d.repoMarket?.min);
-  setText("cmmax",d.callMarket?.max); setText("rmmax",d.repoMarket?.max);
-  setText("cmwa", d.callMarket?.wa);  setText("rmwa", d.repoMarket?.wa);
-  setText("cmvol",d.callMarket?.vol); setText("rmvol",d.repoMarket?.vol);
-  setText("liqcur",d.liquidity?.current); setText("liqprev",d.liquidity?.previous);
-  setText("sw1ws",d.fxSwaps?.["1w"]?.sell); setText("sw1wb",d.fxSwaps?.["1w"]?.buy);
-  setText("sw1ms",d.fxSwaps?.["1m"]?.sell); setText("sw1mb",d.fxSwaps?.["1m"]?.buy);
-  setText("sw2ms",d.fxSwaps?.["2m"]?.sell); setText("sw2mb",d.fxSwaps?.["2m"]?.buy);
-  setText("sw3ms",d.fxSwaps?.["3m"]?.sell); setText("sw3mb",d.fxSwaps?.["3m"]?.buy);
-  setText("sw6ms",d.fxSwaps?.["6m"]?.sell); setText("sw6mb",d.fxSwaps?.["6m"]?.buy);
-  setText("sw1ys",d.fxSwaps?.["1y"]?.sell); setText("sw1yb",d.fxSwaps?.["1y"]?.buy);
+  setText("cmmin",d.callMarket?.min);setText("rmmin",d.repoMarket?.min);
+  setText("cmmax",d.callMarket?.max);setText("rmmax",d.repoMarket?.max);
+  setText("cmwa",d.callMarket?.wa); setText("rmwa",d.repoMarket?.wa);
+  setText("cmvol",d.callMarket?.vol);setText("rmvol",d.repoMarket?.vol);
+  setText("liqcur",d.liquidity?.current);setText("liqprev",d.liquidity?.previous);
+  setText("sw1ws",d.fxSwaps?.["1w"]?.sell);setText("sw1wb",d.fxSwaps?.["1w"]?.buy);
+  setText("sw1ms",d.fxSwaps?.["1m"]?.sell);setText("sw1mb",d.fxSwaps?.["1m"]?.buy);
+  setText("sw2ms",d.fxSwaps?.["2m"]?.sell);setText("sw2mb",d.fxSwaps?.["2m"]?.buy);
+  setText("sw3ms",d.fxSwaps?.["3m"]?.sell);setText("sw3mb",d.fxSwaps?.["3m"]?.buy);
+  setText("sw6ms",d.fxSwaps?.["6m"]?.sell);setText("sw6mb",d.fxSwaps?.["6m"]?.buy);
+  setText("sw1ys",d.fxSwaps?.["1y"]?.sell);setText("sw1yb",d.fxSwaps?.["1y"]?.buy);
 
-  const tb=document.getElementById("tbillRows"); tb.innerHTML="";
+  const tb=document.getElementById("tbillRows");tb.innerHTML="";
   (d.tbills||[]).forEach(r=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${r.date}</td><td>${r.m3}</td><td>${r.m6}</td><td>${r.m12}</td>`;tb.appendChild(tr);});
 
-  const bhr=document.getElementById("bondHeaderRow"); bhr.innerHTML="<th>Bond</th>";
+  const bhr=document.getElementById("bondHeaderRow");bhr.innerHTML="<th>Bond</th>";
   (d.bonds?.headers||[]).forEach(h=>{const th=document.createElement("th");th.textContent=h;bhr.appendChild(th);});
-  const bb=document.getElementById("bondRows"); bb.innerHTML="";
+  const bb=document.getElementById("bondRows");bb.innerHTML="";
   (d.bonds?.rows||[]).forEach(r=>{const tr=document.createElement("tr");let c=`<td>${r.bond}</td>`;(r.values||[]).forEach(v=>{c+=`<td>${v&&v!=="0"?v:"—"}</td>`;});tr.innerHTML=c;bb.appendChild(tr);});
 
   setText("exusd",d.execSummary?.usdlkr);
   setText("exdir",d.execSummary?.liqDir);
   setText("exdelta",d.execSummary?.liqDelta);
-
-  // Build ticker from marketSummary
   buildTicker((d.marketSummary||"").trim());
+
+  // ── NEW: render T-Bill Auction Detail table
+  renderTbillAuction(d.tbillAuction||[]);
 
   buildCharts(d);
 }
