@@ -144,10 +144,30 @@ canvas{max-width:100%!important}
     <div class="panel">
       <div class="panel-title">Treasury Bill</div>
       <canvas id="tbillChart" style="max-height:160px;margin-bottom:10px"></canvas>
-      <table style="font-size:10px">
+      <table style="font-size:10px;margin-bottom:12px">
         <thead><tr><th>Auction Date</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
         <tbody id="tbillRows"></tbody>
       </table>
+      <!-- Auction Detail Table inside T-Bill panel -->
+      <div style="border-top:1px solid #1a3050;padding-top:10px;margin-top:2px">
+        <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px">Auction Details</div>
+        <div class="tbill-auction-wrap">
+          <table class="tbill-auction-table" id="tbillAuctionTable">
+            <thead>
+              <tr>
+                <th>Auction Date</th>
+                <th>Maturity</th>
+                <th>Offered (Rs.Mn)</th>
+                <th>Accepted (Rs.Mn)</th>
+                <th>Yield (%)</th>
+              </tr>
+            </thead>
+            <tbody id="tbillAuctionBody">
+              <tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:10px">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
     <div class="panel">
       <div class="panel-title">Treasury Bond (Yield Curve)</div>
@@ -158,27 +178,6 @@ canvas{max-width:100%!important}
           <tbody id="bondRows"></tbody>
         </table>
       </div>
-    </div>
-  </div>
-
-  <!-- ══ NEW: TREASURY BILL AUCTION TABLE ══ -->
-  <div class="panel full-width" style="margin-bottom:14px">
-    <div class="panel-title">Treasury Bill — Auction Details</div>
-    <div class="tbill-auction-wrap">
-      <table class="tbill-auction-table" id="tbillAuctionTable">
-        <thead>
-          <tr>
-            <th>Auction Date</th>
-            <th>Maturity</th>
-            <th>Amount Offered (Rs.Mn)</th>
-            <th>Amount Accepted (Rs.Mn)</th>
-            <th>Yield (%)</th>
-          </tr>
-        </thead>
-        <tbody id="tbillAuctionBody">
-          <tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:14px">—</td></tr>
-        </tbody>
-      </table>
     </div>
   </div>
 
