@@ -21,7 +21,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 .login-btn:hover{background:#6ab8f0}
 .err{color:#e87a4d;font-size:11px;text-align:center;margin-top:8px;min-height:16px}
 
-#app{display:none;padding:10px;min-height:100vh;max-width:100%;overflow-x:hidden}
+#app{display:block;padding:10px;min-height:100vh;max-width:100%;overflow-x:hidden}
 .hdr{display:flex;justify-content:space-between;align-items:center;background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:8px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
 .hdr-left{display:flex;align-items:center;gap:10px}
 .logo-circle{width:44px;height:44px;background:#4da3e8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#0a1628;flex-shrink:0;text-align:center;line-height:1.2}
@@ -81,7 +81,24 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 /* ── TBILL AUCTION SECTION ───────────────────────── */
 .tbill-auction-hint{font-size:11px;color:#7fa3c8;margin-bottom:8px;line-height:1.6}
 .tbill-auction-hint strong{color:#c8a84b}
-
+/* Group block per auction date */
+.auction-group{background:#091525;border:1px solid #1a3050;border-radius:6px;padding:10px 12px;margin-bottom:10px;position:relative}
+.auction-group-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.auction-group-hdr label{font-size:10px;color:#7fa3c8;text-transform:uppercase}
+.auction-group-hdr input{background:#0d1e38;border:1px solid #1a4060;border-radius:4px;padding:5px 9px;color:#c8a84b;font-size:12px;font-weight:700;outline:none;width:140px}
+.auction-group-hdr input:focus{border-color:#c8a84b}
+.rm-group-btn{background:#2a1010;color:#e87a4d;border:1px solid #5a2020;border-radius:3px;padding:3px 8px;font-size:11px;cursor:pointer;margin-left:auto}
+.rm-group-btn:hover{background:#5a1a1a}
+.mat-rows table{width:100%;border-collapse:collapse;font-size:11px}
+.mat-rows th{background:#0a1828;color:#7fa3c8;padding:4px 8px;font-size:10px;text-align:left;border-bottom:1px solid #1a3050}
+.mat-rows td{padding:3px 3px;border-top:1px solid #0d2040}
+.mat-rows td input,.mat-rows td select{background:#060f1e;border:1px solid #0d2040;border-radius:3px;padding:4px 7px;color:#d4e4f4;font-size:11px;width:100%;outline:none}
+.mat-rows td input:focus,.mat-rows td select:focus{border-color:#4da3e8}
+.mat-rows td:last-child{width:30px;text-align:center}
+.add-mat-btn{background:#091525;color:#6dd4a0;border:1px solid #1a4060;border-radius:4px;padding:4px 10px;font-size:10px;cursor:pointer;margin-top:5px}
+.add-mat-btn:hover{background:#1a3050}
+.add-group-btn{background:#0d1e38;color:#c8a84b;border:1px solid #c8a84b;border-radius:5px;padding:7px 16px;font-size:11px;font-weight:700;cursor:pointer;margin-top:4px}
+.add-group-btn:hover{background:#1a2a0a}
 
 .toast{position:fixed;bottom:22px;right:22px;background:#1a5c3a;color:#6dd4a0;border:1px solid #2a7a50;border-radius:6px;padding:10px 18px;font-size:12px;font-weight:600;z-index:2000;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;max-width:320px}
 .toast.show{opacity:1;transform:translateY(0)}
@@ -90,20 +107,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 </style>
 </head>
 <body>
-
-<!-- LOGIN -->
-<div id="login-page">
-  <div class="card">
-    <div class="card-logo">✏️</div>
-    <h2>MVS Money Brokers<br>Data Editor — Staff Access</h2>
-    <form id="loginForm" autocomplete="on">
-      <div class="field"><label>Username</label><input id="u" type="text" placeholder="Staff username" autocomplete="username" name="username"></div>
-      <div class="field"><label>Password</label><input id="p" type="password" placeholder="Staff password" autocomplete="current-password" name="password"></div>
-      <button type="submit" class="login-btn">Sign In</button>
-    </form>
-    <div class="err" id="err"></div>
-  </div>
-</div>
 
 <!-- EDITOR APP -->
 <div id="app">
@@ -117,10 +120,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
     </div>
     <div class="hdr-right">
       <span class="badge-edit">EDITOR MODE</span>
-      <button class="btn-blue" onclick="document.getElementById('xl-input').click()">⬆ Import Excel</button>
-      <input type="file" id="xl-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="importExcel(event)">
+      <button class="btn-blue" onclick="document.getElementById('xl-input').click()">⬆ Import Excel (select both files)</button>
+      <input type="file" id="xl-input" accept=".xlsx,.xls,.csv" multiple style="display:none" onchange="importExcel(event)">
       <button class="btn-gold" onclick="downloadTemplate()">⬇ Template</button>
-      <button class="btn-ghost" onclick="logout()">Sign Out</button>
     </div>
   </div>
 
@@ -198,6 +200,28 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
     <button class="add-btn" onclick="addRow('liq-rows',['',''])">+ Add Row</button>
   </div>
 
+  <!-- CBSL HOLDINGS -->
+  <div class="section">
+    <div class="sec-title">CBSL Holdings of Govt Securities (chart)</div>
+    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Oldest first, newest last. Auto-filled from the <strong style="color:#c8a84b">CBSL Holdings</strong> sheet when you import MarketData.xlsx.</div>
+    <table class="dyn-table">
+      <thead><tr><th>Date Label</th><th>Holdings (Rs.Bn)</th><th></th></tr></thead>
+      <tbody id="cbsl-rows"></tbody>
+    </table>
+    <button class="add-btn" onclick="addRow('cbsl-rows',['',''])">+ Add Row</button>
+  </div>
+
+  <!-- FOREIGN HOLDINGS -->
+  <div class="section">
+    <div class="sec-title">Foreign Holdings of Govt Securities (chart)</div>
+    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Oldest first, newest last. Auto-filled from the <strong style="color:#c8a84b">Foreign Holdings</strong> sheet when you import MarketData.xlsx.</div>
+    <table class="dyn-table">
+      <thead><tr><th>Date Label</th><th>Volume (Rs.Mn)</th><th></th></tr></thead>
+      <tbody id="fh-rows"></tbody>
+    </table>
+    <button class="add-btn" onclick="addRow('fh-rows',['',''])">+ Add Row</button>
+  </div>
+
   <!-- FX SWAPS -->
   <div class="section">
     <div class="sec-title">FX Swaps (per day)</div>
@@ -266,6 +290,17 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
     <button class="add-btn" onclick="addRow('bond-rows',['','','','','','',''])">+ Add Row</button>
   </div>
 
+  <!-- GLOBAL MARKET (US 10Y) -->
+  <div class="section">
+    <div class="sec-title green">Global Market — US Treasury 10-Year Yield (chart)</div>
+    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Oldest first, newest last. Auto-filled from the <strong style="color:#c8a84b">Gloable Market</strong> sheet when you import MarketData.xlsx.</div>
+    <table class="dyn-table">
+      <thead><tr><th>Date Label</th><th>Yield (%)</th><th></th></tr></thead>
+      <tbody id="gm-rows"></tbody>
+    </table>
+    <button class="add-btn" onclick="addRow('gm-rows',['',''])">+ Add Row</button>
+  </div>
+
   <!-- EXEC SUMMARY -->
   <div class="section">
     <div class="sec-title">Executive Summary</div>
@@ -294,23 +329,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 // ── GLOBALS ─────────────────────────────────────────────
 let bondHeaders = ['5-Jun','8-Jun','9-Jun','10-Jun','11-Jun','12-Jun'];
 
-// ── AUTH ────────────────────────────────────────────────
-const EDIT_USER='MVSeditor', EDIT_PASS='MVSEdit@2026';
-function login(){
-  if(document.getElementById('u').value.trim()===EDIT_USER&&document.getElementById('p').value===EDIT_PASS){
-    sessionStorage.setItem('mvs_e','1');
-    document.getElementById('login-page').style.display='none';
-    document.getElementById('app').style.display='block';
-    initApp();
-  }else document.getElementById('err').textContent='Incorrect username or password.';
-}
-document.getElementById('loginForm').addEventListener('submit',function(e){e.preventDefault();login();});
-function logout(){sessionStorage.removeItem('mvs_e');location.reload();}
-if(sessionStorage.getItem('mvs_e')==='1'){
-  document.getElementById('login-page').style.display='none';
-  document.getElementById('app').style.display='block';
-  initApp();
-}
+// ── NO LOGIN — open editor immediately ──────────────────
+initApp();
 
 // ── GITHUB CONFIG ────────────────────────────────────────
 function loadConfig(){
@@ -396,12 +416,16 @@ function buildData(){
     callMarket:{min:gv('cm-min'),max:gv('cm-max'),wa:gv('cm-wa'),vol:gv('cm-vol')},
     repoMarket:{min:gv('rm-min'),max:gv('rm-max'),wa:gv('rm-wa'),vol:gv('rm-vol')},
     liquidity:{current:gv('liq-cur'),previous:gv('liq-prev'),labels:getRows('liq-rows').map(r=>r[0]),values:getRows('liq-rows').map(r=>parseFloat(r[1])||0)},
+    cbsl:{labels:getRows('cbsl-rows').map(r=>r[0]),values:getRows('cbsl-rows').map(r=>parseFloat(r[1])||0)},
+    foreign:{labels:getRows('fh-rows').map(r=>r[0]),values:getRows('fh-rows').map(r=>parseFloat(r[1])||0)},
     fxSwaps:{'1w':{sell:gv('sw-1w-s'),buy:gv('sw-1w-b')},'1m':{sell:gv('sw-1m-s'),buy:gv('sw-1m-b')},'2m':{sell:gv('sw-2m-s'),buy:gv('sw-2m-b')},'3m':{sell:gv('sw-3m-s'),buy:gv('sw-3m-b')},'6m':{sell:gv('sw-6m-s'),buy:gv('sw-6m-b')},'1y':{sell:gv('sw-1y-s'),buy:gv('sw-1y-b')}},
     usdlkr:{labels:getRows('fx-rows').map(r=>r[0]),values:getRows('fx-rows').map(r=>parseFloat(r[1])||0),close:gv('fx-close')},
     tbills:getRows('tbill-rows').map(r=>({date:r[0],m3:r[1],m6:r[2],m12:r[3]})),
     // NEW: T-Bill auction detail
     tbillAuction:getAuctionData(),
     bonds:{headers:bondHeaders,rows:getRows('bond-rows').map(r=>({bond:r[0],values:r.slice(1)}))},
+    // NEW: Global Market — US 10Y daily series
+    global10y:{labels:getRows('gm-rows').map(r=>r[0]),values:getRows('gm-rows').map(r=>parseFloat(r[1])||0)},
     execSummary:{usdlkr:gv('ex-usdlkr'),liqDelta:gv('ex-delta'),liqDir:document.getElementById('ex-dir').value},
     marketSummary:document.getElementById('market-summary').value.trim()
   };
@@ -430,6 +454,10 @@ function addAuctionRow(vals){
     `<td><input value="${vals[4]||''}" placeholder="—"></td>`+
     `<td><button class="rm-btn" onclick="this.closest('tr').remove()">✕</button></td>`;
   tbody.appendChild(tr);
+}
+// Compatibility helper: add a grouped auction (date + maturities) as flat rows
+function addAuctionGroup(date,maturities){
+  (maturities||[]).forEach((m,i)=>addAuctionRow([i===0?date:'',m.maturity,m.offered,m.accepted,m.yield]));
 }
 function getAuctionData(){
   // Build grouped structure for dashboard from flat table rows
@@ -469,38 +497,159 @@ function initDefaultRows(){
   [['4-Jun','336.07'],['5-Jun','337.15'],['6-Jun','338.00'],['9-Jun','335.00'],['10-Jun','337.00'],['11-Jun','337.15'],['12-Jun','336.50']].forEach(r=>addRow('fx-rows',r));
   [['6/10/2026','10.09','10.27','10.16'],['6/3/2026','9.84','10.01','10.02'],['5/26/2026','9.36','9.68','9.83'],['5/20/2026','8.18','8.25','8.49'],['5/13/2026','8.13','8.23','8.49']].forEach(r=>addRow('tbill-rows',r));
 
-  // Default auction detail rows matching your Excel image — single flat table (date only on each group's first row)
-  addAuctionRow(['6/17/2026','3M','','','']);
-  addAuctionRow(['','6M','','','']);
-  addAuctionRow(['','12M','','','']);
-  addAuctionRow(['6/10/2026','3M','','','']);
-  addAuctionRow(['','6M','','','']);
-  addAuctionRow(['','12M','','','']);
-  addAuctionRow(['6/3/2026','3M','','','']);
-  addAuctionRow(['','6M','','','']);
-  addAuctionRow(['','12M','','','']);
-  addAuctionRow(['5/26/2026','3M','','','']);
-  addAuctionRow(['','6M','','','']);
-  addAuctionRow(['','12M','','','']);
+  // Default auction detail groups matching your Excel image
+  addAuctionGroup('6/17/2026',[{maturity:'3M',offered:'',accepted:'',yield:''},{maturity:'6M',offered:'',accepted:'',yield:''},{maturity:'12M',offered:'',accepted:'',yield:''}]);
+  addAuctionGroup('6/10/2026',[{maturity:'3M',offered:'',accepted:'',yield:''},{maturity:'6M',offered:'',accepted:'',yield:''},{maturity:'12M',offered:'',accepted:'',yield:''}]);
+  addAuctionGroup('6/3/2026', [{maturity:'3M',offered:'',accepted:'',yield:''},{maturity:'6M',offered:'',accepted:'',yield:''},{maturity:'12M',offered:'',accepted:'',yield:''}]);
+  addAuctionGroup('5/26/2026',[{maturity:'3M',offered:'',accepted:'',yield:''},{maturity:'6M',offered:'',accepted:'',yield:''},{maturity:'12M',offered:'',accepted:'',yield:''}]);
 
   [['15.12.2026','9.70/10.20','9.75/10','9.8/10.25','10.25/10.55','0','0'],['15.09.2027','10.80/11.40','10.9/11.1','10.85/11','11/11.3','0','0'],['15.12.2028','11.50/12.00','11.75/12','11.8/12','11.9/11.95','0','0'],['15.12.2029','11.75/12.25','12/12.2','12/12.2','12/12.15','0','0'],['01.07.2030','11.80/12.30','12.15/12.2','12.15/12.25','12.15/12.3','0','0'],['15.03.2031','12.20/12.60','12.3/12.7','12.3/12.7','12.3/12.7','0','0'],['15.12.2032','12.30/12.70','12.5/12.9','12.5/12.9','12.55/12.9','0','0'],['01.11.2033','12.40/12.80','12.65/13','12.65/13','12.7/13','0','0'],['15.06.2034','12.50/13.00','12.8/13.15','12.8/13.1','13/13.2','0','0'],['15.03.2035','12.50/13.00','12.85/13.15','12.8/13.2','13/13.3','0','0'],['01.08.2036','12.60/13.20','13/13.5','13/13.5','13/13.5','0','0'],['01.07.2037','12.60/13.20','12.9/13.3','13.1/13.3','13.1/13.4','0','0']].forEach(r=>addRow('bond-rows',r));
   renderBondHeaders();
+
+  // Default Global Market (US 10Y) rows — replaced when MarketData.xlsx is imported
+  [['8 Jun','4.56'],['9 Jun','4.53'],['10 Jun','4.55'],['11 Jun','4.45'],['12 Jun','4.48'],['15 Jun','4.47'],['16 Jun','4.43'],['17 Jun','4.49']].forEach(r=>addRow('gm-rows',r));
+
+  // Default CBSL Holdings rows — replaced when MarketData.xlsx is imported
+  [['8 Jun','2498.12'],['9 Jun','2498.12'],['10 Jun','2498.12'],['11 Jun','2498.12'],['12 Jun','2498.12'],['15 Jun','2498.12'],['16 Jun','2498.12'],['17 Jun','2498.12']].forEach(r=>addRow('cbsl-rows',r));
+
+  // Default Foreign Holdings rows — replaced when MarketData.xlsx is imported
+  [['2 Apr','143617'],['10 Apr','142920'],['17 Apr','142922'],['24 Apr','144202'],['30 Apr','144202'],['8 May','142732'],['15 May','138007'],['22 May','133427'],['29 May','126099'],['5 Jun','121331'],['12 Jun','121344']].forEach(r=>addRow('fh-rows',r));
 }
 
-// ── EXCEL IMPORT ─────────────────────────────────────────
+// ── EXCEL IMPORT (one or both files at once) ─────────────
 function importExcel(event){
-  const file=event.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      const wb=XLSX.read(e.target.result,{type:'binary',cellDates:true});
-      applyMVSExcel(wb);
-      showToast('✓ Excel imported! Review then click Publish.');
-    }catch(err){showToast('⚠ Error: '+err.message,'err');console.error(err);}
-    event.target.value='';
-  };
-  reader.readAsBinaryString(file);
+  const files=Array.from(event.target.files||[]);
+  if(!files.length)return;
+  const readers=files.map(f=>new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=e=>{try{res({name:f.name,wb:XLSX.read(e.target.result,{type:'binary',cellDates:true})});}catch(err){rej(err);}};
+    r.onerror=()=>rej(new Error('Could not read '+f.name));
+    r.readAsBinaryString(f);
+  }));
+  Promise.all(readers).then(items=>{
+    const isMD=wb=>wb.SheetNames.some(n=>{const k=n.trim().toLowerCase();return k.indexOf('liquid')>-1||k.indexOf('dollar')>-1||k.indexOf('glo')>-1;});
+    const reportWbs=items.filter(it=>it.wb.Sheets['get_data']);
+    const mdWbs=items.filter(it=>isMD(it.wb));
+    const did=[];
+    // Apply report first (money market, swaps, bonds, auction, exec) ...
+    reportWbs.forEach(it=>{applyMVSExcel(it.wb);});
+    if(reportWbs.length)did.push('report');
+    // ... then MarketData so full-year daily Liquidity/FX/T-bill/10Y win
+    mdWbs.forEach(it=>{applyMarketData(it.wb);});
+    if(mdWbs.length)did.push('marketdata');
+    if(!did.length){showToast('⚠ Unrecognised file(s) — expected MarketData.xlsx and/or the get_data report.','err');return;}
+    showToast('✓ Imported '+files.length+' file(s) ['+did.join(' + ')+']. Review then click Publish.');
+  }).catch(err=>{showToast('⚠ Error: '+err.message,'err');console.error(err);});
+  event.target.value='';
 }
+
+// ── MarketData.xlsx parser (full-year daily series + global 10Y) ──
+function mdLabel(d){const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const dt=(d instanceof Date)?d:new Date(d);return isNaN(dt)?String(d):dt.getDate()+' '+M[dt.getMonth()];}
+function mdDate(v){ if(v instanceof Date&&!isNaN(v))return v; if(typeof v==='number'){const dt=new Date(Math.round((v-25569)*86400*1000));return isNaN(dt)?null:dt;} if(v==null||v==='')return null; const d=new Date(v);return isNaN(d)?null:d; }
+function mdNum(v){ if(v==null||v==='')return null; const n=parseFloat(String(v).replace(/,/g,'')); return isNaN(n)?null:n; }
+function applyMarketData(wb){
+  const sheetByKey=k=>{const n=wb.SheetNames.find(s=>s.trim().toLowerCase().indexOf(k)>-1);return n?wb.Sheets[n]:null;};
+  const rowsOf=ws=>ws?XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null}):[];
+
+  // Liquidity (col A=date, B=value) — full year
+  const liqWs=sheetByKey('liquid');
+  if(liqWs){
+    const recs=[];rowsOf(liqWs).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
+    recs.sort((a,b)=>a[0]-b[0]);
+    if(recs.length){
+      document.getElementById('liq-rows').innerHTML='';
+      recs.forEach(x=>addRow('liq-rows',[mdLabel(x[0]),n2(x[1])]));
+      sv('liq-cur',n2(recs[recs.length-1][1]));
+      sv('liq-prev',recs.length>1?n2(recs[recs.length-2][1]):'');
+    }
+  }
+
+  // Dollar Rate / Exchange (col A=date, B=rate) — full year
+  const fxWs=sheetByKey('dollar')||sheetByKey('exchange');
+  if(fxWs){
+    const recs=[];rowsOf(fxWs).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
+    recs.sort((a,b)=>a[0]-b[0]);
+    if(recs.length){
+      document.getElementById('fx-rows').innerHTML='';
+      recs.forEach(x=>addRow('fx-rows',[mdLabel(x[0]),n2(x[1])]));
+      const last=n2(recs[recs.length-1][1]);
+      sv('fx-close',last);sv('ex-usdlkr',last);
+    }
+  }
+
+  // T bill: cols A=date,B=3M,C=6M,D=12M (yield chart) + cols F-J auction detail
+  const tbWs=sheetByKey('bill');
+  if(tbWs){
+    const rows=rowsOf(tbWs);
+    // yield series (latest first for the existing table)
+    const recs=[];rows.forEach(r=>{const d=mdDate(r&&r[0]),a=mdNum(r&&r[1]),b=mdNum(r&&r[2]),c=mdNum(r&&r[3]);if(d&&a!=null)recs.push([d,a,b,c]);});
+    recs.sort((a,b)=>b[0]-a[0]); // newest first
+    if(recs.length){
+      document.getElementById('tbill-rows').innerHTML='';
+      recs.forEach(x=>addRow('tbill-rows',[mdLabel(x[0]),n2(x[1]),n2(x[2]),n2(x[3])]));
+    }
+    // auction detail: F(5)=date, G(6)=maturity, H(7)=offered, I(8)=accepted, J(9)=%
+    const groups=[];let cur=null;
+    for(let i=1;i<Math.min(rows.length,60);i++){
+      const r=rows[i]||[];
+      const dv=r[5],matRaw=String(r[6]==null?'':r[6]).trim();
+      const off=r[7],acc=r[8],yld=r[9];
+      if(!matRaw&&(dv==null||dv===''))continue;
+      if(dv!=null&&dv!==''){
+        const pd=mdDate(dv);const ds=pd?((pd.getMonth()+1)+'/'+pd.getDate()+'/'+pd.getFullYear()):String(dv);
+        cur={date:ds,maturities:[]};groups.push(cur);
+      }
+      if(cur&&matRaw){
+        const ml=matRaw.toUpperCase().indexOf('12')>-1?'12M':matRaw.toUpperCase().indexOf('6')>-1?'6M':matRaw.toUpperCase().indexOf('3')>-1?'3M':matRaw;
+        cur.maturities.push({maturity:ml,offered:off!=null?String(off):'',accepted:acc!=null?String(acc):'',yield:yld!=null?(typeof yld==='number'?yld.toFixed(2):String(yld)):''});
+      }
+    }
+    if(groups.length){
+      document.getElementById('auction-rows').innerHTML='';
+      groups.forEach(g=>g.maturities.forEach((m,i)=>addAuctionRow([i===0?g.date:'',m.maturity,m.offered,m.accepted,m.yield])));
+    }
+  }
+
+  // Global Market (US 10Y): title row then col A=date, B=rate — full year
+  const gWs=sheetByKey('glo');
+  if(gWs){
+    const recs=[];rowsOf(gWs).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
+    recs.sort((a,b)=>a[0]-b[0]);
+    if(recs.length){
+      document.getElementById('gm-rows').innerHTML='';
+      recs.forEach(x=>addRow('gm-rows',[mdLabel(x[0]),n2(x[1])]));
+    }
+  }
+
+  // CBSL Holdings: col A=date, B=holdings — full year
+  const cbWs=sheetByKey('cbsl');
+  if(cbWs){
+    const recs=[];rowsOf(cbWs).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
+    recs.sort((a,b)=>a[0]-b[0]);
+    if(recs.length){
+      document.getElementById('cbsl-rows').innerHTML='';
+      recs.forEach(x=>addRow('cbsl-rows',[mdLabel(x[0]),n2(x[1])]));
+    }
+  }
+
+  // Foreign Holdings: col A=date, B=volume(Mn)
+  const fhWs=wb.SheetNames.find(s=>{const k=s.trim().toLowerCase();return k.indexOf('foreign')>-1;});
+  if(fhWs){
+    const recs=[];rowsOf(wb.Sheets[fhWs]).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
+    recs.sort((a,b)=>a[0]-b[0]);
+    if(recs.length){
+      document.getElementById('fh-rows').innerHTML='';
+      recs.forEach(x=>addRow('fh-rows',[mdLabel(x[0]),n2(x[1])]));
+    }
+  }
+
+  // refresh report date
+  const _td=new Date(),_dy=_td.getDate();
+  const _sx=_dy===1||_dy===21||_dy===31?'st':_dy===2||_dy===22?'nd':_dy===3||_dy===23?'rd':'th';
+  const _ml=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  sv('f-date',_dy+_sx+' '+_ml[_td.getMonth()]+' '+_td.getFullYear());
+}
+
 function fmtDate(d){
   if(!d)return'';const dt=(d instanceof Date)?d:new Date(d);
   if(isNaN(dt))return String(d);
@@ -512,7 +661,7 @@ function n2(v){return(typeof v==='number')?v.toFixed(2):String(v||'');}
 
 function applyMVSExcel(wb){
   const ws=wb.Sheets['get_data'];
-  if(!ws){showToast('⚠ Sheet "get_data" not found!','err');return;}
+  if(!ws){return;}
   const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:false,dateNF:'yyyy-mm-dd'});
   const rowsRaw=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
 
@@ -595,9 +744,11 @@ function applyMVSExcel(wb){
     bondData.forEach(r=>addRow('bond-rows',r));
   }
 
-  // ── T-Bill Auction Detail (cols F-J = indices 5-9) — single flat table, matches Excel layout
+  // ── NEW: T-Bill Auction Detail (cols F-J = indices 5-9)
   // Sheet: get_data  Columns: F(5)=Auction Date, G(6)=Maturity, H(7)=Amount Offered, I(8)=Amount Accepted, J(9)=%
-  const auctionRows=[];
+  // Rows: scan rows 1 onwards until no more data
+  const auctionGroups=[];
+  let currentGroup=null;
   for(let i=1;i<Math.min(rows.length,50);i++){
     const dateVal=rowsRaw[i]?.[5];   // col F
     const matVal =String(rows[i]?.[6]||'').trim();  // col G
@@ -606,26 +757,28 @@ function applyMVSExcel(wb){
     const yld=rowsRaw[i]?.[9];       // col J
     // Skip rows with no maturity and no date
     if(!matVal&&(dateVal===null||dateVal===undefined||dateVal===''))continue;
-    let dateStr='';
+    // If there's a date value in col F, start a new group
     if(dateVal!==null&&dateVal!==undefined&&dateVal!==''){
       const parsedDate=dateVal instanceof Date?dateVal:new Date(dateVal);
-      dateStr=isNaN(parsedDate)?String(dateVal):(parsedDate.getMonth()+1)+'/'+parsedDate.getDate()+'/'+parsedDate.getFullYear();
+      const dateStr=isNaN(parsedDate)?String(dateVal):(parsedDate.getMonth()+1)+'/'+parsedDate.getDate()+'/'+parsedDate.getFullYear();
+      currentGroup={date:dateStr,maturities:[]};
+      auctionGroups.push(currentGroup);
     }
-    if(matVal){
+    // Add maturity row to current group
+    if(currentGroup&&matVal){
       const matLabel=matVal.toUpperCase().includes('3')?'3M':matVal.toUpperCase().includes('6')?'6M':matVal.toUpperCase().includes('12')?'12M':matVal;
-      auctionRows.push([
-        dateStr,
-        matLabel,
-        offered!==null&&offered!==undefined?String(offered):'',
-        accepted!==null&&accepted!==undefined?String(accepted):'',
-        yld!==null&&yld!==undefined?(typeof yld==='number'?yld.toFixed(2):String(yld)):''
-      ]);
+      currentGroup.maturities.push({
+        maturity:matLabel,
+        offered:offered!==null&&offered!==undefined?String(offered):'',
+        accepted:accepted!==null&&accepted!==undefined?String(accepted):'',
+        yield:yld!==null&&yld!==undefined?(typeof yld==='number'?yld.toFixed(2):String(yld)):''
+      });
     }
   }
-  if(auctionRows.length){
+  if(auctionGroups.length){
     document.getElementById('auction-rows').innerHTML='';
-    auctionRows.forEach(r=>addAuctionRow(r));
-    showToast('✓ T-Bill auction data imported: '+auctionRows.length+' rows');
+    auctionGroups.forEach(g=>addAuctionGroup(g.date,g.maturities));
+    showToast('✓ T-Bill auction data imported: '+auctionGroups.length+' dates');
   }
 
   // Executive summary sheet
