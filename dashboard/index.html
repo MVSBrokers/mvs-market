@@ -89,6 +89,17 @@ canvas{max-width:100%!important}
 .mg-btn.active{background:#c8a84b;color:#0a1628;border-color:#c8a84b}
 /* top news ribbon */
 .news-ribbon{margin-top:0!important;margin-bottom:14px!important;height:38px}
+/* ── CHART STAT BAR ─────────────────────────────────────── */
+.chart-stats{display:flex;gap:0;margin-top:10px;border:1px solid #1a3050;border-radius:6px;overflow:hidden;background:#091525}
+.cs-item{flex:1;padding:7px 10px;text-align:center;border-right:1px solid #1a3050;position:relative}
+.cs-item:last-child{border-right:none}
+.cs-label{font-size:8px;color:#5a7a9a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.cs-val{font-size:13px;font-weight:700;color:#d4e4f4;line-height:1}
+.cs-prev{font-size:9px;color:#5a7a9a;margin-top:2px}
+.cs-chg{display:inline-flex;align-items:center;gap:2px;font-size:9px;font-weight:700;margin-top:3px;padding:1px 5px;border-radius:3px}
+.cs-chg.up{color:#ff8a78;background:rgba(255,138,120,0.12)}
+.cs-chg.down{color:#6dd4a0;background:rgba(109,212,160,0.12)}
+.cs-chg.flat{color:#7fa3c8;background:rgba(77,163,232,0.10)}
 @media(max-width:1024px){.grid-2x2,.full-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.report-hdr{flex-direction:column;text-align:center}.hdr-right{text-align:center}.hdr-left{flex-direction:column;justify-content:center}.logo{width:68px;height:68px}.logo-img{height:68px}}
 </style>
@@ -146,7 +157,7 @@ canvas{max-width:100%!important}
       <div class="panel-title pt-row"><span>Treasury Bill</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('tbill',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('tbill','all',this)" title="Full year (all data)">Y</button></span></div>
       <canvas id="tbillChart" style="max-height:160px;margin-bottom:10px"></canvas>
       <table style="font-size:10px;margin-bottom:12px">
-        <thead><tr><th>Auction Date</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
+        <thead><tr><th>Auction Date</th><th>Last Year</th><th>Last Month</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
         <tbody id="tbillRows"></tbody>
       </table>
       <!-- Auction Detail Table inside T-Bill panel -->
@@ -164,7 +175,7 @@ canvas{max-width:100%!important}
               </tr>
             </thead>
             <tbody id="tbillAuctionBody">
-              <tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:10px">—</td></tr>
+              <tr><td colspan="7" style="text-align:center;color:#7fa3c8;padding:10px">—</td></tr>
             </tbody>
           </table>
         </div>
@@ -185,15 +196,15 @@ canvas{max-width:100%!important}
 
   <!-- CBSL + FOREIGN HOLDINGS (last part of Money Market, below T-bill/T-bond) -->
   <div class="grid-2x2">
-    <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas></div>
-    <div class="panel"><div class="panel-title pt-row"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas></div>
+    <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div></div>
+    <div class="panel"><div class="panel-title pt-row"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fhStat"></div></div>
   </div>
 
   <!-- FX MARKET HEADER -->
   <div class="panel full-width"><div class="panel-title">USD / FX Market</div></div>
 
   <div class="grid-2x2">
-    <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas></div>
+    <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
     <div class="panel">
       <div class="panel-title">FX Swaps (per day)</div>
       <table>
@@ -214,7 +225,7 @@ canvas{max-width:100%!important}
   <div class="panel full-width"><div class="panel-title">Global Market</div></div>
 
   <div class="grid-2x2">
-    <div class="panel"><div class="panel-title pt-row"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('g10',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('g10','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="g10Chart" style="max-height:200px"></canvas></div>
+    <div class="panel"><div class="panel-title pt-row"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('g10',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('g10','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="g10Chart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="g10Stat"></div></div>
   </div>
 
   <div class="exec-summary">
@@ -412,10 +423,10 @@ function render(d){
   // Helper: append current year to short dates like "16 Jun" → "16 Jun 2026"
   const fmtDY=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
   // show only the 4 most recent auctions (d.tbills is newest-first)
-  (d.tbills||[]).slice(0,4).forEach(r=>{const tr=document.createElement("tr");const blk=v=>(v&&String(v).trim()&&v!=="0")?v:"—";tr.innerHTML=`<td>${fmtDY(r.date)}</td><td>${r.m3}</td><td>${r.m6}</td><td>${r.m12}</td>`;tb.appendChild(tr);});
+  (d.tbills||[]).slice(0,4).forEach(r=>{const tr=document.createElement("tr");const blk=v=>(v&&String(v).trim()&&v!=="0")?v:"—";tr.innerHTML=`<td>${fmtDY(r.date)}</td><td>${blk(r.lastYear)}</td><td>${blk(r.lastMonth)}</td><td>${r.m3}</td><td>${r.m6}</td><td>${r.m12}</td>`;tb.appendChild(tr);});
 
   // ── Bond table: AVERAGE (mid) rates with professional transparent heat-map
-  const bhr=document.getElementById("bondHeaderRow");bhr.innerHTML="<th>Maturity</th>";
+  const bhr=document.getElementById("bondHeaderRow");bhr.innerHTML="<th>Maturity</th><th>Last Year</th><th>Last Month</th>";
   const bHeaders=d.bonds?.headers||[], bRows=d.bonds?.rows||[];
   bHeaders.forEach(h=>{const th=document.createElement("th");th.textContent=h;bhr.appendChild(th);});
   const midMatrix=bRows.map(r=>(r.values||[]).map(bondMid));
@@ -423,8 +434,10 @@ function render(d){
   bRows.forEach((r,ri)=>{
     const tr=document.createElement("tr");
     const td0=document.createElement("td");td0.textContent=r.bond;tr.appendChild(td0);
-    // End-of-Year / End-of-Month reference rates removed
+    // Last Year / Last Month reference rates
     const blk=v=>(v&&String(v).trim()&&String(v).trim()!=="0")?String(v).trim():"—";
+    const tdY=document.createElement("td");tdY.textContent=blk(r.eoy);tdY.style.color="#c8a84b";tdY.style.fontSize="9px";tr.appendChild(tdY);
+    const tdM=document.createElement("td");tdM.textContent=blk(r.eom);tdM.style.color="#9fb6d4";tdM.style.fontSize="9px";tr.appendChild(tdM);
     const mids=midMatrix[ri]||[];
     // per-row heat scale: this bond's own low (green) → high (red) across the dates
     const rv=mids.filter(m=>m!=null);
@@ -466,21 +479,52 @@ function buildCharts(d){
   destroyChart("liq");
   const liqAg=aggregateIdx(d.liquidity?.labels||[],GRANS.liq);
   charts.liq=new Chart(document.getElementById("liqChart"),{type:"line",data:{labels:liqAg.labels,datasets:[{label:"Rs.Bn",data:pick(d.liquidity?.values||[],liqAg.idx),borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  // ── STAT BARS ──────────────────────────────────────────────
+  function renderStatBar(elId,values,labels,unit,decimals){
+    const el=document.getElementById(elId);if(!el)return;
+    const vals=values.filter(v=>v!=null&&!isNaN(v));
+    if(vals.length<2){el.innerHTML="";return;}
+    const prev=vals[vals.length-2], curr=vals[vals.length-1];
+    const diff=+(curr-prev).toFixed(decimals);
+    const pct=prev!==0?+((diff/Math.abs(prev))*100).toFixed(2):0;
+    const isUp=diff>0,isFlat=diff===0;
+    const arrow=isFlat?"▸":isUp?"▲":"▼";
+    const cls=isFlat?"flat":isUp?"up":"down";
+    const fmt=v=>v!=null?v.toFixed(decimals):"—";
+    // prev label
+    const prevLbl=labels&&labels.length>=2?labels[labels.length-2]:"Prev";
+    const currLbl=labels&&labels.length>=1?labels[labels.length-1]:"Latest";
+    el.innerHTML=`<div class="chart-stats">
+      <div class="cs-item" style="padding:5px 8px">
+        <div class="cs-label" style="font-size:7px">Previous <span style="color:#3a5a7a">(${prevLbl})</span></div>
+        <div class="cs-val" style="font-size:11px">${fmt(prev)}<span style="font-size:8px;color:#5a7a9a;font-weight:400"> ${unit}</span></div>
+      </div>
+      <div class="cs-item" style="padding:5px 8px">
+        <div class="cs-label" style="font-size:7px">Latest <span style="color:#3a5a7a">(${currLbl})</span></div>
+        <div class="cs-val" style="color:#fff;font-size:11px">${fmt(curr)}<span style="font-size:8px;color:#5a7a9a;font-weight:400"> ${unit}</span></div>
+        <div class="cs-chg ${cls}" style="font-size:8px;padding:1px 4px;margin-top:2px">${arrow} ${Math.abs(diff).toFixed(decimals)} <span style="opacity:.7">(${isUp?"+":""}${pct}%)</span></div>
+      </div>
+    </div>`;
+  }
+  // ──────────────────────────────────────────────────────────
   destroyChart("cbsl");
   const cbAg=aggregateIdx(d.cbsl?.labels||[],GRANS.cbsl);
   const cbv=pick(d.cbsl?.values||[],cbAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
   const cbn=cbv.filter(v=>v!=null);
   charts.cbsl=new Chart(document.getElementById("cbslChart"),{type:"line",data:{labels:cbAg.labels,datasets:[{label:"Rs.Bn",data:cbv,borderColor:"#e08a3c",backgroundColor:"rgba(224,138,60,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:cbn.length?(Math.min(...cbn)-2):undefined,max:cbn.length?(Math.max(...cbn)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("cbslStat",cbv,cbAg.labels,"Rs.Bn",2);
   destroyChart("fh");
   const fhAg=aggregateIdx(d.foreign?.labels||[],GRANS.fh);
   const fhv=pick(d.foreign?.values||[],fhAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
   const fhn=fhv.filter(v=>v!=null);
   charts.fh=new Chart(document.getElementById("fhChart"),{type:"line",data:{labels:fhAg.labels,datasets:[{label:"Rs.Mn",data:fhv,borderColor:"#3cb6a8",backgroundColor:"rgba(60,182,168,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fhn.length?(Math.min(...fhn)-500):undefined,max:fhn.length?(Math.max(...fhn)+500):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("fhStat",fhv,fhAg.labels,"Rs.Mn",0);
   destroyChart("fx");
   const fxAg=aggregateIdx(d.usdlkr?.labels||[],GRANS.fx);
   const fxData=pick(d.usdlkr?.values||[],fxAg.idx);
   const fv=fxData.filter(v=>v>0);
   charts.fx=new Chart(document.getElementById("fxChart"),{type:"line",data:{labels:fxAg.labels,datasets:[{label:"LKR",data:fxData,borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("fxStat",fxData,fxAg.labels,"LKR",2);
   destroyChart("tbill");
   const tbr=[...(d.tbills||[])].reverse();
   const fmtDY2=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
@@ -510,6 +554,7 @@ function buildCharts(d){
   const g10raw=pick(d.global10y?.values||[],gAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
   const g10n=g10raw.filter(v=>v!=null);
   charts.g10=new Chart(document.getElementById("g10Chart"),{type:"line",data:{labels:gAg.labels,datasets:[{label:"US 10Y %",data:g10raw,borderColor:"#a77ad4",backgroundColor:"rgba(167,122,212,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:g10n.length?(Math.min(...g10n)-0.1):undefined,max:g10n.length?(Math.max(...g10n)+0.1):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("g10Stat",g10raw,gAg.labels,"%",3);
 }
 
 // no login required — load immediately
