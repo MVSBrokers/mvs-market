@@ -349,28 +349,38 @@ function renderTbillAuction(data){
     tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:14px">No auction data available</td></tr>';
     return;
   }
-  data.forEach(entry=>{
+  const groupBgs=["rgba(26,48,80,0.55)","rgba(10,28,52,0.30)"];
+  data.forEach((entry,ei)=>{
     const mats=entry.maturities||[];
     const rowCount=mats.length||1;
+    const groupBg=groupBgs[ei%2];
+    const isFirst=ei===0;
     mats.forEach((m,mi)=>{
       const tr=document.createElement("tr");
+      const topBorder=(!isFirst&&mi===0)?"2px solid #c8a84b":"none";
       if(mi===0){
-        // Date cell spans all maturity rows
         const dateTd=document.createElement("td");
         dateTd.rowSpan=rowCount;
-        dateTd.textContent=entry.date||"—";
-        dateTd.style.fontWeight="700";
+        dateTd.textContent=(()=>{const t=String(entry.date||"—").trim();if(t==="—"||/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();})();
+        dateTd.style.fontWeight="800";
         dateTd.style.color="#c8a84b";
-        dateTd.style.borderRight="1px solid #1a3050";
+        dateTd.style.borderRight="2px solid #c8a84b";
+        dateTd.style.borderTop=topBorder;
         dateTd.style.verticalAlign="middle";
+        dateTd.style.background=groupBg;
+        dateTd.style.fontSize="11px";
         tr.appendChild(dateTd);
       }
       const matTd=document.createElement("td");matTd.className="mat-cell";matTd.textContent=m.maturity||"—";
+      matTd.style.background=groupBg;matTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";matTd.style.fontWeight="600";
       const offTd=document.createElement("td");offTd.textContent=m.offered||"—";
+      offTd.style.background=groupBg;offTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
       const accTd=document.createElement("td");accTd.textContent=m.accepted||"—";
+      accTd.style.background=groupBg;accTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
       const yldTd=document.createElement("td");
       yldTd.textContent=m.yield||"—";
-      if(m.yield&&m.yield!=="—"){yldTd.style.color="#6dd4a0";yldTd.style.fontWeight="600";}
+      yldTd.style.background=groupBg;yldTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
+      if(m.yield&&m.yield!=="—"){yldTd.style.color="#6dd4a0";yldTd.style.fontWeight="700";}
       tr.appendChild(matTd);tr.appendChild(offTd);tr.appendChild(accTd);tr.appendChild(yldTd);
       tbody.appendChild(tr);
     });
@@ -399,8 +409,10 @@ function render(d){
   setText("sw1ys",d.fxSwaps?.["1y"]?.sell);setText("sw1yb",d.fxSwaps?.["1y"]?.buy);
 
   const tb=document.getElementById("tbillRows");tb.innerHTML="";
+  // Helper: append current year to short dates like "16 Jun" → "16 Jun 2026"
+  const fmtDY=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
   // show only the 4 most recent auctions (d.tbills is newest-first)
-  (d.tbills||[]).slice(0,4).forEach(r=>{const tr=document.createElement("tr");const blk=v=>(v&&String(v).trim()&&v!=="0")?v:"—";tr.innerHTML=`<td>${r.date}</td><td>${r.m3}</td><td>${r.m6}</td><td>${r.m12}</td>`;tb.appendChild(tr);});
+  (d.tbills||[]).slice(0,4).forEach(r=>{const tr=document.createElement("tr");const blk=v=>(v&&String(v).trim()&&v!=="0")?v:"—";tr.innerHTML=`<td>${fmtDY(r.date)}</td><td>${r.m3}</td><td>${r.m6}</td><td>${r.m12}</td>`;tb.appendChild(tr);});
 
   // ── Bond table: AVERAGE (mid) rates with professional transparent heat-map
   const bhr=document.getElementById("bondHeaderRow");bhr.innerHTML="<th>Maturity</th>";
@@ -471,7 +483,8 @@ function buildCharts(d){
   charts.fx=new Chart(document.getElementById("fxChart"),{type:"line",data:{labels:fxAg.labels,datasets:[{label:"LKR",data:fxData,borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
   destroyChart("tbill");
   const tbr=[...(d.tbills||[])].reverse();
-  const tbAg=aggregateIdx(tbr.map(r=>r.date),GRANS.tbill);
+  const fmtDY2=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
+  const tbAg=aggregateIdx(tbr.map(r=>fmtDY2(r.date)),GRANS.tbill);
   charts.tbill=new Chart(document.getElementById("tbillChart"),{type:"line",data:{labels:tbAg.labels,datasets:[{label:"3M",data:pick(tbr.map(r=>parseFloat(r.m3)||null),tbAg.idx),borderColor:"#4da3e8",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"6M",data:pick(tbr.map(r=>parseFloat(r.m6)||null),tbAg.idx),borderColor:"#c8a84b",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"12M",data:pick(tbr.map(r=>parseFloat(r.m12)||null),tbAg.idx),borderColor:"#6dd4a0",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
   destroyChart("yield");
   const yBHead=d.bonds?.headers||[], yBRows=d.bonds?.rows||[];
