@@ -289,7 +289,7 @@ canvas{max-width:100%!important}
           <canvas id="op-yieldChart" style="max-height:230px"></canvas>
         </div>
         <div class="op-col" style="flex:1.25;min-width:300px">
-          <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map: <span style="color:#7ee0a8">low</span>&rarr;<span style="color:#ff8a78">high</span> yield &nbsp;|&nbsp; <span style="color:#ff8a78">&#9662;</span> down &nbsp;<span style="color:#7ee0a8">&#9652;</span> up vs prev day</div>
+          <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span>&rarr;<span style="color:#ff8a78">high</span> yield &middot; &#9662; down / &#9652; up vs prev day</div>
           <div style="overflow:auto;max-height:250px"><table style="font-size:9px">
             <thead><tr id="op-bond-header"><th>Bond</th></tr></thead>
             <tbody id="op-bond-rows"></tbody>
@@ -310,7 +310,25 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: CLOSING REPORT -->
   <div class="page" id="page-open" style="display:block">
-    <div class="panel full-width"><div class="panel-title" id="opening-report-title">Opening Report — <span id="opening-report-date"></span></div></div>
+    <div class="panel full-width"><div class="panel-title" id="opening-report-title">Opening Report — Volume of FX Market &amp; Value Dates</div></div>
+    <div class="grid-2x2">
+      <div class="panel">
+        <div class="panel-title" id="op-fxsum-title">Volume of FX Market</div>
+        <canvas id="opFxSumChart" style="max-height:190px"></canvas>
+        <table style="font-size:11px;margin-top:10px">
+          <thead><tr><th>Tenor</th><th>Volume (USD Mn)</th><th>W/A Rate</th></tr></thead>
+          <tbody id="dyn-op-fxsum"></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Value Dates</div>
+        <div style="max-height:430px;overflow-y:auto"><table style="font-size:11px">
+          <thead><tr><th>Tenor</th><th>Value Date</th><th>NOD</th></tr></thead>
+          <tbody id="dyn-op-vd"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
 
   <!-- PAGE: MONEY MARKET -->
   <div class="page" id="page-mm">
@@ -389,7 +407,7 @@ canvas{max-width:100%!important}
     <div class="panel">
       <div class="panel-title">Treasury Bond (Yield Curve)</div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas><div class="chart-stat-bar" id="yieldStat"></div>
-      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map: <span style="color:#7ee0a8">low</span>→<span style="color:#ff8a78">high</span> yield &nbsp;|&nbsp; <span style="color:#ff8a78">▾</span> down &nbsp;<span style="color:#7ee0a8">▴</span> up vs prev day</div>
+      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span>→<span style="color:#ff8a78">high</span> yield · ▾ down / ▴ up vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
         <table style="font-size:9px">
           <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
@@ -414,7 +432,7 @@ canvas{max-width:100%!important}
   <!-- PAGE: FX -->
   <div class="page" id="page-fx">
   <!-- FX MARKET HEADER -->
-  <div class="panel full-width"><div class="panel-title">Foreign Exchange Market</div></div>
+  <div class="panel full-width"><div class="panel-title">USD / FX Market</div></div>
 
   <div class="grid-2x2">
     <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
@@ -470,7 +488,7 @@ canvas{max-width:100%!important}
           <thead><tr><th>Month</th><th>Reserve ($)</th></tr></thead>
           <tbody id="dyn-reserves"></tbody>
         </table>
-
+        <div class="rpt-note">Source: https://www.cbsl.gov.lk/</div>
       </div>
     </div>
     <div class="grid-2x2">
@@ -971,10 +989,15 @@ function renderExtras(d){
   {// Auto report dates (Sri Lanka bank working days) with optional editor overrides
    const todayD=slWorkDay(0), yestD=slWorkDay(1);
    const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
-   const ot=document.getElementById("opening-report-date");
-   if(ot){ot.innerHTML=ov(d.openingDate)?escHtml(ov(d.openingDate)):fmtOrd(todayD);}
+   const ot=document.getElementById("opening-report-title");
+   if(ot){const od=ov(d.openingDate)||fmtLong(todayD);ot.innerHTML="Opening Report ("+escHtml(od)+") — Volume of FX Market &amp; Value Dates";}
    const cd=document.getElementById("closing-report-date");
-   if(cd){cd.innerHTML=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(todayD);}}
+   if(cd){cd.innerHTML=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(todayD);}
+   const ft=document.getElementById("op-fxsum-title");
+   if(ft){const fv=ov(d.fxVolDate)||fmtShort(yestD);ft.textContent="Volume of FX Market ("+fv+")";}}
+  set('dyn-op-vd',(d.valueDates||[]).map(v=>`<tr><td>${escHtml(v.tenor)}</td><td>${escHtml(v.date)}</td><td style="color:#9fb6d4">${escHtml(v.nod||'')}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-op-srr',(d.srr||[]).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${dash(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+}
 
 function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
 
@@ -1027,7 +1050,10 @@ function buildCharts(d){
       <div class="cs-item">
         <div class="cs-label">Latest <span style="color:#3a5a7a">(${currLbl})</span></div>
         <div class="cs-val" style="color:#fff">${fmt(curr)}<span class="cs-unit"> ${unit}</span></div>
-        <div class="cs-chg ${cls}" style="font-size:9px;margin-top:2px">${arrow} ${Math.abs(diff).toFixed(decimals)} <span style="opacity:.75">(${isUp?"+":""}${pct}%)</span></div>
+      </div>
+      <div class="cs-item">
+        <div class="cs-label">Difference</div>
+        <div class="cs-chg ${cls}">${arrow} ${Math.abs(diff).toFixed(decimals)} <span style="opacity:.75">(${isUp?"+":""}${pct}%)</span></div>
       </div>
     </div>`;
   }
@@ -1158,8 +1184,6 @@ startPolling();
 (function(){
   const el=document.getElementById("closing-report-date");
   if(el) el.innerHTML=fmtOrd(slWorkDay(0));
-  const ol=document.getElementById("opening-report-date");
-  if(ol) ol.innerHTML=fmtOrd(slWorkDay(0));
 })();
 
 </script>
