@@ -51,12 +51,12 @@ table tr:hover td{background:#132540}
 
 /* ── TBILL AUCTION TABLE ───────────────────────────────── */
 .tbill-auction-wrap{overflow-x:auto;max-width:100%}
-.tbill-auction-table{width:100%;border-collapse:collapse;font-size:11px;min-width:480px}
-.tbill-auction-table th{color:#7fa3c8;font-weight:600;text-align:center;padding:6px 8px;font-size:10px;border-bottom:2px solid #1a3050;background:#091525;white-space:nowrap}
+.tbill-auction-table{width:100%;border-collapse:collapse;font-size:9.5px;min-width:340px}
+.tbill-auction-table th{color:#7fa3c8;font-weight:600;text-align:center;padding:3px 5px;font-size:8.5px;border-bottom:2px solid #1a3050;background:#091525;white-space:nowrap}
 .tbill-auction-table th:first-child{text-align:left}
-.tbill-auction-table td{padding:5px 8px;text-align:center;color:#d4e4f4;border-top:1px solid #0d2040;vertical-align:middle}
-.tbill-auction-table td:first-child{text-align:left;color:#c8a84b;font-weight:700;font-size:11px}
-.tbill-auction-table td.mat-cell{color:#7fa3c8;font-size:10px;font-weight:500;text-align:center}
+.tbill-auction-table td{padding:2px 5px;text-align:center;color:#d4e4f4;border-top:1px solid #0d2040;vertical-align:middle;line-height:1.25}
+.tbill-auction-table td:first-child{text-align:left;color:#c8a84b;font-weight:700;font-size:9.5px}
+.tbill-auction-table td.mat-cell{color:#7fa3c8;font-size:9px;font-weight:500;text-align:center}
 .tbill-auction-table tr:hover td{background:#132540}
 .tbill-auction-table .date-row td{background:#0a1828}
 .tbill-auction-table .date-row td:first-child{color:#c8a84b;font-weight:700}
@@ -90,13 +90,16 @@ canvas{max-width:100%!important}
 /* top news ribbon */
 .news-ribbon{margin-top:0!important;margin-bottom:12px!important;height:26px;padding-left:6px}
 /* ── CHART STAT BAR ─────────────────────────────────────── */
-.chart-stats{display:flex;gap:0;margin-top:10px;border:1px solid #1a3050;border-radius:6px;overflow:hidden;background:#091525}
-.cs-item{flex:1;padding:7px 10px;text-align:center;border-right:1px solid #1a3050;position:relative}
+.chart-stats{display:flex;gap:0;margin-top:10px;border:1px solid #1a3050;border-radius:7px;overflow:hidden;background:#091525}
+.cs-item{flex:1;padding:9px 8px;text-align:center;border-right:1px solid #1a3050;position:relative;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}
 .cs-item:last-child{border-right:none}
-.cs-label{font-size:8px;color:#5a7a9a;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
-.cs-val{font-size:13px;font-weight:700;color:#d4e4f4;line-height:1}
+.cs-label{font-size:9px;color:#5a7a9a;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.cs-val{font-size:15px;font-weight:700;color:#d4e4f4;line-height:1.05;white-space:nowrap}
+.cs-unit{font-size:9px;color:#5a7a9a;font-weight:400}
 .cs-prev{font-size:9px;color:#5a7a9a;margin-top:2px}
-.cs-chg{display:inline-flex;align-items:center;gap:2px;font-size:9px;font-weight:700;margin-top:3px;padding:1px 5px;border-radius:3px}
+.cs-chg{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.series-toggle{display:flex;align-items:center;gap:5px;margin:7px 0 5px}
+.series-toggle .st-lbl{font-size:9px;color:#5a7a9a;text-transform:uppercase;letter-spacing:.6px;margin-right:2px}
 .cs-chg.up{color:#ff8a78;background:rgba(255,138,120,0.12)}
 .cs-chg.down{color:#6dd4a0;background:rgba(109,212,160,0.12)}
 .cs-chg.flat{color:#7fa3c8;background:rgba(77,163,232,0.10)}
@@ -155,6 +158,15 @@ canvas{max-width:100%!important}
 .event-card .ev-days.soon{color:#e8b14d;background:rgba(232,177,77,.12)}
 .event-card .ev-days.today{color:#ff8a78;background:rgba(255,138,120,.14)}
 .event-card .ev-days.passed{color:#7a93b4;background:rgba(122,147,180,.1)}
+.mini-tbl{margin-top:8px;max-height:128px;overflow-y:auto;border:1px solid #14283f;border-radius:6px}
+.mini-tbl table{width:100%;border-collapse:collapse;font-size:9.5px}
+.mini-tbl th{position:sticky;top:0;background:#0d1e38;color:#7fa3c8;font-weight:600;text-align:right;padding:3px 8px;letter-spacing:.3px;border-bottom:1px solid #1a3050}
+.mini-tbl th:first-child,.mini-tbl td:first-child{text-align:left}
+.mini-tbl td{padding:3px 8px;border-bottom:1px solid #0f2138;color:#cfe0f2}
+.mini-tbl tr:last-child td{border-bottom:none}
+.mini-tbl tr:first-child td{color:#fff;font-weight:700}
+.mini-tbl .chg-up{color:#6dd4a0}.mini-tbl .chg-dn{color:#ff8a78}
+.np{color:#5a7a9a;font-size:11px;font-style:italic;padding:10px;text-align:center;border:1px dashed #1a3050;border-radius:6px;margin-top:6px}
 </style>
 </head>
 <body>
@@ -216,14 +228,10 @@ canvas{max-width:100%!important}
                 <tr><td>Gross Volume(Rs.Bn)</td><td id="op-cmvol">—</td><td id="op-rmvol">—</td></tr>
               </tbody>
             </table>
-            <div class="liq-box">
-              <div class="liq-item"><div class="liq-label">Current Liquidity</div><div class="liq-val" id="op-liqcur">—</div></div>
-              <div class="liq-item"><div class="liq-label">Previous Liquidity</div><div class="liq-val" id="op-liqprev">—</div></div>
-            </div>
           </div>
           <div class="op-col op-chartcol">
             <div class="op-chart-cap">Market Liquidity (Rs.Bn)</div>
-            <canvas id="op-liqChart" style="max-height:175px"></canvas>
+            <canvas id="op-liqChart" style="max-height:175px"></canvas><div class="chart-stat-bar" id="op-liqStat"></div>
           </div>
         </div>
       </div>
@@ -245,7 +253,7 @@ canvas{max-width:100%!important}
           </div>
           <div class="op-col op-chartcol">
             <div class="op-chart-cap">USD/LKR Movement</div>
-            <canvas id="op-fxChart" style="max-height:175px"></canvas>
+            <canvas id="op-fxChart" style="max-height:175px"></canvas><div class="chart-stat-bar" id="op-fxStat"></div>
           </div>
         </div>
       </div>
@@ -302,159 +310,23 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: CLOSING REPORT -->
   <div class="page" id="page-open" style="display:block">
-    <!-- Title + key dates -->
-    <div class="panel full-width">
-      <div class="panel-title">Market Report — 22<sup>nd</sup> June 2026</div>
-      <div class="kd-grid">
-        <div class="kd-item"><div class="kd-lbl">Next Squaring Off Day</div><div class="kd-val">23.06.2026</div></div>
-        <div class="kd-item"><div class="kd-lbl">Next T-Bill Auction Day</div><div class="kd-val">24.06.2026</div></div>
-        <div class="kd-item"><div class="kd-lbl">Next T-Bond Auction Day</div><div class="kd-val">26.06.2026</div></div>
-        <div class="kd-item"><div class="kd-lbl">Next Monetary Policy Day</div><div class="kd-val">22.07.2026</div></div>
-      </div>
-    </div>
-
-    <!-- 1. Central Bank Liquidity & Holdings -->
-    <div class="panel full-width">
-      <div class="panel-title"><span class="sec-num">1.</span> Central Bank Liquidity &amp; Holdings</div>
-      <table style="font-size:11px">
-        <thead>
-          <tr><th rowspan="2" style="vertical-align:bottom;text-align:left">Facility</th><th colspan="2" style="text-align:center">Volume (LKR Bn)</th><th colspan="2" style="text-align:center">CBSL Policy Window Rates</th></tr>
-          <tr><th style="text-align:right">19<sup>th</sup> Jun</th><th style="text-align:right">18<sup>th</sup> Jun</th><th style="text-align:right">19<sup>th</sup> Jun</th><th style="text-align:right">18<sup>th</sup> Jun</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Standing Deposit Facility (SDF)</td><td>76.24</td><td>90.42</td><td>8.25%</td><td>8.25%</td></tr>
-          <tr><td>Standing Lending Facility (SLF)</td><td>44.99</td><td>59.22</td><td>9.25%</td><td>9.25%</td></tr>
-          <tr><td style="font-weight:700">Net Market Liquidity Status</td><td style="color:#c8a84b;font-weight:700">31.25 <span class="up-arrow">&#9650;</span></td><td>31.20</td><td colspan="2" style="color:#6dd4a0;font-weight:700">CBSL Holdings: 2,498.12 Bn</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- 2 & 3 -->
+    <div class="panel full-width"><div class="panel-title" id="opening-report-title">Opening Report — Volume of FX Market &amp; Value Dates</div></div>
     <div class="grid-2x2">
       <div class="panel">
-        <div class="panel-title"><span class="sec-num">2.</span> Interbank Money Market (Call &amp; Repo)</div>
-        <table style="font-size:11px">
-          <thead><tr><th>Instrument</th><th>Highest</th><th>Lowest</th><th>W/A</th><th>Volume</th></tr></thead>
-          <tbody>
-            <tr><td>Call Money</td><td>9.25%</td><td>8.40%</td><td style="color:#c8a84b">9.22%</td><td>32.83 Bn</td></tr>
-            <tr><td>Repo</td><td>9.25%</td><td>9.23%</td><td style="color:#c8a84b">9.24%</td><td>69.18 Bn</td></tr>
-          </tbody>
+        <div class="panel-title" id="op-fxsum-title">Volume of FX Market</div>
+        <canvas id="opFxSumChart" style="max-height:190px"></canvas>
+        <table style="font-size:11px;margin-top:10px">
+          <thead><tr><th>Tenor</th><th>Volume (USD Mn)</th><th>W/A Rate</th></tr></thead>
+          <tbody id="dyn-op-fxsum"></tbody>
         </table>
       </div>
       <div class="panel">
-        <div class="panel-title"><span class="sec-num">3.</span> Monetary Policy Decisions (OPR)</div>
-        <table style="font-size:12px">
-          <thead><tr><th>Date</th><th>OPR</th></tr></thead>
-          <tbody>
-            <tr><td>27.11.2024</td><td>8.00%</td></tr>
-            <tr><td>22.05.2025</td><td>7.75%</td></tr>
-            <tr><td>26.05.2026</td><td style="color:#c8a84b;font-weight:700">8.75% <span class="up-arrow">&#9650;</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 4 & 5 -->
-    <div class="grid-2x2">
-      <div class="panel">
-        <div class="panel-title"><span class="sec-num">4.</span> Treasury Bills (T-Bills) Data</div>
-        <table style="font-size:12px">
-          <thead><tr><th>Tenure</th><th>Days to Maturity</th><th>W/A (%)</th></tr></thead>
-          <tbody>
-            <tr><td>3 Months</td><td>91 Days</td><td style="color:#c8a84b">10.02%</td></tr>
-            <tr><td>6 Months</td><td>182 Days</td><td style="color:#c8a84b">10.16%</td></tr>
-            <tr><td>1 Year</td><td>364 Days</td><td style="color:#c8a84b">10.16%</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="panel">
-        <div class="panel-title"><span class="sec-num">5.</span> FX Market Overview (19<sup>th</sup> Jun)</div>
-        <div class="fx-ov">
-          <div class="fx-ov-row"><span class="lbl">Opening Spot</span><span class="val">335.50 / 334.25</span></div>
-          <div class="fx-ov-row"><span class="lbl">Closing Spot</span><span class="val">333.90 / 334.25</span></div>
-          <div class="fx-ov-row"><span class="lbl">Intraday Lowest Rate</span><span class="val">333.50</span></div>
-          <div class="fx-ov-row"><span class="lbl">Intraday Highest Rate</span><span class="val">334.00</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. T-Bonds secondary yields -->
-    <div class="panel full-width">
-      <div class="panel-title"><span class="sec-num">6.</span> T-Bonds Secondary Market Closing Yields <span style="font-size:9px;color:#7a93b4;font-weight:400">(19<sup>th</sup> June · bid / offer)</span></div>
-      <div class="by-grid"><div class="by-row"><span class="by-mat">15.09.2027</span><span class="by-rate">10.35 / 10.45</span></div><div class="by-row"><span class="by-mat">15.02.2028</span><span class="by-rate">10.50 / 10.60</span></div><div class="by-row"><span class="by-mat">15.03.2028</span><span class="by-rate">10.50 / 10.60</span></div><div class="by-row"><span class="by-mat">01.05.2028</span><span class="by-rate">10.50 / 10.65</span></div><div class="by-row"><span class="by-mat">01.07.2028</span><span class="by-rate">10.50 / 10.70</span></div><div class="by-row"><span class="by-mat">01.09.2028</span><span class="by-rate">10.50 / 10.70</span></div><div class="by-row"><span class="by-mat">15.10.2028</span><span class="by-rate">10.50 / 10.70</span></div><div class="by-row"><span class="by-mat">15.12.2028</span><span class="by-rate">10.50 / 10.75</span></div><div class="by-row"><span class="by-mat">15.06.2029</span><span class="by-rate">10.85 / 10.95</span></div><div class="by-row"><span class="by-mat">15.07.2029</span><span class="by-rate">10.85 / 10.95</span></div><div class="by-row"><span class="by-mat">15.09.2029</span><span class="by-rate">10.85 / 11.00</span></div><div class="by-row"><span class="by-mat">15.10.2029</span><span class="by-rate">10.85 / 11.00</span></div><div class="by-row"><span class="by-mat">15.12.2029</span><span class="by-rate">10.90 / 11.00</span></div><div class="by-row"><span class="by-mat">01.03.2030</span><span class="by-rate">11.00 / 11.10</span></div><div class="by-row"><span class="by-mat">15.05.2030</span><span class="by-rate">11.00 / 11.15</span></div><div class="by-row"><span class="by-mat">01.07.2030</span><span class="by-rate">11.05 / 11.20</span></div><div class="by-row"><span class="by-mat">01.08.2030</span><span class="by-rate">11.15 / 11.25</span></div><div class="by-row"><span class="by-mat">15.10.2030</span><span class="by-rate">11.15 / 11.25</span></div><div class="by-row"><span class="by-mat">15.01.2033</span><span class="by-rate">11.40 / 11.50</span></div><div class="by-row"><span class="by-mat">01.06.2033</span><span class="by-rate">11.45 / 11.55</span></div><div class="by-row"><span class="by-mat">15.06.2034</span><span class="by-rate">11.60 / 11.70</span></div><div class="by-row"><span class="by-mat">15.09.2034</span><span class="by-rate">11.60 / 11.70</span></div><div class="by-row"><span class="by-mat">15.03.2035</span><span class="by-rate">11.70 / 11.80</span></div><div class="by-row"><span class="by-mat">15.06.2035</span><span class="by-rate">11.70 / 11.90</span></div><div class="by-row"><span class="by-mat">15.08.2036</span><span class="by-rate">11.75 / 12.00</span></div></div>
-    </div>
-
-    <!-- 7. FX Market Summary + Value Dates -->
-    <div class="grid-2x2">
-      <div class="panel">
-        <div class="panel-title"><span class="sec-num">7.</span> FX Market Summary (19<sup>th</sup> Jun)</div>
-        <table style="font-size:11px">
-          <thead><tr><th>Tenor</th><th>Volume (USD Mn)</th><th>W/A</th></tr></thead>
-          <tbody>
-            <tr><td>Spot</td><td>14.75</td><td>333.7646</td></tr>
-            <tr><td>Tom</td><td>—</td><td>—</td></tr>
-            <tr><td>Cash</td><td>—</td><td>—</td></tr>
-            <tr style="font-weight:700"><td>SubTotal</td><td>14.75</td><td></td></tr>
-            <tr><td>1W</td><td>01.25</td><td>334.4200</td></tr>
-            <tr><td>1M</td><td>07.25</td><td>335.6062</td></tr>
-            <tr style="font-weight:700"><td>Sub Total (Forwards)</td><td>08.50</td><td></td></tr>
-            <tr style="font-weight:700;color:#c8a84b"><td>Grand Total Volume</td><td>23.25</td><td></td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="panel">
-        <div class="panel-title">Value Dates (22.06.2026)</div>
-        <div style="max-height:300px;overflow-y:auto"><table style="font-size:10px">
+        <div class="panel-title">Value Dates</div>
+        <div style="max-height:430px;overflow-y:auto"><table style="font-size:11px">
           <thead><tr><th>Tenor</th><th>Value Date</th><th>NOD</th></tr></thead>
-          <tbody><tr><td>Cash</td><td>22.06.2026</td><td style="color:#9fb6d4"></td></tr><tr><td>Tom</td><td>23.06.2026</td><td style="color:#9fb6d4"></td></tr><tr><td>Spot</td><td>24.06.2026</td><td style="color:#9fb6d4"></td></tr><tr><td>1 Week</td><td>01.07.2026</td><td style="color:#9fb6d4">07 Days</td></tr><tr><td>2 Weeks</td><td>08.07.2026</td><td style="color:#9fb6d4">14 Days</td></tr><tr><td>3 Weeks</td><td>15.07.2026</td><td style="color:#9fb6d4">21 Days</td></tr><tr><td>1 Month</td><td>24.07.2026</td><td style="color:#9fb6d4">30 Days</td></tr><tr><td>2 Months</td><td>24.08.2026</td><td style="color:#9fb6d4">61 Days</td></tr><tr><td>3 Months</td><td>24.09.2026</td><td style="color:#9fb6d4">92 Days</td></tr><tr><td>4 Months</td><td>26.10.2026</td><td style="color:#9fb6d4">124 Days</td></tr><tr><td>5 Months</td><td>25.11.2026</td><td style="color:#9fb6d4">154 Days</td></tr><tr><td>6 Months</td><td>24.12.2026</td><td style="color:#9fb6d4">183 Days</td></tr><tr><td>7 Months</td><td>25.01.2027</td><td style="color:#9fb6d4">215 Days</td></tr><tr><td>8 Months</td><td>24.02.2027</td><td style="color:#9fb6d4">245 Days</td></tr><tr><td>9 Months</td><td>24.03.2027</td><td style="color:#9fb6d4">273 Days</td></tr><tr><td>10 Months</td><td>26.04.2027</td><td style="color:#9fb6d4">306 Days</td></tr><tr><td>11 Months</td><td>24.05.2027</td><td style="color:#9fb6d4">334 Days</td></tr><tr><td>12 Months</td><td>24.06.2027</td><td style="color:#9fb6d4">365 Days</td></tr></tbody>
+          <tbody id="dyn-op-vd"></tbody>
         </table></div>
       </div>
-    </div>
-
-    <!-- SRR + T-Bill Auction Results -->
-    <div class="grid-2x2">
-      <div class="panel">
-        <div class="panel-title">Statutory Reserve Requirement (SRR)</div>
-        <table style="font-size:12px">
-          <thead><tr><th>Date</th><th>SRR</th></tr></thead>
-          <tbody>
-            <tr><td>16.03.2020</td><td>4.00%</td></tr>
-            <tr><td>16.06.2020</td><td>2.00%</td></tr>
-            <tr><td>01.09.2021</td><td>4.00%</td></tr>
-            <tr><td>16.08.2023</td><td>2.00%</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="panel">
-        <div class="panel-title">T-Bill Auction Results <span style="font-size:9px;color:#7a93b4;font-weight:400">(17<sup>th</sup> Jun 2026)</span></div>
-        <table style="font-size:10px">
-          <thead><tr><th>Maturity</th><th>Offered</th><th>Bids</th><th>Accepted</th><th>Cur. W/A</th><th>Last W/A</th></tr></thead>
-          <tbody>
-            <tr><td>91 Days<br><span style="font-size:8px;color:#7a93b4">LKA09126I187</span></td><td>35,000</td><td>68,778</td><td>51,621</td><td style="color:#c8a84b">10.02</td><td>10.09</td></tr>
-            <tr><td>182 Days<br><span style="font-size:8px;color:#7a93b4">LKA18226L188</span></td><td>25,000</td><td>40,050</td><td>8,734</td><td style="color:#c8a84b">10.16</td><td>10.27</td></tr>
-            <tr><td>364 Days<br><span style="font-size:8px;color:#7a93b4">LKA36427F182</span></td><td>10,000</td><td>20,595</td><td>9,645</td><td style="color:#c8a84b">10.16</td><td>10.16</td></tr>
-            <tr style="font-weight:700"><td>Total</td><td>140,000</td><td>201,006</td><td>70,000</td><td></td><td></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- T-Bond Auction Results -->
-    <div class="panel full-width">
-      <div class="panel-title">T-Bond Auction Results <span style="font-size:9px;color:#7a93b4;font-weight:400">(11<sup>th</sup> Jun 2026)</span></div>
-      <div style="overflow-x:auto"><table style="font-size:10px">
-        <thead><tr><th>Series</th><th>11.00% 2030 'A'</th><th>11.50% 2032 'A'</th><th>10.75% 2037 'A'</th></tr></thead>
-        <tbody>
-          <tr><td>Date of Maturity</td><td>15 May 2030</td><td>15 Dec 2032</td><td>01 Jul 2037</td></tr>
-          <tr><td>ISIN</td><td>LKB01530E152</td><td>LKB00832L158</td><td>LKB01237G019</td></tr>
-          <tr><td>Coupon Rate (p.a.)</td><td>11.00%</td><td>11.50%</td><td>10.75%</td></tr>
-          <tr><td>Amount Offered (Rs.Mn)</td><td>70,000</td><td>60,000</td><td>20,000</td></tr>
-          <tr><td>Bids Received (Rs.Mn)</td><td>124,842</td><td>126,197</td><td>44,935</td></tr>
-          <tr><td>Amount Accepted (Rs.Mn)</td><td>44,957</td><td>47,596</td><td>—</td></tr>
-          <tr style="font-weight:700"><td>W/A (%)</td><td style="color:#c8a84b">11.65</td><td style="color:#c8a84b">12.69</td><td>—</td></tr>
-        </tbody>
-      </table></div>
-      <div class="rpt-note">Source: https://www.cbsl.gov.lk/ &nbsp;·&nbsp; Next T-Bill Auction: 24<sup>th</sup> Jun (settle 26<sup>th</sup> Jun · 91/182/364D · Rs.70 Bn) &nbsp;·&nbsp; Next T-Bond Auction: 26<sup>th</sup> Jun (settle 01<sup>st</sup> Jul · 4Y/10Y · Rs.60 Bn)</div>
     </div>
   </div>
 
@@ -475,19 +347,27 @@ canvas{max-width:100%!important}
           <tr><td>Gross Volume(Rs.Bn)</td><td id="cmvol">—</td><td id="rmvol">—</td></tr>
         </tbody>
       </table>
-      <div class="liq-box">
-        <div class="liq-item"><div class="liq-label">Current Liquidity</div><div class="liq-val" id="liqcur">—</div></div>
-        <div class="liq-item"><div class="liq-label">Previous Liquidity</div><div class="liq-val" id="liqprev">—</div></div>
-      </div>
     </div>
-    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas></div>
+    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
   </div>
 
-  <!-- CBSL + FOREIGN HOLDINGS (last part of Money Market, below T-bill/T-bond) -->
   <div class="grid-2x2">
-    <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div></div>
-    <div class="panel"><div class="panel-title pt-row"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fhStat"></div></div>
+    <div class="panel">
+      <div class="panel-title">Policy Rate (OPR) History</div>
+      <table style="font-size:12px">
+        <thead><tr><th>Effective Date</th><th>OPR (%)</th></tr></thead>
+        <tbody id="dyn-opr"></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Standing Facilities (Rs.Bn)</div>
+      <table style="font-size:12px">
+        <thead><tr><th>Instrument</th><th>Latest</th><th>Previous</th></tr></thead>
+        <tbody id="dyn-windows"></tbody>
+      </table>
+    </div>
   </div>
+
 
   </div>
 
@@ -497,7 +377,8 @@ canvas{max-width:100%!important}
   <div class="full-grid">
     <div class="panel">
       <div class="panel-title pt-row"><span>Treasury Bill</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('tbill',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('tbill','all',this)" title="Full year (all data)">Y</button></span></div>
-      <canvas id="tbillChart" style="max-height:160px;margin-bottom:10px"></canvas>
+      <div class="series-toggle"><span class="st-lbl">Tenor:</span><button class="mg-btn active" onclick="setTbillSeries('all',this)" title="Show all tenors">All</button><button class="mg-btn" onclick="setTbillSeries('m3',this)">3M</button><button class="mg-btn" onclick="setTbillSeries('m6',this)">6M</button><button class="mg-btn" onclick="setTbillSeries('m12',this)">12M</button></div>
+      <canvas id="tbillChart" style="max-height:160px;margin-bottom:10px"></canvas><div class="chart-stat-bar" id="tbillStat"></div>
       <table style="font-size:10px;margin-bottom:12px">
         <thead><tr><th>Auction Date</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
         <tbody id="tbillRows"></tbody>
@@ -525,7 +406,7 @@ canvas{max-width:100%!important}
     </div>
     <div class="panel">
       <div class="panel-title">Treasury Bond (Yield Curve)</div>
-      <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
+      <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas><div class="chart-stat-bar" id="yieldStat"></div>
       <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span>→<span style="color:#ff8a78">high</span> yield · ▾ down / ▴ up vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
         <table style="font-size:9px">
@@ -533,6 +414,16 @@ canvas{max-width:100%!important}
           <tbody id="bondRows"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <div class="panel full-width">
+    <div class="panel-title">T-Bond Secondary Market Closing Yields</div>
+    <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
+      <table style="font-size:10px">
+        <thead><tr><th>Maturity Date</th><th>Bid (%)</th><th>Ask (%)</th></tr></thead>
+        <tbody id="dyn-secondary"></tbody>
+      </table>
     </div>
   </div>
 
@@ -561,6 +452,22 @@ canvas{max-width:100%!important}
     </div>
   </div>
 
+  <div class="grid-2x2">
+    <div class="panel">
+      <div class="panel-title">FX Market Overview (Spot)</div>
+      <table style="font-size:12px">
+        <tbody id="dyn-spot"></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Cross-Currency Rates</div>
+      <table style="font-size:11px">
+        <thead><tr><th>Currency</th><th>Buying</th><th>Selling</th></tr></thead>
+        <tbody id="dyn-cross"></tbody>
+      </table>
+    </div>
+  </div>
+
   </div>
 
   <!-- PAGE: MACRO ECONOMY -->
@@ -569,39 +476,35 @@ canvas{max-width:100%!important}
     <div class="grid-2x2">
       <div class="panel">
         <div class="panel-title">Inflation (CCPI vs NCPI)</div>
+        <canvas id="inflChart" style="max-height:185px;margin-bottom:10px"></canvas>
         <table style="font-size:11px">
           <thead><tr><th>Index / Metric</th><th>April 2026</th><th>May 2026</th></tr></thead>
-          <tbody>
-            <tr><td>CCPI Year-on-Year (YoY %)</td><td>5.4%</td><td style="color:#c8a84b">5.5%</td></tr>
-            <tr><td>CCPI Month-on-Month (MoM %)</td><td>3.0%</td><td style="color:#c8a84b">0.9%</td></tr>
-            <tr><td>NCPI Year-on-Year (YoY %)</td><td>4.7%</td><td>&mdash;</td></tr>
-            <tr><td>NCPI Month-on-Month (MoM %)</td><td>2.6%</td><td>&mdash;</td></tr>
-          </tbody>
+          <tbody id="dyn-inflation"></tbody>
         </table>
       </div>
       <div class="panel">
         <div class="panel-title">Foreign Currency Reserves</div>
         <table style="font-size:12px">
           <thead><tr><th>Month</th><th>Reserve ($)</th></tr></thead>
-          <tbody>
-            <tr><td>March 2026</td><td>6,800 Mn</td></tr>
-            <tr><td>April 2026</td><td>6,511 Mn</td></tr>
-            <tr><td>May 2026</td><td style="color:#c8a84b;font-weight:700">6,652 Mn</td></tr>
-          </tbody>
+          <tbody id="dyn-reserves"></tbody>
         </table>
         <div class="rpt-note">Source: https://www.cbsl.gov.lk/</div>
       </div>
+    </div>
+    <div class="grid-2x2">
+      <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div><div class="mini-tbl" id="cbslTbl"></div></div>
+      <div class="panel"><div class="panel-title pt-row"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fhStat"></div><div class="mini-tbl" id="fhTbl"></div></div>
     </div>
     <div class="panel full-width">
       <div class="panel-title">Tourism &amp; Remittances</div>
       <div class="grid-2x2" style="margin-top:0">
         <table style="font-size:11px">
-          <thead><tr><th>Tourism (USD)</th><th>Mar 2026</th><th>Apr 2026</th><th>Y-o-Y (Apr)</th></tr></thead>
-          <tbody><tr><td>Earnings</td><td>223.70 Mn</td><td>157.10 Mn</td><td style="color:#6dd4a0;font-weight:700">19.4%</td></tr></tbody>
+          <thead><tr><th>Tourism (USD)</th><th>Apr 2026</th><th>May 2026</th><th>Y-o-Y</th></tr></thead>
+          <tbody id="dyn-tourism"></tbody>
         </table>
         <table style="font-size:11px">
-          <thead><tr><th>Remittances (USD)</th><th>Apr 2025</th><th>May 2026</th><th>Y-o-Y (May)</th></tr></thead>
-          <tbody><tr><td>Inflows</td><td>767.9 Mn</td><td>847.00 Mn</td><td style="color:#6dd4a0;font-weight:700">26.0%</td></tr></tbody>
+          <thead><tr><th>Remittances (USD)</th><th>Apr 2025</th><th>May 2026</th><th>Y-o-Y</th></tr></thead>
+          <tbody id="dyn-remit"></tbody>
         </table>
       </div>
     </div>
@@ -615,32 +518,28 @@ canvas{max-width:100%!important}
     <div class="grid-2x2">
       <div class="panel">
         <div class="panel-title pt-row"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('g10',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('g10','all',this)" title="Full year (all data)">Y</button></span></div>
-        <canvas id="g10Chart" style="max-height:210px"></canvas><div class="chart-stat-bar" id="g10Stat"></div>
+        <canvas id="g10Chart" style="max-height:210px"></canvas><div class="chart-stat-bar" id="g10Stat"></div><div class="mini-tbl" id="g10Tbl"></div>
       </div>
       <div class="panel">
         <div class="panel-title">US Fed Rate — FOMC Decisions</div>
         <table style="font-size:11px">
           <thead><tr><th>Date</th><th>Range</th><th>O/N REPO</th><th>O/N R/REPO</th></tr></thead>
-          <tbody>
-            <tr><td>18<sup>th</sup> Mar 26</td><td>3.50% - 3.75%</td><td>3.75%</td><td>3.50%</td></tr>
-            <tr><td>29<sup>th</sup> Apr 26</td><td>3.50% - 3.75%</td><td>3.75%</td><td>3.50%</td></tr>
-            <tr><td>17<sup>th</sup> Jun 26</td><td>3.50% - 3.75%</td><td>3.75%</td><td>3.50%</td></tr>
-          </tbody>
+          <tbody id="dyn-fomc"></tbody>
         </table>
-        <div class="rpt-note" style="color:#c8a84b;font-weight:700">Next FOMC Meeting: 28 &ndash; 29 July 2026</div>
+        <div class="rpt-note" style="color:#c8a84b;font-weight:700" id="dyn-fomc-next">Next FOMC Meeting: 28 &ndash; 29 July 2026</div>
       </div>
     </div>
 
     <!-- Gold + DXY -->
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title">Gold Price (USD / oz)</div><canvas id="goldChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="goldStat"></div><div class="rpt-note" id="goldNote">Awaiting data upload.</div></div>
-      <div class="panel"><div class="panel-title">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title">Gold Price (USD / oz)</div><canvas id="goldChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="goldStat"></div><div class="mini-tbl" id="goldTbl"></div><div class="rpt-note" id="goldNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="mini-tbl" id="dxyTbl"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
     </div>
 
     <!-- Brent + WTI -->
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
-      <div class="panel"><div class="panel-title">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
     </div>
   </div>
 
@@ -662,6 +561,19 @@ canvas{max-width:100%!important}
 const DATA_URL="https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-market/main/data.json";
 const POLL_INTERVAL = 30000;
 let charts={}, pollTimer=null;
+let _tbillSel='all';
+// Sri Lanka bank working day (Mon–Fri). back=0 -> today's working day, 1 -> previous working day…
+function slWorkDay(back){
+  let d=new Date();
+  while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()-1);
+  for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(d.getDay()===0||d.getDay()===6);}
+  return d;
+}
+const _MON3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const _MONF=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function fmtShort(d){return d.getDate()+" "+_MON3[d.getMonth()];}                 // 24 Jun
+function fmtLong(d){return d.getDate()+" "+_MONF[d.getMonth()]+" "+d.getFullYear();} // 24 June 2026
+function fmtOrd(d){const v=d.getDate()%100,o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return d.getDate()+"<sup>"+o+"</sup> "+_MONF[d.getMonth()]+" "+d.getFullYear();}
 let GRANS={liq:"all",cbsl:"all",fh:"all",fx:"all",tbill:"all",g10:"all"};  // per-chart: number of last data points to show, or "all"
 let lastData=null;       // most recent dataset, for re-render on interval change
 
@@ -734,15 +646,20 @@ function setChartGran(key,g,btn){
 function startPolling(){stopPolling();pollTimer=setInterval(()=>loadData(true),POLL_INTERVAL);}
 function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
 
+let _lastDataHash=null;
 async function loadData(silent=false){
   const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
   if(!silent){bar.style.display="block";errEl.style.display="none";}
   try{
     const res=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
     if(!res.ok)throw new Error("HTTP "+res.status);
-    const d=await res.json();
+    const txt=await res.text();
     bar.style.display="none";
-    render(d);
+    // Only re-render (and rebuild charts) when the published data has actually changed.
+    // This stops the every-30s flicker — the dashboard refreshes only after you publish.
+    if(txt===_lastDataHash)return;
+    _lastDataHash=txt;
+    render(JSON.parse(txt));
   }catch(e){
     bar.style.display="none";
     if(!silent){errEl.style.display="block";errEl.textContent="Could not load data — "+e.message;}
@@ -762,18 +679,29 @@ function getKeyEvents(d){
   ];
   return (d&&Array.isArray(d.keyDates)&&d.keyDates.length)?d.keyDates:defaults;
 }
+function parseEventDate(s){
+  s=String(s||"").trim();if(!s)return null;
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);                       // YYYY-MM-DD
+  if(m)return new Date(+m[1],+m[2]-1,+m[3]);
+  m=s.match(/^(\d{1,2})(?:\s*-\s*\d{1,2})?[.\/-](\d{1,2})[.\/-](\d{4})/); // DD.MM.YYYY / DD/MM/YYYY (range -> first day)
+  if(m)return new Date(+m[3],+m[2]-1,+m[1]);
+  m=s.match(/^(\d{1,2})\s*(?:st|nd|rd|th)?\s+([A-Za-z]{3,})\.?\s*(\d{4})?/); // D Mon [YYYY]
+  if(m){const mi=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"].indexOf(m[2].slice(0,3).toLowerCase());if(mi>=0)return new Date(m[3]?+m[3]:new Date().getFullYear(),mi,+m[1]);}
+  const d=new Date(s);return isNaN(d.getTime())?null:d;
+}
 function eventDayInfo(dateStr){
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const dt=new Date(String(dateStr)+"T00:00:00");
-  if(isNaN(dt.getTime()))return {dstr:String(dateStr),daysTxt:"",cls:""};
+  const dt=parseEventDate(dateStr);
+  if(!dt||isNaN(dt.getTime()))return {dstr:String(dateStr),daysTxt:"",cls:""};
+  dt.setHours(0,0,0,0);
   const today=new Date();today.setHours(0,0,0,0);
-  const diff=Math.round((dt-today)/86400000);
+  const diff=Math.round((dt-today)/86400000);   // plain calendar days (no working-day logic)
   let daysTxt,cls;
-  if(diff<0){daysTxt="Passed";cls="passed";}
+  if(diff<0){daysTxt=Math.abs(diff)+" day"+(Math.abs(diff)===1?"":"s")+" ago";cls="passed";}
   else if(diff===0){daysTxt="Today";cls="today";}
-  else if(diff===1){daysTxt="Tomorrow";cls="soon";}
+  else if(diff===1){daysTxt="Tomorrow (1 day)";cls="soon";}
   else{daysTxt="in "+diff+" days";cls=diff<=5?"soon":"";}
-  return {dstr:dt.getDate()+" "+MON[dt.getMonth()]+" "+dt.getFullYear(),daysTxt:daysTxt,cls:cls};
+  return {dstr:dt.getDate()+" "+MON[dt.getMonth()]+" "+dt.getFullYear(),daysTxt:daysTxt,cls:cls,diff:diff};
 }
 function renderEvents(d){
   const grid=document.getElementById("events-grid");if(!grid)return;
@@ -840,7 +768,7 @@ function renderTbillAuction(data,targetId){
         dateTd.style.borderTop=topBorder;
         dateTd.style.verticalAlign="middle";
         dateTd.style.background=groupBg;
-        dateTd.style.fontSize="11px";
+        dateTd.style.fontSize="9.5px";
         tr.appendChild(dateTd);
       }
       const matTd=document.createElement("td");matTd.className="mat-cell";matTd.textContent=m.maturity||"—";
@@ -850,7 +778,7 @@ function renderTbillAuction(data,targetId){
       const accTd=document.createElement("td");accTd.textContent=m.accepted||"—";
       accTd.style.background=groupBg;accTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
       const yldTd=document.createElement("td");
-      yldTd.textContent=m.yield||"—";
+      {const yv=parseFloat(m.yield);yldTd.textContent=(m.yield==null||m.yield===""||isNaN(yv))?"—":(Math.round(yv)+"%");}
       yldTd.style.background=groupBg;yldTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
       if(m.yield&&m.yield!=="—"){yldTd.style.color="#6dd4a0";yldTd.style.fontWeight="700";}
       tr.appendChild(matTd);tr.appendChild(offTd);tr.appendChild(accTd);tr.appendChild(yldTd);
@@ -935,7 +863,7 @@ function render(d){
   setText("exdir",d.execSummary?.liqDir);
   setText("exdelta",d.execSummary?.liqDelta);
   // Live ribbon = upcoming announcement dates with countdown (not market news)
-  buildTicker(getKeyEvents(d).map(e=>{const i=eventDayInfo(e.date);return e.label+" — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":"");}));
+  buildTicker(getKeyEvents(d).filter(e=>e.show!==false).map(e=>{const i=eventDayInfo(e.date);return e.label+" — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":"");}));
 
   // ── NEW: render T-Bill Auction Detail table
   renderTbillAuction(d.tbillAuction||[]);
@@ -1015,10 +943,80 @@ function render(d){
   const nl=document.getElementById("news-list");
   if(nl){const items=(d.marketNews&&d.marketNews.length)?d.marketNews:[];nl.innerHTML=items.length?items.map((t,i)=>`<div class="news-card"><span class="news-idx">${i+1}.</span>${escHtml(t)}</div>`).join(""):'<div class="news-card">No announcements published.</div>';}
 
+  renderExtras(d);
   buildCharts(d);
 }
 
+// ── Populate all data-driven tables that aren't handled inline above ──
+function renderExtras(d){
+  const E=id=>document.getElementById(id);
+  const dash=v=>(v==null||String(v).trim()===''||String(v).trim()==='0')?'—':v;
+  const set=(id,html)=>{const el=E(id);if(el)el.innerHTML=html;};
+  // Macro — inflation
+  set('dyn-inflation',(d.inflation||[]).map(r=>`<tr><td>${escHtml(r.metric)}</td><td>${dash(r.apr)}</td><td style="color:#c8a84b">${dash(r.may)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  // Macro — reserves (highlight last)
+  {const r=d.reserves||[];set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${dash(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  // Macro — tourism & remittances
+  {const t=d.tourism||{};set('dyn-tourism',`<tr><td>Earnings</td><td>${dash(t.apr)}</td><td>${dash(t.may)}</td><td style="color:#6dd4a0;font-weight:700">${dash(t.yoy)}</td></tr>`);}
+  {const r=d.remittances||{};set('dyn-remit',`<tr><td>Inflows</td><td>${dash(r.apr)}</td><td>${dash(r.may)}</td><td style="color:#6dd4a0;font-weight:700">${dash(r.yoy)}</td></tr>`);}
+  // Global — FOMC
+  set('dyn-fomc',(d.fomc||[]).map(r=>`<tr><td>${escHtml(r.date)}</td><td>${escHtml(r.range)}</td><td>${dash(r.repo)}</td><td>${dash(r.rrepo)}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  {const fk=(d.keyDates||[]).find(k=>/fomc/i.test(k.label));if(fk&&E('dyn-fomc-next')){const i=eventDayInfo(fk.date);E('dyn-fomc-next').textContent='Next FOMC Meeting: '+i.dstr+(i.daysTxt?'  ('+i.daysTxt+')':'');}}
+  // FX — spot overview + cross rates
+  {const s=d.spot||{};set('dyn-spot',`<tr><td>Opening Spot</td><td style="text-align:right">${dash(s.open)}</td></tr><tr><td>Closing Spot</td><td style="text-align:right;color:#c8a84b;font-weight:700">${dash(s.close)}</td></tr><tr><td>Intraday Lowest</td><td style="text-align:right">${dash(s.low)}</td></tr><tr><td>Intraday Highest</td><td style="text-align:right">${dash(s.high)}</td></tr>`);}
+  set('dyn-cross',(d.crossRates||[]).map(c=>`<tr><td>${escHtml(c.pair)}</td><td>${dash(c.buy)}</td><td>${dash(c.sell)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  // Money Market — OPR + standing facilities
+  {const o=d.opr||[];set('dyn-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${dash(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  {const w=d.windows||{};set('dyn-windows',`<tr><td>Standing Deposit (SDF)</td><td>${dash(w.sdf&&w.sdf.cur)}</td><td style="color:#7fa3c8">${dash(w.sdf&&w.sdf.prev)}</td></tr><tr><td>Standing Lending (SLF)</td><td>${dash(w.slf&&w.slf.cur)}</td><td style="color:#7fa3c8">${dash(w.slf&&w.slf.prev)}</td></tr>`);}
+  // FI — secondary yields (table)
+  set('dyn-secondary',(d.bondSecondary||[]).map(s=>`<tr><td>${escHtml(s.maturity)}</td><td>${dash(s.bid)}</td><td>${dash(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+
+  // ── Opening Report mirror tables ──
+  {const w=d.windows||{},lq=d.liquidity||{};
+   set('dyn-op-cbsl',`<tr><td>Standing Deposit Facility (SDF)</td><td style="text-align:right">${dash(w.sdf&&w.sdf.cur)}</td><td style="text-align:right">${dash(w.sdf&&w.sdf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
+     `<tr><td>Standing Lending Facility (SLF)</td><td style="text-align:right">${dash(w.slf&&w.slf.cur)}</td><td style="text-align:right">${dash(w.slf&&w.slf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
+     `<tr><td style="font-weight:700">Net Market Liquidity</td><td style="color:#c8a84b;font-weight:700;text-align:right">${dash(lq.current)}</td><td style="text-align:right">${dash(lq.previous)}</td><td colspan="2" style="color:#6dd4a0;font-weight:700;text-align:right">CBSL Holdings: ${dash(d.cbslHoldings)} Bn</td></tr>`);}
+  {const c=d.callMarket||{},r=d.repoMarket||{};
+   set('dyn-op-mm',`<tr><td>Call Money</td><td>${dash(c.max)}</td><td>${dash(c.min)}</td><td style="color:#c8a84b">${dash(c.wa)}</td><td>${dash(c.vol)}</td></tr>`+
+     `<tr><td>Repo</td><td>${dash(r.max)}</td><td>${dash(r.min)}</td><td style="color:#c8a84b">${dash(r.wa)}</td><td>${dash(r.vol)}</td></tr>`);}
+  {const o=d.opr||[];set('dyn-op-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${dash(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  {const lt=(d.tbills||[])[0]||{};const rows=[['3 Months','91 Days',lt.m3],['6 Months','182 Days',lt.m6],['1 Year','364 Days',lt.m12]];
+   set('dyn-op-tbill3',rows.map(([t,dys,v])=>`<tr><td>${t}</td><td>${dys}</td><td style="color:#c8a84b">${dash(v)}</td></tr>`).join(''));}
+  {const s=d.spot||{};const row=(l,v)=>`<div class="fx-ov-row"><span class="lbl">${l}</span><span class="val">${dash(v)}</span></div>`;
+   set('dyn-op-fxov',row('Opening Spot',s.open)+row('Closing Spot',s.close)+row('Intraday Lowest Rate',s.low)+row('Intraday Highest Rate',s.high));}
+  set('dyn-op-secondary',(d.bondSecondary||[]).map(s=>`<div class="by-row"><span class="by-mat">${escHtml(s.maturity)}</span><span class="by-rate">${dash(s.bid)} / ${dash(s.ask)}</span></div>`).join(''));
+  set('dyn-op-fxsum',(d.fxSummary||[]).map(f=>{const bold=/total/i.test(f.tenor);return `<tr${bold?' style="font-weight:700"':''}><td>${escHtml(f.tenor)}</td><td>${dash(f.volume)}</td><td>${f.wa?dash(f.wa):''}</td></tr>`;}).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  {// Auto report dates (Sri Lanka bank working days) with optional editor overrides
+   const todayD=slWorkDay(0), yestD=slWorkDay(1);
+   const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
+   const ot=document.getElementById("opening-report-title");
+   if(ot){const od=ov(d.openingDate)||fmtLong(todayD);ot.innerHTML="Opening Report ("+escHtml(od)+") — Volume of FX Market &amp; Value Dates";}
+   const cd=document.getElementById("closing-report-date");
+   if(cd){cd.innerHTML=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(todayD);}
+   const ft=document.getElementById("op-fxsum-title");
+   if(ft){const fv=ov(d.fxVolDate)||fmtShort(yestD);ft.textContent="Volume of FX Market ("+fv+")";}}
+  set('dyn-op-vd',(d.valueDates||[]).map(v=>`<tr><td>${escHtml(v.tenor)}</td><td>${escHtml(v.date)}</td><td style="color:#9fb6d4">${escHtml(v.nod||'')}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-op-srr',(d.srr||[]).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${dash(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+}
+
 function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
+
+// Compact "recent values" table under a chart: newest-first, with day-on-day change
+function recentTable(elId,labels,values,unit,dec,n){
+  const el=document.getElementById(elId);if(!el)return;
+  n=n||8;
+  const L=labels||[],V=(values||[]).map(v=>{const x=parseFloat(v);return isNaN(x)?null:x;});
+  const idx=[];for(let i=V.length-1;i>=0&&idx.length<n;i--){if(V[i]!=null)idx.push(i);}
+  if(idx.length<1){el.innerHTML='<div class="np">Not published yet</div>';return;}
+  const rows=idx.map(i=>{
+    const cur=V[i];let prev=null;for(let k=i-1;k>=0;k--){if(V[k]!=null){prev=V[k];break;}}
+    const diff=prev!=null?+(cur-prev).toFixed(dec):null;
+    const cls=diff==null||diff===0?"":diff>0?"chg-up":"chg-dn";
+    const arr=diff==null||diff===0?"":diff>0?"▲":"▼";
+    return `<tr><td>${escHtml(L[i]!=null?L[i]:i)}</td><td>${cur.toFixed(dec)}</td><td class="${cls}">${diff==null?"—":(arr+" "+Math.abs(diff).toFixed(dec))}</td></tr>`;
+  }).join("");
+  el.innerHTML=`<table><thead><tr><th>Date</th><th>${escHtml(unit||"")}</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
 
 function buildCharts(d){
   const gc="rgba(26,48,80,.5)",tc="#7fa3c8",tf={size:10};
@@ -1026,10 +1024,13 @@ function buildCharts(d){
   destroyChart("liq");
   const liqAg=aggregateIdx(d.liquidity?.labels||[],GRANS.liq);
   charts.liq=new Chart(document.getElementById("liqChart"),{type:"line",data:{labels:liqAg.labels,datasets:[{label:"Rs.Bn",data:pick(d.liquidity?.values||[],liqAg.idx),borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("liqStat",pick(d.liquidity?.values||[],liqAg.idx),liqAg.labels,"Rs.Bn",2);
+  recentTable("liqTbl",d.liquidity?.labels||[],d.liquidity?.values||[],"Rs.Bn",2);
   // ── STAT BARS ──────────────────────────────────────────────
   function renderStatBar(elId,values,labels,unit,decimals){
     const el=document.getElementById(elId);if(!el)return;
     const vals=values.filter(v=>v!=null&&!isNaN(v));
+    if(vals.length===0){el.innerHTML='<div class="np">Not published yet</div>';return;}
     if(vals.length<2){el.innerHTML="";return;}
     const prev=vals[vals.length-2], curr=vals[vals.length-1];
     const diff=+(curr-prev).toFixed(decimals);
@@ -1042,14 +1043,17 @@ function buildCharts(d){
     const prevLbl=labels&&labels.length>=2?labels[labels.length-2]:"Prev";
     const currLbl=labels&&labels.length>=1?labels[labels.length-1]:"Latest";
     el.innerHTML=`<div class="chart-stats">
-      <div class="cs-item" style="padding:5px 8px">
-        <div class="cs-label" style="font-size:7px">Previous <span style="color:#3a5a7a">(${prevLbl})</span></div>
-        <div class="cs-val" style="font-size:11px">${fmt(prev)}<span style="font-size:8px;color:#5a7a9a;font-weight:400"> ${unit}</span></div>
+      <div class="cs-item">
+        <div class="cs-label">Previous <span style="color:#3a5a7a">(${prevLbl})</span></div>
+        <div class="cs-val">${fmt(prev)}<span class="cs-unit"> ${unit}</span></div>
       </div>
-      <div class="cs-item" style="padding:5px 8px">
-        <div class="cs-label" style="font-size:7px">Latest <span style="color:#3a5a7a">(${currLbl})</span></div>
-        <div class="cs-val" style="color:#fff;font-size:11px">${fmt(curr)}<span style="font-size:8px;color:#5a7a9a;font-weight:400"> ${unit}</span></div>
-        <div class="cs-chg ${cls}" style="font-size:8px;padding:1px 4px;margin-top:2px">${arrow} ${Math.abs(diff).toFixed(decimals)} <span style="opacity:.7">(${isUp?"+":""}${pct}%)</span></div>
+      <div class="cs-item">
+        <div class="cs-label">Latest <span style="color:#3a5a7a">(${currLbl})</span></div>
+        <div class="cs-val" style="color:#fff">${fmt(curr)}<span class="cs-unit"> ${unit}</span></div>
+      </div>
+      <div class="cs-item">
+        <div class="cs-label">Difference</div>
+        <div class="cs-chg ${cls}">${arrow} ${Math.abs(diff).toFixed(decimals)} <span style="opacity:.75">(${isUp?"+":""}${pct}%)</span></div>
       </div>
     </div>`;
   }
@@ -1060,12 +1064,26 @@ function buildCharts(d){
   const cbn=cbv.filter(v=>v!=null);
   charts.cbsl=new Chart(document.getElementById("cbslChart"),{type:"line",data:{labels:cbAg.labels,datasets:[{label:"Rs.Bn",data:cbv,borderColor:"#e08a3c",backgroundColor:"rgba(224,138,60,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:cbn.length?(Math.min(...cbn)-2):undefined,max:cbn.length?(Math.max(...cbn)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
   renderStatBar("cbslStat",cbv,cbAg.labels,"Rs.Bn",2);
+  recentTable("cbslTbl",d.cbsl?.labels||[],d.cbsl?.values||[],"Rs.Bn",2);
   destroyChart("fh");
   const fhAg=aggregateIdx(d.foreign?.labels||[],GRANS.fh);
   const fhv=pick(d.foreign?.values||[],fhAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
   const fhn=fhv.filter(v=>v!=null);
   charts.fh=new Chart(document.getElementById("fhChart"),{type:"line",data:{labels:fhAg.labels,datasets:[{label:"Rs.Mn",data:fhv,borderColor:"#3cb6a8",backgroundColor:"rgba(60,182,168,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fhn.length?(Math.min(...fhn)-500):undefined,max:fhn.length?(Math.max(...fhn)+500):undefined},x:{ticks:xt,grid:{color:gc}}}}});
   renderStatBar("fhStat",fhv,fhAg.labels,"Rs.Mn",0);
+  recentTable("fhTbl",d.foreign?.labels||[],d.foreign?.values||[],"Rs.Mn",0);
+  // Inflation — horizontal bars, April vs May (2 months)
+  destroyChart("infl");
+  if(document.getElementById("inflChart")){
+    const inf=d.inflation||[];
+    const pv=s=>{if(s==null)return null;const n=parseFloat(String(s).replace('%',''));return isNaN(n)?null:n;};
+    if(inf.length){
+      charts.infl=new Chart(document.getElementById("inflChart"),{type:"bar",data:{labels:inf.map(r=>r.metric),datasets:[
+        {label:"April 2026",data:inf.map(r=>pv(r.apr)),backgroundColor:"#c8a84b",borderRadius:3,maxBarThickness:13},
+        {label:"May 2026",data:inf.map(r=>pv(r.may)),backgroundColor:"#e0443a",borderRadius:3,maxBarThickness:13}]},
+        options:{indexAxis:"y",responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:10}},title:{display:true,text:"INFLATION (%)",color:"#c8a84b",font:{size:12,weight:"700"}}},scales:{x:{ticks:{color:tc,font:tf},grid:{color:gc},suggestedMin:-2,suggestedMax:6},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
+    }
+  }
   destroyChart("fx");
   const fxAg=aggregateIdx(d.usdlkr?.labels||[],GRANS.fx);
   const fxData=pick(d.usdlkr?.values||[],fxAg.idx);
@@ -1077,6 +1095,17 @@ function buildCharts(d){
   const fmtDY2=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
   const tbAg=aggregateIdx(tbr.map(r=>fmtDY2(r.date)),GRANS.tbill);
   charts.tbill=new Chart(document.getElementById("tbillChart"),{type:"line",data:{labels:tbAg.labels,datasets:[{label:"3M",data:pick(tbr.map(r=>parseFloat(r.m3)||null),tbAg.idx),borderColor:"#4da3e8",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"6M",data:pick(tbr.map(r=>parseFloat(r.m6)||null),tbAg.idx),borderColor:"#c8a84b",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"12M",data:pick(tbr.map(r=>parseFloat(r.m12)||null),tbAg.idx),borderColor:"#6dd4a0",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("tbillStat",pick(tbr.map(r=>parseFloat(r.m12)||null),tbAg.idx),tbAg.labels,"% (12M)",2);
+  {const _tbm={labels:tbAg.labels,m3:pick(tbr.map(r=>parseFloat(r.m3)||null),tbAg.idx),m6:pick(tbr.map(r=>parseFloat(r.m6)||null),tbAg.idx),m12:pick(tbr.map(r=>parseFloat(r.m12)||null),tbAg.idx)};
+    function applyTbillSel(){
+      if(!charts.tbill)return;const ds=charts.tbill.data.datasets,map={m3:0,m6:1,m12:2};
+      const el=document.getElementById("tbillStat");
+      if(_tbillSel==="all"){ds.forEach(x=>x.hidden=false);charts.tbill.update();if(el)el.innerHTML="";return;}
+      const idx=map[_tbillSel];ds.forEach((x,i)=>x.hidden=(i!==idx));charts.tbill.update();
+      renderStatBar("tbillStat",_tbm[_tbillSel],_tbm.labels,{m3:"% (3M)",m6:"% (6M)",m12:"% (12M)"}[_tbillSel],2);
+    }
+    window.setTbillSeries=function(sel,btn){_tbillSel=sel;if(btn){btn.parentNode.querySelectorAll(".mg-btn").forEach(b=>b.classList.remove("active"));btn.classList.add("active");}applyTbillSel();};
+    applyTbillSel();}
   destroyChart("yield");
   const yBHead=d.bonds?.headers||[], yBRows=d.bonds?.rows||[];
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -1094,6 +1123,8 @@ function buildCharts(d){
   if(yCol>=0)yDS.push({label:"Yesterday ("+yBHead[yCol]+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
   yDS.push({label:"Today ("+(tCol>=0?yBHead[tCol]:"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
   charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels,datasets:yDS},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:10},boxWidth:18,usePointStyle:false,padding:12}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
+  {const avg=a=>{const f=a.filter(v=>v!=null&&!isNaN(v));return f.length?+(f.reduce((x,y)=>x+y,0)/f.length).toFixed(2):null;};
+   renderStatBar("yieldStat",[avg(yestD),avg(todayD)],[yCol>=0?yBHead[yCol]:"Prev",tCol>=0?yBHead[tCol]:"Latest"],"% avg",2);}
 
   // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
   destroyChart("g10");
@@ -1102,6 +1133,7 @@ function buildCharts(d){
   const g10n=g10raw.filter(v=>v!=null);
   charts.g10=new Chart(document.getElementById("g10Chart"),{type:"line",data:{labels:gAg.labels,datasets:[{label:"US 10Y %",data:g10raw,borderColor:"#a77ad4",backgroundColor:"rgba(167,122,212,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:g10n.length?(Math.min(...g10n)-0.1):undefined,max:g10n.length?(Math.max(...g10n)+0.1):undefined},x:{ticks:xt,grid:{color:gc}}}}});
   renderStatBar("g10Stat",g10raw,gAg.labels,"%",3);
+  recentTable("g10Tbl",d.global10y?.labels||[],d.global10y?.values||[],"%",2);
 
   // ── NEW: Global Market commodity & FX-index charts (populate once data.json carries them) ──
   [["gold","goldChart","goldStat","goldNote","#c8a84b","USD/oz",2],
@@ -1117,18 +1149,26 @@ function buildCharts(d){
     if(note)note.style.display=nn.length?"none":"block";
     charts[key]=new Chart(el,{type:"line",data:{labels:labs,datasets:[{label:unit,data:vals,borderColor:color,backgroundColor:color+"22",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:nn.length?(Math.min(...nn)-(Math.max(...nn)-Math.min(...nn)||1)*0.1):undefined,max:nn.length?(Math.max(...nn)+(Math.max(...nn)-Math.min(...nn)||1)*0.1):undefined},x:{ticks:xt,grid:{color:gc}}}}});
     if(statId)renderStatBar(statId,vals,labs,unit,dec);
+    recentTable(key+"Tbl",labs,vals,unit,dec);
   });
 
   // ── NEW: Market Open Report charts — weekly view (last points) with markers, matching the printed report ──
   const OPEN_PTS=7;
   const lastN=(a,n)=>(a&&a.length>n)?a.slice(a.length-n):(a||[]);
   const vlab={id:'vlab',afterDatasetsDraw(ch){const ctx=ch.ctx,ca=ch.chartArea;ctx.save();ctx.font='700 9px Segoe UI,Arial';ctx.fillStyle='#eaf2fb';ctx.textBaseline='bottom';const placed=[];ch.data.datasets.forEach((ds,di)=>{const meta=ch.getDatasetMeta(di);meta.data.forEach((pt,i)=>{const val=ds.data[i];if(val==null||isNaN(val))return;const txt=(+val).toFixed(2);const w=ctx.measureText(txt).width;ctx.textAlign='center';let x=pt.x;if(x-w/2<ca.left+1)x=ca.left+1+w/2;if(x+w/2>ca.right-1)x=ca.right-1-w/2;let y=pt.y-6;let g=0;while(g<5&&placed.some(p=>Math.abs(p.x-x)<(p.w+w)/2+2&&Math.abs(p.y-y)<11)){y-=11;g++;}if(y-9<ca.top)y=pt.y+15;placed.push({x:x,y:y,w:w});ctx.fillText(txt,x,y);});});ctx.restore();}};
-  const liqL=lastN(d.liquidity?.labels||[],OPEN_PTS), liqV=lastN(d.liquidity?.values||[],OPEN_PTS);
-  destroyChart("opLiq");
+  const liqL=lastN(d.liquidity?.labels||[],OPEN_PTS), liqV=lastN(d.liquidity?.values||[],OPEN_PTS);  destroyChart("opLiq");
   if(document.getElementById("op-liqChart"))charts.opLiq=new Chart(document.getElementById("op-liqChart"),{type:"line",data:{labels:liqL,datasets:[{label:"Rs.Bn",data:liqV,borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.3,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:"#c8a84b",borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,layout:{padding:{top:18,right:16,left:4}},plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}},plugins:[vlab]});
+  renderStatBar("op-liqStat",liqV,liqL,"Rs.Bn",2);
+  // Opening Report — FX Market Summary volume by tenor (excludes subtotal/grand-total rows)
+  destroyChart("opFxSum");
+  if(document.getElementById("opFxSumChart")){
+    const fsRows=(d.fxSummary||[]).filter(r=>!/total/i.test(r.tenor)&&r.volume!=null);
+    charts.opFxSum=new Chart(document.getElementById("opFxSumChart"),{type:"bar",data:{labels:fsRows.map(r=>r.tenor),datasets:[{label:"Volume (USD Mn)",data:fsRows.map(r=>parseFloat(r.volume)||0),backgroundColor:"#4da3e8",borderRadius:4,maxBarThickness:34}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
+  }
   const ofxL=lastN(d.usdlkr?.labels||[],OPEN_PTS), ofxV=lastN(d.usdlkr?.values||[],OPEN_PTS), ofv=ofxV.filter(v=>v>0);
   destroyChart("opFx");
   if(document.getElementById("op-fxChart"))charts.opFx=new Chart(document.getElementById("op-fxChart"),{type:"line",data:{labels:ofxL,datasets:[{label:"LKR",data:ofxV,borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:3,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,layout:{padding:{top:18,right:16,left:4}},plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:ofv.length?Math.floor(Math.min(...ofv)-1):undefined,max:ofv.length?Math.ceil(Math.max(...ofv)+1):undefined},x:{ticks:xt,grid:{color:gc}}}},plugins:[vlab]});
+  renderStatBar("op-fxStat",ofxV,ofxL,"LKR",2);
   destroyChart("opTbill");
   const otb=lastN(tbr,OPEN_PTS);
   if(document.getElementById("op-tbillChart"))charts.opTbill=new Chart(document.getElementById("op-tbillChart"),{type:"line",data:{labels:otb.map(r=>fmtDY2(r.date)),datasets:[{label:"3M",data:otb.map(r=>parseFloat(r.m3)||null),borderColor:"#4da3e8",tension:0.3,pointRadius:2.5,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"6M",data:otb.map(r=>parseFloat(r.m6)||null),borderColor:"#c8a84b",tension:0.3,pointRadius:2.5,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"12M",data:otb.map(r=>parseFloat(r.m12)||null),borderColor:"#6dd4a0",tension:0.3,pointRadius:2.5,pointHoverRadius:5,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
@@ -1140,15 +1180,10 @@ function buildCharts(d){
 loadData();
 startPolling();
 
-// Set closing report date dynamically
+// Initial closing report date fallback (render() refines with any editor override)
 (function(){
-  const MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  const ORDINALS=["th","st","nd","rd"];
-  function ord(n){const v=n%100;return ORDINALS[(v-20)%10]||ORDINALS[v]||ORDINALS[0];}
-  const now=new Date();
-  const d=now.getDate(), mo=MONTHS[now.getMonth()], yr=now.getFullYear();
   const el=document.getElementById("closing-report-date");
-  if(el) el.innerHTML=d+"<sup>"+ord(d)+"</sup> "+mo+" "+yr;
+  if(el) el.innerHTML=fmtOrd(slWorkDay(0));
 })();
 
 </script>
