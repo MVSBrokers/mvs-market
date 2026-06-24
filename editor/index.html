@@ -1,439 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>MVS — Data Editor</title>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MVS Market Data — Editor</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{overflow-x:hidden;width:100%}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;min-height:100vh}
-#login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#060f1e,#0d1e38)}
-.card{background:#0d1e38;border:1px solid #4da3e8;border-radius:12px;padding:44px 36px;width:380px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.card-logo{text-align:center;margin-bottom:18px;font-size:28px}
-.card h2{color:#4da3e8;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;text-align:center;margin-bottom:20px}
-.field{margin-bottom:13px}
-.field label{display:block;font-size:10px;color:#7fa3c8;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
-.field input{width:100%;background:#091525;border:1px solid #1a3050;border-radius:6px;padding:10px 13px;color:#d4e4f4;font-size:13px;outline:none;transition:border-color .2s}
-.field input:focus{border-color:#4da3e8}
-.login-btn{width:100%;background:#4da3e8;color:#0a1628;border:none;border-radius:6px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px;transition:background .2s}
-.login-btn:hover{background:#6ab8f0}
-.err{color:#e87a4d;font-size:11px;text-align:center;margin-top:8px;min-height:16px}
-
-#app{display:block;padding:10px;min-height:100vh;max-width:100%;overflow-x:hidden}
-.hdr{display:flex;justify-content:space-between;align-items:center;background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:8px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.hdr-left{display:flex;align-items:center;gap:10px}
-.logo-circle{width:44px;height:44px;background:#4da3e8;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#0a1628;flex-shrink:0;text-align:center;line-height:1.2}
-.hdr-title h1{font-size:16px;font-weight:700;color:#fff}
-.hdr-title p{font-size:11px;color:#7fa3c8}
-.hdr-right{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.btn-blue{background:#4da3e8;color:#0a1628;border:none;border-radius:5px;padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
-.btn-blue:hover{background:#6ab8f0}
-.btn-green{background:#2a7a4a;color:#6dd4a0;border:none;border-radius:5px;padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
-.btn-green:hover{background:#3a9a5a}
-.btn-gold{background:#c8a84b;color:#0a1628;border:none;border-radius:5px;padding:7px 13px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s;white-space:nowrap}
-.btn-gold:hover{background:#e0c060}
-.btn-ghost{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:6px 10px;font-size:11px;cursor:pointer}
-.btn-ghost:hover{border-color:#c8a84b;color:#c8a84b}
-.badge-edit{background:#1a2a4a;border:1px solid #2a4a7a;color:#4da3e8;border-radius:10px;padding:2px 10px;font-size:10px;font-weight:700}
-
-.section{background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:14px 16px;margin-bottom:12px;min-width:0;overflow:hidden;max-width:100%}
-.sec-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid #1a3050;color:#4da3e8}
-.sec-title.gold{color:#c8a84b}
-.sec-title.green{color:#6dd4a0}
-.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
-.fgrid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
-.fg{display:flex;flex-direction:column;gap:4px;min-width:0}
-.fg label{font-size:10px;color:#7fa3c8;text-transform:uppercase;letter-spacing:.3px}
-.fg input,.fg select{background:#091525;border:1px solid #1a3050;border-radius:4px;padding:7px 10px;color:#d4e4f4;font-size:12px;outline:none;transition:border-color .2s;width:100%}
-.fg textarea{background:#091525;border:1px solid #1a3050;border-radius:4px;padding:7px 10px;color:#d4e4f4;font-size:12px;outline:none;transition:border-color .2s;width:100%;resize:vertical;font-family:inherit}
-.fg input:focus,.fg select:focus{border-color:#4da3e8}
-
-.setup-box{background:#0b1a08;border:2px solid #c8a84b;border-radius:8px;padding:16px 18px;margin-bottom:12px;min-width:0;overflow:hidden;max-width:100%}
-.setup-step{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}
-.step-num{background:#c8a84b;color:#0a1628;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
-.step-body{flex:1;font-size:12px;color:#d4e4f4;line-height:1.8;min-width:0;word-break:break-word}
-.step-body a{color:#4da3e8;text-decoration:none}
-.step-body code{background:#091525;padding:2px 6px;border-radius:3px;font-size:11px;color:#c8a84b}
-.step-body strong{color:#fff}
-.connected-badge{background:#0a2a0a;border:1px solid #2a6a2a;border-radius:6px;padding:10px 14px;font-size:12px;color:#6dd4a0;margin-bottom:12px;display:none}
-
-.save-bar{background:#0d1e38;border:2px solid #2a5080;border-radius:8px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.save-info{flex:1;min-width:0}
-.save-info h3{font-size:13px;color:#fff;font-weight:700;margin-bottom:3px}
-.save-status{font-size:12px;color:#7fa3c8;word-break:break-word}
-.save-status.saving{color:#c8a84b}
-.save-status.ok{color:#6dd4a0}
-.save-status.fail{color:#e87a4d}
-
-.dyn-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}
-.dyn-table th{background:#091525;color:#7fa3c8;font-size:10px;padding:5px 8px;text-align:left;border-bottom:1px solid #1a3050}
-.dyn-table td{padding:4px 4px;border-top:1px solid #0d2040}
-.dyn-table td input{background:#091525;border:1px solid #0d2040;border-radius:3px;padding:4px 7px;color:#d4e4f4;font-size:11px;width:100%;outline:none}
-.dyn-table td input:focus{border-color:#4da3e8}
-.dyn-table td:last-child{width:30px;text-align:center}
-.rm-btn{background:#2a1010;color:#e87a4d;border:1px solid #5a2020;border-radius:3px;padding:3px 7px;font-size:11px;cursor:pointer}
-.rm-btn:hover{background:#5a1a1a}
-.add-btn{background:#091525;color:#4da3e8;border:1px solid #1a4060;border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;margin-top:6px}
-.add-btn:hover{background:#1a3050}
-
-/* ── TBILL AUCTION SECTION ───────────────────────── */
-.tbill-auction-hint{font-size:11px;color:#7fa3c8;margin-bottom:8px;line-height:1.6}
-.tbill-auction-hint strong{color:#c8a84b}
-/* Group block per auction date */
-.auction-group{background:#091525;border:1px solid #1a3050;border-radius:6px;padding:10px 12px;margin-bottom:10px;position:relative}
-.auction-group-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-.auction-group-hdr label{font-size:10px;color:#7fa3c8;text-transform:uppercase}
-.auction-group-hdr input{background:#0d1e38;border:1px solid #1a4060;border-radius:4px;padding:5px 9px;color:#c8a84b;font-size:12px;font-weight:700;outline:none;width:140px}
-.auction-group-hdr input:focus{border-color:#c8a84b}
-.rm-group-btn{background:#2a1010;color:#e87a4d;border:1px solid #5a2020;border-radius:3px;padding:3px 8px;font-size:11px;cursor:pointer;margin-left:auto}
-.rm-group-btn:hover{background:#5a1a1a}
-.mat-rows table{width:100%;border-collapse:collapse;font-size:11px}
-.mat-rows th{background:#0a1828;color:#7fa3c8;padding:4px 8px;font-size:10px;text-align:left;border-bottom:1px solid #1a3050}
-.mat-rows td{padding:3px 3px;border-top:1px solid #0d2040}
-.mat-rows td input,.mat-rows td select{background:#060f1e;border:1px solid #0d2040;border-radius:3px;padding:4px 7px;color:#d4e4f4;font-size:11px;width:100%;outline:none}
-.mat-rows td input:focus,.mat-rows td select:focus{border-color:#4da3e8}
-.mat-rows td:last-child{width:30px;text-align:center}
-.add-mat-btn{background:#091525;color:#6dd4a0;border:1px solid #1a4060;border-radius:4px;padding:4px 10px;font-size:10px;cursor:pointer;margin-top:5px}
-.add-mat-btn:hover{background:#1a3050}
-.add-group-btn{background:#0d1e38;color:#c8a84b;border:1px solid #c8a84b;border-radius:5px;padding:7px 16px;font-size:11px;font-weight:700;cursor:pointer;margin-top:4px}
-.add-group-btn:hover{background:#1a2a0a}
-
-.toast{position:fixed;bottom:22px;right:22px;background:#1a5c3a;color:#6dd4a0;border:1px solid #2a7a50;border-radius:6px;padding:10px 18px;font-size:12px;font-weight:600;z-index:2000;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;max-width:320px}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#eaf2fb;padding:22px;max-width:1080px;margin:0 auto;line-height:1.5}
+h1{font-size:22px;color:#c8a84b;letter-spacing:.5px}
+.sub{color:#7fa3c8;font-size:12px;margin-bottom:18px}
+.card{background:#0b1830;border:1px solid #18304f;border-radius:12px;padding:18px 20px;margin-bottom:16px}
+.card h2{font-size:14px;color:#c8a84b;text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;border-bottom:1px solid #18304f;padding-bottom:8px}
+label{display:block;font-size:11px;color:#9fb6d4;margin-bottom:4px}
+input{width:100%;background:#081424;border:1px solid #1a3050;border-radius:7px;color:#eaf2fb;padding:9px 11px;font-size:13px;font-family:inherit}
+.fg{margin-bottom:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{font-family:inherit;cursor:pointer;border:none;border-radius:8px;font-weight:700;font-size:13px;padding:11px 20px;transition:all .15s}
+.btn-blue{background:#1c4f8a;color:#eaf2fb}.btn-blue:hover{background:#2563a8}
+.btn-gold{background:linear-gradient(135deg,#c8a84b,#a8893a);color:#060f1e}.btn-gold:hover{filter:brightness(1.1)}
+.btn-green{background:#1f7a4d;color:#eaf2fb}.btn-green:hover{background:#258c59}
+.btn-red{background:#7a2e2e;color:#eaf2fb}.btn-red:hover{background:#9c3a3a}
+.btn-ghost{background:transparent;color:#9fb6d4;border:1px solid #1a3050}.btn-ghost:hover{background:#0d1e38}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.badge{display:none;background:#0d2818;border:1px solid #1f7a4d;border-radius:8px;padding:9px 13px;font-size:12px;color:#6dd4a0;margin-bottom:12px}
+.status{font-size:12px;margin-top:10px;min-height:18px}
+.prev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.prev-item{background:#081424;border:1px solid #1a3050;border-left:3px solid #c8a84b;border-radius:7px;padding:11px 13px}
+.prev-item .pl{font-size:10px;color:#7fa3c8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.prev-item .pv{font-size:13px;color:#eaf2fb;font-weight:600}
+.prev-item.empty{border-left-color:#7a2e2e;opacity:.7}
+.prev-item.empty .pv{color:#e8917a}
+.toast{position:fixed;bottom:20px;right:20px;background:#0d2818;border:1px solid #1f7a4d;color:#6dd4a0;padding:13px 18px;border-radius:9px;font-size:13px;font-weight:600;opacity:0;transform:translateY(10px);transition:all .25s;z-index:100}
 .toast.show{opacity:1;transform:translateY(0)}
-.toast.err{background:#3a1a1a;color:#e87a4d;border-color:#6a2a2a}
-@media(max-width:600px){.fgrid,.fgrid2{grid-template-columns:1fr}}
-</style>
-</head>
+.toast.err{background:#2a1212;border-color:#7a2e2e;color:#e8917a}
+.hint{font-size:11px;color:#5a7a9a;margin-top:6px}
+code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-size:11px}
+</style></head>
 <body>
+<h1>MVS Market Data — Editor</h1>
+<div class="sub">Upload one <code>MarketData.xlsx</code>, review, and publish. The dashboard updates only when you publish.</div>
 
-<!-- EDITOR APP -->
-<div id="app">
-  <div class="hdr">
-    <div class="hdr-left">
-      <div class="logo-circle" style="background:none;border:none;overflow:hidden;padding:0;"><img src="data:image/jpeg;base64,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" style="height:44px;width:auto;border-radius:4px;display:block;"></div>
-      <div class="hdr-title">
-        <h1>Data Editor</h1>
-        <p>Fill in data · Click Publish · Dashboard updates live</p>
-      </div>
-    </div>
-    <div class="hdr-right">
-      <span class="badge-edit">EDITOR MODE</span>
-      <button class="btn-blue" onclick="document.getElementById('xl-input').click()">⬆ Import Excel (select both files)</button>
-      <input type="file" id="xl-input" accept=".xlsx,.xls,.csv" multiple style="display:none" onchange="importExcel(event)">
-      <button class="btn-gold" onclick="downloadTemplate()">⬇ Template</button>
-    </div>
+<!-- GITHUB SETUP -->
+<div class="card" id="setup-box">
+  <h2>1 · Connect GitHub (one-time)</h2>
+  <div class="grid">
+    <div class="fg" style="grid-column:1/-1"><label>GitHub Personal Access Token (fine-grained)</label><input id="gh-token" type="password" placeholder="github_pat_..."></div>
+    <div class="fg"><label>GitHub Username / Org</label><input id="gh-owner" placeholder="kavindyamaheshi303-beep"></div>
+    <div class="fg"><label>Repository Name</label><input id="gh-repo" placeholder="mvs-market"></div>
+    <div class="fg"><label>Branch</label><input id="gh-branch" value="main"></div>
+    <div class="fg"><label>Path to data.json</label><input id="gh-path" value="data.json"></div>
   </div>
+  <div class="row" style="margin-top:8px">
+    <button class="btn-gold" onclick="saveGithubConfig()">Save &amp; Test Connection</button>
+    <button class="btn-ghost" onclick="document.getElementById('setup-box').style.display='none'">Hide</button>
+  </div>
+  <div class="status" id="setup-result"></div>
+</div>
 
-  <!-- GITHUB SETUP -->
-  <div class="setup-box" id="setup-box">
-    <div class="sec-title gold" style="margin-bottom:14px">⚙️ One-time GitHub setup (2 minutes)</div>
-    <div class="setup-step">
-      <div class="step-num">1</div>
-      <div class="step-body">Go to <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a>. Give it a name like <strong>MVS Editor</strong>. Under <strong>Repository permissions</strong>, set <strong>Contents → Read and write</strong>. Click <strong>Generate token</strong> and copy it.</div>
-    </div>
-    <div class="setup-step">
-      <div class="step-num">2</div>
-      <div class="step-body">Fill in your GitHub details below and click <strong>Save &amp; Test</strong>.</div>
-    </div>
-    <div class="fgrid" style="gap:10px">
-      <div class="fg" style="grid-column:1/-1"><label>GitHub Personal Access Token (fine-grained)</label><input id="gh-token" type="password" placeholder="github_pat_..."></div>
-      <div class="fg"><label>GitHub Username / Org</label><input id="gh-owner" placeholder="e.g. kavindyamaheshi303-beep"></div>
-      <div class="fg"><label>Repository Name</label><input id="gh-repo" placeholder="e.g. mvs-market"></div>
-      <div class="fg"><label>Branch</label><input id="gh-branch" placeholder="main" value="main"></div>
-      <div class="fg"><label>Path to data.json in repo</label><input id="gh-path" placeholder="data.json" value="data.json"></div>
-    </div>
-    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn-gold" onclick="saveGithubConfig()">💾 Save &amp; Test Connection</button>
-      <button class="btn-ghost" onclick="document.getElementById('setup-box').style.display='none'">Hide setup</button>
-    </div>
-    <div id="setup-result" style="margin-top:10px;font-size:12px;min-height:16px"></div>
-  </div>
+<div class="badge" id="connected-badge">Connected to <strong id="connected-repo"></strong> — <span id="connected-path"></span>
+  <button class="btn-ghost" style="margin-left:10px;padding:3px 9px;font-size:11px" onclick="document.getElementById('setup-box').style.display='block'">Edit</button>
+</div>
 
-  <div class="connected-badge" id="connected-badge">
-    ✓ Connected to GitHub · <strong id="connected-repo">—</strong> · <span id="connected-path">—</span>
-    <button class="btn-ghost" style="margin-left:12px;padding:2px 8px;font-size:10px" onclick="document.getElementById('setup-box').style.display='block'">Edit</button>
+<!-- IMPORT -->
+<div class="card">
+  <h2>2 · Import the Excel</h2>
+  <div class="row">
+    <button class="btn-blue" onclick="document.getElementById('xl-input').click()">⬆ Import MarketData.xlsx</button>
+    <input type="file" id="xl-input" accept=".xlsx,.xls" style="display:none" onchange="importExcel(event)">
+    <button class="btn-red" onclick="clearAll()">✕ Clear All Data</button>
+    <button class="btn-ghost" onclick="loadPublished()">↻ Reload Published</button>
   </div>
+  <div class="hint">One workbook with sheets: Opening Report, Clossing Report, Money Morket, Fixed Income, Fx, Macro Economy, Global Market, Announcement.</div>
+  <div class="status" id="import-status"></div>
+</div>
 
-  <div class="save-bar">
-    <div class="save-info">
-      <h3>🚀 Publish to Dashboard</h3>
-      <div class="save-status" id="save-status">Ready — fill in today's data then click Publish.</div>
-    </div>
-    <button class="btn-green" style="padding:10px 22px;font-size:13px" onclick="publishData()">Publish to Dashboard</button>
-  </div>
+<!-- PREVIEW -->
+<div class="card">
+  <h2>3 · Review loaded data</h2>
+  <div class="prev-grid" id="preview"><div class="prev-item empty"><div class="pl">No data</div><div class="pv">Import an Excel or reload published data.</div></div></div>
+</div>
 
-  <!-- DATE -->
-  <div class="section">
-    <div class="sec-title">Report Date</div>
-    <div class="fgrid">
-      <div class="fg"><label>Date Label (shown on dashboard)</label><input id="f-date" value="12th June 2026"></div>
-    </div>
-  </div>
-
-  <!-- MONEY MARKET -->
-  <div class="section">
-    <div class="sec-title">Money &amp; Repo Market</div>
-    <div class="fgrid">
-      <div class="fg"><label>Call Min Rate (%)</label><input id="cm-min" value="9.15"></div>
-      <div class="fg"><label>Call Max Rate (%)</label><input id="cm-max" value="9.25"></div>
-      <div class="fg"><label>Call W.A Yield (%)</label><input id="cm-wa" value="9.19"></div>
-      <div class="fg"><label>Call Gross Vol (Rs.Bn)</label><input id="cm-vol" value="34.33"></div>
-      <div class="fg"><label>Repo Min Rate (%)</label><input id="rm-min" value="9.23"></div>
-      <div class="fg"><label>Repo Max Rate (%)</label><input id="rm-max" value="9.25"></div>
-      <div class="fg"><label>Repo W.A Yield (%)</label><input id="rm-wa" value="9.24"></div>
-      <div class="fg"><label>Repo Gross Vol (Rs.Bn)</label><input id="rm-vol" value="82.99"></div>
-      <div class="fg"><label>Liquidity Current (Rs.Bn)</label><input id="liq-cur" value="66.62"></div>
-      <div class="fg"><label>Liquidity Previous (Rs.Bn)</label><input id="liq-prev" value="57.38"></div>
-    </div>
-  </div>
-
-  <!-- LIQUIDITY TREND -->
-  <div class="section">
-    <div class="sec-title">Liquidity Trend (chart)</div>
-    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Oldest first, newest last.</div>
-    <table class="dyn-table">
-      <thead><tr><th>Date Label</th><th>Value (Rs.Bn)</th><th></th></tr></thead>
-      <tbody id="liq-rows"></tbody>
-    </table>
-    <button class="add-btn" onclick="addRow('liq-rows',['',''])">+ Add Row</button> <button class="add-btn show-toggle" data-target="liq-rows" onclick="toggleRows('liq-rows',this)" style="display:none">Show all</button>
-  </div>
-
-  <!-- CBSL HOLDINGS -->
-  <div class="section">
-    <div class="sec-title">CBSL Holdings of Govt Securities (chart)</div>
-    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Oldest first, newest last. Auto-filled from the <strong style="color:#c8a84b">CBSL Holdings</strong> sheet when you import MarketData.xlsx.</div>
-    <table class="dyn-table">
-      <thead><tr><th>Date Label</th><th>Holdings (Rs.Bn)</th><th></th></tr></thead>
-      <tbody id="cbsl-rows"></tbody>
-    </table>
-    <button class="add-btn" onclick="addRow('cbsl-rows',['',''])">+ Add Row</button> <button class="add-btn show-toggle" data-target="cbsl-rows" onclick="toggleRows('cbsl-rows',this)" style="display:none">Show all</button>
-  </div>
-
-  <!-- FOREIGN HOLDINGS -->
-  <div class="section">
-    <div class="sec-title">Foreign Holdings of Govt Securities (chart)</div>
-    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Oldest first, newest last. Auto-filled from the <strong style="color:#c8a84b">Foreign Holdings</strong> sheet when you import MarketData.xlsx.</div>
-    <table class="dyn-table">
-      <thead><tr><th>Date Label</th><th>Volume (Rs.Mn)</th><th></th></tr></thead>
-      <tbody id="fh-rows"></tbody>
-    </table>
-    <button class="add-btn" onclick="addRow('fh-rows',['',''])">+ Add Row</button> <button class="add-btn show-toggle" data-target="fh-rows" onclick="toggleRows('fh-rows',this)" style="display:none">Show all</button>
-  </div>
-
-  <!-- FX SWAPS -->
-  <div class="section">
-    <div class="sec-title">FX Swaps (per day)</div>
-    <div class="fgrid">
-      <div class="fg"><label>1 Week — Sell/Buy</label><input id="sw-1w-s" value="5.75"></div>
-      <div class="fg"><label>1 Week — Buy/Sell</label><input id="sw-1w-b" value="7.25"></div>
-      <div class="fg"><label>1 Month — Sell/Buy</label><input id="sw-1m-s" value="6.00"></div>
-      <div class="fg"><label>1 Month — Buy/Sell</label><input id="sw-1m-b" value="6.75"></div>
-      <div class="fg"><label>2 Months — Sell/Buy</label><input id="sw-2m-s" value="6.00"></div>
-      <div class="fg"><label>2 Months — Buy/Sell</label><input id="sw-2m-b" value="6.50"></div>
-      <div class="fg"><label>3 Months — Sell/Buy</label><input id="sw-3m-s" value="6.00"></div>
-      <div class="fg"><label>3 Months — Buy/Sell</label><input id="sw-3m-b" value="6.40"></div>
-      <div class="fg"><label>6 Months — Sell/Buy</label><input id="sw-6m-s" value="5.50"></div>
-      <div class="fg"><label>6 Months — Buy/Sell</label><input id="sw-6m-b" value="6.10"></div>
-      <div class="fg"><label>1 Year — Sell/Buy</label><input id="sw-1y-s" value="5.15"></div>
-      <div class="fg"><label>1 Year — Buy/Sell</label><input id="sw-1y-b" value="6.00"></div>
-    </div>
-  </div>
-
-  <!-- USD/LKR -->
-  <div class="section">
-    <div class="sec-title">USD/LKR Movement</div>
-    <table class="dyn-table">
-      <thead><tr><th>Date Label</th><th>Rate</th><th></th></tr></thead>
-      <tbody id="fx-rows"></tbody>
-    </table>
-    <button class="add-btn" onclick="addRow('fx-rows',['',''])">+ Add Row</button> <button class="add-btn show-toggle" data-target="fx-rows" onclick="toggleRows('fx-rows',this)" style="display:none">Show all</button>
-    <div class="fgrid" style="margin-top:10px">
-      <div class="fg"><label>Closing Rate (e.g. 336.50/337.00)</label><input id="fx-close" value="336.50/337.00"></div>
-    </div>
-  </div>
-
-  <!-- T-BILLS (yield chart data) -->
-  <div class="section">
-    <div class="sec-title">Treasury Bills — Auction Yield Data (chart)</div>
-    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Latest auction first. Used for the yield trend chart.</div>
-    <table class="dyn-table">
-      <thead><tr><th>Auction Date</th><th>3M Yield</th><th>6M Yield</th><th>12M Yield</th><th></th></tr></thead>
-      <tbody id="tbill-rows"></tbody>
-    </table>
-    <button class="add-btn" onclick="addRow('tbill-rows',['','','',''])">+ Add Row</button> <button class="add-btn show-toggle" data-target="tbill-rows" onclick="toggleRows('tbill-rows',this)" style="display:none">Show all</button>
-    <div style="margin-top:14px;border-top:1px solid #1a3050;padding-top:12px">
-      <div style="font-size:11px;color:#c8a84b;font-weight:700;margin-bottom:8px">Reference rows (shown at the bottom of the T-Bill table)</div>
-      <table class="dyn-table" style="max-width:520px">
-        <thead><tr><th></th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
-        <tbody>
-          <tr><td style="font-size:11px;color:#9fb6d4">End of Month</td><td><input id="tbref-lm-3m"></td><td><input id="tbref-lm-6m"></td><td><input id="tbref-lm-12m"></td></tr>
-          <tr><td style="font-size:11px;color:#9fb6d4">End of Year</td><td><input id="tbref-ly-3m"></td><td><input id="tbref-ly-6m"></td><td><input id="tbref-ly-12m"></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ══ T-BILL AUCTION DETAIL TABLE ══ -->
-  <div class="section">
-    <div class="sec-title green">Treasury Bill — Auction Detail Table</div>
-    <div style="font-size:11px;color:#7fa3c8;margin-bottom:10px">One row per maturity. Columns match your Excel: <strong style="color:#c8a84b">F = Auction Date &nbsp;|&nbsp; G = Maturity &nbsp;|&nbsp; H = Amount Offered &nbsp;|&nbsp; I = Amount Accepted &nbsp;|&nbsp; J = %</strong></div>
-    <div style="overflow-x:auto">
-      <table class="dyn-table">
-        <thead><tr><th>Auction Date</th><th>Maturity</th><th>Amount Offered (Rs.Mn)</th><th>Amount Accepted (Rs.Mn)</th><th>Yield (%)</th><th></th></tr></thead>
-        <tbody id="auction-rows"></tbody>
-      </table>
-    </div>
-    <button class="add-btn" onclick="addAuctionRow(['','3M','','','','',''])">+ Add Row</button>
-  </div>
-
-  <!-- T-BONDS -->
-  <div class="section">
-    <div class="sec-title">Treasury Bonds</div>
-    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Column headers = dates. First 2 cols = <strong style="color:#c8a84b">Last Year</strong> and <strong style="color:#c8a84b">Last Month</strong> reference rates. Values = bid/offer e.g. 10.5/11. Use 0 for no data.</div>
-    <div class="fgrid2" style="margin-bottom:10px" id="bond-headers-row"></div>
-    <table class="dyn-table">
-      <thead><tr><th>Bond Maturity</th><th>Last Year</th><th>Last Month</th><th id="bh0">—</th><th id="bh1">—</th><th id="bh2">—</th><th id="bh3">—</th><th id="bh4">—</th><th id="bh5">—</th><th></th></tr></thead>
-      <tbody id="bond-rows"></tbody>
-    </table>
-    <button class="add-btn" onclick="addRow('bond-rows',['','','','','','','','',''])">+ Add Row</button>
-  </div>
-
-  <!-- GLOBAL MARKET (US 10Y) -->
-  <div class="section">
-    <div class="sec-title green">Global Market — US Treasury 10-Year Yield (chart)</div>
-    <div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Oldest first, newest last. Auto-filled from the <strong style="color:#c8a84b">Gloable Market</strong> sheet when you import MarketData.xlsx.</div>
-    <table class="dyn-table">
-      <thead><tr><th>Date Label</th><th>Yield (%)</th><th></th></tr></thead>
-      <tbody id="gm-rows"></tbody>
-    </table>
-    <button class="add-btn" onclick="addRow('gm-rows',['',''])">+ Add Row</button> <button class="add-btn show-toggle" data-target="gm-rows" onclick="toggleRows('gm-rows',this)" style="display:none">Show all</button>
-  </div>
-
-  <!-- EXEC SUMMARY -->
-  <div class="section">
-    <div class="sec-title">Executive Summary</div>
-    <div class="fgrid" style="margin-bottom:12px">
-      <div class="fg"><label>USD/LKR Close</label><input id="ex-usdlkr" value="336.50/337.00"></div>
-      <div class="fg"><label>Liquidity Change (Rs.Bn)</label><input id="ex-delta" value="9.24"></div>
-      <div class="fg">
-        <label>Direction</label>
-        <select id="ex-dir"><option value="increased">Increased</option><option value="decreased">Decreased</option></select>
-      </div>
-    </div>
-    <div class="fg">
-      <label>Live Market News — each row becomes a separate scrolling news item</label>
-      <table class="dyn-table">
-        <thead><tr><th>News item (row 1 = first news, row 2 = second news, …)</th><th></th></tr></thead>
-        <tbody id="news-rows"></tbody>
-      </table>
-      <button class="add-btn" onclick="addRow('news-rows',[''])">+ Add News</button>
-    </div>
-  </div>
-
-  <div style="text-align:right;margin-bottom:30px;padding-right:4px">
-    <button class="btn-green" style="padding:10px 24px;font-size:13px" onclick="publishData()">🚀 Publish to Dashboard</button>
-  </div>
+<!-- PUBLISH -->
+<div class="card">
+  <h2>4 · Publish to dashboard</h2>
+  <div class="row"><button class="btn-green" onclick="publishData()">🚀 Publish to Dashboard</button></div>
+  <div class="status" id="save-status"></div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── GLOBALS ─────────────────────────────────────────────
-let bondHeaders = ['12-Jun','13-Jun','16-Jun','17-Jun','18-Jun','19-Jun'];
+let LOADED=null;
 
-// ── NO LOGIN — open editor immediately ──────────────────
-initApp();
-
-// ── GITHUB CONFIG ────────────────────────────────────────
-function loadConfig(){
-  return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'',repo:localStorage.getItem('mvs_gh_repo')||'',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};
-}
-function initApp(){
-  initDefaultRows();
-  const cfg=loadConfig();
-  if(cfg.token&&cfg.owner&&cfg.repo){
-    document.getElementById('setup-box').style.display='none';
-    document.getElementById('connected-badge').style.display='block';
-    document.getElementById('connected-repo').textContent=cfg.owner+'/'+cfg.repo;
-    document.getElementById('connected-path').textContent=cfg.path+' ('+cfg.branch+')';
-    document.getElementById('gh-token').value=cfg.token;
-    document.getElementById('gh-owner').value=cfg.owner;
-    document.getElementById('gh-repo').value=cfg.repo;
-    document.getElementById('gh-branch').value=cfg.branch;
-    document.getElementById('gh-path').value=cfg.path;
-  }
-  // On load, pull the latest published data.json so the editor reflects what's live
-  loadPublished();
-}
-
-// Fetch the latest published data.json and fill the editor with it (falls back to defaults if unavailable)
-async function loadPublished(){
-  const cfg=loadConfig();
-  if(!(cfg.owner&&cfg.repo&&cfg.path))return false;
-  const branch=cfg.branch||'main';
-  try{
-    const url=`https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${branch}/${cfg.path}?t=${Date.now()}`;
-    const res=await fetch(url,{cache:'no-store'});
-    if(!res.ok)return false;
-    const d=await res.json();
-    populateFromData(d);
-    showToast('✓ Loaded latest published data from GitHub');
-    return true;
-  }catch(e){return false;}
-}
-
-// Clear a dynamic table and refill it from an array of row-arrays
-function fillRows(tbodyId,rowsArr){
-  const tb=document.getElementById(tbodyId);if(!tb)return;
-  tb.innerHTML='';
-  (rowsArr||[]).forEach(r=>addRow(tbodyId,(r||[]).map(v=>v==null?'':String(v))));
-}
-
-// Reverse of buildData: populate every editor field/table from a published data.json object
-function populateFromData(d){
-  if(!d||typeof d!=='object')return;
-  const set=(id,v)=>{const el=document.getElementById(id);if(el&&v!=null&&v!=='')el.value=v;};
-  if(d.date)set('f-date',d.date);
-  if(d.callMarket){set('cm-min',d.callMarket.min);set('cm-max',d.callMarket.max);set('cm-wa',d.callMarket.wa);set('cm-vol',d.callMarket.vol);}
-  if(d.repoMarket){set('rm-min',d.repoMarket.min);set('rm-max',d.repoMarket.max);set('rm-wa',d.repoMarket.wa);set('rm-vol',d.repoMarket.vol);}
-  if(d.liquidity){set('liq-cur',d.liquidity.current);set('liq-prev',d.liquidity.previous);fillRows('liq-rows',(d.liquidity.labels||[]).map((l,i)=>[l,(d.liquidity.values||[])[i]]));}
-  if(d.cbsl)fillRows('cbsl-rows',(d.cbsl.labels||[]).map((l,i)=>[l,(d.cbsl.values||[])[i]]));
-  if(d.foreign)fillRows('fh-rows',(d.foreign.labels||[]).map((l,i)=>[l,(d.foreign.values||[])[i]]));
-  if(d.usdlkr){set('fx-close',d.usdlkr.close);fillRows('fx-rows',(d.usdlkr.labels||[]).map((l,i)=>[l,(d.usdlkr.values||[])[i]]));}
-  if(Array.isArray(d.tbills))fillRows('tbill-rows',d.tbills.map(t=>[t.date,t.m3,t.m6,t.m12]));
-  if(d.tbillRef){const lm=d.tbillRef.lastMonth||{},ly=d.tbillRef.lastYear||{};set('tbref-lm-3m',lm.m3);set('tbref-lm-6m',lm.m6);set('tbref-lm-12m',lm.m12);set('tbref-ly-3m',ly.m3);set('tbref-ly-6m',ly.m6);set('tbref-ly-12m',ly.m12);}
-  if(d.global10y&&Array.isArray(d.global10y.labels))fillRows('gm-rows',d.global10y.labels.map((l,i)=>[l,(d.global10y.values||[])[i]]));
-  if(d.bonds){
-    if(Array.isArray(d.bonds.headers)&&d.bonds.headers.length){bondHeaders=d.bonds.headers.slice(0,6);renderBondHeaders();}
-    fillRows('bond-rows',(d.bonds.rows||[]).map(r=>{const vals=(r.values||[]).slice(0,6);while(vals.length<6)vals.push('');return [r.bond,r.eoy||'',r.eom||'',...vals];}));
-  }
-  if(Array.isArray(d.tbillAuction)){document.getElementById('auction-rows').innerHTML='';d.tbillAuction.forEach(g=>addAuctionGroup(g.date,g.maturities||[]));}
-  if(d.fxSwaps){['1w','1m','2m','3m','6m','1y'].forEach(k=>{const sw=d.fxSwaps[k]||{};set('sw-'+k+'-s',sw.sell);set('sw-'+k+'-b',sw.buy);});}
-  if(d.execSummary){set('ex-usdlkr',d.execSummary.usdlkr);set('ex-delta',d.execSummary.liqDelta);const dir=document.getElementById('ex-dir');if(dir&&d.execSummary.liqDir)dir.value=d.execSummary.liqDir;}
-  if(Array.isArray(d.marketNews)){const nb=document.getElementById('news-rows');if(nb){nb.innerHTML='';d.marketNews.forEach(n=>addRow('news-rows',[n]));}}
-  collapseAll();
-}
+// ── CONFIG / GITHUB ──────────────────────────────────────
+function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'',repo:localStorage.getItem('mvs_gh_repo')||'',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
 async function saveGithubConfig(){
-  const token=document.getElementById('gh-token').value.trim(),owner=document.getElementById('gh-owner').value.trim(),repo=document.getElementById('gh-repo').value.trim(),branch=document.getElementById('gh-branch').value.trim()||'main',path=document.getElementById('gh-path').value.trim()||'data.json';
-  const result=document.getElementById('setup-result');
-  if(!token||!owner||!repo){result.style.color='#e87a4d';result.textContent='Fill in all fields.';return;}
-  result.style.color='#c8a84b';result.textContent='Testing connection…';
+  const token=val('gh-token'),owner=val('gh-owner'),repo=val('gh-repo'),branch=val('gh-branch')||'main',path=val('gh-path')||'data.json';
+  const r=document.getElementById('setup-result');
+  if(!token||!owner||!repo){r.style.color='#e8917a';r.textContent='Fill in all fields.';return;}
+  r.style.color='#c8a84b';r.textContent='Testing…';
   try{
     const res=await ghGet(owner,repo,branch,path,token);
-    localStorage.setItem('mvs_gh_token',token);localStorage.setItem('mvs_gh_owner',owner);
-    localStorage.setItem('mvs_gh_repo',repo);localStorage.setItem('mvs_gh_branch',branch);localStorage.setItem('mvs_gh_path',path);
-    result.style.color='#6dd4a0';
-    result.textContent=res.sha?'✓ Connected! Found data.json (SHA: '+res.sha.slice(0,8)+'…). You can now Publish.':'✓ Connected! data.json not found yet — it will be created on first Publish.';
-    document.getElementById('connected-badge').style.display='block';
-    document.getElementById('connected-repo').textContent=owner+'/'+repo;
-    document.getElementById('connected-path').textContent=path+' ('+branch+')';
-    showToast('✓ GitHub connected!');
-  }catch(e){result.style.color='#e87a4d';result.textContent='✗ '+e.message;}
+    localStorage.setItem('mvs_gh_token',token);localStorage.setItem('mvs_gh_owner',owner);localStorage.setItem('mvs_gh_repo',repo);localStorage.setItem('mvs_gh_branch',branch);localStorage.setItem('mvs_gh_path',path);
+    r.style.color='#6dd4a0';r.textContent=res.sha?('✓ Connected. Found data.json ('+res.sha.slice(0,8)+'…).'):'✓ Connected. data.json will be created on first publish.';
+    showBadge();showToast('✓ GitHub connected');loadPublished();
+  }catch(e){r.style.color='#e8917a';r.textContent='✗ '+e.message;}
 }
-
-// ── GITHUB API ───────────────────────────────────────────
 async function ghGet(owner,repo,branch,path,token){
   const res=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
   if(res.status===404)return{sha:null};
@@ -447,483 +118,185 @@ async function ghPut(owner,repo,branch,path,token,content,sha){
   if(!res.ok){const d=await res.json();throw new Error(d.message||'GitHub error '+res.status);}
   return res.json();
 }
-
-// ── PUBLISH ──────────────────────────────────────────────
 async function publishData(){
+  if(!LOADED){showToast('Nothing to publish — import an Excel first.','err');return;}
   const cfg=loadConfig();
   if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Complete the GitHub setup first.','err');document.getElementById('setup-box').style.display='block';return;}
-  const st=document.getElementById('save-status');
-  st.className='save-status saving';
-  const content=JSON.stringify(buildData(),null,2);
-  for(let attempt=1;attempt<=5;attempt++){
+  const st=document.getElementById('save-status');st.style.color='#c8a84b';
+  const content=JSON.stringify(LOADED,null,1);
+  for(let a=1;a<=5;a++){
     try{
-      st.textContent='Publishing… (attempt '+attempt+') fetching SHA…';
+      st.textContent='Publishing… (attempt '+a+')';
       const cur=await ghGet(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token);
-      st.textContent='Committing to GitHub…';
       await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,content,cur.sha||null);
-      st.className='save-status ok';
-      st.textContent='✓ Published at '+new Date().toLocaleTimeString()+' — dashboard updates in ~30 sec.';
-      showToast('✓ Published to GitHub!');return;
+      st.style.color='#6dd4a0';st.textContent='✓ Published at '+new Date().toLocaleTimeString()+'. Dashboard will refresh on its next check.';
+      showToast('✓ Published to dashboard');return;
     }catch(e){
-      const isConflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha')||e.message.includes('conflict'));
-      if(isConflict&&attempt<5){st.textContent='SHA conflict — retrying ('+attempt+'/5)…';await new Promise(r=>setTimeout(r,800*attempt));continue;}
-      st.className='save-status fail';st.textContent='✗ '+e.message;showToast(e.message,'err');return;
+      const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
+      if(conflict&&a<5){st.textContent='Conflict — retrying ('+a+'/5)…';await new Promise(r=>setTimeout(r,800*a));continue;}
+      st.style.color='#e8917a';st.textContent='✗ '+e.message;showToast(e.message,'err');return;
     }
   }
 }
 
-// ── DATA BUILDER ─────────────────────────────────────────
-function gv(id){return document.getElementById(id).value.trim();}
-function buildData(){
-  return{
-    date:gv('f-date'),
-    callMarket:{min:gv('cm-min'),max:gv('cm-max'),wa:gv('cm-wa'),vol:gv('cm-vol')},
-    repoMarket:{min:gv('rm-min'),max:gv('rm-max'),wa:gv('rm-wa'),vol:gv('rm-vol')},
-    liquidity:{current:gv('liq-cur'),previous:gv('liq-prev'),labels:getRows('liq-rows').map(r=>r[0]),values:getRows('liq-rows').map(r=>parseFloat(r[1])||0)},
-    cbsl:{labels:getRows('cbsl-rows').map(r=>r[0]),values:getRows('cbsl-rows').map(r=>parseFloat(r[1])||0)},
-    foreign:{labels:getRows('fh-rows').map(r=>r[0]),values:getRows('fh-rows').map(r=>parseFloat(r[1])||0)},
-    fxSwaps:{'1w':{sell:gv('sw-1w-s'),buy:gv('sw-1w-b')},'1m':{sell:gv('sw-1m-s'),buy:gv('sw-1m-b')},'2m':{sell:gv('sw-2m-s'),buy:gv('sw-2m-b')},'3m':{sell:gv('sw-3m-s'),buy:gv('sw-3m-b')},'6m':{sell:gv('sw-6m-s'),buy:gv('sw-6m-b')},'1y':{sell:gv('sw-1y-s'),buy:gv('sw-1y-b')}},
-    usdlkr:{labels:getRows('fx-rows').map(r=>r[0]),values:getRows('fx-rows').map(r=>parseFloat(r[1])||0),close:gv('fx-close')},
-    tbills:getRows('tbill-rows').map(r=>({date:r[0],m3:r[1],m6:r[2],m12:r[3]})),
-    tbillRef:{lastMonth:{m3:gv('tbref-lm-3m'),m6:gv('tbref-lm-6m'),m12:gv('tbref-lm-12m')},lastYear:{m3:gv('tbref-ly-3m'),m6:gv('tbref-ly-6m'),m12:gv('tbref-ly-12m')}},
-    // NEW: T-Bill auction detail
-    tbillAuction:getAuctionData(),
-    bonds:{headers:bondHeaders,rows:getRows('bond-rows').map(r=>({bond:r[0],eoy:r[1],eom:r[2],values:r.slice(3)}))},
-    // NEW: Global Market — US 10Y daily series
-    global10y:{labels:getRows('gm-rows').map(r=>r[0]),values:getRows('gm-rows').map(r=>parseFloat(r[1])||0)},
-    execSummary:{usdlkr:gv('ex-usdlkr'),liqDelta:gv('ex-delta'),liqDir:document.getElementById('ex-dir').value},
-    marketNews:getRows('news-rows').map(r=>(r[0]||'').trim()).filter(Boolean),
-    marketSummary:getRows('news-rows').map(r=>(r[0]||'').trim()).filter(Boolean).join('   \u25C6   ')
+// ── EXCEL IMPORT ─────────────────────────────────────────
+function importExcel(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const st=document.getElementById('import-status');st.style.color='#c8a84b';st.textContent='Reading '+f.name+'…';
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'binary',cellDates:true});
+      LOADED=parseWorkbook(wb,XLSX);
+      st.style.color='#6dd4a0';st.textContent='✓ Imported '+f.name+'. Review below, then Publish.';
+      renderPreview(LOADED);showToast('✓ Excel imported');
+    }catch(err){st.style.color='#e8917a';st.textContent='✗ '+err.message;showToast('Import failed: '+err.message,'err');}
+    ev.target.value='';
   };
+  r.readAsBinaryString(f);
+}
+function clearAll(){
+  LOADED=null;
+  document.getElementById('preview').innerHTML='<div class="prev-item empty"><div class="pl">Cleared</div><div class="pv">All data cleared. Import an Excel to start again.</div></div>';
+  document.getElementById('import-status').textContent='';
+  document.getElementById('save-status').textContent='';
+  showToast('All data cleared');
+}
+async function loadPublished(){
+  const cfg=loadConfig();if(!(cfg.owner&&cfg.repo&&cfg.path))return false;
+  try{
+    const url=`https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch||'main'}/${cfg.path}?t=`+Date.now();
+    const res=await fetch(url,{cache:'no-store'});if(!res.ok)return false;
+    LOADED=await res.json();renderPreview(LOADED);
+    document.getElementById('import-status').style.color='#9fb6d4';
+    document.getElementById('import-status').textContent='Loaded the currently published data. Re-import the Excel to update it.';
+    return true;
+  }catch(e){return false;}
 }
 
-// ── DYNAMIC ROWS ─────────────────────────────────────────
-function addRow(tbodyId,defaults){
-  const tbody=document.getElementById(tbodyId);
-  const tr=document.createElement('tr');
-  tr.innerHTML=defaults.map(v=>`<td><input value="${v}"></td>`).join('')+`<td><button class="rm-btn" onclick="this.closest('tr').remove()">✕</button></td>`;
-  tbody.appendChild(tr);
-}
-function getRows(tbodyId){
-  return Array.from(document.getElementById(tbodyId).querySelectorAll('tr')).map(tr=>Array.from(tr.querySelectorAll('input')).map(i=>i.value.trim()));
-}
-
-// ── ROW LIMITING (show last 4, toggle to show all) ──────
-function applyRowLimit(tbodyId,collapsed){
-  const tb=document.getElementById(tbodyId); if(!tb) return;
-  const rows=Array.from(tb.querySelectorAll('tr'));
-  const n=rows.length;
-  rows.forEach((tr,i)=>{ tr.style.display=(collapsed && i < n-4) ? 'none' : ''; });
-  const btn=document.querySelector('.show-toggle[data-target="'+tbodyId+'"]');
-  if(btn){
-    btn.dataset.expanded = collapsed ? '0' : '1';
-    btn.style.display = (n>4) ? '' : 'none';
-    btn.textContent = collapsed ? ('Show all '+n+' rows \u25be') : 'Show last 4 \u25b4';
-  }
-}
-function toggleRows(tbodyId,btn){ applyRowLimit(tbodyId, btn.dataset.expanded==='1'); }
-function collapseAll(){ ['liq-rows','cbsl-rows','fh-rows','fx-rows','tbill-rows','gm-rows'].forEach(id=>applyRowLimit(id,true)); }
-
-// ── AUCTION FLAT TABLE ───────────────────────────────────
-function addAuctionRow(vals){
-  const tbody=document.getElementById('auction-rows');
-  const tr=document.createElement('tr');
-  const matSel=['3M','6M','12M'].map(m=>`<option${vals[1]===m?' selected':''}>${m}</option>`).join('');
-  tr.innerHTML=`<td><input value="${vals[0]||''}" placeholder="e.g. 6/17/2026" style="min-width:90px"></td>`+
-    `<td><select style="background:#091525;border:1px solid #0d2040;border-radius:3px;padding:4px 6px;color:#d4e4f4;font-size:11px;width:100%;outline:none">${matSel}</select></td>`+
-    `<td><input value="${vals[2]||''}" placeholder="Offered"></td>`+
-    `<td><input value="${vals[3]||''}" placeholder="Accepted"></td>`+
-    `<td><input value="${vals[4]||''}" placeholder="%"></td>`+
-    `<td><button class="rm-btn" onclick="this.closest('tr').remove()">✕</button></td>`;
-  tbody.appendChild(tr);
-}
-// Compatibility helper: add a grouped auction (date + maturities) as flat rows
-function addAuctionGroup(date,maturities){
-  (maturities||[]).forEach((m,i)=>addAuctionRow([i===0?date:'',m.maturity,m.offered,m.accepted,m.yield]));
-}
-function getAuctionData(){
-  // Build grouped structure for dashboard from flat table rows
-  const rows=Array.from(document.getElementById('auction-rows').querySelectorAll('tr'));
-  const groups=[];
-  let lastDate='';
-  rows.forEach(tr=>{
-    const cells=tr.querySelectorAll('input,select');
-    if(!cells.length)return;
-    const date=cells[0].value.trim();
-    const mat =cells[1].value.trim();
-    const off =cells[2].value.trim();
-    const acc =cells[3].value.trim();
-    const yld =cells[4].value.trim();
-    const useDate=date||lastDate;
-    if(date)lastDate=date;
-    const grp=groups.find(g=>g.date===useDate);
-    const entry={maturity:mat,offered:off,accepted:acc,yield:yld};
-    if(grp){grp.maturities.push(entry);}
-    else{groups.push({date:useDate,maturities:[entry]});}
-  });
-  return groups.filter(g=>g.date);
+// ── PREVIEW ──────────────────────────────────────────────
+function renderPreview(d){
+  if(!d){clearAll();return;}
+  const items=[];
+  const add=(label,v)=>items.push({label,val:(v==null||v==='')?'—':v,ok:!(v==null||v==='')});
+  const len=a=>Array.isArray(a)?a.length:(a&&a.values?a.values.length:0);
+  add('Report date',d.date);
+  add('Call W/A',d.callMarket?(d.callMarket.wa+'%'):null);
+  add('Repo W/A',d.repoMarket?(d.repoMarket.wa+'%'):null);
+  add('OPR entries',d.opr?d.opr.length:null);
+  add('SDF / SLF',d.windows?(d.windows.sdf.cur+' / '+d.windows.slf.cur):null);
+  add('Liquidity series',len(d.liquidity)+' pts');
+  add('Current liquidity',d.liquidity?d.liquidity.current:null);
+  add('USD/LKR series',len(d.usdlkr)+' pts');
+  add('USD/LKR close',d.usdlkr?d.usdlkr.close:null);
+  add('FX swaps',d.fxSwaps?Object.keys(d.fxSwaps).length+' tenors':null);
+  add('FX summary rows',d.fxSummary?d.fxSummary.length:null);
+  add('Value dates',d.valueDates?d.valueDates.length:null);
+  add('Cross rates',d.crossRates?d.crossRates.length:null);
+  add('T-bill auctions',d.tbills?d.tbills.length:null);
+  add('Auction details',d.tbillAuction?d.tbillAuction.length+' days':null);
+  add('Bond maturities',d.bonds?d.bonds.rows.length:null);
+  add('Bond date cols',d.bonds?d.bonds.headers.length:null);
+  add('T-bill curve',(d.tbillCurve&&d.tbillCurve.m3?d.tbillCurve.m3.length:0)+' pts');
+  add('Secondary yields',d.bondSecondary?d.bondSecondary.length:null);
+  add('Foreign holdings',len(d.foreign)+' pts');
+  add('CBSL holdings',d.cbslHoldings);
+  add('Reserves',d.reserves?d.reserves.length+' mo':null);
+  add('Inflation rows',d.inflation?d.inflation.length:null);
+  add('SRR rows',d.srr?d.srr.length:null);
+  add('Tourism Y-o-Y',d.tourism?d.tourism.yoy:null);
+  add('Remittances Y-o-Y',d.remittances?d.remittances.yoy:null);
+  add('US 10Y series',len(d.global10y)+' pts');
+  add('Gold series',len(d.gold)+' pts');
+  add('Brent / WTI',(len(d.brent))+' / '+(len(d.wti))+' pts');
+  add('DXY series',len(d.dxy)+' pts');
+  add('FOMC rows',d.fomc?d.fomc.length:null);
+  add('Key dates',d.keyDates?d.keyDates.length:null);
+  document.getElementById('preview').innerHTML=items.map(it=>`<div class="prev-item${it.ok?'':' empty'}"><div class="pl">${it.label}</div><div class="pv">${it.val}</div></div>`).join('');
 }
 
-// ── BOND HEADERS ──────────────────────────────────────────
-function renderBondHeaders(){
-  const div=document.getElementById('bond-headers-row');
-  div.innerHTML='<label style="font-size:10px;color:#7fa3c8;text-transform:uppercase;grid-column:1/-1">Column date headers:</label>';
-  bondHeaders.forEach((h,i)=>{div.innerHTML+=`<div class="fg"><label>Col ${i+1}</label><input value="${h}" oninput="bondHeaders[${i}]=this.value;updateBondHeaderCells()"></div>`;});
-  updateBondHeaderCells();
-}
-function updateBondHeaderCells(){bondHeaders.forEach((h,i)=>{const el=document.getElementById('bh'+i);if(el)el.textContent=h||'—';});}
+// ── HELPERS ──────────────────────────────────────────────
+function val(id){return document.getElementById(id).value.trim();}
+function showBadge(){const cfg=loadConfig();if(cfg.token&&cfg.owner&&cfg.repo){document.getElementById('setup-box').style.display='none';const b=document.getElementById('connected-badge');b.style.display='block';document.getElementById('connected-repo').textContent=cfg.owner+'/'+cfg.repo;document.getElementById('connected-path').textContent=cfg.path+' ('+cfg.branch+')';['token','owner','repo','branch','path'].forEach(k=>{const el=document.getElementById('gh-'+k);if(el)el.value=cfg[k];});}}
+let toastT;
+function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type==='err'?' err':'');clearTimeout(toastT);toastT=setTimeout(()=>t.className='toast'+(type==='err'?' err':''),3200);}
 
-// ── DEFAULT DATA ──────────────────────────────────────────
-function initDefaultRows(){
-  [['4-Jun','105.04'],['5-Jun','63.25'],['6-Jun','59.18'],['9-Jun','57.38'],['10-Jun','66.62']].forEach(r=>addRow('liq-rows',r));
-  [['4-Jun','336.07'],['5-Jun','337.15'],['6-Jun','338.00'],['9-Jun','335.00'],['10-Jun','337.00'],['11-Jun','337.15'],['12-Jun','336.50']].forEach(r=>addRow('fx-rows',r));
-  [['6/10/2026','10.09','10.27','10.16'],['6/3/2026','9.84','10.01','10.02'],['5/26/2026','9.36','9.68','9.83'],['5/20/2026','8.18','8.25','8.49'],['5/13/2026','8.13','8.23','8.49']].forEach(r=>addRow('tbill-rows',r));
-
-  // Default auction detail groups matching your Excel image
-  addAuctionGroup('6/17/2026',[{maturity:'3M',offered:'',accepted:'',yield:''},{maturity:'6M',offered:'',accepted:'',yield:''},{maturity:'12M',offered:'',accepted:'',yield:''}]);
-  addAuctionGroup('6/10/2026',[{maturity:'3M',offered:'',accepted:'',yield:''},{maturity:'6M',offered:'',accepted:'',yield:''},{maturity:'12M',offered:'',accepted:'',yield:''}]);
-  addAuctionGroup('6/3/2026', [{maturity:'3M',offered:'',accepted:'',yield:''},{maturity:'6M',offered:'',accepted:'',yield:''},{maturity:'12M',offered:'',accepted:'',yield:''}]);
-  addAuctionGroup('5/26/2026',[{maturity:'3M',offered:'',accepted:'',yield:''},{maturity:'6M',offered:'',accepted:'',yield:''},{maturity:'12M',offered:'',accepted:'',yield:''}]);
-
-  [['15.12.2026','','','9.70/10.20','9.75/10','9.8/10.25','10.25/10.55','0','0'],['15.09.2027','','','10.80/11.40','10.9/11.1','10.85/11','11/11.3','0','0'],['15.12.2028','','','11.50/12.00','11.75/12','11.8/12','11.9/11.95','0','0'],['15.12.2029','','','11.75/12.25','12/12.2','12/12.2','12/12.15','0','0'],['01.07.2030','','','11.80/12.30','12.15/12.2','12.15/12.25','12.15/12.3','0','0'],['15.03.2031','','','12.20/12.60','12.3/12.7','12.3/12.7','12.3/12.7','0','0'],['15.12.2032','','','12.30/12.70','12.5/12.9','12.5/12.9','12.55/12.9','0','0'],['01.11.2033','','','12.40/12.80','12.65/13','12.65/13','12.7/13','0','0'],['15.06.2034','','','12.50/13.00','12.8/13.15','12.8/13.1','13/13.2','0','0'],['15.03.2035','','','12.50/13.00','12.85/13.15','12.8/13.2','13/13.3','0','0'],['01.08.2036','','','12.60/13.20','13/13.5','13/13.5','13/13.5','0','0'],['01.07.2037','','','12.60/13.20','12.9/13.3','13.1/13.3','13.1/13.4','0','0']].forEach(r=>addRow('bond-rows',r));
-  renderBondHeaders();
-
-  // Default Global Market (US 10Y) rows — replaced when MarketData.xlsx is imported
-  [['8 Jun','4.56'],['9 Jun','4.53'],['10 Jun','4.55'],['11 Jun','4.45'],['12 Jun','4.48'],['15 Jun','4.47'],['16 Jun','4.43'],['17 Jun','4.49']].forEach(r=>addRow('gm-rows',r));
-
-  // Default CBSL Holdings rows — replaced when MarketData.xlsx is imported
-  [['8 Jun','2498.12'],['9 Jun','2498.12'],['10 Jun','2498.12'],['11 Jun','2498.12'],['12 Jun','2498.12'],['15 Jun','2498.12'],['16 Jun','2498.12'],['17 Jun','2498.12']].forEach(r=>addRow('cbsl-rows',r));
-
-  // Default Foreign Holdings rows — replaced when MarketData.xlsx is imported
-  [['2 Apr','143617'],['10 Apr','142920'],['17 Apr','142922'],['24 Apr','144202'],['30 Apr','144202'],['8 May','142732'],['15 May','138007'],['22 May','133427'],['29 May','126099'],['5 Jun','121331'],['12 Jun','121344']].forEach(r=>addRow('fh-rows',r));
-
-  // Default Live Market News — one row per news item
-  [['CBSL holds policy rate steady at the latest review'],['Overnight liquidity remains in surplus'],['T-bill yields ease across all tenors at this week\u2019s auction']].forEach(r=>addRow('news-rows',r));
-
-  collapseAll();
-}
-
-// ── EXCEL IMPORT (one or both files at once) ─────────────
-function importExcel(event){
-  const files=Array.from(event.target.files||[]);
-  if(!files.length)return;
-  const readers=files.map(f=>new Promise((res,rej)=>{
-    const r=new FileReader();
-    r.onload=e=>{try{res({name:f.name,wb:XLSX.read(e.target.result,{type:'binary',cellDates:true})});}catch(err){rej(err);}};
-    r.onerror=()=>rej(new Error('Could not read '+f.name));
-    r.readAsBinaryString(f);
-  }));
-  Promise.all(readers).then(items=>{
-    const isMD=wb=>wb.SheetNames.some(n=>{const k=n.trim().toLowerCase();return k.indexOf('liquid')>-1||k.indexOf('dollar')>-1||k.indexOf('glo')>-1;});
-    const reportWbs=items.filter(it=>it.wb.Sheets['get_data']);
-    const mdWbs=items.filter(it=>isMD(it.wb));
-    const did=[];
-    // Apply report first (money market, swaps, bonds, auction, exec) ...
-    reportWbs.forEach(it=>{applyMVSExcel(it.wb);});
-    if(reportWbs.length)did.push('report');
-    // ... then MarketData so full-year daily Liquidity/FX/T-bill/10Y win
-    mdWbs.forEach(it=>{applyMarketData(it.wb);});
-    if(mdWbs.length)did.push('marketdata');
-    if(!did.length){showToast('⚠ Unrecognised file(s) — expected MarketData.xlsx and/or the get_data report.','err');return;}
-    collapseAll();
-    showToast('✓ Imported '+files.length+' file(s) ['+did.join(' + ')+']. Showing last 4 rows per table — click “Show all”. Review then Publish.');
-  }).catch(err=>{showToast('⚠ Error: '+err.message,'err');console.error(err);});
-  event.target.value='';
-}
-
-// ── MarketData.xlsx parser (full-year daily series + global 10Y) ──
-function mdLabel(d){const M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];const dt=(d instanceof Date)?d:new Date(d);return isNaN(dt)?String(d):dt.getUTCDate()+' '+M[dt.getUTCMonth()];}
-function mdDate(v){ if(v instanceof Date&&!isNaN(v))return v; if(typeof v==='number'){const dt=new Date(Math.round((v-25569)*86400*1000));return isNaN(dt)?null:dt;} if(v==null||v==='')return null; const d=new Date(v);return isNaN(d)?null:d; }
-function mdNum(v){ if(v==null||v==='')return null; const n=parseFloat(String(v).replace(/,/g,'')); return isNaN(n)?null:n; }
-function applyMarketData(wb){
-  const sheetByKey=k=>{const n=wb.SheetNames.find(s=>s.trim().toLowerCase().indexOf(k)>-1);return n?wb.Sheets[n]:null;};
-  const rowsOf=ws=>ws?XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null}):[];
-
-  // Liquidity (col A=date, B=value) — full year
-  const liqWs=sheetByKey('liquid');
-  if(liqWs){
-    const recs=[];rowsOf(liqWs).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
-    recs.sort((a,b)=>a[0]-b[0]);
-    if(recs.length){
-      document.getElementById('liq-rows').innerHTML='';
-      recs.forEach(x=>addRow('liq-rows',[mdLabel(x[0]),n2(x[1])]));
-      sv('liq-cur',n2(recs[recs.length-1][1]));
-      sv('liq-prev',recs.length>1?n2(recs[recs.length-2][1]):'');
-    }
+// ── PARSER: MarketData.xlsx -> data.json (matches dashboard schema) ──
+function parseWorkbook(wb,XLSX){
+  const S=n=>{const ws=wb.Sheets[n];return ws?XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null}):[];};
+  const sheets=wb.SheetNames;
+  const find=name=>sheets.find(s=>s.toLowerCase().replace(/\s+/g,'').includes(name));
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const lbl=d=>d instanceof Date?d.getUTCDate()+" "+MON[d.getUTCMonth()]:(d==null?"":String(d).trim());
+  const num=v=>{if(v==null||v==="")return null;const n=parseFloat(String(v).replace(/,/g,'').replace('%',''));return isNaN(n)?null:n;};
+  const pct=v=>{if(v==null||v==="")return"";let n=parseFloat(String(v).replace('%',''));if(isNaN(n))return String(v);if(Math.abs(n)<=1.0001)n=n*100;return n.toFixed(2).replace(/\.00$/,'.0')+"%";};
+  const toISO=s=>{s=String(s).trim();const m=s.match(/^(\d{1,2})(?:-\d{1,2})?[.\-/](\d{1,2})[.\-/](\d{4})/);return m?(m[3]+"-"+String(m[2]).padStart(2,'0')+"-"+String(m[1]).padStart(2,'0')):s;};
+  const o={};
+  const mm=S(find('moneymorket')||find('moneymarket')||'');
+  if(mm.length){
+    o.opr=[];for(let i=2;i<mm.length;i++)if(mm[i][0]&&mm[i][1]!=null)o.opr.push({date:String(mm[i][0]).trim(),rate:String(mm[i][1]).trim()});
+    o.callMarket={min:num(mm[2][4]),max:num(mm[3][4]),wa:num(mm[4][4]),vol:num(mm[5][4])};
+    o.repoMarket={min:num(mm[2][5]),max:num(mm[3][5]),wa:num(mm[4][5]),vol:num(mm[5][5])};
+    o.windows={sdf:{cur:num(mm[8]&&mm[8][4]),prev:num(mm[8]&&mm[8][5])},slf:{cur:num(mm[9]&&mm[9][4]),prev:num(mm[9]&&mm[9][5])}};
+    let L=[],V=[];for(let i=2;i<mm.length;i++)if(mm[i][7]!=null&&mm[i][8]!=null){L.push(lbl(mm[i][7]));V.push(num(mm[i][8]));}
+    let rl=[];for(let i=2;i<mm.length;i++)if(mm[i][10]!=null&&mm[i][11]!=null)rl.push(num(mm[i][11]));
+    o.liquidity={labels:L,values:V,current:rl.length?rl[rl.length-1]:(V.length?V[V.length-1]:null),previous:rl.length>1?rl[rl.length-2]:(V.length>1?V[V.length-2]:null)};
   }
-
-  // Dollar Rate / Exchange (col A=date, B=rate) — full year
-  const fxWs=sheetByKey('dollar')||sheetByKey('exchange');
-  if(fxWs){
-    const recs=[];rowsOf(fxWs).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
-    recs.sort((a,b)=>a[0]-b[0]);
-    if(recs.length){
-      document.getElementById('fx-rows').innerHTML='';
-      recs.forEach(x=>addRow('fx-rows',[mdLabel(x[0]),n2(x[1])]));
-      const last=n2(recs[recs.length-1][1]);
-      sv('fx-close',last);sv('ex-usdlkr',last);
-    }
+  const fi=S(find('fixedincome')||'');
+  if(fi.length){
+    let bh=[];for(let c=3;c<=8;c++)if(fi[1][c]!=null)bh.push(String(fi[1][c]).trim());
+    let br=[];for(let i=2;i<fi.length;i++)if(fi[i][0]){const vals=[];for(let c=3;c<=8;c++)vals.push(fi[i][c]);br.push({bond:String(fi[i][0]).trim(),eoy:fi[i][1],eom:fi[i][2],values:vals});}
+    o.bonds={headers:bh,rows:br};
+    let tcL=[],t3=[],t6=[],t12=[];for(let i=2;i<fi.length;i++)if(fi[i][10]!=null){tcL.push(lbl(fi[i][10]));t3.push(num(fi[i][11]));t6.push(num(fi[i][12]));t12.push(num(fi[i][13]));}
+    o.tbillCurve={labels:tcL,m3:t3,m6:t6,m12:t12};
+    let tb=[],tref={};for(let i=2;i<fi.length;i++){const a=fi[i][15];if(a==null)continue;if(a instanceof Date)tb.push({date:lbl(a),m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])});else{const t=String(a).toLowerCase();if(t.includes('last month'))tref.lastMonth={m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])};else if(t.includes('last year'))tref.lastYear={m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])};}}
+    o.tbills=tb;o.tbillRef=tref;
+    let auc=[];for(let i=2;i<fi.length;i++){const d=fi[i][20],mat=fi[i][21];if(mat==null)continue;if(d instanceof Date)auc.push({date:lbl(d),maturities:[]});if(auc.length)auc[auc.length-1].maturities.push({maturity:String(mat).trim(),offered:num(fi[i][22]),accepted:num(fi[i][23]),yield:num(fi[i][24])});}
+    o.tbillAuction=auc;
+    let sec=[];for(let i=2;i<fi.length;i++)if(fi[i][26]!=null)sec.push({maturity:String(fi[i][26]).trim(),bid:num(fi[i][27]),ask:num(fi[i][28])});
+    o.bondSecondary=sec;
   }
-
-  // T bill: cols A=date,B=3M,C=6M,D=12M (yield chart) + cols F-J auction detail
-  const tbWs=sheetByKey('bill');
-  if(tbWs){
-    const rows=rowsOf(tbWs);
-    // yield series (latest first for the existing table)
-    const recs=[];rows.forEach(r=>{const d=mdDate(r&&r[0]),a=mdNum(r&&r[1]),b=mdNum(r&&r[2]),c=mdNum(r&&r[3]);if(d&&a!=null)recs.push([d,a,b,c]);});
-    recs.sort((a,b)=>b[0]-a[0]); // newest first
-    if(recs.length){
-      document.getElementById('tbill-rows').innerHTML='';
-      recs.forEach(x=>addRow('tbill-rows',[mdLabel(x[0]),n2(x[1]),n2(x[2]),n2(x[3])]));
-    }
-    // auction detail: F(5)=date, G(6)=maturity, H(7)=offered, I(8)=accepted, J(9)=%
-    const groups=[];let cur=null;
-    for(let i=1;i<Math.min(rows.length,60);i++){
-      const r=rows[i]||[];
-      const dv=r[5],matRaw=String(r[6]==null?'':r[6]).trim();
-      const off=r[7],acc=r[8],yld=r[9];
-      if(!matRaw&&(dv==null||dv===''))continue;
-      if(dv!=null&&dv!==''){
-        const pd=mdDate(dv);const ds=pd?((pd.getUTCMonth()+1)+'/'+pd.getUTCDate()+'/'+pd.getUTCFullYear()):String(dv);
-        cur={date:ds,maturities:[]};groups.push(cur);
-      }
-      if(cur&&matRaw){
-        const ml=matRaw.toUpperCase().indexOf('12')>-1?'12M':matRaw.toUpperCase().indexOf('6')>-1?'6M':matRaw.toUpperCase().indexOf('3')>-1?'3M':matRaw;
-        cur.maturities.push({maturity:ml,offered:off!=null?String(off):'',accepted:acc!=null?String(acc):'',yield:yld!=null?(typeof yld==='number'?yld.toFixed(2):String(yld)):''});
-      }
-    }
-    // Only rebuild the auction table from MarketData if it actually carries Offered/Accepted/% values.
-    // (In the current file H/I/J are empty, so we keep the yields imported from get_data instead of wiping them.)
-    const hasAuctionVals=groups.some(g=>g.maturities.some(m=>(m.offered&&m.offered!=='')||(m.accepted&&m.accepted!=='')||(m.yield&&m.yield!=='')));
-    if(groups.length&&hasAuctionVals){
-      document.getElementById('auction-rows').innerHTML='';
-      groups.forEach(g=>g.maturities.forEach((m,i)=>addAuctionRow([i===0?g.date:'',m.maturity,m.offered,m.accepted,m.yield])));
-    }
+  const fx=S(find('fx')||'');
+  if(fx.length){
+    let L=[],V=[];for(let i=2;i<fx.length;i++)if(fx[i][0]!=null&&fx[i][1]!=null){L.push(lbl(fx[i][0]));V.push(num(fx[i][1]));}
+    const swMap={'1 week':'1w','1 month':'1m','2 month':'2m','3 month':'3m','6 month':'6m','1 year':'1y'};
+    let sw={};for(let i=2;i<fx.length;i++){const k=fx[i][6];if(k==null)continue;const key=swMap[String(k).toLowerCase().trim()];if(key)sw[key]={sell:num(fx[i][7]),buy:num(fx[i][8])};}
+    let spot={};for(let i=2;i<fx.length;i++){const it=fx[i][10];if(it==null)continue;const t=String(it).toLowerCase();if(t.includes('opening'))spot.open=String(fx[i][11]).trim();else if(t.includes('closing'))spot.close=String(fx[i][11]).trim();else if(t.includes('lowest'))spot.low=String(fx[i][11]).trim();else if(t.includes('highest'))spot.high=String(fx[i][11]).trim();}
+    let fsum=[];for(let i=2;i<fx.length;i++)if(fx[i][13]!=null)fsum.push({tenor:String(fx[i][13]).trim(),volume:num(fx[i][14]),wa:num(fx[i][15])});
+    let vd=[];for(let i=2;i<fx.length;i++)if(fx[i][17]!=null)vd.push({tenor:String(fx[i][17]).trim(),date:String(fx[i][18]).trim(),nod:fx[i][19]==null?'':String(fx[i][19]).trim()});
+    let cross=[];for(let i=2;i<fx.length;i++)if(fx[i][21]!=null)cross.push({pair:String(fx[i][21]).trim(),buy:num(fx[i][22]),sell:num(fx[i][23])});
+    o.usdlkr={labels:L,values:V,close:spot.close||(V.length?V[V.length-1]:null)};
+    o.fxSwaps=sw;o.spot=spot;o.fxSummary=fsum;o.valueDates=vd;o.crossRates=cross;
   }
-
-  // Global Market (US 10Y): title row then col A=date, B=rate — full year
-  const gWs=sheetByKey('glo');
-  if(gWs){
-    const recs=[];rowsOf(gWs).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
-    recs.sort((a,b)=>a[0]-b[0]);
-    if(recs.length){
-      document.getElementById('gm-rows').innerHTML='';
-      recs.forEach(x=>addRow('gm-rows',[mdLabel(x[0]),n2(x[1])]));
-    }
+  const mc=S(find('macroeconomy')||'');
+  if(mc.length){
+    let fL=[],fV=[];for(let i=2;i<mc.length;i++)if(mc[i][0]!=null&&mc[i][1]!=null){fL.push(lbl(mc[i][0]));fV.push(num(mc[i][1]));}
+    o.foreign={labels:fL,values:fV};
+    let cL=[],cV=[];for(let i=2;i<mc.length;i++)if(mc[i][3]!=null&&mc[i][4]!=null){cL.push(lbl(mc[i][3]));cV.push(num(mc[i][4]));}
+    o.cbsl={labels:cL,values:cV};o.cbslHoldings=cV.length?cV[cV.length-1]:null;
+    let res=[];for(let i=2;i<mc.length;i++)if(mc[i][6]!=null)res.push({month:String(mc[i][6]).trim(),value:String(mc[i][7]).trim()});o.reserves=res;
+    let inf=[];for(let i=2;i<mc.length;i++)if(mc[i][9]!=null)inf.push({metric:String(mc[i][9]).trim(),apr:pct(mc[i][10]),may:pct(mc[i][11])});o.inflation=inf;
+    let srr=[];for(let i=2;i<mc.length;i++)if(mc[i][13]!=null)srr.push({date:String(mc[i][13]).trim(),rate:pct(mc[i][14])});o.srr=srr;
+    if(mc[2])o.tourism={apr:mc[2][17]==null?'':String(mc[2][17]).trim(),may:mc[2][18]==null?'':String(mc[2][18]).trim(),yoy:mc[2][19]==null?'':String(mc[2][19]).trim()};
+    if(mc[6])o.remittances={apr:mc[6][17]==null?'':String(mc[6][17]).trim(),may:mc[6][18]==null?'':String(mc[6][18]).trim(),yoy:mc[6][19]==null?'':String(mc[6][19]).trim()};
   }
-
-  // CBSL Holdings: col A=date, B=holdings — full year
-  const cbWs=sheetByKey('cbsl');
-  if(cbWs){
-    const recs=[];rowsOf(cbWs).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
-    recs.sort((a,b)=>a[0]-b[0]);
-    if(recs.length){
-      document.getElementById('cbsl-rows').innerHTML='';
-      recs.forEach(x=>addRow('cbsl-rows',[mdLabel(x[0]),n2(x[1])]));
-    }
+  const gl=S(find('globalmarket')||'');
+  if(gl.length){
+    const ser=(dc,vc)=>{let L=[],V=[];for(let i=2;i<gl.length;i++)if(gl[i][dc]!=null&&gl[i][vc]!=null){L.push(lbl(gl[i][dc]));V.push(num(gl[i][vc]));}return{labels:L,values:V};};
+    o.global10y=ser(0,1);o.wti=ser(3,4);o.brent=ser(3,5);o.dxy=ser(7,8);o.gold=ser(10,11);
+    let fomc=[];for(let i=2;i<gl.length;i++)if(gl[i][13]!=null)fomc.push({date:String(gl[i][13]).trim(),range:String(gl[i][14]).trim(),repo:pct(gl[i][15]),rrepo:pct(gl[i][16])});o.fomc=fomc;
   }
-
-  // Foreign Holdings: col A=date, B=volume(Mn)
-  const fhWs=wb.SheetNames.find(s=>{const k=s.trim().toLowerCase();return k.indexOf('foreign')>-1;});
-  if(fhWs){
-    const recs=[];rowsOf(wb.Sheets[fhWs]).forEach(r=>{const d=mdDate(r&&r[0]),v=mdNum(r&&r[1]);if(d&&v!=null)recs.push([d,v]);});
-    recs.sort((a,b)=>a[0]-b[0]);
-    if(recs.length){
-      document.getElementById('fh-rows').innerHTML='';
-      recs.forEach(x=>addRow('fh-rows',[mdLabel(x[0]),n2(x[1])]));
-    }
-  }
-
-  // refresh report date
-  const _td=new Date(),_dy=_td.getDate();
-  const _sx=_dy===1||_dy===21||_dy===31?'st':_dy===2||_dy===22?'nd':_dy===3||_dy===23?'rd':'th';
-  const _ml=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  sv('f-date',_dy+_sx+' '+_ml[_td.getMonth()]+' '+_td.getFullYear());
+  const an=S(find('announcement')||'');
+  if(an.length){let kd=[];for(let i=2;i<an.length;i++)if(an[i][0]!=null&&an[i][1]!=null)kd.push({label:String(an[i][0]).trim(),date:toISO(an[i][1])});o.keyDates=kd;}
+  o.execSummary={usdlkr:(o.spot&&o.spot.close)||(o.usdlkr&&o.usdlkr.close)||'',liqDir:'',liqDelta:''};
+  if(o.liquidity&&o.liquidity.current!=null&&o.liquidity.previous!=null){const dlt=+(o.liquidity.current-o.liquidity.previous).toFixed(2);o.execSummary.liqDir=dlt>=0?'increased':'decreased';o.execSummary.liqDelta=Math.abs(dlt);}
+  o.marketNews=o.marketNews||[];
+  o.date=new Date().toISOString().slice(0,10);
+  return o;
 }
 
-function fmtDate(d){
-  if(!d)return'';const dt=(d instanceof Date)?d:new Date(d);
-  if(isNaN(dt))return String(d);
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return dt.getUTCDate()+'-'+months[dt.getUTCMonth()];
-}
-function sv(id,val){if(val!==undefined&&val!==''&&val!==null)document.getElementById(id).value=String(val);}
-function n2(v){return(typeof v==='number')?v.toFixed(2):String(v||'');}
-
-function applyMVSExcel(wb){
-  const ws=wb.Sheets['get_data'];
-  if(!ws){return;}
-  const rows=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:false,dateNF:'yyyy-mm-dd'});
-  const rowsRaw=XLSX.utils.sheet_to_json(ws,{header:1,defval:null,raw:true});
-
-  const _td=new Date(),_dy=_td.getDate();
-  const _sx=_dy===1||_dy===21||_dy===31?'st':_dy===2||_dy===22?'nd':_dy===3||_dy===23?'rd':'th';
-  const _ml=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  sv('f-date',_dy+_sx+' '+_ml[_td.getMonth()]+' '+_td.getFullYear());
-
-  // Bond headers (row 0, cols 20-25 for 6 columns)
-  const hdrRow=rows[0];
-  if(hdrRow){
-    const bh=[22,23,24,25,26,27].map(c=>String(hdrRow[c]||'').trim()).filter(h=>h);
-    if(bh.length){bondHeaders=bh.slice(0,6);renderBondHeaders();}
-  }
-
-  // FX data (rows 1-7, col 0=date, col 1=rate)
-  const fxData=[];
-  for(let i=1;i<=7;i++){
-    const dv=rows[i]?.[0],rv=rowsRaw[i]?.[1];
-    if(!dv||rv===null||rv===undefined||rv===0)continue;
-    fxData.push([fmtDate(new Date(dv)),n2(rv)]);
-  }
-  if(fxData.length){
-    document.getElementById('fx-rows').innerHTML='';
-    fxData.forEach(r=>addRow('fx-rows',r));
-    const lastFX=fxData[fxData.length-1][1];
-    sv('fx-close',lastFX+'/'+lastFX);sv('ex-usdlkr',lastFX+'/'+lastFX);
-  }
-
-  // Liquidity data (rows 1-6, col 7=date, col 8=value)
-  const liqData=[];
-  for(let i=1;i<=6;i++){
-    const dv=rows[i]?.[7],lv=rowsRaw[i]?.[8];
-    if(!dv||lv===null||lv===undefined||typeof lv!=='number')continue;
-    liqData.push([fmtDate(new Date(dv)),n2(lv)]);
-  }
-  if(liqData.length){
-    document.getElementById('liq-rows').innerHTML='';
-    liqData.forEach(r=>addRow('liq-rows',r));
-    sv('liq-cur',liqData[liqData.length-1][1]);
-    sv('liq-prev',liqData.length>1?liqData[liqData.length-2][1]:'');
-  }
-
-  // T-Bill yield chart data (rows 1-7, col 10=date, 11=3M, 12=6M, 13=12M; lastYear/lastMonth left blank — enter manually)
-  const tbData=[];
-  for(let i=1;i<=7;i++){
-    const dv=rows[i]?.[10],m3=rowsRaw[i]?.[11],m6=rowsRaw[i]?.[12],m12=rowsRaw[i]?.[13];
-    if(!dv||m3===null||m3===undefined)continue;
-    tbData.push([fmtDate(new Date(dv)),n2(m3),n2(m6),n2(m12)]);
-  }
-  if(tbData.length){
-    document.getElementById('tbill-rows').innerHTML='';
-    tbData.forEach(r=>addRow('tbill-rows',r));
-  }
-  // T-Bill Last Month / Last Year reference yields (get_data rows where col10 is a text label)
-  for(let i=1;i<=11;i++){
-    const lbl=String(rows[i]?.[10]||'').toLowerCase().trim();
-    const m3=rowsRaw[i]?.[11],m6=rowsRaw[i]?.[12],m12=rowsRaw[i]?.[13];
-    if(lbl.includes('last month')){sv('tbref-lm-3m',n2(m3));sv('tbref-lm-6m',n2(m6));sv('tbref-lm-12m',n2(m12));}
-    if(lbl.includes('last year')){sv('tbref-ly-3m',n2(m3));sv('tbref-ly-6m',n2(m6));sv('tbref-ly-12m',n2(m12));}
-  }
-
-  // Money market rates (rows 1-4, col 15=label, 16=call, 17=repo)
-  for(let i=1;i<=4;i++){
-    const lbl=String(rows[i]?.[15]||'').toLowerCase();
-    const call=rowsRaw[i]?.[16],repo=rowsRaw[i]?.[17];
-    if(lbl.includes('minimum')){sv('cm-min',n2(call));sv('rm-min',n2(repo));}
-    if(lbl.includes('maximum')){sv('cm-max',n2(call));sv('rm-max',n2(repo));}
-    if(lbl.includes('w.a')||lbl.includes('yield')){sv('cm-wa',n2(call));sv('rm-wa',n2(repo));}
-    if(lbl.includes('gross')||lbl.includes('volume')){sv('cm-vol',n2(call));sv('rm-vol',n2(repo));}
-  }
-
-  // Bond rows (rows 1-12, col 19=maturity, cols 20-25=values for 6 date columns)
-  const bondData=[];
-  const refCell=v=>(v===null||v===undefined||v===0||String(v).trim()===''||String(v).trim()==='-')?'':(typeof v==='number'?(+v).toFixed(2):String(v).trim());
-  for(let i=1;i<=12;i++){
-    const mat=String(rows[i]?.[19]||'').trim();
-    if(!mat.match(/^\d{2}\.\d{2}\.\d{4}$/))continue;
-    const ly=refCell(rowsRaw[i]?.[20]);   // col 20 = Last Year
-    const lm=refCell(rowsRaw[i]?.[21]);   // col 21 = Last Month
-    const vals=[22,23,24,25,26,27].map(c=>{   // cols 22-27 = date columns
-      const v=rowsRaw[i]?.[c];
-      if(v===null||v===undefined||v===0||String(v).trim()===''||String(v).trim()==='-')return'0';
-      return String(v).trim();
-    });
-    bondData.push([mat,ly,lm,...vals]);
-  }
-  if(bondData.length){
-    document.getElementById('bond-rows').innerHTML='';
-    bondData.forEach(r=>addRow('bond-rows',r));
-  }
-
-  // ── T-Bill Auction Detail from get_data auction yields (col10=date, 11=3M, 12=6M, 13=12M).
-  // Offered/Accepted are not in the sheet, so they stay blank for manual entry; % column = auction yield.
-  const aGroups=[];
-  for(let i=1;i<=12;i++){
-    const dv=rows[i]?.[10];
-    if(dv===null||dv===undefined||dv==='')continue;
-    const d=dv instanceof Date?dv:new Date(dv);
-    const ds=isNaN(d)?String(dv):((d.getUTCMonth()+1)+'/'+d.getUTCDate()+'/'+d.getUTCFullYear());
-    const y3=rowsRaw[i]?.[11],y6=rowsRaw[i]?.[12],y12=rowsRaw[i]?.[13];
-    const mats=[];
-    if(y3!==null&&y3!==undefined&&y3!=='')mats.push({maturity:'3M',offered:'',accepted:'',yield:n2(y3)});
-    if(y6!==null&&y6!==undefined&&y6!=='')mats.push({maturity:'6M',offered:'',accepted:'',yield:n2(y6)});
-    if(y12!==null&&y12!==undefined&&y12!=='')mats.push({maturity:'12M',offered:'',accepted:'',yield:n2(y12)});
-    if(mats.length)aGroups.push({date:ds,maturities:mats});
-  }
-  if(aGroups.length){
-    document.getElementById('auction-rows').innerHTML='';
-    aGroups.forEach(g=>addAuctionGroup(g.date,g.maturities));
-    showToast('✓ Auction detail imported ('+aGroups.length+' dates, yields filled; Offered/Accepted blank — add in Excel if needed)');
-  }
-
-  // Executive summary sheet
-  const execWs=wb.Sheets['Executive summary'];
-  if(execWs){
-    const execRows=XLSX.utils.sheet_to_json(execWs,{header:1,defval:''});
-    execRows.forEach(r=>{
-      const txt=String(r[0]||'').trim();
-      const usdM=txt.match(/USD\/LKR\s+Closed\s+at\s+([\d.\/]+)/i);
-      if(usdM){sv('ex-usdlkr',usdM[1]);sv('fx-close',usdM[1]);}
-      const liqM=txt.match(/liquidity\s+(increased|decreased)\s+by\s+([\d.]+)/i);
-      if(liqM){document.getElementById('ex-dir').value=liqM[1].toLowerCase();sv('ex-delta',liqM[2]);}
-    });
-  }
-
-  // Summary sheet (FX swaps)
-  const sumWs=wb.Sheets['Summary'];
-  if(sumWs){
-    const sumRows=XLSX.utils.sheet_to_json(sumWs,{header:1,defval:null,raw:true});
-    const dateLabel=sumRows[2]&&sumRows[2][7]?String(sumRows[2][7]):'';
-    if(dateLabel)sv('f-date',dateLabel+' 2026');
-    const swapKeys=['1w','1m','2m','3m','6m','1y'];
-    const swapRows=[6,8,10,12,14,16];
-    swapRows.forEach((ri,i)=>{
-      const r=sumRows[ri];
-      if(r){
-        const sell=r[15],buy=r[16];
-        if(sell)sv('sw-'+swapKeys[i]+'-s',typeof sell==='number'?sell.toFixed(2):sell);
-        if(buy) sv('sw-'+swapKeys[i]+'-b',typeof buy==='number'?buy.toFixed(2):buy);
-      }
-    });
-  }
-}
-
-function downloadTemplate(){
-  const rows=[
-    ['Field','Value1','Value2','Value3','Value4','Value5','Value6','Value7','','','','','','','','','','','','','','','','','',''],
-    // Row 1 - headers for T-Bill auction cols F-J
-    ['FX Date','FX Rate','','','','Auction Date','Maturity','Offered','Accepted','Yield%','TBill Date','3M','6M','12M','','Money Mkt Label','Call','Repo','','Bond Maturity','Col1','Col2','Col3','Col4','Col5','Col6'],
-    // Row 2 - first FX + first auction
-    ['6/4/2026','336.07','','','','6/17/2026','3M','','','','6/10/2026','10.09','10.27','10.16','','Minimum Rate(%)','9.15','9.23','','15.12.2026','9.70/10.20','9.75/10','9.8/10.25','10.25/10.55','0','0'],
-    ['6/5/2026','337.15','','','','','6M','','','','6/3/2026','9.84','10.01','10.02','','Maximum Rate(%)','9.25','9.25','','15.09.2027','10.80/11.40','10.9/11.1','10.85/11','11/11.3','0','0'],
-    ['6/6/2026','338.00','','','','','12M','','','','5/26/2026','9.36','9.68','9.83','','W.A Yield (%)','9.19','9.24','','15.12.2028','11.50/12.00','11.75/12','11.8/12','11.9/11.95','0','0'],
-    ['6/9/2026','335.00','','','','6/10/2026','3M','','','','5/20/2026','8.18','8.25','8.49','','Gross Volume(Bn)','34.33','82.99','','15.12.2029','11.75/12.25','12/12.2','12/12.2','12/12.15','0','0'],
-    ['6/10/2026','337.00','','','','','6M','','','','','','','','','','','','','01.07.2030','11.80/12.30','12.15/12.2','12.15/12.25','12.15/12.3','0','0'],
-    ['6/11/2026','337.15','','','','','12M','','','','','','','','','','','','','15.03.2031','12.20/12.60','12.3/12.7','12.3/12.7','12.3/12.7','0','0'],
-    ['6/12/2026','336.50','','','','6/3/2026','3M','','','','','','','','','','','','','15.12.2032','12.30/12.70','12.5/12.9','12.5/12.9','12.55/12.9','0','0'],
-  ];
-  const wb=XLSX.utils.book_new();
-  const ws=XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols']=[...Array(26).fill({wch:14})];
-  XLSX.utils.book_append_sheet(wb,ws,'get_data');
-  XLSX.writeFile(wb,'MVS_Data_Template.xlsx');
-}
-
-function showToast(msg,type=''){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast'+(type?' '+type:'')+' show';
-  setTimeout(()=>t.classList.remove('show'),3500);
-}
+// ── INIT ─────────────────────────────────────────────────
+showBadge();
+loadPublished();
 </script>
-</body>
-</html>
+</body></html>
