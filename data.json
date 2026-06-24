@@ -10,7 +10,7 @@
   },
   {
    "date": "26.05.2026",
-   "rate": "8.75%"
+   "rate": "10%"
   }
  ],
  "callMarket": {
@@ -268,7 +268,7 @@
    31.25,
    44.16
   ],
-  "current": 64.26,
+  "current": null,
   "previous": 44.16
  },
  "bonds": {
@@ -2903,8 +2903,8 @@
  ],
  "execSummary": {
   "usdlkr": "333.90 / 334.25",
-  "liqDir": "increased",
-  "liqDelta": 20.1
+  "liqDir": "",
+  "liqDelta": ""
  },
  "marketNews": [],
  "date": "2026-06-24",
