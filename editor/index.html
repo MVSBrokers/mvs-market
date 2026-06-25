@@ -465,14 +465,15 @@ function parseWorkbook(wb,XLSX){
     o.bondSecondary=sec;
   }
   const fx=S(find('fx')||'');
+  const op=S(find('opening')||'');
   if(fx.length){
     let L=[],V=[];for(let i=2;i<fx.length;i++)if(fx[i][0]!=null&&fx[i][1]!=null){L.push(lbl(fx[i][0]));V.push(num(fx[i][1]));}
     const swMap={'1 week':'1w','1 month':'1m','2 month':'2m','3 month':'3m','6 month':'6m','1 year':'1y'};
-    let sw={};for(let i=2;i<fx.length;i++){const k=fx[i][6];if(k==null)continue;const key=swMap[String(k).toLowerCase().trim()];if(key)sw[key]={sell:num(fx[i][7]),buy:num(fx[i][8])};}
-    let spot={};for(let i=2;i<fx.length;i++){const it=fx[i][10];if(it==null)continue;const t=String(it).toLowerCase();if(t.includes('opening'))spot.open=String(fx[i][11]).trim();else if(t.includes('closing'))spot.close=String(fx[i][11]).trim();else if(t.includes('lowest'))spot.low=String(fx[i][11]).trim();else if(t.includes('highest'))spot.high=String(fx[i][11]).trim();}
-    let fsum=[];for(let i=2;i<fx.length;i++)if(fx[i][13]!=null)fsum.push({tenor:String(fx[i][13]).trim(),volume:num(fx[i][14]),wa:num(fx[i][15])});
-    let vd=[];for(let i=2;i<fx.length;i++)if(fx[i][17]!=null)vd.push({tenor:String(fx[i][17]).trim(),date:String(fx[i][18]).trim(),nod:fx[i][19]==null?'':String(fx[i][19]).trim()});
-    let cross=[];for(let i=2;i<fx.length;i++)if(fx[i][21]!=null)cross.push({pair:String(fx[i][21]).trim(),buy:num(fx[i][22]),sell:num(fx[i][23])});
+    let sw={};for(let i=2;i<fx.length;i++){const k=fx[i][3];if(k==null)continue;const key=swMap[String(k).toLowerCase().trim()];if(key)sw[key]={sell:num(fx[i][4]),buy:num(fx[i][5])};}
+    let spot={};for(let i=2;i<fx.length;i++){const it=fx[i][7];if(it==null)continue;const t=String(it).toLowerCase();if(t.includes('opening'))spot.open=String(fx[i][8]).trim();else if(t.includes('closing'))spot.close=String(fx[i][8]).trim();else if(t.includes('lowest'))spot.low=String(fx[i][8]).trim();else if(t.includes('highest'))spot.high=String(fx[i][8]).trim();}
+    let cross=[];for(let i=2;i<fx.length;i++)if(fx[i][11]!=null)cross.push({pair:String(fx[i][11]).trim(),buy:num(fx[i][12]),sell:num(fx[i][13])});
+    let fsum=[];if(op.length){for(let i=2;i<op.length;i++)if(op[i][0]!=null)fsum.push({tenor:String(op[i][0]).trim(),volume:num(op[i][1]),wa:num(op[i][2])});}
+    let vd=[];if(op.length){for(let i=2;i<op.length;i++)if(op[i][4]!=null)vd.push({tenor:String(op[i][4]).trim(),date:String(op[i][5]).trim(),nod:op[i][6]==null?'':String(op[i][6]).trim()});}
     o.usdlkr={labels:L,values:V,close:spot.close||(V.length?V[V.length-1]:null)};
     o.fxSwaps=sw;o.spot=spot;o.fxSummary=fsum;o.valueDates=vd;o.crossRates=cross;
   }
