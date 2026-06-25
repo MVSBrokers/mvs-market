@@ -1054,44 +1054,206 @@
    333.9788,
    334
   ],
-  "close": 334
+  "close": "333.90 / 334.25"
  },
- "fxSwaps": {},
- "spot": {},
+ "fxSwaps": {
+  "1w": {
+   "sell": 6.1,
+   "buy": 6.5
+  },
+  "1m": {
+   "sell": 6.1,
+   "buy": 6.25
+  },
+  "2m": {
+   "sell": 6.1,
+   "buy": 6.25
+  },
+  "3m": {
+   "sell": 6.1,
+   "buy": 6.25
+  },
+  "6m": {
+   "sell": 5.75,
+   "buy": 6.1
+  },
+  "1y": {
+   "sell": 5.15,
+   "buy": 6
+  }
+ },
+ "spot": {
+  "open": "335.50 / 334.50",
+  "close": "333.90 / 334.25",
+  "low": "334.25",
+  "high": "334.8"
+ },
  "fxSummary": [
   {
-   "tenor": "2.1259",
-   "volume": null,
+   "tenor": "Spot",
+   "volume": 17.25,
+   "wa": 334.5438
+  },
+  {
+   "tenor": "Tom",
+   "volume": 12.5,
+   "wa": 334.6359
+  },
+  {
+   "tenor": "Cash",
+   "volume": 23.5,
+   "wa": 334.4723
+  },
+  {
+   "tenor": "Sub Total (Spot)",
+   "volume": 53.25,
    "wa": null
   },
   {
-   "tenor": "450.3042",
-   "volume": null,
+   "tenor": "S+1",
+   "volume": 3,
+   "wa": 334.505
+  },
+  {
+   "tenor": "1W",
+   "volume": 1,
+   "wa": 334.75
+  },
+  {
+   "tenor": "Sub Total (Forwards)",
+   "volume": 4,
    "wa": null
   },
   {
-   "tenor": "388.5482",
-   "volume": null,
-   "wa": null
-  },
-  {
-   "tenor": "239.7963",
-   "volume": null,
-   "wa": null
-  },
-  {
-   "tenor": "265.6149",
-   "volume": null,
-   "wa": null
-  },
-  {
-   "tenor": "50.8786",
-   "volume": null,
+   "tenor": "GRAND TOTAL VOLUME",
+   "volume": 57.25,
    "wa": null
   }
  ],
- "valueDates": [],
- "crossRates": [],
+ "valueDates": [
+  {
+   "tenor": "Cash",
+   "date": "23.06.2026",
+   "nod": ""
+  },
+  {
+   "tenor": "Tom",
+   "date": "24.06.2026",
+   "nod": ""
+  },
+  {
+   "tenor": "Spot",
+   "date": "25.06.2026",
+   "nod": ""
+  },
+  {
+   "tenor": "1 Week",
+   "date": "02.07.2026",
+   "nod": "07 Days"
+  },
+  {
+   "tenor": "2 Weeks",
+   "date": "09.07.2026",
+   "nod": "14 Days"
+  },
+  {
+   "tenor": "3 Weeks",
+   "date": "16.07.2026",
+   "nod": "21 Days"
+  },
+  {
+   "tenor": "1 Month",
+   "date": "27.07.2026",
+   "nod": "32 Days"
+  },
+  {
+   "tenor": "2 Months",
+   "date": "25.08.2026",
+   "nod": "61 Days"
+  },
+  {
+   "tenor": "3 Months",
+   "date": "25.09.2026",
+   "nod": "92 Days"
+  },
+  {
+   "tenor": "4 Months",
+   "date": "26.10.2026",
+   "nod": "123 Days"
+  },
+  {
+   "tenor": "5 Months",
+   "date": "25.11.2026",
+   "nod": "153 Days"
+  },
+  {
+   "tenor": "6 Months",
+   "date": "28.12.2026",
+   "nod": "186 Days"
+  },
+  {
+   "tenor": "7 Months",
+   "date": "25.01.2027",
+   "nod": "214 Days"
+  },
+  {
+   "tenor": "8 Months",
+   "date": "25.02.2027",
+   "nod": "245 Days"
+  },
+  {
+   "tenor": "9 Months",
+   "date": "25.03.2027",
+   "nod": "273 Days"
+  },
+  {
+   "tenor": "10 Months",
+   "date": "26.04.2027",
+   "nod": "305 Days"
+  },
+  {
+   "tenor": "11 Months",
+   "date": "25.05.2027",
+   "nod": "334 Days"
+  },
+  {
+   "tenor": "12 Months",
+   "date": "25.06.2027",
+   "nod": "365 Days"
+  }
+ ],
+ "crossRates": [
+  {
+   "pair": "Japanese Yen",
+   "buy": 1.9774,
+   "sell": 2.1259
+  },
+  {
+   "pair": "British Pound Sterling",
+   "buy": 433.4016,
+   "sell": 450.3042
+  },
+  {
+   "pair": "Euro",
+   "buy": 372.6727,
+   "sell": 388.5482
+  },
+  {
+   "pair": "Australian Dollar",
+   "buy": 226.4907,
+   "sell": 239.7963
+  },
+  {
+   "pair": "Singapore Dollar",
+   "buy": 248.5785,
+   "sell": 265.6149
+  },
+  {
+   "pair": "Chinese Yuan",
+   "buy": 45.0498,
+   "sell": 50.8786
+  }
+ ],
  "foreign": {
   "labels": [
    "1 Apr",
@@ -2795,7 +2957,7 @@
   }
  ],
  "execSummary": {
-  "usdlkr": 334,
+  "usdlkr": "333.90 / 334.25",
   "liqDir": "decreased",
   "liqDelta": 3.22
  },
