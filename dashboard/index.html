@@ -909,7 +909,7 @@ function renderExtras(d){
    const secEl=ov(d.secondaryDate)?escHtml(ov(d.secondaryDate)):fmtLong(yestD);
    {const e=document.getElementById("secondary-close");if(e)e.textContent="Closing: "+secEl;}
    const ft=document.getElementById("op-fxsum-title");
-   if(ft)ft.textContent="Volume of FX Market — "+fmtLong(yestD);}
+   if(ft)ft.textContent="Volume of FX Market";}
   set('dyn-op-vd',(d.valueDates||[]).map(v=>`<tr><td>${escHtml(v.tenor)}</td><td>${escHtml(v.date)}</td><td style="color:#9fb6d4">${escHtml(v.nod||'')}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   set('dyn-op-srr',(d.srr||[]).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${dash(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
 }
@@ -1024,7 +1024,10 @@ function buildCharts(d){
   barChart("gdp",d.gdpGrowth,"period","growth","#4da3e8","%",2);
   barChart("bop",d.bop,"period","value","#c8a84b","USD bn",3);
   barChart("debt",d.debtGdp,"period","ratio","#9b8cff","%",1);
-  const fv=fxData.filter(v=>v>0);
+  destroyChart("fx");
+  const fxAg=aggregateIdx(d.fx?.labels||d.usdlkr?.labels||[],GRANS.fx);
+  const fxData=pick((d.fx?.values||d.usdlkr?.values||[]).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;}),fxAg.idx);
+  const fv=fxData.filter(v=>v!=null&&v>0);
   charts.fx=new Chart(document.getElementById("fxChart"),{type:"line",data:{labels:fxAg.labels,datasets:[{label:"LKR",data:fxData,borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
   renderStatBar("fxStat",fxData,fxAg.labels,"LKR",2);
   destroyChart("tbill");
