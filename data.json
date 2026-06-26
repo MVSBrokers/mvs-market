@@ -3069,17 +3069,10 @@
   "liqDir": "increased",
   "liqDelta": 4.32
  },
- "marketNews": [
-  "",
-  "",
-  "",
-  "",
-  "",
-  "",
-  ""
- ],
+ "marketNews": [],
  "date": "2026-06-26",
  "openingDate": "",
  "closingDate": "",
- "secondaryDate": ""
+ "secondaryDate": "",
+ "fxVolDate": ""
 }
