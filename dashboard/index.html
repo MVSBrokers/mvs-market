@@ -29,6 +29,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 .hdr-right{text-align:right}
 .hdr-date{font-size:14px;color:#c8a84b;font-weight:700;margin-bottom:4px}
 .hdr-live{display:inline-block;background:#1a3a1a;border:1px solid #2a5a2a;color:#6dd4a0;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;margin-right:8px}
+.refresh-btn{background:#0d1e38;border:1px solid #1a3050;color:#4da3e8;border-radius:12px;padding:3px 12px;font-size:10px;font-weight:700;cursor:pointer;margin-right:8px}
+.refresh-btn:hover{background:#13294a;color:#fff}
+.refresh-btn:active{transform:scale(.96)}
 .sign-out{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:5px 10px;font-size:11px;cursor:pointer}
 .sign-out:hover{border-color:#c8a84b;color:#c8a84b}
 .grid-2x2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
@@ -183,6 +186,7 @@ canvas{max-width:100%!important}
     <div class="hdr-right">
       <div class="hdr-date" id="dateDisplay">—</div>
       <span class="hdr-live">LIVE</span>
+      <button class="refresh-btn" onclick="loadData(false,true)" title="Reload the latest published data now">⟳ Refresh</button>
       <span id="last-updated" style="font-size:10px;color:#7fa3c8;margin-right:8px"></span>
     </div>
   </div>
@@ -274,7 +278,7 @@ canvas{max-width:100%!important}
   <div class="full-grid">
     <div class="panel">
       <div class="panel-title"><span>Treasury Bill<span class="close-date" id="tbill-close"></span></span></div>
-      <div class="series-toggle"><span class="st-lbl">Tenor:</span><button class="mg-btn active" onclick="setTbillSel('all',this)">All</button><button class="mg-btn" onclick="setTbillSel('m3',this)">3M</button><button class="mg-btn" onclick="setTbillSel('m6',this)">6M</button><button class="mg-btn" onclick="setTbillSel('m12',this)">12M</button></div>
+      <div class="series-toggle"><span class="st-lbl">Lines:</span><button class="mg-btn active" onclick="setTbillSel('all')">All</button><button class="mg-btn active" onclick="setTbillSel('m3')">3M</button><button class="mg-btn active" onclick="setTbillSel('m6')">6M</button><button class="mg-btn active" onclick="setTbillSel('m12')">12M</button></div>
       <canvas id="tbillChart" style="max-height:160px;margin-bottom:6px"></canvas>
       <div class="chart-stat-bar" id="tbillStat"></div>
       <table style="font-size:10px;margin-bottom:12px">
@@ -352,7 +356,7 @@ canvas{max-width:100%!important}
 
   <div class="grid-2x2">
     <div class="panel">
-      <div class="panel-title">FX Market Overview (Spot)</div>
+      <div class="panel-title">FX Market Overview (Spot)<span class="close-date" id="fxov-close"></span></div>
       <table style="font-size:12px">
         <tbody id="dyn-spot"></tbody>
       </table>
@@ -474,7 +478,7 @@ canvas{max-width:100%!important}
 
 <script>
 const DATA_URL="https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-market/main/data.json";
-const POLL_INTERVAL = 20000;
+const POLL_INTERVAL = 15000;
 let charts={}, pollTimer=null;
 // Sri Lanka bank working day (Mon–Fri). back=0 -> today's working day, 1 -> previous working day…
 function slWorkDay(back){
@@ -571,7 +575,7 @@ function startPolling(){stopPolling();pollTimer=setInterval(()=>loadData(true),P
 function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
 
 let _lastDataHash=null;
-async function loadData(silent=false){
+async function loadData(silent=false,force=false){
   const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
   if(!silent){bar.style.display="block";errEl.style.display="none";}
   try{
@@ -579,9 +583,10 @@ async function loadData(silent=false){
     if(!res.ok)throw new Error("HTTP "+res.status);
     const txt=await res.text();
     bar.style.display="none";
-    // Only re-render (and rebuild charts) when the published data has actually changed.
-    // This stops the every-30s flicker — the dashboard refreshes only after you publish.
-    if(txt===_lastDataHash)return;
+    const lu=document.getElementById("last-updated");
+    if(lu)lu.textContent="Updated "+new Date().toLocaleTimeString();
+    // Re-render only when the published data actually changed (avoids flicker), unless a manual refresh forces it.
+    if(txt===_lastDataHash&&!force)return;
     _lastDataHash=txt;
     render(JSON.parse(txt));
   }catch(e){
@@ -918,7 +923,7 @@ function renderExtras(d){
    const ot=document.getElementById("opening-report-title");
    if(ot){const od=ov(d.openingDate)||fmtOrd(todayD);ot.innerHTML="Opening Report — "+od;}
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(slClosingDay());
-   ["mm-close","fx-close","tbill-close","tbond-close","secondary-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML="Closing: "+cdEl;});
+   ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML="Closing: "+cdEl;});
    const ft=document.getElementById("op-fxsum-title");
    if(ft)ft.innerHTML="Volume of FX Market ("+(ov(d.fxVolDate)?escHtml(ov(d.fxVolDate)):fmtOrd(yestD))+")";}
   set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>`<tr><td>${escHtml(v.tenor)}</td><td>${escHtml(v.date)}</td><td style="color:#9fb6d4">${escHtml(v.nod||'')}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
@@ -944,8 +949,21 @@ function recentTable(elId,labels,values,unit,dec,n){
   el.innerHTML=`<table><thead><tr><th>Date</th><th>${escHtml(unit||"")}</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-let _tbr=[], _tbillSel='all';
-function setTbillSel(sel,btn){_tbillSel=sel;if(btn){const p=btn.parentNode;p.querySelectorAll('.mg-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}buildTbillChart();}
+let _tbr=[], _tbVis={m3:true,m6:true,m12:true};
+function syncTbillBtns(){
+  const wrap=document.querySelector('#page-fi .series-toggle');if(!wrap)return;
+  const b=wrap.querySelectorAll('.mg-btn');
+  const allOn=_tbVis.m3&&_tbVis.m6&&_tbVis.m12;
+  if(b[0])b[0].classList.toggle('active',allOn);
+  if(b[1])b[1].classList.toggle('active',_tbVis.m3);
+  if(b[2])b[2].classList.toggle('active',_tbVis.m6);
+  if(b[3])b[3].classList.toggle('active',_tbVis.m12);
+}
+function setTbillSel(sel){
+  if(sel==='all'){_tbVis={m3:true,m6:true,m12:true};}
+  else{_tbVis[sel]=!_tbVis[sel];if(!_tbVis.m3&&!_tbVis.m6&&!_tbVis.m12)_tbVis[sel]=true;} // keep at least one line
+  buildTbillChart();
+}
 function buildTbillChart(){
   const cv=document.getElementById('tbillChart');if(!cv)return;
   if(charts.tbill){try{charts.tbill.destroy();}catch(e){}}
@@ -953,23 +971,18 @@ function buildTbillChart(){
   const tc="#7fa3c8",gc="rgba(26,48,80,.5)",tf={size:10};
   const xt={color:tc,font:{size:8},autoSkip:true,maxTicksLimit:12,maxRotation:0};
   const fmtDY2=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
-  const labels=tbr.map(r=>fmtDY2(r.date));
+  const labels=tbr.map(r=>fmtDY2(r.date));   // ALL past data from the workbook
   const SER={m3:{label:"3M",color:"#4da3e8"},m6:{label:"6M",color:"#c8a84b"},m12:{label:"12M",color:"#6dd4a0"}};
-  let datasets,showLegend;
-  if(_tbillSel==='all'){
-    datasets=["m3","m6","m12"].map(k=>({label:SER[k].label,data:tbr.map(r=>parseFloat(r[k])||null),borderColor:SER[k].color,tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false}));
-    showLegend=true;
-  }else{
-    const k=_tbillSel;datasets=[{label:SER[k].label,data:tbr.map(r=>parseFloat(r[k])||null),borderColor:SER[k].color,backgroundColor:SER[k].color+"22",tension:0.3,pointRadius:2,pointHoverRadius:5,borderWidth:2,fill:true}];
-    showLegend=false;
-  }
-  charts.tbill=new Chart(cv,{type:"line",data:{labels,datasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:showLegend,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
-  // Difference (Previous → Latest) shown only when a single tenor is selected
+  const visKeys=["m3","m6","m12"].filter(k=>_tbVis[k]);
+  const datasets=visKeys.map(k=>({label:SER[k].label,data:tbr.map(r=>parseFloat(r[k])||null),borderColor:SER[k].color,backgroundColor:SER[k].color+"22",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.6,fill:false}));
+  charts.tbill=new Chart(cv,{type:"line",data:{labels,datasets},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  syncTbillBtns();
+  // Difference (Previous → Latest) shown when a single tenor line is isolated
   const st=document.getElementById('tbillStat');
   if(st){
-    if(_tbillSel==='all'){st.innerHTML='';}
+    if(visKeys.length!==1){st.innerHTML='';}
     else{
-      const vals=tbr.map(r=>parseFloat(r[_tbillSel])).filter(v=>!isNaN(v));
+      const vals=tbr.map(r=>parseFloat(r[visKeys[0]])).filter(v=>!isNaN(v));
       if(vals.length<2){st.innerHTML='';}
       else{
         const prev=vals[vals.length-2],curr=vals[vals.length-1],diff=+(curr-prev).toFixed(2),pc=prev!==0?+((diff/Math.abs(prev))*100).toFixed(2):0;
@@ -1126,6 +1139,10 @@ function buildCharts(d){
 // no login required — load immediately
 loadData();
 startPolling();
+// Auto-refresh the instant the dashboard tab/window becomes active again
+// (e.g. right after you publish in the editor tab and switch back here).
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadData(true);});
+window.addEventListener("focus",()=>loadData(true));
 
 
 </script>
