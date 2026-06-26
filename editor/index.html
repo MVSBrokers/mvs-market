@@ -75,6 +75,13 @@ code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-siz
 .ed-arr{display:flex;flex-wrap:wrap;gap:6px}.ed-arr input{width:auto;min-width:64px}
 .muted{color:#5a7a9a;font-size:11px;font-style:italic}
 .bulkbar{position:sticky;top:0;z-index:20;background:#060f1e;padding:8px 0;margin-bottom:8px;border-bottom:1px solid #18304f}
+.vis-btn{font-size:11px;font-weight:700;padding:4px 9px;border-radius:6px;border:1px solid #2a4a6a;cursor:pointer;margin-right:8px;white-space:nowrap;transition:.15s}
+.vis-btn.on{background:rgba(109,212,160,.12);border:1px solid #2e7d5b;color:#6dd4a0}
+.vis-btn.on:hover{background:rgba(109,212,160,.22)}
+.vis-btn.off{background:rgba(255,138,120,.14);border:1px solid #7d3a30;color:#ff8a78}
+.vis-btn.off:hover{background:rgba(255,138,120,.24)}
+.sec.is-hidden{opacity:.6}
+.hid-tag{font-size:9px;font-weight:700;color:#ff8a78;background:rgba(255,138,120,.13);border:1px solid #7d3a30;border-radius:5px;padding:1px 6px;margin-left:8px;text-transform:uppercase;letter-spacing:.4px;vertical-align:middle}
 </style></head>
 <body>
 <h1>MVS Market Data — Editor</h1>
@@ -171,6 +178,7 @@ const SECTIONS=[
  {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews']},
 ];
 const META_KEYS=['execSummary','date','marketNews'];
+const NO_HIDE=new Set(['dates','srr']); // sections with no standalone panel on the dashboard
 
 // ── CONFIG / GITHUB ──────────────────────────────────────
 function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'',repo:localStorage.getItem('mvs_gh_repo')||'',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
@@ -213,7 +221,8 @@ function ingestFile(file,auto){
     const wb=XLSX.read(new Uint8Array(buf),{type:'array',cellDates:true});
     window._lastWB=wb;
     LOADED=parseWorkbook(wb,XLSX);
-    try{renderFreshness(analyzeFreshness(wb,XLSX));}catch(fe){}
+    try{const ph=JSON.parse(localStorage.getItem('mvs_editor_hidden')||'null');if(ph&&typeof ph==='object')LOADED.hidden=ph;}catch(e){}
+    try{const _ck=analyzeFreshness(wb,XLSX);renderFreshness(_ck);try{localStorage.setItem('mvs_editor_freshness',JSON.stringify(_ck));}catch(_e){}}catch(fe){}
     renderSections();
     saveLocal();   // keep this import across editor page refreshes
     const L=LOADED.liquidity||{},U=LOADED.usdlkr||{};
@@ -261,7 +270,7 @@ function updateWatchBtn(on){
 }
 function clearAll(){
   LOADED=null;
-  try{localStorage.removeItem('mvs_editor_loaded');}catch(e){}
+  try{localStorage.removeItem('mvs_editor_loaded');localStorage.removeItem('mvs_editor_freshness');localStorage.removeItem('mvs_editor_hidden');}catch(e){}
   document.getElementById('sections').innerHTML='';
   document.getElementById('sections-hint').textContent='Cleared. Import an Excel to load sections.';
   const fb=document.getElementById('fresh-banner');if(fb)fb.style.display='none';
@@ -334,6 +343,8 @@ function renderSections(){
   host.innerHTML=SECTIONS.map(sec=>{
     const present=sec.keys.some(k=>LOADED[k]!=null);
     const pts=sec.keys.reduce((n,k)=>n+countPoints(k),0);
+    const hid=!!(LOADED.hidden&&LOADED.hidden[sec.id]);
+    const canHide=!NO_HIDE.has(sec.id);
     let body;
     if(sec.id==='results'){
       const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:[];
@@ -345,10 +356,10 @@ function renderSections(){
       }).join('');
     }
     const presentEff=sec.id==='results'?true:present;
-    return `<div class="sec" id="sec-${sec.id}">
+    return `<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
       <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
-        <div><div class="st">${sec.title}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
-        <div class="right"><span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
+        <div><div class="st">${sec.title}${hid?' <span class="hid-tag">hidden on dashboard</span>':''}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
+        <div class="right">${canHide?`<button class="vis-btn ${hid?'off':'on'}" onclick="event.stopPropagation();toggleHide('${sec.id}')" title="${hid?'Hidden on the dashboard — click to show it':'Showing on the dashboard — click to hide it'}">${hid?'🚫 Hidden':'👁 Shown'}</button>`:''}<span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
       </div>
       <div class="sec-body">
         ${presentEff?body:'<span class="muted">This section has no data in the imported workbook.</span>'}
@@ -439,8 +450,35 @@ async function publishKeys(keys,secId){
   }
 }
 
-// ── HELPERS ──────────────────────────────────────────────
-function val(id){return document.getElementById(id).value.trim();}
+// ── SHOW / HIDE a section on the dashboard ───────────────
+function toggleHide(id){
+  if(!LOADED){showToast('Import an Excel first.','err');return;}
+  applyEdits();
+  if(!LOADED.hidden||typeof LOADED.hidden!=='object')LOADED.hidden={};
+  if(LOADED.hidden[id])delete LOADED.hidden[id];else LOADED.hidden[id]=true;
+  try{localStorage.setItem('mvs_editor_hidden',JSON.stringify(LOADED.hidden));}catch(e){}
+  saveLocal();renderSections();
+  publishHidden();
+}
+async function publishHidden(){
+  const cfg=loadConfig();
+  if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Saved here. Finish GitHub setup, then publish to apply on the dashboard.','err');return;}
+  for(let a=1;a<=5;a++){
+    try{
+      const {json,sha}=await getPublished(cfg);
+      let published=(json&&typeof json==='object')?json:{};
+      published.hidden=(LOADED&&LOADED.hidden)||{};
+      await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,JSON.stringify(published,null,1),sha||null);
+      PUBLISHED=published;markPublishStates();
+      showToast('✓ Dashboard show/hide updated');return;
+    }catch(e){
+      const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
+      if(conflict&&a<5){await new Promise(r=>setTimeout(r,800*a));continue;}
+      showToast('Show/hide publish failed: '+e.message,'err');return;
+    }
+  }
+}
+
 function showBadge(){const cfg=loadConfig();if(cfg.token&&cfg.owner&&cfg.repo){document.getElementById('setup-box').style.display='none';const b=document.getElementById('connected-badge');b.style.display='block';document.getElementById('connected-repo').textContent=cfg.owner+'/'+cfg.repo;document.getElementById('connected-path').textContent=cfg.path+' ('+cfg.branch+')';['token','owner','repo','branch','path'].forEach(k=>{const el=document.getElementById('gh-'+k);if(el)el.value=cfg[k];});}}
 let toastT;function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type==='err'?' err':'');clearTimeout(toastT);toastT=setTimeout(()=>t.className='toast'+(type==='err'?' err':''),3200);}
 
@@ -592,7 +630,9 @@ function parseWorkbook(wb,XLSX){
 // ── INIT ─────────────────────────────────────────────────
 showBadge();
 // Restore the last imported/edited data so a page refresh doesn't wipe your work
-(function restoreLocal(){try{const s=localStorage.getItem('mvs_editor_loaded');if(s){LOADED=JSON.parse(s);renderSections();const st=document.getElementById('import-status');if(st){st.style.color='#9fb6d4';st.textContent='Restored your last imported data (kept across refresh). Re-import the Excel to refresh it.';}}}catch(e){}})();
+(function restoreLocal(){try{const s=localStorage.getItem('mvs_editor_loaded');if(s){LOADED=JSON.parse(s);renderSections();const st=document.getElementById('import-status');if(st){st.style.color='#9fb6d4';st.textContent='Restored your last imported data (kept across refresh). Re-import the Excel to refresh it.';}}
+  const f=localStorage.getItem('mvs_editor_freshness');if(f){const ck=JSON.parse(f);if(Array.isArray(ck)&&ck.length){renderFreshness(ck);const fb=document.getElementById('fresh-banner');if(fb&&fb.textContent)fb.textContent+='  (as of your last import — re-import to recheck for today)';}}
+}catch(e){}})();
 loadPublished();
 </script>
 </body></html>
