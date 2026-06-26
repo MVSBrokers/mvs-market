@@ -228,7 +228,7 @@ canvas{max-width:100%!important}
     <div class="panel full-width"><div class="panel-title" id="opening-report-title">Opening Report</div></div>
     <div class="grid-2x2">
       <div class="panel">
-        <div class="panel-title" id="op-fxsum-title">Volume of FX Market</div>
+        <div class="panel-title" id="op-fxsum-title" data-sec="fxsummary">Volume of FX Market</div>
         <canvas id="opFxSumChart" style="max-height:190px"></canvas>
         <table style="font-size:11px;margin-top:10px">
           <thead><tr><th>Tenor</th><th>Volume (USD Mn)</th><th>W/A Rate</th></tr></thead>
@@ -236,7 +236,7 @@ canvas{max-width:100%!important}
         </table>
       </div>
       <div class="panel">
-        <div class="panel-title">Value Dates</div>
+        <div class="panel-title" data-sec="valuedates">Value Dates</div>
         <div style="max-height:430px;overflow-y:auto"><table style="font-size:11px">
           <thead><tr><th>Tenor</th><th>Value Date</th><th>NOD</th></tr></thead>
           <tbody id="dyn-op-vd"></tbody>
@@ -252,7 +252,7 @@ canvas{max-width:100%!important}
 
   <div class="grid-2x2">
     <div class="panel">
-      <div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
+      <div data-sec-self="mmrates"><div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
       <table>
         <thead><tr><th></th><th>Call</th><th>Repo</th></tr></thead>
         <tbody>
@@ -262,18 +262,18 @@ canvas{max-width:100%!important}
           <tr><td>Gross Volume(Rs.Bn)</td><td id="cmvol">—</td><td id="rmvol">—</td></tr>
         </tbody>
       </table>
-      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Standing Facilities (Rs.Bn)</div>
+      </div><div data-sec-self="windows"><div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Standing Facilities (Rs.Bn)</div>
       <table style="font-size:12px">
         <thead><tr><th>Instrument</th><th>Latest</th><th>Previous</th></tr></thead>
         <tbody id="dyn-windows"></tbody>
-      </table>
+      </table></div>
     </div>
-    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
+    <div class="panel"><div class="panel-title pt-row" data-sec="liquidity"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
   </div>
 
   <div style="display:flex;justify-content:flex-start;margin-bottom:14px">
     <div class="panel" style="width:320px;flex-shrink:0">
-      <div class="panel-title">Policy Rate (OPR) History</div>
+      <div class="panel-title" data-sec="opr">Policy Rate (OPR) History</div>
       <table style="font-size:12px">
         <thead><tr><th>Effective Date</th><th>OPR (%)</th></tr></thead>
         <tbody id="dyn-opr"></tbody>
@@ -290,15 +290,15 @@ canvas{max-width:100%!important}
   <div class="full-grid">
     <div class="panel">
       <div class="panel-title"><span>Treasury Bill<span class="close-date" id="tbill-close"></span></span></div>
-      <div class="series-toggle"><span class="st-lbl">Lines:</span><button class="mg-btn active" onclick="setTbillSel('all')">All</button><button class="mg-btn" onclick="setTbillSel('m3')">3M</button><button class="mg-btn" onclick="setTbillSel('m6')">6M</button><button class="mg-btn" onclick="setTbillSel('m12')">12M</button></div>
+      <div data-sec-self="tbillcurve"><div class="series-toggle"><span class="st-lbl">Lines:</span><button class="mg-btn active" onclick="setTbillSel('all')">All</button><button class="mg-btn" onclick="setTbillSel('m3')">3M</button><button class="mg-btn" onclick="setTbillSel('m6')">6M</button><button class="mg-btn" onclick="setTbillSel('m12')">12M</button></div>
       <canvas id="tbillChart" style="max-height:160px;margin-bottom:6px"></canvas>
-      <div class="chart-stat-bar" id="tbillStat"></div>
-      <table style="font-size:10px;margin-bottom:12px">
+      <div class="chart-stat-bar" id="tbillStat"></div></div>
+      <div data-sec-self="tbills"><table style="font-size:10px;margin-bottom:12px">
         <thead><tr><th>Auction Date</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
         <tbody id="tbillRows"></tbody>
-      </table>
+      </table></div>
       <!-- Auction Detail Table inside T-Bill panel -->
-      <div style="border-top:1px solid #1a3050;padding-top:10px;margin-top:2px">
+      <div data-sec-self="tbillauction" style="border-top:1px solid #1a3050;padding-top:10px;margin-top:2px">
         <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px">Auction Details</div>
         <div class="tbill-auction-wrap">
           <table class="tbill-auction-table" id="tbillAuctionTable">
@@ -319,9 +319,9 @@ canvas{max-width:100%!important}
       </div>
     </div>
     <div class="panel">
-      <div class="panel-title">Treasury Bond (Yield Curve)<span class="close-date" id="tbond-close"></span></div>
+      <div class="panel-title" data-sec="bonds">Treasury Bond (Yield Curve)<span class="close-date" id="tbond-close"></span></div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
-      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#ff8a78">low</span> → <span style="color:#7ee0a8">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
+      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Cells shaded by change vs previous day · <span style="color:#7ee0a8">▴ up (green)</span> / <span style="color:#ff8a78">▾ down (red)</span></div>
       <div style="overflow-x:auto;max-width:100%">
         <table style="font-size:9px">
           <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
@@ -332,7 +332,7 @@ canvas{max-width:100%!important}
   </div>
 
   <div class="panel full-width">
-    <div class="panel-title">T-Bond Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
+    <div class="panel-title" data-sec="secondary">T-Bond Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
     <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
       <table style="font-size:10px">
         <thead><tr><th>Maturity Date</th><th>Bid (%)</th><th>Ask (%)</th></tr></thead>
@@ -349,9 +349,9 @@ canvas{max-width:100%!important}
   <div class="panel full-width"><div class="panel-title">USD / FX Market</div></div>
 
   <div class="grid-2x2">
-    <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
+    <div class="panel"><div class="panel-title pt-row" data-sec="usdlkr"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
     <div class="panel">
-      <div class="panel-title">FX Swaps (per day)<span class="close-date" id="fx-close"></span></div>
+      <div class="panel-title" data-sec="fxswaps">FX Swaps (per day)<span class="close-date" id="fx-close"></span></div>
       <table>
         <thead><tr><th>Tenor</th><th>Sell/Buy</th><th>Buy/Sell</th></tr></thead>
         <tbody>
@@ -368,13 +368,13 @@ canvas{max-width:100%!important}
 
   <div class="grid-2x2">
     <div class="panel">
-      <div class="panel-title">FX Market Overview (Spot)<span class="close-date" id="fxov-close"></span></div>
+      <div class="panel-title" data-sec="spot">FX Market Overview (Spot)<span class="close-date" id="fxov-close"></span></div>
       <table style="font-size:12px">
         <tbody id="dyn-spot"></tbody>
       </table>
     </div>
     <div class="panel">
-      <div class="panel-title">Cross-Currency Rates</div>
+      <div class="panel-title" data-sec="cross">Cross-Currency Rates</div>
       <table style="font-size:11px">
         <thead><tr><th>Currency</th><th>Buying</th><th>Selling</th></tr></thead>
         <tbody id="dyn-cross"></tbody>
@@ -389,7 +389,7 @@ canvas{max-width:100%!important}
     <div class="panel full-width"><div class="panel-title">Macro Economy — Sri Lanka</div></div>
     <div class="grid-2x2">
       <div class="panel">
-        <div class="panel-title">Inflation (CCPI vs NCPI)</div>
+        <div class="panel-title" data-sec="inflation">Inflation (CCPI vs NCPI)</div>
         <canvas id="inflChart" style="max-height:185px;margin-bottom:10px"></canvas>
         <table style="font-size:11px">
           <thead><tr><th>Index / Metric</th><th>April 2026</th><th>May 2026</th></tr></thead>
@@ -397,7 +397,7 @@ canvas{max-width:100%!important}
         </table>
       </div>
       <div class="panel">
-        <div class="panel-title">Foreign Currency Reserves</div>
+        <div class="panel-title" data-sec="reserves">Foreign Currency Reserves</div>
         <table style="font-size:12px">
           <thead><tr><th>Month</th><th>Reserve ($)</th></tr></thead>
           <tbody id="dyn-reserves"></tbody>
@@ -405,22 +405,22 @@ canvas{max-width:100%!important}
       </div>
     </div>
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div><div class="mini-tbl" id="cbslTbl"></div></div>
-      <div class="panel"><div class="panel-title pt-row"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fhStat"></div><div class="mini-tbl" id="fhTbl"></div></div>
+      <div class="panel"><div class="panel-title pt-row" data-sec="cbsl"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div><div class="mini-tbl" id="cbslTbl"></div></div>
+      <div class="panel"><div class="panel-title pt-row" data-sec="foreign"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fhStat"></div><div class="mini-tbl" id="fhTbl"></div></div>
     </div>
     <div class="grid-3col">
       <div class="panel">
-        <div class="panel-title">Quarterly Real GDP Growth</div>
+        <div class="panel-title" data-sec="gdp">Quarterly Real GDP Growth</div>
         <canvas id="gdpChart" style="max-height:170px;margin-bottom:8px"></canvas>
         <div class="mini-tbl" id="gdpTbl"></div>
       </div>
       <div class="panel">
-        <div class="panel-title">Balance of Payment (USD bn)</div>
+        <div class="panel-title" data-sec="bop">Balance of Payment (USD bn)</div>
         <canvas id="bopChart" style="max-height:170px;margin-bottom:8px"></canvas>
         <div class="mini-tbl" id="bopTbl"></div>
       </div>
       <div class="panel">
-        <div class="panel-title">Debt to GDP (%)</div>
+        <div class="panel-title" data-sec="debtgdp">Debt to GDP (%)</div>
         <canvas id="debtChart" style="max-height:170px;margin-bottom:8px"></canvas>
         <div class="mini-tbl" id="debtTbl"></div>
       </div>
@@ -429,14 +429,14 @@ canvas{max-width:100%!important}
     <div class="panel full-width">
       <div class="panel-title">Tourism &amp; Remittances</div>
       <div class="grid-2x2" style="margin-top:4px">
-        <table style="font-size:11px">
+        <div data-sec-self="tourism"><table style="font-size:11px">
           <thead><tr><th>Tourism (USD)</th><th>Apr 2026</th><th>May 2026</th><th>Y-o-Y</th></tr></thead>
           <tbody id="dyn-tourism"></tbody>
-        </table>
-        <table style="font-size:11px">
+        </table></div>
+        <div data-sec-self="remittances"><table style="font-size:11px">
           <thead><tr><th>Remittances (USD)</th><th>Apr 2025</th><th>May 2026</th><th>Y-o-Y</th></tr></thead>
           <tbody id="dyn-remit"></tbody>
-        </table>
+        </table></div>
       </div>
     </div>
   </div>
@@ -448,11 +448,11 @@ canvas{max-width:100%!important}
     <!-- US bond rate + Fed rate -->
     <div class="grid-2x2">
       <div class="panel">
-        <div class="panel-title pt-row"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('g10',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('g10','all',this)" title="Full year (all data)">Y</button></span></div>
+        <div class="panel-title pt-row" data-sec="global10y"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('g10',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('g10','all',this)" title="Full year (all data)">Y</button></span></div>
         <canvas id="g10Chart" style="max-height:210px"></canvas><div class="chart-stat-bar" id="g10Stat"></div><div class="mini-tbl" id="g10Tbl"></div>
       </div>
       <div class="panel">
-        <div class="panel-title">US Fed Rate — FOMC Decisions</div>
+        <div class="panel-title" data-sec="fomc">US Fed Rate — FOMC Decisions</div>
         <table style="font-size:11px">
           <thead><tr><th>Date</th><th>Range</th><th>O/N REPO</th><th>O/N R/REPO</th></tr></thead>
           <tbody id="dyn-fomc"></tbody>
@@ -463,23 +463,23 @@ canvas{max-width:100%!important}
 
     <!-- Gold + DXY -->
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title">Gold Price (USD / oz)</div><canvas id="goldChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="goldStat"></div><div class="mini-tbl" id="goldTbl"></div><div class="rpt-note" id="goldNote">Awaiting data upload.</div></div>
-      <div class="panel"><div class="panel-title">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="mini-tbl" id="dxyTbl"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="gold">Gold Price (USD / oz)</div><canvas id="goldChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="goldStat"></div><div class="mini-tbl" id="goldTbl"></div><div class="rpt-note" id="goldNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="dxy">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="mini-tbl" id="dxyTbl"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
     </div>
 
     <!-- Brent + WTI -->
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
-      <div class="panel"><div class="panel-title">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="brent">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="wti">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
     </div>
   </div>
 
   <!-- PAGE: LATEST MARKET ANNOUNCEMENTS -->
   <div class="page" id="page-news">
-    <div class="panel full-width"><div class="panel-title">Upcoming Key Dates &amp; Announcements</div></div>
-    <div id="events-grid" class="events-grid"></div>
+    <div class="panel full-width"><div class="panel-title" data-sec="keydates">Upcoming Key Dates &amp; Announcements</div></div>
+    <div id="events-grid" class="events-grid" data-sec-self="keydates"></div>
     <div class="panel full-width" style="margin-top:14px">
-      <div class="panel-title">Latest Results</div>
+      <div class="panel-title" data-sec="results">Latest Results</div>
       <div id="news-list" class="news-list"></div>
     </div>
   </div>
@@ -801,7 +801,7 @@ function render(d){
         let arrow="",acol="";
         if(delta!=null&&delta!==0){ if(delta<0){arrow="\u25be";acol="#ff8a78";}else{arrow="\u25b4";acol="#7ee0a8";} }
         td.innerHTML=m.toFixed(2)+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
-        td.style.background=heatColor(m,rmn,rmx);   // per-row colour
+        td.style.background=(delta==null||delta===0)?"transparent":(delta>0?"rgba(126,224,168,0.34)":"rgba(255,140,122,0.34)");   // shade by change vs previous day (up=green, down=red)
         td.style.color="#eaf2fb";td.style.fontWeight="600";
         if(delta!=null&&delta!==0)td.title=(delta<0?"Yield down ":"Yield up ")+Math.abs(delta).toFixed(2)+" vs previous";
       }else{td.textContent="—";td.style.color="#3a5575";}
@@ -870,7 +870,7 @@ function render(d){
           let arrow="",acol="";
           if(delta!=null&&delta!==0){if(delta<0){arrow="\u25be";acol="#ff8a78";}else{arrow="\u25b4";acol="#7ee0a8";}}
           td.innerHTML=m.toFixed(2)+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
-          td.style.background=heatColor(m,rmn,rmx);td.style.color="#eaf2fb";td.style.fontWeight="600";
+          td.style.background=(delta==null||delta===0)?"transparent":(delta>0?"rgba(126,224,168,0.34)":"rgba(255,140,122,0.34)");td.style.color="#eaf2fb";td.style.fontWeight="600";
         }else{td.textContent="—";td.style.color="#3a5575";}
         tr.appendChild(td);
       });
@@ -897,6 +897,15 @@ function render(d){
 
   renderExtras(d);
   buildCharts(d);
+  applyHidden(d);
+}
+// Hide/show sections on the dashboard based on the editor's per-section toggles (d.hidden map)
+function applyHidden(d){
+  const h=(d&&d.hidden&&typeof d.hidden==='object')?d.hidden:{};
+  // data-sec  → hide the whole panel this element sits in
+  document.querySelectorAll('[data-sec]').forEach(el=>{const p=el.closest('.panel')||el;p.style.display=h[el.getAttribute('data-sec')]?'none':'';});
+  // data-sec-self → hide only this block (sub-sections that share a panel)
+  document.querySelectorAll('[data-sec-self]').forEach(el=>{el.style.display=h[el.getAttribute('data-sec-self')]?'none':'';});
 }
 
 // ── Populate all data-driven tables that aren't handled inline above ──
@@ -1097,7 +1106,11 @@ function buildCharts(d){
   charts.fx=new Chart(document.getElementById("fxChart"),{type:"line",data:{labels:fxAg.labels,datasets:[{label:"LKR",data:fxData,borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
   renderStatBar("fxStat",fxData,fxAg.labels,"LKR",2);
   destroyChart("tbill");
-  _tbr=[...(d.tbills||[])].reverse();
+  // T-bill chart uses the FULL yield-curve series from Excel columns K,L,M,N (d.tbillCurve = all rows)
+  const _tc=d.tbillCurve||{};
+  _tbr=(_tc.labels&&_tc.labels.length)
+        ?_tc.labels.map((lab,i)=>({date:lab,m3:(_tc.m3||[])[i],m6:(_tc.m6||[])[i],m12:(_tc.m12||[])[i]}))
+        :[...(d.tbills||[])].reverse();   // fallback to auction points if the curve isn't published
   buildTbillChart();
   destroyChart("yield");
   const yBHead=d.bonds?.headers||[], yBRows=d.bonds?.rows||[];
