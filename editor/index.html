@@ -206,6 +206,7 @@ function importExcel(ev){
   r.onload=e=>{
     try{
       const wb=XLSX.read(e.target.result,{type:'binary',cellDates:true});
+      window._lastWB=wb;
       LOADED=parseWorkbook(wb,XLSX);
       try{renderFreshness(analyzeFreshness(wb,XLSX));}catch(fe){}
       renderSections();
@@ -345,6 +346,19 @@ async function publishKeys(keys,secId){
   const cfg=loadConfig();
   if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Complete the GitHub setup first.','err');document.getElementById('setup-box').style.display='block';return;}
   applyEdits();
+  // ── Freshness guard: block publish if any daily section is stale or missing ──
+  try{
+    const wb2=window._lastWB;
+    if(wb2){
+      const checks=analyzeFreshness(wb2,XLSX);
+      const bad=checks.filter(c=>c.status==='stale'||c.status==='missing');
+      if(bad.length){
+        const names=bad.map(c=>c.label).join(', ');
+        const go=confirm('⚠ '+bad.length+' section'+(bad.length>1?'s are':' is')+' NOT updated for today:\n\n'+names+'\n\nYour Excel does not have today\'s data for these sections.\nAdd today\'s data to Excel and re-import before publishing.\n\nPress OK to publish anyway, or Cancel to go back.');
+        if(!go)return;
+      }
+    }
+  }catch(e){}
   const isAll=keys==='all';
   const stEl=secId?document.getElementById('ps-'+secId):document.getElementById('sections-hint');
   const setSt=(c,m)=>{if(stEl){stEl.style.color=c;stEl.textContent=m;}};
@@ -378,17 +392,17 @@ function analyzeFreshness(wb,XLSX,nowOverride){
   const sheets=wb.SheetNames, _IGN=/dailydata|weeklydata|monthlydata|others/, find=name=>sheets.find(s=>{const t=s.toLowerCase().replace(/\s+/g,"");return !_IGN.test(t)&&t.includes(name);});
   const MON3=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"],MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const US_HOL=new Set(["2026-01-01","2026-01-19","2026-02-16","2026-05-25","2026-06-19","2026-07-03","2026-09-07","2026-10-12","2026-11-11","2026-11-26","2026-12-25"]);
-  const iso=d=>d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,'0')+"-"+String(d.getUTCDate()).padStart(2,'0');
-  const fmt=d=>d.getUTCDate()+" "+MONF[d.getUTCMonth()];
-  const isWknd=d=>{const g=d.getUTCDay();return g===0||g===6;};
+  const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');
+  const fmt=d=>d.getDate()+" "+MONF[d.getMonth()];
+  const isWknd=d=>{const g=d.getDay();return g===0||g===6;};
   const isWork=(d,cal)=>!isWknd(d)&&!(cal==='US'&&US_HOL.has(iso(d)));
-  const lastWork=(d,cal)=>{let x=new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()));while(!isWork(x,cal))x.setUTCDate(x.getUTCDate()-1);return x;};
-  const wdBetween=(a,b,cal)=>{let c=0,x=new Date(a.getTime());while(x<b){x.setUTCDate(x.getUTCDate()+1);if(isWork(x,cal))c++;}return c;};
+  const lastWork=(d,cal)=>{let x=new Date(d.getFullYear(),d.getMonth(),d.getDate());while(!isWork(x,cal))x.setDate(x.getDate()-1);return x;};
+  const wdBetween=(a,b,cal)=>{let c=0,x=new Date(a.getTime());while(x<b){x.setDate(x.getDate()+1);if(isWork(x,cal))c++;}return c;};
   const now=nowOverride||new Date();
-  const todayUTC=new Date(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate()));
-  const usNow=new Date(now.getTime()-10.5*3600*1000);const usTodayUTC=new Date(Date.UTC(usNow.getUTCFullYear(),usNow.getUTCMonth(),usNow.getUTCDate()));
-  const latestDate=(rows,col,sr)=>{sr=sr||2;let mx=null;for(let i=sr;i<rows.length;i++){const v=rows[i]&&rows[i][col];if(v instanceof Date){if(!mx||v>mx)mx=v;}}return mx?new Date(Date.UTC(mx.getUTCFullYear(),mx.getUTCMonth(),mx.getUTCDate())):null;};
-  const parseDM=s=>{const m=String(s||'').trim().match(/^(\d{1,2})[\s\-]([A-Za-z]{3})/);if(!m)return null;const mi=MON3.indexOf(m[2].toLowerCase());if(mi<0)return null;return new Date(Date.UTC(now.getFullYear(),mi,parseInt(m[1])));};
+  const todayUTC=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const usNow=new Date(now.getTime()-10.5*3600*1000);const usTodayUTC=new Date(usNow.getFullYear(),usNow.getMonth(),usNow.getDate());
+  const latestDate=(rows,col,sr)=>{sr=sr||2;let mx=null;for(let i=sr;i<rows.length;i++){const v=rows[i]&&rows[i][col];if(v instanceof Date){if(!mx||v>mx)mx=v;}}return mx?new Date(mx.getFullYear(),mx.getMonth(),mx.getDate()):null;};
+  const parseDM=s=>{const m=String(s||'').trim().match(/^(\d{1,2})[\s\-]([A-Za-z]{3})/);if(!m)return null;const mi=MON3.indexOf(m[2].toLowerCase());if(mi<0)return null;return new Date(now.getFullYear(),mi,parseInt(m[1]));};
   const out=[];
   const daily=(label,cal,last,secId)=>{const ref=cal==='US'?usTodayUTC:todayUTC,exp=lastWork(ref,cal);
     if(!last){out.push({label,cadence:'Daily',cal,secId,status:'missing',msg:'No dates found in this section.'});return;}
@@ -399,7 +413,7 @@ function analyzeFreshness(wb,XLSX,nowOverride){
     const days=Math.round((ref-last)/86400000);out.push({label,cadence:'Weekly',cal,secId,status:days>9?'stale':(days>7?'pending':'ok'),msg:(days>9?'NOT updated — ':'')+'latest '+fmt(last)+' ('+days+' day'+(days===1?'':'s')+' ago).'});};
   const mm=S(find('moneymorket')||find('moneymarket')||'');daily('Money Market & Liquidity','SL',latestDate(mm,7),'liquidity');
   const fx=S(find('fx')||'');daily('USD/LKR & FX Spot','SL',latestDate(fx,0),'usdlkr');
-  const fi=S(find('fixedincome')||'');{let bh=fi[1]||[],last=null;for(let c=3;c<=8;c++){const d=parseDM(bh[c]);if(d&&(!last||d>last))last=d;}daily('Daily Bond / Yield Rates','SL',last,'bonds');}
+  const fi=S(find('fixedincome')||'');{let last=latestDate(fi,10);daily('Daily Bond / Yield Rates','SL',last,'bonds');}
   const gl=S(find('globalmarket')||'');daily('US 10Y Treasury','US',latestDate(gl,0),'global10y');daily('Gold (XAU/USD)','US',latestDate(gl,10),'gold');daily('Crude Oil (WTI / Brent)','US',latestDate(gl,3),'brent');daily('US Dollar Index (DXY)','US',latestDate(gl,7),'dxy');
   const mc=S(find('macroeconomy')||'');weekly('Foreign Holdings of Govt Securities','SL',latestDate(mc,0),'foreign');weekly('T-Bill Auction (Primary)','SL',latestDate(fi,15),'tbills');
   const monthLbl=(mc[1]&&mc[1][11])?String(mc[1][11]).trim():'';
@@ -435,14 +449,14 @@ function parseWorkbook(wb,XLSX){
   const S=n=>{const ws=wb.Sheets[n];return ws?XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null}):[];};
   const sheets=wb.SheetNames, _IGN=/dailydata|weeklydata|monthlydata|others/, find=name=>sheets.find(s=>{const t=s.toLowerCase().replace(/\s+/g,"");return !_IGN.test(t)&&t.includes(name);});
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const lbl=d=>d instanceof Date?d.getUTCDate()+" "+MON[d.getUTCMonth()]:(d==null?"":String(d).trim());
+  const lbl=d=>d instanceof Date?d.getDate()+" "+MON[d.getMonth()]:(d==null?"":String(d).trim());
   const num=v=>{if(v==null||v==="")return null;const n=parseFloat(String(v).replace(/,/g,'').replace('%',''));return isNaN(n)?null:n;};
   const pct=v=>{if(v==null||v==="")return"";let n=parseFloat(String(v).replace('%',''));if(isNaN(n))return String(v);if(Math.abs(n)<=1.0001)n=n*100;return n.toFixed(2).replace(/\.00$/,'.0')+"%";};
   const toISO=s=>{s=String(s).trim();const m=s.match(/^(\d{1,2})(?:-\d{1,2})?[.\-/](\d{1,2})[.\-/](\d{4})/);return m?(m[3]+"-"+String(m[2]).padStart(2,'0')+"-"+String(m[1]).padStart(2,'0')):s;};
   const o={};
   const mm=S(find('moneymorket')||find('moneymarket')||'');
   if(mm.length){
-    o.opr=[];for(let i=2;i<mm.length;i++)if(mm[i][0]&&mm[i][1]!=null)o.opr.push({date:String(mm[i][0]).trim(),rate:String(mm[i][1]).trim()});
+    o.opr=[];for(let i=2;i<mm.length;i++)if(mm[i][0]&&mm[i][1]!=null)o.opr.push({date:String(mm[i][0]).trim(),rate:String(mm[i][1]).trim(),show:true});
     o.callMarket={min:num(mm[2][4]),max:num(mm[3][4]),wa:num(mm[4][4]),vol:num(mm[5][4])};
     o.repoMarket={min:num(mm[2][5]),max:num(mm[3][5]),wa:num(mm[4][5]),vol:num(mm[5][5])};
     o.windows={sdf:{cur:num(mm[8]&&mm[8][4]),prev:num(mm[8]&&mm[8][5])},slf:{cur:num(mm[9]&&mm[9][4]),prev:num(mm[9]&&mm[9][5])}};
@@ -452,28 +466,29 @@ function parseWorkbook(wb,XLSX){
   }
   const fi=S(find('fixedincome')||'');
   if(fi.length){
-    let bh=[];for(let c=3;c<=8;c++)if(fi[1][c]!=null)bh.push(String(fi[1][c]).trim());
+    // Bond column dates: try row1 col3-8 as dates first, else use text
+    const parseDMlocal=s=>{const MON3l=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];const m=String(s||'').trim().match(/^(\d{1,2})[\s\-]([A-Za-z]{3})/i);if(!m)return null;const mi=MON3l.indexOf(m[2].toLowerCase());if(mi<0)return null;const yr=new Date().getFullYear();return new Date(yr,mi,parseInt(m[1]));};
+    let bh=[];for(let c=3;c<=8;c++){const v=fi[1][c];if(v==null)continue;bh.push(v instanceof Date?lbl(v):(parseDMlocal(v)?lbl(parseDMlocal(v)):String(v).trim()));}
     let br=[];for(let i=2;i<fi.length;i++)if(fi[i][0]){const vals=[];for(let c=3;c<=8;c++)vals.push(fi[i][c]);br.push({bond:String(fi[i][0]).trim(),eoy:fi[i][1],eom:fi[i][2],values:vals});}
     o.bonds={headers:bh,rows:br};
     let tcL=[],t3=[],t6=[],t12=[];for(let i=2;i<fi.length;i++)if(fi[i][10]!=null){tcL.push(lbl(fi[i][10]));t3.push(num(fi[i][11]));t6.push(num(fi[i][12]));t12.push(num(fi[i][13]));}
     o.tbillCurve={labels:tcL,m3:t3,m6:t6,m12:t12};
-    let tb=[],tref={};for(let i=2;i<fi.length;i++){const a=fi[i][15];if(a==null)continue;if(a instanceof Date)tb.push({date:lbl(a),m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])});else{const t=String(a).toLowerCase();if(t.includes('last month'))tref.lastMonth={m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])};else if(t.includes('last year'))tref.lastYear={m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])};}}
+    let tb=[],tref={};for(let i=2;i<fi.length;i++){const a=fi[i][15];if(a==null)continue;if(a instanceof Date)tb.push({date:lbl(a),m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18]),show:true});else{const t=String(a).toLowerCase();if(t.includes('last month'))tref.lastMonth={m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])};else if(t.includes('last year'))tref.lastYear={m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])};}}
     o.tbills=tb;o.tbillRef=tref;
     let auc=[];for(let i=2;i<fi.length;i++){const d=fi[i][20],mat=fi[i][21];if(mat==null)continue;if(d instanceof Date)auc.push({date:lbl(d),maturities:[]});if(auc.length)auc[auc.length-1].maturities.push({maturity:String(mat).trim(),offered:num(fi[i][22]),accepted:num(fi[i][23]),yield:num(fi[i][24])});}
     o.tbillAuction=auc;
-    let sec=[];for(let i=2;i<fi.length;i++)if(fi[i][26]!=null)sec.push({maturity:String(fi[i][26]).trim(),bid:num(fi[i][27]),ask:num(fi[i][28])});
+    let sec=[];for(let i=2;i<fi.length;i++)if(fi[i][26]!=null)sec.push({maturity:String(fi[i][26]).trim(),bid:num(fi[i][27]),ask:num(fi[i][28]),show:true});
     o.bondSecondary=sec;
   }
   const fx=S(find('fx')||'');
-  const op=S(find('opening')||'');
   if(fx.length){
     let L=[],V=[];for(let i=2;i<fx.length;i++)if(fx[i][0]!=null&&fx[i][1]!=null){L.push(lbl(fx[i][0]));V.push(num(fx[i][1]));}
     const swMap={'1 week':'1w','1 month':'1m','2 month':'2m','3 month':'3m','6 month':'6m','1 year':'1y'};
-    let sw={};for(let i=2;i<fx.length;i++){const k=fx[i][3];if(k==null)continue;const key=swMap[String(k).toLowerCase().trim()];if(key)sw[key]={sell:num(fx[i][4]),buy:num(fx[i][5])};}
-    let spot={};for(let i=2;i<fx.length;i++){const it=fx[i][7];if(it==null)continue;const t=String(it).toLowerCase();if(t.includes('opening'))spot.open=String(fx[i][8]).trim();else if(t.includes('closing'))spot.close=String(fx[i][8]).trim();else if(t.includes('lowest'))spot.low=String(fx[i][8]).trim();else if(t.includes('highest'))spot.high=String(fx[i][8]).trim();}
-    let cross=[];for(let i=2;i<fx.length;i++)if(fx[i][11]!=null)cross.push({pair:String(fx[i][11]).trim(),buy:num(fx[i][12]),sell:num(fx[i][13])});
-    let fsum=[];if(op.length){for(let i=2;i<op.length;i++)if(op[i][0]!=null)fsum.push({tenor:String(op[i][0]).trim(),volume:num(op[i][1]),wa:num(op[i][2])});}
-    let vd=[];if(op.length){for(let i=2;i<op.length;i++)if(op[i][4]!=null)vd.push({tenor:String(op[i][4]).trim(),date:String(op[i][5]).trim(),nod:op[i][6]==null?'':String(op[i][6]).trim()});}
+    let sw={};for(let i=2;i<fx.length;i++){const k=fx[i][6];if(k==null)continue;const key=swMap[String(k).toLowerCase().trim()];if(key)sw[key]={sell:num(fx[i][7]),buy:num(fx[i][8])};}
+    let spot={};for(let i=2;i<fx.length;i++){const it=fx[i][10];if(it==null)continue;const t=String(it).toLowerCase();if(t.includes('opening'))spot.open=String(fx[i][11]).trim();else if(t.includes('closing'))spot.close=String(fx[i][11]).trim();else if(t.includes('lowest'))spot.low=String(fx[i][11]).trim();else if(t.includes('highest'))spot.high=String(fx[i][11]).trim();}
+    let fsum=[];for(let i=2;i<fx.length;i++)if(fx[i][13]!=null)fsum.push({tenor:String(fx[i][13]).trim(),volume:num(fx[i][14]),wa:num(fx[i][15]),show:true});
+    let vd=[];for(let i=2;i<fx.length;i++)if(fx[i][17]!=null)vd.push({tenor:String(fx[i][17]).trim(),date:String(fx[i][18]).trim(),nod:fx[i][19]==null?'':String(fx[i][19]).trim(),show:true});
+    let cross=[];for(let i=2;i<fx.length;i++)if(fx[i][21]!=null)cross.push({pair:String(fx[i][21]).trim(),buy:num(fx[i][22]),sell:num(fx[i][23]),show:true});
     o.usdlkr={labels:L,values:V,close:spot.close||(V.length?V[V.length-1]:null)};
     o.fxSwaps=sw;o.spot=spot;o.fxSummary=fsum;o.valueDates=vd;o.crossRates=cross;
   }
@@ -483,28 +498,28 @@ function parseWorkbook(wb,XLSX){
     o.foreign={labels:fL,values:fV};
     let cL=[],cV=[];for(let i=2;i<mc.length;i++)if(mc[i][3]!=null&&mc[i][4]!=null){cL.push(lbl(mc[i][3]));cV.push(num(mc[i][4]));}
     o.cbsl={labels:cL,values:cV};o.cbslHoldings=cV.length?cV[cV.length-1]:null;
-    let res=[];for(let i=2;i<mc.length;i++)if(mc[i][6]!=null)res.push({month:String(mc[i][6]).trim(),value:String(mc[i][7]).trim()});o.reserves=res;
-    let inf=[];for(let i=2;i<mc.length;i++)if(mc[i][9]!=null)inf.push({metric:String(mc[i][9]).trim(),apr:pct(mc[i][10]),may:pct(mc[i][11])});o.inflation=inf;
-    let srr=[];for(let i=2;i<mc.length;i++)if(mc[i][13]!=null)srr.push({date:String(mc[i][13]).trim(),rate:pct(mc[i][14])});o.srr=srr;
+    let res=[];for(let i=2;i<mc.length;i++)if(mc[i][6]!=null)res.push({month:String(mc[i][6]).trim(),value:String(mc[i][7]).trim(),show:true});o.reserves=res;
+    let inf=[];for(let i=2;i<mc.length;i++)if(mc[i][9]!=null)inf.push({metric:String(mc[i][9]).trim(),apr:pct(mc[i][10]),may:pct(mc[i][11]),show:true});o.inflation=inf;
+    let srr=[];for(let i=2;i<mc.length;i++)if(mc[i][13]!=null)srr.push({date:String(mc[i][13]).trim(),rate:pct(mc[i][14]),show:true});o.srr=srr;
     if(mc[2])o.tourism={apr:mc[2][17]==null?'':String(mc[2][17]).trim(),may:mc[2][18]==null?'':String(mc[2][18]).trim(),yoy:pct(mc[2][19])};
     if(mc[6])o.remittances={apr:mc[6][17]==null?'':String(mc[6][17]).trim(),may:mc[6][18]==null?'':String(mc[6][18]).trim(),yoy:pct(mc[6][19])};
     // New macro tables (each grows by row): GDP growth (21-22), Balance of Payment (24-25), Debt-to-GDP (27-28)
-    let gdp=[];for(let i=2;i<mc.length;i++)if(mc[i][21]!=null){let g=num(mc[i][22]);if(g!=null&&Math.abs(g)<=1.0001)g=g*100;gdp.push({period:String(mc[i][21]).trim(),growth:g==null?null:+g.toFixed(2)});}o.gdpGrowth=gdp;
-    let bop=[];for(let i=2;i<mc.length;i++)if(mc[i][24]!=null)bop.push({period:String(mc[i][24]).trim(),value:num(mc[i][25])});o.bop=bop;
-    let dgd=[];for(let i=2;i<mc.length;i++)if(mc[i][27]!=null){let r=num(mc[i][28]);if(r!=null&&Math.abs(r)<=3)r=r*100;dgd.push({period:String(mc[i][27]).trim(),ratio:r==null?null:+r.toFixed(1)});}o.debtGdp=dgd;
+    let gdp=[];for(let i=2;i<mc.length;i++)if(mc[i][21]!=null){let g=num(mc[i][22]);if(g!=null&&Math.abs(g)<=1.0001)g=g*100;gdp.push({period:String(mc[i][21]).trim(),growth:g==null?null:+g.toFixed(2),show:true});}o.gdpGrowth=gdp;
+    let bop=[];for(let i=2;i<mc.length;i++)if(mc[i][24]!=null)bop.push({period:String(mc[i][24]).trim(),value:num(mc[i][25]),show:true});o.bop=bop;
+    let dgd=[];for(let i=2;i<mc.length;i++)if(mc[i][27]!=null){let r=num(mc[i][28]);if(r!=null&&Math.abs(r)<=3)r=r*100;dgd.push({period:String(mc[i][27]).trim(),ratio:r==null?null:+r.toFixed(1),show:true});}o.debtGdp=dgd;
   }
   const gl=S(find('globalmarket')||'');
   if(gl.length){
     const ser=(dc,vc)=>{let L=[],V=[];for(let i=2;i<gl.length;i++)if(gl[i][dc]!=null&&gl[i][vc]!=null){L.push(lbl(gl[i][dc]));V.push(num(gl[i][vc]));}return{labels:L,values:V};};
     o.global10y=ser(0,1);o.wti=ser(3,4);o.brent=ser(3,5);o.dxy=ser(7,8);o.gold=ser(10,11);
-    let fomc=[];for(let i=2;i<gl.length;i++)if(gl[i][13]!=null)fomc.push({date:String(gl[i][13]).trim(),range:String(gl[i][14]).trim(),repo:pct(gl[i][15]),rrepo:pct(gl[i][16])});o.fomc=fomc;
+    let fomc=[];for(let i=2;i<gl.length;i++)if(gl[i][13]!=null)fomc.push({date:String(gl[i][13]).trim(),range:String(gl[i][14]).trim(),repo:pct(gl[i][15]),rrepo:pct(gl[i][16]),show:true});o.fomc=fomc;
   }
   const an=S(find('announcement')||'');
   if(an.length){let kd=[];for(let i=2;i<an.length;i++)if(an[i][0]!=null&&an[i][1]!=null)kd.push({label:String(an[i][0]).trim(),date:toISO(an[i][1]),show:true});o.keyDates=kd;}
   o.execSummary={usdlkr:(o.spot&&o.spot.close)||(o.usdlkr&&o.usdlkr.close)||'',liqDir:'',liqDelta:''};
   if(o.liquidity&&o.liquidity.current!=null&&o.liquidity.previous!=null){const dlt=+(o.liquidity.current-o.liquidity.previous).toFixed(2);o.execSummary.liqDir=dlt>=0?'increased':'decreased';o.execSummary.liqDelta=Math.abs(dlt);}
   o.marketNews=o.marketNews||[];o.date=new Date().toISOString().slice(0,10);
-  // Report date overrides — leave blank to auto-show today / yesterday (SL bank working days) on the dashboard
+  // Report dates — leave blank so dashboard auto-uses SL working days
   o.openingDate="";o.closingDate="";o.secondaryDate="";
   return o;
 }
