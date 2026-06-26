@@ -66,6 +66,8 @@ code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-siz
 .row-del:hover{background:#5a2226;color:#fff}
 .row-add{margin-top:6px;background:#0d2a1a;color:#6dd4a0;border:1px solid #1d4a32;border-radius:5px;cursor:pointer;font-size:11px;font-weight:600;padding:5px 12px}
 .row-add:hover{background:#15452a;color:#fff}
+.ed-news{width:100%;background:#0a1830;border:1px solid #1a3050;border-radius:6px;color:#eaf2fb;font-size:12px;font-family:inherit;padding:9px;resize:vertical;line-height:1.55;box-sizing:border-box}
+.ed-news:focus{outline:none;border-color:#4da3e8}
 .ed-tbl th{position:sticky;top:0;background:#0d1e38;color:#7fa3c8;font-weight:600;text-align:left;padding:5px 7px;border-bottom:1px solid #1a3050;white-space:nowrap}
 .ed-tbl td{padding:3px 5px;border-bottom:1px solid #0f2138;vertical-align:top}
 .ed-tbl input{padding:5px 7px;font-size:11px;min-width:70px}
@@ -214,7 +216,11 @@ function importExcel(ev){
       LOADED=parseWorkbook(wb,XLSX);
       try{renderFreshness(analyzeFreshness(wb,XLSX));}catch(fe){}
       renderSections();
-      st.style.color='#6dd4a0';st.textContent='✓ Imported '+f.name+'. Edit any section, then publish.';
+      saveLocal();   // keep this import across editor page refreshes
+      const L=LOADED.liquidity||{},U=LOADED.usdlkr||{};
+      const liqN=(L.values||[]).length,liqLast=(L.labels||[]).slice(-1)[0]||'—',fxLast=(U.labels||[]).slice(-1)[0]||'—';
+      st.style.color='#6dd4a0';
+      st.textContent='✓ Imported '+f.name+' — Liquidity '+liqN+' rows (last '+liqLast+') · USD/LKR last '+fxLast+'.  If a new row is missing here, the file you picked is an older copy.';
       showToast('✓ Excel imported');
     }catch(err){st.style.color='#e8917a';st.textContent='✗ '+err.message;showToast('Import failed: '+err.message,'err');}
     ev.target.value='';
@@ -223,6 +229,7 @@ function importExcel(ev){
 }
 function clearAll(){
   LOADED=null;
+  try{localStorage.removeItem('mvs_editor_loaded');}catch(e){}
   document.getElementById('sections').innerHTML='';
   document.getElementById('sections-hint').textContent='Cleared. Import an Excel to load sections.';
   const fb=document.getElementById('fresh-banner');if(fb)fb.style.display='none';
@@ -266,10 +273,10 @@ function renderNode(value,path){
   if(arrKeys.length>=1&&arrKeys.every(k=>value[k].length===value[arrKeys[0]].length)&&value[arrKeys[0]].length>3){
     const scalarKeys=keys.filter(k=>!arrKeys.includes(k));let h='';
     if(scalarKeys.length)h+='<div class="ed-fields">'+scalarKeys.map(k=>`<div><label>${k}</label>${renderNode(value[k],path+'.'+k)}</div>`).join('')+'</div>';
-    h+='<div class="ed-scroll"><table class="ed-tbl"><thead><tr><th>#</th>'+arrKeys.map(k=>`<th>${k}</th>`).join('')+'</tr></thead><tbody>';
+    h+='<div class="ed-scroll"><table class="ed-tbl"><thead><tr><th>#</th>'+arrKeys.map(k=>`<th>${k}</th>`).join('')+'<th></th></tr></thead><tbody>';
     const n=value[arrKeys[0]].length;
-    for(let i=0;i<n;i++){h+=`<tr><td style="color:#5a7a9a">${i+1}</td>`+arrKeys.map(k=>`<td>${renderNode(value[k][i],path+'.'+k+'.'+i)}</td>`).join('')+'</tr>';}
-    return h+'</tbody></table></div>';
+    for(let i=0;i<n;i++){h+=`<tr><td style="color:#5a7a9a">${i+1}</td>`+arrKeys.map(k=>`<td>${renderNode(value[k][i],path+'.'+k+'.'+i)}</td>`).join('')+`<td><button type="button" class="row-del" onclick="rowDelP('${path}',${i})" title="Delete this row">✕</button></td></tr>`;}
+    return h+'</tbody></table></div><button type="button" class="row-add" onclick="rowAddP(\''+path+'\')">+ Add row</button>';
   }
   return '<div class="ed-fields">'+keys.map(k=>{
     const v=value[k];
@@ -286,6 +293,9 @@ function countPoints(secKey){
 }
 function renderSections(){
   if(!LOADED){return;}
+  // remember which sections are open + scroll position so add/delete-row doesn't collapse the table
+  const openIds=[...document.querySelectorAll('#sections .sec.open')].map(el=>el.id);
+  const sy=window.scrollY;
   document.getElementById('sections-hint').textContent='Click a section to edit. Each has its own publish button.';
   const host=document.getElementById('sections');
   host.innerHTML=SECTIONS.map(sec=>{
@@ -294,9 +304,7 @@ function renderSections(){
     let body;
     if(sec.id==='results'){
       const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:[];
-      const N=Math.max(6,cur.length+1);
-      let rows='';for(let i=0;i<N;i++){rows+=`<div style="margin-bottom:6px"><input class="ed" data-path="marketNews.${i}" data-kind="str" placeholder="Result / announcement ${i+1} (leave blank to skip)" value="${escAttr(cur[i]||'')}" style="width:100%"></div>`;}
-      body=`<div class="ed-sub"><div class="ed-sub-t">Latest results — shown on the dashboard Announcements tab &amp; live bar</div>${rows}</div>`;
+      body=`<div class="ed-sub"><div class="ed-sub-t">Latest results — type or paste freely, one item per line (shown on the dashboard's Announcements tab &amp; live bar)</div><textarea id="news-box" class="ed-news" rows="9" placeholder="Paste or type your latest results here…&#10;One per line, e.g.&#10;T-bill auction fully subscribed&#10;IMF 4th review completed">${escHtml(cur.join('\n'))}</textarea></div>`;
     } else {
       body=sec.keys.map(k=>{
         if(LOADED[k]==null)return `<div class="ed-sub"><div class="ed-sub-t">${k}</div><span class="muted">No data in this workbook.</span></div>`;
@@ -316,6 +324,8 @@ function renderSections(){
         </div>
       </div></div>`;
   }).join('');
+  openIds.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('open');});
+  window.scrollTo(0,sy);
   markPublishStates();
 }
 function toggleAll(open){document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('open',open));}
@@ -330,8 +340,13 @@ function markPublishStates(){
 // read every input back into LOADED (keeps edits)
 function setByPath(root,path,v){const s=path.split('.');let o=root;for(let i=0;i<s.length-1;i++){const k=s[i];if(o[k]==null)o[k]=/^\d+$/.test(s[i+1])?[]:{};o=o[k];}o[s[s.length-1]]=v;}
 function getByPath(root,path){const s=path.split('.');let o=root;for(let i=0;i<s.length;i++){if(o==null)return null;o=o[s[i]];}return o;}
-function rowDel(path,i){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)&&i>=0&&i<arr.length){arr.splice(i,1);renderSections();}}
-function rowAdd(path){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)){const cols=arr.length?[...new Set(arr.flatMap(o=>Object.keys(o)))]:['label','value'];const row={};cols.forEach(c=>{row[c]=(c==='show')?true:'';});arr.push(row);renderSections();}}
+function saveLocal(){try{if(LOADED)localStorage.setItem('mvs_editor_loaded',JSON.stringify(LOADED));}catch(e){}}
+function rowDel(path,i){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)&&i>=0&&i<arr.length){arr.splice(i,1);saveLocal();renderSections();}}
+function rowAdd(path){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)){const cols=arr.length?[...new Set(arr.flatMap(o=>Object.keys(o)))]:['label','value'];const row={};cols.forEach(c=>{row[c]=(c==='show')?true:'';});arr.push(row);saveLocal();renderSections();}}
+// Parallel-array (series) tables: keep every column array the same length
+function _arrKeysOf(obj){return Object.keys(obj).filter(k=>Array.isArray(obj[k])&&obj[k].every(x=>x===null||typeof x!=='object'));}
+function rowDelP(path,i){applyEdits();const obj=getByPath(LOADED,path);if(obj&&typeof obj==='object'){_arrKeysOf(obj).forEach(k=>{if(i>=0&&i<obj[k].length)obj[k].splice(i,1);});saveLocal();renderSections();}}
+function rowAddP(path){applyEdits();const obj=getByPath(LOADED,path);if(obj&&typeof obj==='object'){_arrKeysOf(obj).forEach(k=>obj[k].push(''));saveLocal();renderSections();}}
 function applyEdits(){
   document.querySelectorAll('#sections input.ed').forEach(el=>{
     const p=el.getAttribute('data-path'),kind=el.getAttribute('data-kind');let v;
@@ -339,6 +354,9 @@ function applyEdits(){
     else{v=el.value;if(kind==='num'||kind==='null'){const s=v.trim();v=s===''?(kind==='num'?null:null):(isNaN(+s)||/[^0-9.+\-eE]/.test(s)?s:+s);}}
     setByPath(LOADED,p,v);
   });
+  const nb=document.getElementById('news-box');
+  if(nb&&LOADED)LOADED.marketNews=nb.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  saveLocal();
 }
 function recomputeMeta(p){
   p.date=new Date().toISOString().slice(0,10);
@@ -540,6 +558,8 @@ function parseWorkbook(wb,XLSX){
 
 // ── INIT ─────────────────────────────────────────────────
 showBadge();
+// Restore the last imported/edited data so a page refresh doesn't wipe your work
+(function restoreLocal(){try{const s=localStorage.getItem('mvs_editor_loaded');if(s){LOADED=JSON.parse(s);renderSections();const st=document.getElementById('import-status');if(st){st.style.color='#9fb6d4';st.textContent='Restored your last imported data (kept across refresh). Re-import the Excel to refresh it.';}}}catch(e){}})();
 loadPublished();
 </script>
 </body></html>
