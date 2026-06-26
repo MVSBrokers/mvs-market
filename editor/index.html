@@ -395,7 +395,7 @@ let toastT;function showToast(msg,type){const t=document.getElementById('toast')
 
 // ── FRESHNESS ────────────────────────────────────────────
 function analyzeFreshness(wb,XLSX,nowOverride){
-  const S=n=>{const ws=wb.Sheets[n];return ws?XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null}):[];};
+  const S=n=>{const ws=wb.Sheets[n];if(!ws)return [];let _mr=0,_mc=0;for(const k in ws){if(k[0]==='!')continue;const c=XLSX.utils.decode_cell(k);if(c.r>_mr)_mr=c.r;if(c.c>_mc)_mc=c.c;}ws['!ref']=XLSX.utils.encode_range({s:{r:0,c:0},e:{r:_mr,c:_mc}});return XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});};
   const sheets=wb.SheetNames, _IGN=/dailydata|weeklydata|monthlydata|others/, find=name=>sheets.find(s=>{const t=s.toLowerCase().replace(/\s+/g,"");return !_IGN.test(t)&&t.includes(name);});
   const MON3=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"],MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const US_HOL=new Set(["2026-01-01","2026-01-19","2026-02-16","2026-05-25","2026-06-19","2026-07-03","2026-09-07","2026-10-12","2026-11-11","2026-11-26","2026-12-25"]);
@@ -454,7 +454,7 @@ function gotoSection(id){
 
 // ── PARSER ───────────────────────────────────────────────
 function parseWorkbook(wb,XLSX){
-  const S=n=>{const ws=wb.Sheets[n];return ws?XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null}):[];};
+  const S=n=>{const ws=wb.Sheets[n];if(!ws)return [];let _mr=0,_mc=0;for(const k in ws){if(k[0]==='!')continue;const c=XLSX.utils.decode_cell(k);if(c.r>_mr)_mr=c.r;if(c.c>_mc)_mc=c.c;}ws['!ref']=XLSX.utils.encode_range({s:{r:0,c:0},e:{r:_mr,c:_mc}});return XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});};
   const sheets=wb.SheetNames, _IGN=/dailydata|weeklydata|monthlydata|others/, find=name=>sheets.find(s=>{const t=s.toLowerCase().replace(/\s+/g,"");return !_IGN.test(t)&&t.includes(name);});
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const xlDate=v=>{if(v instanceof Date){const _t=new Date(v.getTime()+432e5);return new Date(_t.getUTCFullYear(),_t.getUTCMonth(),_t.getUTCDate());}if(typeof v==='number'&&v>40000&&v<60000){const d=new Date(Math.round((v-(v>59?25569:25568))*86400*1000));return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());}if(typeof v==='string'){const s=v.trim();const m1=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);if(m1)return new Date(+m1[3],+m1[1]-1,+m1[2]);const m2=s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);if(m2)return new Date(+m2[1],+m2[2]-1,+m2[3]);}return null;};
