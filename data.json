@@ -284,12 +284,12 @@
  },
  "bonds": {
   "headers": [
-   "19th Jun",
-   "22nd Jun",
-   "23rd Jun",
-   "24th Jun",
-   "25th Jun",
-   "26th Jun"
+   "Day 1",
+   "Day 2",
+   "Day 3",
+   "Day 4",
+   "Day 5",
+   "Day 6"
   ],
   "rows": [
    {
@@ -712,151 +712,151 @@
  ],
  "bondSecondary": [
   {
-   "maturity": "7/3/2026 ",
+   "maturity": "7/3/2026 12:00:00 AM",
    "bid": 9.6,
    "ask": 9.9,
    "show": true
   },
   {
-   "maturity": "7/3/2026 ",
+   "maturity": "7/3/2026 12:00:00 AM",
    "bid": 9.6,
    "ask": 9.9,
    "show": true
   },
   {
-   "maturity": "7/3/2026 ",
+   "maturity": "7/3/2026 12:00:00 AM",
    "bid": 9.6,
    "ask": 9.9,
    "show": true
   },
   {
-   "maturity": "7/10/2026 ",
+   "maturity": "7/10/2026 12:00:00 AM",
    "bid": 9.6,
    "ask": 9.9,
    "show": true
   },
   {
-   "maturity": "7/10/2026 ",
+   "maturity": "7/10/2026 12:00:00 AM",
    "bid": 9.6,
    "ask": 9.9,
    "show": true
   },
   {
-   "maturity": "7/10/2026 ",
+   "maturity": "7/10/2026 12:00:00 AM",
    "bid": 9.6,
    "ask": 9.9,
    "show": true
   },
   {
-   "maturity": "7/17/2026 ",
+   "maturity": "7/17/2026 12:00:00 AM",
    "bid": 9.7,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "7/17/2026 ",
+   "maturity": "7/17/2026 12:00:00 AM",
    "bid": 9.7,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "7/17/2026 ",
+   "maturity": "7/17/2026 12:00:00 AM",
    "bid": 9.7,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "7/24/2026 ",
+   "maturity": "7/24/2026 12:00:00 AM",
    "bid": 9.7,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "7/24/2026 ",
+   "maturity": "7/24/2026 12:00:00 AM",
    "bid": 9.7,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "7/24/2026 ",
+   "maturity": "7/24/2026 12:00:00 AM",
    "bid": 9.7,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "7/31/2026 ",
+   "maturity": "7/31/2026 12:00:00 AM",
    "bid": 9.7,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "7/31/2026 ",
+   "maturity": "7/31/2026 12:00:00 AM",
    "bid": 9.8,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "7/31/2026 ",
+   "maturity": "7/31/2026 12:00:00 AM",
    "bid": 9.8,
    "ask": 9.95,
    "show": true
   },
   {
-   "maturity": "8/7/2026 ",
+   "maturity": "8/7/2026 12:00:00 AM",
    "bid": 9.8,
    "ask": 10,
    "show": true
   },
   {
-   "maturity": "8/7/2026 ",
+   "maturity": "8/7/2026 12:00:00 AM",
    "bid": 9.85,
    "ask": 10,
    "show": true
   },
   {
-   "maturity": "8/7/2026 ",
+   "maturity": "8/7/2026 12:00:00 AM",
    "bid": 9.85,
    "ask": 10,
    "show": true
   },
   {
-   "maturity": "8/14/2026 ",
+   "maturity": "8/14/2026 12:00:00 AM",
    "bid": 9.85,
    "ask": 10,
    "show": true
   },
   {
-   "maturity": "8/14/2026 ",
+   "maturity": "8/14/2026 12:00:00 AM",
    "bid": 9.9,
    "ask": 10,
    "show": true
   },
   {
-   "maturity": "8/14/2026 ",
+   "maturity": "8/14/2026 12:00:00 AM",
    "bid": 9.9,
    "ask": 10,
    "show": true
   },
   {
-   "maturity": "8/21/2026 ",
+   "maturity": "8/21/2026 12:00:00 AM",
    "bid": 9.9,
    "ask": 10.05,
    "show": true
   },
   {
-   "maturity": "8/21/2026 ",
+   "maturity": "8/21/2026 12:00:00 AM",
    "bid": 9.9,
    "ask": 10.05,
    "show": true
   },
   {
-   "maturity": "8/21/2026 ",
+   "maturity": "8/21/2026 12:00:00 AM",
    "bid": 9.9,
    "ask": 10.05,
    "show": true
   },
   {
-   "maturity": "8/28/2026 ",
+   "maturity": "8/28/2026 12:00:00 AM",
    "bid": 9.9,
    "ask": 10.05,
    "show": true
@@ -1132,10 +1132,10 @@
   }
  },
  "spot": {
-  "open": "337.10/337.40",
-  "close": "336.40/336.60",
-  "low": "336.40",
-  "high": "337.20"
+  "open": "337.10/ 337.40",
+  "close": "336.40 / 336.60",
+  "low": "336.4",
+  "high": "337.2"
  },
  "crossRates": [
   {
@@ -1192,7 +1192,7 @@
    "wa": 336.7271
   },
   {
-   "tenor": "Sub Total (Short)",
+   "tenor": "Sub Total (Spot)",
    "volume": 80.6,
    "wa": null
   },
@@ -1705,22 +1705,22 @@
  "bop": [
   {
    "period": "2022",
-   "value": -0.028,
+   "value": -2.8,
    "show": true
   },
   {
    "period": "2023",
-   "value": 0.028,
+   "value": 2.8,
    "show": true
   },
   {
    "period": "2024",
-   "value": 0.029,
+   "value": 2.9,
    "show": true
   },
   {
    "period": "2025",
-   "value": 0.018,
+   "value": 1.8,
    "show": true
   }
  ],
@@ -3085,16 +3085,11 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "336.40/336.60",
+  "usdlkr": "336.40 / 336.60",
   "liqDir": "decreased",
   "liqDelta": 3.74
  },
- "marketNews": [
-  "Treasury Bond Auction Results",
-  "The accepted weighted average yields were:",
-  "15 Oct 2030 Maturity: 11.44%",
-  "15 Mar 2035 Maturity: 11.88%"
- ],
+ "marketNews": [],
  "date": "2026-06-27",
  "openingDate": "",
  "closingDate": "",
