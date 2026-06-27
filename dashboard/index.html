@@ -308,7 +308,7 @@ canvas{max-width:100%!important}
       </div>
     </div>
     <div class="panel">
-      <div class="panel-title">Treasury Bond (Yield Curve)<span class="close-date" id="tbond-close"></span></div>
+      <div class="panel-title">Treasury Bond Average Rate<span class="close-date" id="tbond-close"></span></div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
       <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#ff8a78">low</span> → <span style="color:#7ee0a8">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
@@ -1050,8 +1050,8 @@ function buildCharts(d){
   const todayD=tCol>=0?yBRows.map(r=>bondMid((r.values||[])[tCol])):[];
   const yestD =yCol>=0?yBRows.map(r=>bondMid((r.values||[])[yCol])):[];
   const yDS=[];
-  if(yCol>=0)yDS.push({label:"Yesterday ("+yBHead[yCol]+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
-  yDS.push({label:"Today ("+(tCol>=0?yBHead[tCol]:"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
+  if(yCol>=0)yDS.push({label:"Previous ("+yBHead[yCol]+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
+  yDS.push({label:"Latest ("+(tCol>=0?yBHead[tCol]:"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
   charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels,datasets:yDS},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:10},boxWidth:18,usePointStyle:false,padding:12}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
 
   // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
