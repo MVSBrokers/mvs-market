@@ -284,12 +284,12 @@
  },
  "bonds": {
   "headers": [
-   "19th Jun",
-   "22rndJun",
-   "23rd Jun",
-   "24th Jun",
-   "25th Jun",
-   "26th Jun"
+   "Day 1",
+   "Day 2",
+   "Day 3",
+   "Day 4",
+   "Day 5",
+   "Day 6"
   ],
   "rows": [
    {
@@ -1866,9 +1866,7 @@
    "17 Jun",
    "18 Jun",
    "22 Jun",
-   "24 Jun",
-   "25 Jun",
-   "26 Jun"
+   "24 Jun"
   ],
   "values": [
    4.19,
@@ -1989,9 +1987,7 @@
    4.49,
    4.46,
    4.51,
-   4.41,
-   "4.39",
-   "4.37"
+   4.41
   ]
  },
  "wti": {
@@ -3092,8 +3088,8 @@
  "marketNews": [
   "Treasury Bond Auction Results",
   "The Treasury fully accepted both Treasury bond auctions. The accepted weighted average yields were:",
-  "15 Oct 2030 Maturity  :  11.44%  (Fully Accepted)",
-  "15 Mar 2035 Maturity :  11.88%   (Fully Accepted)"
+  "15 Oct 2030 Maturity  :  11.44% (Fully Accepted)",
+  "15 Mar 2035 Maturity  : 11.88% (Fully Accepted)"
  ],
  "date": "2026-06-27",
  "openingDate": "",
