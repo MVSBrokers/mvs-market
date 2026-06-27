@@ -3102,6 +3102,7 @@
  "fxVolDate": "",
  "hidden": {
   "srr": true,
-  "secondary": true
+  "secondary": true,
+  "bop": true
  }
 }
