@@ -1132,8 +1132,8 @@
   }
  },
  "spot": {
-  "open": "337.25",
-  "close": "336.50",
+  "open": "337.10/337.40",
+  "close": "336.40/336.60",
   "low": "336.40",
   "high": "337.20"
  },
@@ -3085,13 +3085,15 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "336.50",
+  "usdlkr": "336.40/336.60",
   "liqDir": "decreased",
   "liqDelta": 3.74
  },
  "marketNews": [
-  "15 Oct 2030 Maturity : 11.44% (Fully Accepted)",
-  "15 Mar 2035 Maturity : 11.88% (Fully Accepted)"
+  "Treasury Bond Auction Results",
+  "The Treasury fully accepted both Treasury bond auctions. The accepted weighted average yields were:",
+  "15 Oct 2030 Maturity: 11.44% (Fully Accepted)",
+  "15 Mar 2035 Maturity: 11.88% (Fully Accepted)"
  ],
  "date": "2026-06-27",
  "openingDate": "",
