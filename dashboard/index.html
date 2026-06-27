@@ -592,6 +592,7 @@ async function loadData(silent=false){
 }
 
 function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=(val!=null&&val!=="")? val:"—";}
+function setFmt(id,val){const el=document.getElementById(id);if(!el)return;if(val==null||String(val).trim()===""){el.textContent="—";return;}const n=parseFloat(String(val).replace(/,/g,""));el.textContent=isNaN(n)?String(val):n.toFixed(2);}
 function escHtml(s){return String(s==null?"":s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 // Upcoming key dates with live "days remaining" countdown
 function getKeyEvents(d){
@@ -719,17 +720,17 @@ function render(d){
   const lu=document.getElementById("last-updated");
   if(lu)lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
-  setText("cmmin",d.callMarket?.min);setText("rmmin",d.repoMarket?.min);
-  setText("cmmax",d.callMarket?.max);setText("rmmax",d.repoMarket?.max);
-  setText("cmwa",d.callMarket?.wa); setText("rmwa",d.repoMarket?.wa);
-  setText("cmvol",d.callMarket?.vol);setText("rmvol",d.repoMarket?.vol);
-  setText("liqcur",d.liquidity?.current);setText("liqprev",d.liquidity?.previous);
-  setText("sw1ws",d.fxSwaps?.["1w"]?.sell);setText("sw1wb",d.fxSwaps?.["1w"]?.buy);
-  setText("sw1ms",d.fxSwaps?.["1m"]?.sell);setText("sw1mb",d.fxSwaps?.["1m"]?.buy);
-  setText("sw2ms",d.fxSwaps?.["2m"]?.sell);setText("sw2mb",d.fxSwaps?.["2m"]?.buy);
-  setText("sw3ms",d.fxSwaps?.["3m"]?.sell);setText("sw3mb",d.fxSwaps?.["3m"]?.buy);
-  setText("sw6ms",d.fxSwaps?.["6m"]?.sell);setText("sw6mb",d.fxSwaps?.["6m"]?.buy);
-  setText("sw1ys",d.fxSwaps?.["1y"]?.sell);setText("sw1yb",d.fxSwaps?.["1y"]?.buy);
+  setFmt("cmmin",d.callMarket?.min);setFmt("rmmin",d.repoMarket?.min);
+  setFmt("cmmax",d.callMarket?.max);setFmt("rmmax",d.repoMarket?.max);
+  setFmt("cmwa",d.callMarket?.wa); setFmt("rmwa",d.repoMarket?.wa);
+  setFmt("cmvol",d.callMarket?.vol);setFmt("rmvol",d.repoMarket?.vol);
+  setFmt("liqcur",d.liquidity?.current);setFmt("liqprev",d.liquidity?.previous);
+  setFmt("sw1ws",d.fxSwaps?.["1w"]?.sell);setFmt("sw1wb",d.fxSwaps?.["1w"]?.buy);
+  setFmt("sw1ms",d.fxSwaps?.["1m"]?.sell);setFmt("sw1mb",d.fxSwaps?.["1m"]?.buy);
+  setFmt("sw2ms",d.fxSwaps?.["2m"]?.sell);setFmt("sw2mb",d.fxSwaps?.["2m"]?.buy);
+  setFmt("sw3ms",d.fxSwaps?.["3m"]?.sell);setFmt("sw3mb",d.fxSwaps?.["3m"]?.buy);
+  setFmt("sw6ms",d.fxSwaps?.["6m"]?.sell);setFmt("sw6mb",d.fxSwaps?.["6m"]?.buy);
+  setFmt("sw1ys",d.fxSwaps?.["1y"]?.sell);setFmt("sw1yb",d.fxSwaps?.["1y"]?.buy);
 
   const tb=document.getElementById("tbillRows");tb.innerHTML="";
   // Helper: append current year to short dates like "16 Jun" → "16 Jun 2026"
@@ -876,17 +877,17 @@ function render(d){
   setText("op-exdelta",d.execSummary?.liqDelta);
 
   // ── NEW: Closing Report ──
-  setText("cl-usd",d.usdlkr?.close||d.execSummary?.usdlkr);
-  setText("cl-liq",d.liquidity?.current);
+  setFmt("cl-usd",d.usdlkr?.close||d.execSummary?.usdlkr);
+  setFmt("cl-liq",d.liquidity?.current);
   const lt=((d.tbills||[]).filter(r=>r.show!==false))[0]||{};
-  setText("cl-3m",lt.m3);setText("cl-6m",lt.m6);setText("cl-12m",lt.m12);
+  setFmt("cl-3m",lt.m3);setFmt("cl-6m",lt.m6);setFmt("cl-12m",lt.m12);
   const cn=document.getElementById("cl-news");
   if(cn){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());cn.innerHTML=items.length?items.map(t=>"• "+escHtml(t)).join("<br>"):"—";}
 
   // ── NEW: Latest Market Announcements ──
   renderEvents(d);
   const nl=document.getElementById("news-list");
-  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());nl.innerHTML=items.length?`<div class="news-card" style="line-height:2">${items.map((t,i)=>`<div style="padding:3px 0">${escHtml(t)}</div>`).join('')}</div>`:'<div class="news-card">No announcements published.</div>';}
+  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());nl.innerHTML=items.length?`<div class="news-card" style="line-height:2;font-size:13px;white-space:pre-wrap">${escHtml(items.join("\n"))}</div>`:'<div class="news-card">No announcements published.</div>';}
 
   applyHidden(d);
   renderExtras(d);
