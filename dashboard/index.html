@@ -102,8 +102,8 @@ canvas{max-width:100%!important}
 .cs-chg{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap}
 .series-toggle{display:flex;align-items:center;gap:5px;margin:7px 0 5px}
 .series-toggle .st-lbl{font-size:9px;color:#5a7a9a;text-transform:uppercase;letter-spacing:.6px;margin-right:2px}
-.cs-chg.up{color:#ff8a78;background:rgba(255,138,120,0.12)}
-.cs-chg.down{color:#6dd4a0;background:rgba(109,212,160,0.12)}
+.cs-chg.up{color:#6dd4a0;background:rgba(109,212,160,0.12)}
+.cs-chg.down{color:#ff8a78;background:rgba(255,138,120,0.12)}
 .cs-chg.flat{color:#7fa3c8;background:rgba(77,163,232,0.10)}
 @media(max-width:1024px){.grid-2x2,.full-grid{grid-template-columns:1fr}}
 @media(max-width:600px){
@@ -310,7 +310,7 @@ canvas{max-width:100%!important}
     <div class="panel">
       <div class="panel-title">Treasury Bond (Yield Curve)<span class="close-date" id="tbond-close"></span></div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
-      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span> → <span style="color:#ff8a78">high</span> yield · <span style="color:#ff8a78">▴ up</span> / <span style="color:#7ee0a8">▾ down</span> vs prev day</div>
+      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#ff8a78">low</span> → <span style="color:#7ee0a8">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
         <table style="font-size:9px">
           <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
@@ -321,7 +321,7 @@ canvas{max-width:100%!important}
   </div>
 
   <div class="panel full-width">
-    <div class="panel-title">T-Bond Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
+    <div class="panel-title" data-sec="secondary">T-Bond Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
     <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
       <table style="font-size:10px">
         <thead><tr><th>Maturity Date</th><th>Bid (%)</th><th>Ask (%)</th></tr></thead>
@@ -544,7 +544,7 @@ function bondMid(v){
 function heatColor(v,min,max){
   if(v==null||!(max>min))return "transparent";
   const t=Math.max(0,Math.min(1,(v-min)/(max-min)));
-  const hue=(1-t)*140;           // low yield = green (140), high yield = red (0)
+  const hue=t*140;               // low yield = red (0), high yield = green (140)ld = red (0)
   return "hsla("+hue.toFixed(0)+",75%,50%,"+(0.18+t*0.22).toFixed(2)+")";  // transparent, deeper for higher
 }
 // Colour a cell by the DIRECTION of yield change vs the previous day: down = green, up = red.
@@ -765,7 +765,7 @@ function render(d){
         let prev=null;for(let k=ci-1;k>=0;k--){if(mids[k]!=null){prev=mids[k];break;}}
         const delta=prev!=null?+(m-prev).toFixed(3):null;
         let arrow="",acol="";
-        if(delta!=null&&delta!==0){ if(delta<0){arrow="\u25be";acol="#7ee0a8";}else{arrow="\u25b4";acol="#ff8a78";} }
+        if(delta!=null&&delta!==0){ if(delta<0){arrow="\u25be";acol="#ff8a78";}else{arrow="\u25b4";acol="#7ee0a8";} }
         td.innerHTML=m.toFixed(2)+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
         td.style.background=heatColor(m,rmn,rmx);   // per-row colour
         td.style.color="#eaf2fb";td.style.fontWeight="600";
@@ -833,7 +833,7 @@ function render(d){
           let prev=null;for(let k=ci-1;k>=0;k--){if(mids[k]!=null){prev=mids[k];break;}}
           const delta=prev!=null?+(m-prev).toFixed(3):null;
           let arrow="",acol="";
-          if(delta!=null&&delta!==0){if(delta<0){arrow="\u25be";acol="#7ee0a8";}else{arrow="\u25b4";acol="#ff8a78";}}
+          if(delta!=null&&delta!==0){if(delta<0){arrow="\u25be";acol="#ff8a78";}else{arrow="\u25b4";acol="#7ee0a8";}}
           td.innerHTML=m.toFixed(2)+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
           td.style.background=heatColor(m,rmn,rmx);td.style.color="#eaf2fb";td.style.fontWeight="600";
         }else{td.textContent="—";td.style.color="#3a5575";}
@@ -858,8 +858,9 @@ function render(d){
   // ── NEW: Latest Market Announcements ──
   renderEvents(d);
   const nl=document.getElementById("news-list");
-  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());nl.innerHTML=items.length?items.map((t,i)=>`<div class="news-card"><span class="news-idx">${i+1}.</span>${escHtml(t)}</div>`).join(""):'<div class="news-card">No announcements published.</div>';}
+  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());nl.innerHTML=items.length?`<div class="news-card">${items.map((t,i)=>`<div style="padding:4px 0${i>0?';border-top:1px solid #1a3050':''};margin-top:${i>0?'6':'0'}px"><span class="news-idx">${i+1}.</span>${escHtml(t)}</div>`).join('')}</div>`:'<div class="news-card">No announcements published.</div>';}
 
+  applyHidden(d);
   renderExtras(d);
   buildCharts(d);
 }
@@ -916,6 +917,16 @@ function renderExtras(d){
   set('dyn-op-srr',(d.srr||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${dash(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
 }
 
+function applyHidden(d){
+  const h=(d&&d.hidden&&typeof d.hidden==='object')?d.hidden:{};
+  document.querySelectorAll('[data-sec]').forEach(el=>{
+    const p=el.closest('.panel')||el;
+    p.style.display=h[el.getAttribute('data-sec')]?'none':'';
+  });
+  document.querySelectorAll('[data-sec-self]').forEach(el=>{
+    el.style.display=h[el.getAttribute('data-sec-self')]?'none':'';
+  });
+}
 function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
 
 // Compact "recent values" table under a chart: newest-first, with day-on-day change
