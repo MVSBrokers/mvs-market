@@ -213,7 +213,8 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: MARKET OPEN REPORT (full Summary-report replica from get_data) -->
   <div class="page" id="page-open" style="display:block">
-        <div class="grid-2x2">
+    <div class="panel full-width"><div class="panel-title" id="opening-report-title">Opening Report</div></div>
+    <div class="grid-2x2">
       <div class="panel">
         <div class="panel-title" id="op-fxsum-title">Volume of FX Market</div>
         <canvas id="opFxSumChart" style="max-height:190px"></canvas>
@@ -223,7 +224,7 @@ canvas{max-width:100%!important}
         </table>
       </div>
       <div class="panel">
-        <div class="panel-title">Value Dates<span class="close-date" id="vd-close"></span></div>
+        <div class="panel-title">Value Dates</div>
         <div style="max-height:430px;overflow-y:auto"><table style="font-size:11px">
           <thead><tr><th>Tenor</th><th>Value Date</th><th>NOD</th></tr></thead>
           <tbody id="dyn-op-vd"></tbody>
@@ -235,7 +236,8 @@ canvas{max-width:100%!important}
   <!-- PAGE: MONEY MARKET -->
   <div class="page" id="page-mm">
   <!-- MONEY MARKET HEADER -->
-  
+  <div class="panel full-width"><div class="panel-title">Money Market</div></div>
+
   <div class="grid-2x2">
     <div class="panel">
       <div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
@@ -336,13 +338,13 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: FX -->
   <div class="page" id="page-fx">
-
-  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">USD/LKR FX</div></div>
+  <!-- FX MARKET HEADER -->
+  <div class="panel full-width"><div class="panel-title">USD / FX Market</div></div>
 
   <div class="grid-2x2">
     <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
     <div class="panel">
-      <div class="panel-title">Swaps (per day)<span class="close-date" id="fx-close"></span></div>
+      <div class="panel-title">FX Swaps (per day)<span class="close-date" id="fx-close"></span></div>
       <table>
         <thead><tr><th>Tenor</th><th>Sell/Buy</th><th>Buy/Sell</th></tr></thead>
         <tbody>
@@ -357,34 +359,28 @@ canvas{max-width:100%!important}
     </div>
   </div>
 
-  <div class="grid-2x2" style="margin-top:0">
+  <div class="grid-2x2">
     <div class="panel">
-      <div class="panel-title">Market Overview (Spot)<span class="close-date" id="fxov-close"></span></div>
+      <div class="panel-title">FX Market Overview (Spot)<span class="close-date" id="fxov-close"></span></div>
       <table style="font-size:12px">
         <tbody id="dyn-spot"></tbody>
       </table>
     </div>
-    <div class="panel" style="opacity:0;pointer-events:none"></div>
-  </div>
-
-  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">Cross-Currency Rates</div></div>
-
-  <div class="grid-2x2">
     <div class="panel">
-      <div class="panel-title">Cross-Currency Rates<span class="close-date" id="cross-close"></span></div>
+      <div class="panel-title">Cross-Currency Rates</div>
       <table style="font-size:11px">
         <thead><tr><th>Currency</th><th>Buying</th><th>Selling</th></tr></thead>
         <tbody id="dyn-cross"></tbody>
       </table>
     </div>
-    <div class="panel" style="opacity:0;pointer-events:none"></div>
   </div>
 
   </div>
 
   <!-- PAGE: MACRO ECONOMY -->
   <div class="page" id="page-macro">
-        <div class="grid-2x2">
+    <div class="panel full-width"><div class="panel-title">Macro Economy — Sri Lanka</div></div>
+    <div class="grid-2x2">
       <div class="panel">
         <div class="panel-title">Inflation (CCPI vs NCPI)</div>
         <canvas id="inflChart" style="max-height:185px;margin-bottom:10px"></canvas>
@@ -440,7 +436,8 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: GLOBAL MARKET -->
   <div class="page" id="page-global">
-    
+    <div class="panel full-width"><div class="panel-title">Global Market</div></div>
+
     <!-- US bond rate + Fed rate -->
     <div class="grid-2x2">
       <div class="panel">
@@ -944,10 +941,9 @@ function renderExtras(d){
    const ot=document.getElementById("opening-report-title");
    if(ot){const od=ov(d.openingDate)||fmtOrd(todayD);ot.innerHTML="Opening Report — "+od;}
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(todayD);
-   ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=cdEl?"Closing: "+cdEl:"";});
-   {const e=document.getElementById("vd-close");if(e)e.innerHTML=cdEl||"";}
+   ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=cdEl?"Closing: "+cdEl:"";});
    const ft=document.getElementById("op-fxsum-title");
-   if(ft)ft.innerHTML="Volume of FX Market"+(cdEl?'<span class="close-date">'+cdEl+"</span>":"");}
+   if(ft)ft.textContent="Volume of FX Market — "+fmtLong(yestD);}
   set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>`<tr><td>${escHtml(v.tenor)}</td><td>${escHtml(v.date)}</td><td style="color:#9fb6d4">${escHtml(v.nod||'')}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   set('dyn-op-srr',(d.srr||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${fmt2(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
 }
