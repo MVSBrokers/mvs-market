@@ -19,23 +19,23 @@
  "callMarket": {
   "min": 8.4,
   "max": 9.25,
-  "wa": 9.22,
-  "vol": 32.09
+  "wa": 9.23,
+  "vol": 31.46
  },
  "repoMarket": {
-  "min": 9.23,
+  "min": 9.22,
   "max": 9.25,
-  "wa": 9.24,
-  "vol": 85.31
+  "wa": 9.25,
+  "vol": 81.14
  },
  "windows": {
   "sdf": {
-   "cur": 23,
-   "prev": 22
+   "cur": 102.43,
+   "prev": 82.48
   },
   "slf": {
-   "cur": 82.48,
-   "prev": 80.82
+   "cur": 19.87,
+   "prev": 20.86
   }
  },
  "liquidity": {
@@ -157,7 +157,8 @@
    "23 Jun",
    "24 Jun",
    "25 Jun",
-   "26 Jun"
+   "26 Jun",
+   "30 Jun"
   ],
   "values": [
    128.14,
@@ -277,7 +278,8 @@
    64.26,
    61.04,
    65.36,
-   61.62
+   61.62,
+   "82.56"
   ],
   "current": 61.62,
   "previous": 65.36
@@ -1135,8 +1137,8 @@
  },
  "spot": {
   "open": "336.25/ 336.75",
-  "close": "336.20 / 336.40",
-  "low": "336",
+  "close": "336.10 / 336.40",
+  "low": "336.00",
   "high": "336.25"
  },
  "crossRates": [
@@ -3121,11 +3123,16 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "336.20 / 336.40",
+  "usdlkr": "336.10 / 336.40",
   "liqDir": "decreased",
   "liqDelta": 3.74
  },
- "marketNews": [],
+ "marketNews": [
+  "Treasury Bond Auction Results",
+  "The accepted weighted average yields were:",
+  "15 Oct 2030 Maturity: 11.44%",
+  "15 Mar 2035 Maturity: 11.88%"
+ ],
  "date": "2026-06-30",
  "openingDate": "",
  "closingDate": "",
