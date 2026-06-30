@@ -575,10 +575,12 @@ function calcNOD(tenorRaw){
   const t=String(tenorRaw||"").toLowerCase().trim();
   const d=calcValueDate(tenorRaw);if(!d)return"";
   const dd=new Date(d);dd.setHours(0,0,0,0);
-  // Cash/Today/Tom/Spot are counted from today; everything after Spot (SN, SNN, 1 Week, 1 Month etc.)
-  // is counted from the Spot date instead, so NOD reflects days-from-spot for forward tenors.
+  // Cash always shows NOD=0 — its date and base both follow the same Value Dates page date (slValueDay).
+  // Tom/Spot count from today; forward tenors (SN, SNN, 1 Week, 1 Month etc.) count from the Spot date.
   let base;
-  if(/cash|^today/.test(t)||/^tom/.test(t)||/^spot$/.test(t)){
+  if(/cash|^today/.test(t)){
+    base=slValueDay();base.setHours(0,0,0,0);
+  }else if(/^tom/.test(t)||/^spot$/.test(t)){
     base=new Date();base.setHours(0,0,0,0);
   }else{
     base=_spotDate(new Date());base.setHours(0,0,0,0);
