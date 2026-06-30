@@ -558,6 +558,8 @@ function calcValueDate(tenorRaw){
   if(/cash|^today/.test(t))result=_isBothWork(today)?today:_addWorkDays(today,1,_isBothWork);
   else if(/^tom/.test(t))result=_addWorkDays(today,1,_isBothWork);
   else if(/^spot$/.test(t))result=spot;
+  else if(/^snn$/.test(t))result=_addWorkDays(spot,2,_isBothWork);   // Spot/Next/Next = Spot + 2 working days
+  else if(/^sn$/.test(t))result=_addWorkDays(spot,1,_isBothWork);    // Spot/Next = Spot + 1 working day
   else{
     const wkM=t.match(/(\d+)\s*week/);
     const moM=t.match(/(\d+)\s*month/);
