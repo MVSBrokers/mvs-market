@@ -516,6 +516,28 @@ function slOpeningDay(){
   const after830=(slHour>8)||(slHour===8&&slMin>=30);
   return after830?slWorkDay(2):slWorkDay(1);
 }
+// Value Dates: from today's 4 PM SL time until the next working day's 4 PM, show the NEXT SL working day.
+// Before 4 PM today: shows today's SL working day. After 4 PM: shows the next SL working day.
+function slValueDay(){
+  const slNow=new Date(Date.now()+330*60000);
+  const slHour=slNow.getUTCHours();
+  const after4pm=slHour>=16;
+  if(!after4pm)return slWorkDay(0);
+  // After 4 PM: step forward from today's SL working day to the next SL working day
+  let base=slWorkDay(0);
+  let nxt=new Date(base.getFullYear(),base.getMonth(),base.getDate()+1);
+  const SL_HOL=new Set(["2026-01-01","2026-01-14","2026-01-15","2026-02-04","2026-02-12",
+    "2026-02-26","2026-03-14","2026-03-28","2026-04-03","2026-04-13","2026-04-14",
+    "2026-04-15","2026-05-01","2026-05-11","2026-05-22","2026-05-23","2026-06-09",
+    "2026-06-29","2026-06-30","2026-07-08","2026-07-29","2026-08-20","2026-09-18",
+    "2026-09-23","2026-10-16","2026-10-20","2026-10-26","2026-11-11","2026-11-14",
+    "2026-12-14","2026-12-25","2026-12-30"]);
+  const isSLWork=x=>{if(x.getDay()===0||x.getDay()===6)return false;
+    const iso=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+    return !SL_HOL.has(iso);};
+  while(!isSLWork(nxt))nxt.setDate(nxt.getDate()+1);
+  return nxt;
+}
 const _MON3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const _MONF=["January","February","March","April","May","June","July","August","September","October","November","December"];
 function fmtShort(d){return d.getDate()+" "+_MON3[d.getMonth()];}                 // 24 Jun
@@ -985,7 +1007,7 @@ function renderExtras(d){
    const ft=document.getElementById("op-fxsum-title");
    if(ft)ft.innerHTML="Volume of FX Market"+(cdEl?'<span class="close-date">'+cdEl+"</span>":"");
    const vdt=document.getElementById("vd-title");
-   if(vdt)vdt.innerHTML="Value Dates"+(cdEl?'<span class="close-date">'+cdEl+"</span>":"");}
+   if(vdt)vdt.innerHTML="Value Dates"+'<span class="close-date">'+fmtOrd(slValueDay())+"</span>";}
   set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>`<tr><td>${escHtml(v.tenor)}</td><td>${escHtml(v.date)}</td><td style="color:#9fb6d4">${escHtml(v.nod||'')}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   set('dyn-op-srr',(d.srr||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${fmt2(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
 }
