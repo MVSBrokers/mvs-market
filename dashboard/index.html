@@ -513,7 +513,7 @@ function slOpeningDay(){
   const slNow=new Date(Date.now()+330*60000);
   const slHour=slNow.getUTCHours(), slMin=slNow.getUTCMinutes();
   const after830=(slHour>8)||(slHour===8&&slMin>=30);
-  return after830?slWorkDay(2):slWorkDay(1);
+  return after830?slWorkDay(1):slWorkDay(2);
 }
 // Value Dates: from today's 4 PM SL time until the next working day's 4 PM, show the NEXT SL working day.
 // Before 4 PM today: shows today's SL working day. After 4 PM: shows the next SL working day.
@@ -1063,8 +1063,8 @@ function renderExtras(d){
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(todayD);
    ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=cdEl?"Closing: "+cdEl:"";});
 
-   const ft=document.getElementById("op-fxsum-title");
-   if(ft)ft.innerHTML="Volume of FX Market"+(cdEl?'<span class="close-date">'+cdEl+"</span>":"");
+  const ft=document.getElementById("op-fxsum-title");
+   if(ft)ft.innerHTML="Volume of FX Market"+'<span class="close-date">'+fmtOrd(slOpeningDay())+"</span>";
    const vdt=document.getElementById("vd-title");
    if(vdt)vdt.innerHTML="Value Dates"+'<span class="close-date">'+fmtOrd(slValueDay())+"</span>";}
   set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>{
