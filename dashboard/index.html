@@ -555,7 +555,7 @@ function calcValueDate(tenorRaw){
   const today=new Date();
   const spot=_spotDate(today);
   let result=null;
-  if(/cash|^today/.test(t))result=_isBothWork(today)?today:_addWorkDays(today,1,_isBothWork);
+  if(/cash|^today/.test(t))result=slValueDay();   // Cash always matches the Value Dates title date
   else if(/^tom/.test(t))result=_addWorkDays(today,1,_isBothWork);
   else if(/^spot$/.test(t))result=spot;
   else if(/^snn$/.test(t))result=_addWorkDays(spot,2,_isBothWork);   // Spot/Next/Next = Spot + 2 working days
@@ -1208,6 +1208,28 @@ function buildCharts(d){
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const fmtBond=b=>{const p=String(b).split(".");if(p.length===3){const m=parseInt(p[1])-1,y=parseInt(p[2]);if(!isNaN(m)&&!isNaN(y)&&m>=0&&m<=11)return MON[m]+" "+y;}return b;};
   const yLabels=yBRows.map(r=>fmtBond(r.bond));
+  // Re-derive the same auto-generated SL working-day date labels used for the bond table headers,
+  // so the chart legend shows real dates ("30th Jun") instead of raw Excel headers ("Day 6").
+  const autoLabels=(()=>{
+    const SL_HOL2=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04",
+      "2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13",
+      "2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29",
+      "2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08",
+      "2026-11-24","2026-12-23","2026-12-25"]);
+    const isSLW=x=>{const g=x.getDay();if(g===0||g===6)return false;
+      const iso=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+      return !SL_HOL2.has(iso);};
+    const ordA=n=>{const v=n%100;const o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return n+o;};
+    const fmtA=x=>ordA(x.getDate())+" "+MON[x.getMonth()];
+    const slNow=new Date(Date.now()+330*60000);
+    const slHour=slNow.getUTCHours(), slDow=slNow.getUTCDay();
+    const todayReady=(slDow>=1&&slDow<=5)&&slHour>=15;
+    let x=new Date();
+    if(!todayReady||!isSLW(x)){do{x.setDate(x.getDate()-1);}while(!isSLW(x));}
+    const labels=[];
+    for(let i=0;i<yBHead.length;i++){labels.unshift(fmtA(x));do{x.setDate(x.getDate()-1);}while(!isSLW(x));}
+    return labels;
+  })();
   // find the two most recent columns that actually have data
   let tCol=-1,yCol=-1;
   for(let ci=yBHead.length-1;ci>=0;ci--){
@@ -1217,8 +1239,8 @@ function buildCharts(d){
   const todayD=tCol>=0?yBRows.map(r=>bondMid((r.values||[])[tCol])):[];
   const yestD =yCol>=0?yBRows.map(r=>bondMid((r.values||[])[yCol])):[];
   const yDS=[];
-  if(yCol>=0)yDS.push({label:"Previous ("+yBHead[yCol]+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
-  yDS.push({label:"Latest ("+(tCol>=0?yBHead[tCol]:"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
+  if(yCol>=0)yDS.push({label:"Previous ("+(autoLabels[yCol]||yBHead[yCol])+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
+  yDS.push({label:"Latest ("+(tCol>=0?(autoLabels[tCol]||yBHead[tCol]):"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
   charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels,datasets:yDS},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:10},boxWidth:18,usePointStyle:false,padding:12}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
 
   // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
