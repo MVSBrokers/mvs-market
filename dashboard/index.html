@@ -367,11 +367,11 @@ canvas{max-width:100%!important}
     <div class="panel" style="opacity:0;pointer-events:none"></div>
   </div>
 
-  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">Cross-Currency Rates</div></div>
+  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">Cross-Currency</div></div>
 
   <div class="grid-2x2">
     <div class="panel">
-      <div class="panel-title">Cross-Currency Rates<span class="close-date" id="cross-close"></span></div>
+      <div class="panel-title">Cross-Currency<span class="close-date" id="cross-close"></span></div>
       <table style="font-size:11px">
         <thead><tr><th>Currency</th><th>Buying</th><th>Selling</th></tr></thead>
         <tbody id="dyn-cross"></tbody>
@@ -490,21 +490,23 @@ canvas{max-width:100%!important}
 const DATA_URL="https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-market/main/data.json";
 const POLL_INTERVAL = 20000;
 let charts={}, pollTimer=null;
-// Sri Lanka bank working day (Mon–Fri). back=0 -> today's working day, 1 -> previous working day…
+// Sri Lanka bank working day (Mon–Fri) — central holiday/Poya-day list used everywhere date logic needs it
+const SL_HOLIDAYS=new Set(["2026-01-01","2026-01-14","2026-01-15","2026-02-04","2026-02-12",
+  "2026-02-26","2026-03-14","2026-03-28","2026-04-03","2026-04-13","2026-04-14",
+  "2026-04-15","2026-05-01","2026-05-11","2026-05-22","2026-05-23","2026-06-09",
+  "2026-06-29","2026-06-30","2026-07-08","2026-07-29","2026-08-20","2026-09-18",
+  "2026-09-23","2026-10-16","2026-10-20","2026-10-26","2026-11-11","2026-11-14",
+  "2026-12-14","2026-12-25","2026-12-30"]);
+function isSLWorkingDay(d){
+  if(d.getDay()===0||d.getDay()===6)return false;
+  const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  return !SL_HOLIDAYS.has(iso);
+}
+// back=0 -> today's working day, 1 -> previous working day…
 function slWorkDay(back){
-  // Sri Lanka public holidays + Poya days 2026
-  const SL_HOL=new Set(["2026-01-01","2026-01-14","2026-01-15","2026-02-04","2026-02-12",
-    "2026-02-26","2026-03-14","2026-03-28","2026-04-03","2026-04-13","2026-04-14",
-    "2026-04-15","2026-05-01","2026-05-11","2026-05-22","2026-05-23","2026-06-09",
-    "2026-06-29","2026-06-30","2026-07-08","2026-07-29","2026-08-20","2026-09-18",
-    "2026-09-23","2026-10-16","2026-10-20","2026-10-26","2026-11-11","2026-11-14",
-    "2026-12-14","2026-12-25","2026-12-30"]);
-  const isSLWork=d=>{if(d.getDay()===0||d.getDay()===6)return false;
-    const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-    return !SL_HOL.has(iso);};
   let d=new Date();
-  while(!isSLWork(d))d.setDate(d.getDate()-1);
-  for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
+  while(!isSLWorkingDay(d))d.setDate(d.getDate()-1);
+  for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(!isSLWorkingDay(d));}
   return d;
 }
 const _MON3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -563,7 +565,7 @@ function bondMid(v){
 function heatColor(v,min,max){
   if(v==null||!(max>min))return "transparent";
   const t=Math.max(0,Math.min(1,(v-min)/(max-min)));
-  const hue=t*140;               // low yield = red (0), high yield = green (140)ld = red (0)
+  const hue=t*140;               // low yield = red (0), high yield = green (140)
   return "hsla("+hue.toFixed(0)+",75%,50%,"+(0.18+t*0.22).toFixed(2)+")";  // transparent, deeper for higher
 }
 // Colour a cell by the DIRECTION of yield change vs the previous day: down = green, up = red.
@@ -762,25 +764,26 @@ function render(d){
   const lmIdx=bHeadersAll.findIndex(h=>{const t=String(h||'').toLowerCase().trim();return t==='last month'||t==='end of month';});
   const dateIdx=bHeadersAll.map((h,i)=>i).filter(i=>!isRef(bHeadersAll[i]));   // real date columns only
   const bHeaders=dateIdx.map(i=>bHeadersAll[i]);
-  // Auto-generate SL banking working day labels for bond date columns
-  const SL_HOL=new Set(["2026-01-01","2026-01-14","2026-01-15","2026-02-04","2026-02-26","2026-04-03","2026-04-13","2026-04-14","2026-05-01","2026-05-22","2026-06-30","2026-07-29","2026-08-20","2026-09-23","2026-10-20","2026-10-26","2026-11-11","2026-12-25"]);
-  const isSLWork=d=>{const g=d.getDay();if(g===0||g===6)return false;const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");return !SL_HOL.has(iso);};
+  // Auto-generate SL banking working day labels for bond date columns (uses the shared SL_HOLIDAYS / isSLWorkingDay)
   const MON_B=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const ordB=n=>{const v=n%100;const o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return n+o;};
   const fmtBH=d=>ordB(d.getDate())+" "+MON_B[d.getMonth()];
   const autoLabels=(()=>{
-    // Use SL time (UTC+5:30) to decide if today's bond data is ready (after 3 PM)
+    // Use SL time (UTC+5:30) for both the readiness check AND the anchor calendar date,
+    // so the date itself (not just the hour) reflects Sri Lanka, regardless of the viewer's local timezone.
     const slNow=new Date(Date.now()+330*60000);
     const slHour=slNow.getUTCHours();
     const slDow=slNow.getUTCDay();
     const todayReady=(slDow>=1&&slDow<=5)&&slHour>=15;
+    // Anchor date built from SL's Y/M/D (via getUTC* on the shifted timestamp) as a plain local Date,
+    // so isSLWorkingDay's local getDay()/getMonth()/getDate() calls read Sri Lanka's calendar date correctly.
+    let d=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
     // Start from today if ready, else from previous SL working day
-    let d=new Date();
-    if(!todayReady||!isSLWork(d)){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
+    if(!todayReady||!isSLWorkingDay(d)){do{d.setDate(d.getDate()-1);}while(!isSLWorkingDay(d));}
     const labels=[];
     for(let i=0;i<bHeaders.length;i++){
       labels.unshift(fmtBH(d));
-      do{d.setDate(d.getDate()-1);}while(!isSLWork(d));
+      do{d.setDate(d.getDate()-1);}while(!isSLWorkingDay(d));
     }
     return labels;
   })();
@@ -948,7 +951,7 @@ function renderExtras(d){
    set('dyn-op-fxov',row('Opening Spot',s.open)+row('Closing Spot',s.close)+row('Intraday Lowest Rate',s.low)+row('Intraday Highest Rate',s.high));}
   set('dyn-op-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map(s=>`<div class="by-row"><span class="by-mat">${escHtml(s.maturity)}</span><span class="by-rate">${fmt2(s.bid)} / ${fmt2(s.ask)}</span></div>`).join(''));
   set('dyn-op-fxsum',(d.fxSummary||[]).filter(f=>f.show!==false).map(f=>{const bold=/total/i.test(f.tenor);return `<tr${bold?' style="font-weight:700"':''}><td>${escHtml(f.tenor)}</td><td>${fmt2(f.volume)}</td><td>${f.wa?fmt2(f.wa):''}</td></tr>`;}).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
-  {// Auto report dates (Sri Lanka bank working days) with optional editor overrides
+  {// Auto report dates (Sri Lanka bank working days, honouring Poya days & public holidays) with optional editor overrides
    const todayD=slWorkDay(0), yestD=slWorkDay(1);
    const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
    const ot=document.getElementById("opening-report-title");
