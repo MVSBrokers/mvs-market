@@ -1,538 +1,1147 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MVS Market Data — Editor</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MVS Daily Market Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#eaf2fb;padding:22px;max-width:1140px;margin:0 auto;line-height:1.45}
-h1{font-size:22px;color:#c8a84b;letter-spacing:.5px}
-.sub{color:#7fa3c8;font-size:12px;margin-bottom:18px}
-.card{background:#0b1830;border:1px solid #18304f;border-radius:12px;padding:16px 18px;margin-bottom:14px}
-.card h2{font-size:14px;color:#c8a84b;text-transform:uppercase;letter-spacing:.7px;margin-bottom:12px;border-bottom:1px solid #18304f;padding-bottom:8px}
-label{display:block;font-size:11px;color:#9fb6d4;margin-bottom:4px}
-input{background:#081424;border:1px solid #1a3050;border-radius:6px;color:#eaf2fb;padding:8px 10px;font-size:12px;font-family:inherit;width:100%}
-.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fg{margin-bottom:10px}
-button{font-family:inherit;cursor:pointer;border:none;border-radius:8px;font-weight:700;font-size:12px;padding:9px 16px;transition:all .15s}
-.btn-blue{background:#1c4f8a;color:#eaf2fb}.btn-blue:hover{background:#2563a8}
-.btn-gold{background:linear-gradient(135deg,#c8a84b,#a8893a);color:#060f1e}.btn-gold:hover{filter:brightness(1.1)}
-.btn-green{background:#1f7a4d;color:#eaf2fb}.btn-green:hover{background:#258c59}
-.btn-red{background:#7a2e2e;color:#eaf2fb}.btn-red:hover{background:#9c3a3a}
-.btn-ghost{background:transparent;color:#9fb6d4;border:1px solid #1a3050}.btn-ghost:hover{background:#0d1e38}
-.btn-sm{padding:6px 12px;font-size:11px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.badge{display:none;background:#0d2818;border:1px solid #1f7a4d;border-radius:8px;padding:9px 13px;font-size:12px;color:#6dd4a0;margin-bottom:12px}
-.status{font-size:12px;margin-top:8px;min-height:16px}
-.hint{font-size:11px;color:#5a7a9a}
-code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-size:11px}
-.toast{position:fixed;bottom:20px;right:20px;background:#0d2818;border:1px solid #1f7a4d;color:#6dd4a0;padding:13px 18px;border-radius:9px;font-size:13px;font-weight:600;opacity:0;transform:translateY(10px);transition:all .25s;z-index:100}
-.toast.show{opacity:1;transform:translateY(0)}.toast.err{background:#2a1212;border-color:#7a2e2e;color:#e8917a}
-/* freshness */
-.fresh-banner{padding:11px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:12px}
-.fresh-banner.ok{background:#0d2818;border:1px solid #1f7a4d;color:#6dd4a0}
-.fresh-banner.warn{background:#2a1f08;border:1px solid #b5862b;color:#f0c45a}
-.fresh-banner.bad{background:#2a1212;border:1px solid #7a2e2e;color:#e8917a}
-.fresh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:9px}
-.fresh-item{background:#081424;border:1px solid #1a3050;border-left:3px solid #2a4566;border-radius:7px;padding:9px 12px}
-.fresh-item .fi-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.fresh-item .fi-name{font-size:12px;font-weight:600}.fresh-item .fi-tag{font-size:8.5px;text-transform:uppercase;letter-spacing:.5px;color:#7fa3c8;background:#0d1e38;border:1px solid #1a3050;border-radius:4px;padding:1px 6px;white-space:nowrap}
-.fresh-item .fi-msg{font-size:10.5px;color:#9fb6d4;margin-top:5px}
-.fresh-item.ok{border-left-color:#1f7a4d}.fresh-item.pending{border-left-color:#b5862b}.fresh-item.pending .fi-msg{color:#f0c45a}
-.fresh-item.stale,.fresh-item.missing{border-left-color:#c0392b}.fresh-item.stale .fi-msg,.fresh-item.missing .fi-msg{color:#ef8e7a;font-weight:600}
-.fresh-item.info{border-left-color:#3a5a7a}
-.fresh-item .fi-go{font-size:9.5px;color:#c8a84b;margin-top:6px;font-weight:700}
-.fresh-item[onclick]:hover{border-color:#c8a84b;background:#0d1e38}
-/* section editor */
-.sec{background:#0b1830;border:1px solid #18304f;border-radius:11px;margin-bottom:12px;overflow:hidden}
-.sec-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 15px;background:#0d1e38;cursor:pointer}
-.sec-head .st{font-size:13.5px;font-weight:700;color:#eaf2fb}
-.sec-head .meta{font-size:10px;color:#7fa3c8}
-.sec-head .right{display:flex;gap:8px;align-items:center}
-.sec-pub-state{font-size:9.5px;padding:2px 7px;border-radius:20px;font-weight:700;letter-spacing:.3px}
-.sec-pub-state.live{background:#0d2818;color:#6dd4a0;border:1px solid #1f7a4d}
-.sec-pub-state.draft{background:#241a06;color:#e0b552;border:1px solid #6e5414}
-.sec-body{padding:13px 15px;display:none}
-.sec.open .sec-body{display:block}
-.sec-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;border-top:1px solid #14283f;padding-top:10px}
-.sec-foot .ps{font-size:11px;min-height:14px}
-.ed-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px 12px}
-.ed-fields label{margin-top:4px}
-.ed-sub{grid-column:1/-1;border:1px solid #14283f;border-radius:7px;padding:8px 10px;margin-top:4px}
-.ed-sub-t{font-size:10px;color:#c8a84b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.ed-scroll{max-height:260px;overflow:auto;border:1px solid #14283f;border-radius:7px;margin-top:4px}
-.ed-tbl{width:100%;border-collapse:collapse;font-size:11px}
-.ed-tbl th{position:sticky;top:0;background:#0d1e38;color:#7fa3c8;font-weight:600;text-align:left;padding:5px 7px;border-bottom:1px solid #1a3050;white-space:nowrap}
-.ed-tbl td{padding:3px 5px;border-bottom:1px solid #0f2138;vertical-align:top}
-.ed-tbl input{padding:5px 7px;font-size:11px;min-width:70px}
-.ed input[type=checkbox]{width:auto;min-width:0;transform:scale(1.25);accent-color:#c8a84b;cursor:pointer}
-.ed-arr{display:flex;flex-wrap:wrap;gap:6px}.ed-arr input{width:auto;min-width:64px}
-.muted{color:#5a7a9a;font-size:11px;font-style:italic}
-.bulkbar{position:sticky;top:0;z-index:20;background:#060f1e;padding:8px 0;margin-bottom:8px;border-bottom:1px solid #18304f}
-</style></head>
+html,body{overflow-x:hidden;width:100%}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;min-height:100vh}
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#060f1e,#0d1e38)}
+.login-card{background:#0d1e38;border:2px solid #c8a84b;border-radius:12px;padding:44px 36px;width:380px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.8)}
+.login-card h2{color:#c8a84b;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:24px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:10px;color:#7fa3c8;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
+.field input{width:100%;background:#091525;border:1px solid #1a3050;border-radius:6px;padding:10px;color:#d4e4f4;font-size:13px;outline:none}
+.field input:focus{border-color:#c8a84b}
+.login-btn{width:100%;background:#c8a84b;color:#0a1628;border:none;border-radius:6px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;transition:background .2s}
+.login-btn:hover{background:#e0c060}
+.login-err{color:#e87a4d;font-size:11px;text-align:center;margin-top:10px;min-height:18px}
+#dashboard{display:block;padding:14px;min-height:100vh;background:#060f1e;max-width:100%;overflow-x:hidden}
+.report-hdr{background:linear-gradient(90deg,#0d1e38,#1a3050);border:2px solid #c8a84b;border-radius:8px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;background:#c8a84b;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#0a1628;flex-shrink:0}
+.logo-img{height:48px;width:auto;display:block}
+.hdr-info h1{font-size:16px;font-weight:700;color:#fff}
+.hdr-info p{font-size:11px;color:#7fa3c8}
+.hdr-right{text-align:right}
+.hdr-date{font-size:14px;color:#c8a84b;font-weight:700;margin-bottom:4px}
+.hdr-live{display:inline-block;background:#1a3a1a;border:1px solid #2a5a2a;color:#6dd4a0;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;margin-right:8px}
+.sign-out{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:5px 10px;font-size:11px;cursor:pointer}
+.sign-out:hover{border-color:#c8a84b;color:#c8a84b}
+.grid-2x2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.grid-3col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px}
+@media(max-width:760px){.grid-3col{grid-template-columns:1fr}}
+.grid-2x2>*{min-width:0}
+.panel{background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:12px 14px;min-width:0;overflow:hidden;max-width:100%}
+.panel-title{font-size:11px;font-weight:700;color:#c8a84b;letter-spacing:1px;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid #1a3050;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:11px}
+table th{color:#7fa3c8;font-weight:600;text-align:right;padding:5px 6px;font-size:10px;border-bottom:1px solid #1a3050}
+table th:first-child{text-align:left}
+table td{padding:5px 6px;text-align:right;color:#d4e4f4;border-top:1px solid #0d2040}
+table td:first-child{text-align:left;color:#7fa3c8;font-size:10px;font-weight:500}
+table tr:hover td{background:#132540}
+.liq-box{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.liq-item{background:#091525;border-radius:6px;padding:8px;text-align:center}
+.liq-label{font-size:9px;color:#7fa3c8;margin-bottom:4px;text-transform:uppercase}
+.liq-val{font-size:18px;font-weight:700;color:#4da3e8}
+.full-width{margin-bottom:14px}
+.full-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.full-grid>*{min-width:0}
+
+/* ── TBILL AUCTION TABLE ───────────────────────────────── */
+.tbill-auction-wrap{overflow-x:auto;max-width:100%}
+.tbill-auction-table{width:100%;border-collapse:collapse;font-size:9.5px;min-width:340px}
+.tbill-auction-table th{color:#7fa3c8;font-weight:600;text-align:center;padding:3px 5px;font-size:8.5px;border-bottom:2px solid #1a3050;background:#091525;white-space:nowrap}
+.tbill-auction-table th:first-child{text-align:left}
+.tbill-auction-table td{padding:2px 5px;text-align:center;color:#d4e4f4;border-top:1px solid #0d2040;vertical-align:middle;line-height:1.25}
+.tbill-auction-table td:first-child{text-align:left;color:#c8a84b;font-weight:700;font-size:9.5px}
+.tbill-auction-table td.mat-cell{color:#7fa3c8;font-size:9px;font-weight:500;text-align:center}
+.tbill-auction-table tr:hover td{background:#132540}
+.tbill-auction-table .date-row td{background:#0a1828}
+.tbill-auction-table .date-row td:first-child{color:#c8a84b;font-weight:700}
+/* Merged date cell styling */
+.tbill-auction-table td[rowspan]{font-weight:700;color:#c8a84b;border-right:1px solid #1a3050}
+
+/* ── EXECUTIVE SUMMARY WITH TICKER ─────────────────────── */
+.exec-summary{background:#0d1e38;border:1px solid #1a3050;border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.exec-summary .panel-title{margin-bottom:8px}
+.exec-summary ul{list-style:disc;padding-left:20px;font-size:13px;color:#d4e4f4;line-height:2.2}
+.exec-summary ul li strong{color:#fff}
+.ticker-wrap{overflow:hidden;background:#091525;border:1px solid #1a3050;border-left:3px solid #c8a84b;border-radius:4px;margin-top:12px;height:34px;display:none;align-items:center;position:relative}
+.ticker-wrap.visible{display:flex}
+.ticker-label{flex-shrink:0;background:#c8a84b;color:#0a1628;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 10px;height:100%;display:flex;align-items:center;white-space:nowrap}
+.ticker-track{flex:1;overflow:hidden;position:relative;height:100%}
+.ticker-inner{display:inline-flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-scroll linear infinite}
+.ticker-inner span{font-size:11px;color:#b8cfe8;padding:0 55px 0 0}
+@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+#load-err{display:none;background:#1a0808;border:1px solid #5a2020;border-radius:8px;padding:14px;color:#e87a4d;font-size:12px;margin-bottom:14px;text-align:center}
+#loading-bar{height:3px;background:linear-gradient(90deg,#c8a84b,#4da3e8);border-radius:2px;margin-bottom:14px;animation:slide 1.2s ease-in-out infinite;display:none}
+@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(400%)}}
+.footer{text-align:center;font-size:9px;color:#2a4060;padding-bottom:14px}
+canvas{max-width:100%!important}
+/* per-chart interval selector */
+.pt-row{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.mini-gran{display:inline-flex;gap:3px}
+.mg-btn{background:#0d1e38;border:1px solid #1a3050;color:#7fa3c8;border-radius:4px;padding:2px 7px;font-size:9px;font-weight:600;cursor:pointer;letter-spacing:0;text-transform:none;line-height:1.5}
+.mg-btn:hover{border-color:#c8a84b;color:#c8a84b}
+.mg-btn.active{background:#c8a84b;color:#0a1628;border-color:#c8a84b}
+/* top news ribbon */
+.news-ribbon{margin-top:0!important;margin-bottom:12px!important;height:26px;padding-left:6px}
+/* ── CHART STAT BAR ─────────────────────────────────────── */
+.chart-stats{display:flex;gap:0;margin-top:10px;border:1px solid #1a3050;border-radius:7px;overflow:hidden;background:#091525}
+.cs-item{flex:1;padding:9px 8px;text-align:center;border-right:1px solid #1a3050;position:relative;min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px}
+.cs-item:last-child{border-right:none}
+.cs-label{font-size:9px;color:#5a7a9a;text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.cs-val{font-size:15px;font-weight:700;color:#d4e4f4;line-height:1.05;white-space:nowrap}
+.cs-unit{font-size:9px;color:#5a7a9a;font-weight:400}
+.cs-prev{font-size:9px;color:#5a7a9a;margin-top:2px}
+.cs-chg{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.series-toggle{display:flex;align-items:center;gap:5px;margin:7px 0 5px}
+.series-toggle .st-lbl{font-size:9px;color:#5a7a9a;text-transform:uppercase;letter-spacing:.6px;margin-right:2px}
+.cs-chg.up{color:#6dd4a0;background:rgba(109,212,160,0.12)}
+.cs-chg.down{color:#ff8a78;background:rgba(255,138,120,0.12)}
+.cs-chg.flat{color:#7fa3c8;background:rgba(77,163,232,0.10)}
+@media(max-width:1024px){.grid-2x2,.full-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.opr-srr-grid{grid-template-columns:1fr!important}
+  .report-hdr{flex-direction:row;flex-wrap:nowrap;align-items:center;padding:8px 10px;gap:8px}
+  .hdr-left{flex-direction:row;gap:8px;align-items:center}
+  .logo{width:36px;height:36px;flex-shrink:0}
+  .logo-img{height:36px}
+  .hdr-info h1{font-size:12px;line-height:1.2}
+  .hdr-info p{font-size:9px;display:none}
+  .hdr-right{text-align:right;flex-shrink:0}
+  .hdr-date{font-size:11px;margin-bottom:2px}
+  .hdr-live{font-size:9px;padding:1px 6px}
+  #last-updated{font-size:9px}
+}
+.nav-bar{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 14px;}
+.nav-btn{background:#0d1e38;color:#9fb6d4;border:1px solid #1a3050;padding:9px 16px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:.4px;transition:all .15s;font-family:inherit;}
+.nav-btn:hover{background:#142a4a;color:#eaf2fb;}
+.nav-btn.active{background:linear-gradient(135deg,#c8a84b,#a8893a);color:#060f1e;border-color:#c8a84b;}
+.page{display:none;}
+.big-stat{font-size:34px;font-weight:800;color:#c8a84b;text-align:center;padding:18px 0;letter-spacing:1px;}
+.news-list{display:flex;flex-direction:column;gap:0;}
+.news-card{background:transparent;border:none;border-radius:0;padding:0;font-size:13px;line-height:1.8;color:#d4e4f4;}
+.news-card div{padding:9px 12px;border-bottom:1px solid rgba(200,168,75,0.15);transition:background .15s;}
+.news-card div:last-child{border-bottom:none;}
+.news-card div:before{content:"◆";color:#c8a84b;font-size:8px;margin-right:10px;vertical-align:middle;}
+.news-card div:hover{background:rgba(200,168,75,0.06);}
+.news-card .news-idx{color:#c8a84b;font-weight:700;margin-right:8px;}
+.op-split{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;}
+.op-col{flex:1;min-width:190px;}
+.op-chartcol{flex:1.2;min-width:230px;}
+.op-chart-cap{font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.6px;text-transform:uppercase;text-align:center;margin-bottom:6px;}
+.kd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px}
+.kd-item{background:#0d1e38;border:1px solid #1a3050;border-radius:6px;padding:11px 8px;text-align:center}
+.kd-item .kd-lbl{font-size:9px;color:#7fa3c8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;line-height:1.3}
+.kd-item .kd-val{font-size:15px;font-weight:800;color:#c8a84b}
+@media(max-width:600px){.kd-grid{grid-template-columns:repeat(2,1fr);gap:8px}.kd-item .kd-val{font-size:13px}.kd-item .kd-lbl{font-size:8px}}
+.by-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:2px 18px;font-size:11px;margin-top:4px}
+.by-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #11233f}
+.by-mat{color:#9fb6d4}
+.by-rate{color:#eaf2fb;font-weight:600}
+.fx-ov{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.fx-ov-row{display:flex;justify-content:space-between;align-items:center;background:#0d1e38;border:1px solid #1a3050;border-radius:6px;padding:9px 13px}
+.fx-ov-row .lbl{font-size:11px;color:#9fb6d4;text-transform:uppercase;letter-spacing:.4px}
+.fx-ov-row .val{font-size:15px;font-weight:800;color:#c8a84b}
+.rpt-note{font-size:10px;color:#7a93b4;margin-top:8px}
+.close-date{font-size:9px;font-weight:600;color:#c8a84b;background:rgba(200,168,75,0.12);border:1px solid rgba(200,168,75,0.3);border-radius:5px;padding:1px 7px;margin-left:8px;white-space:nowrap;letter-spacing:.3px}
+.up-arrow{color:#6dd4a0;font-size:11px}
+.mini-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:4px}
+.mini-card{background:#0d1e38;border:1px solid #1a3050;border-radius:6px;padding:11px;text-align:center}
+.mini-card .mc-lbl{font-size:9px;color:#7fa3c8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.mini-card .mc-val{font-size:17px;font-weight:800;color:#c8a84b}
+.mini-card .mc-sub{font-size:9px;color:#6dd4a0;margin-top:3px}
+.sec-num{color:#4da3e8}
+.events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px}
+.event-card{background:#0d1e38;border:1px solid #1a3050;border-left:3px solid #c8a84b;border-radius:8px;padding:14px 15px}
+.event-card .ev-label{font-size:10px;color:#7fa3c8;text-transform:uppercase;letter-spacing:.6px;margin-bottom:9px;min-height:24px}
+.event-card .ev-date{font-size:19px;font-weight:800;color:#c8a84b;margin-bottom:7px}
+.event-card .ev-days{font-size:12px;font-weight:700;color:#6dd4a0;background:rgba(109,212,160,.12);display:inline-block;padding:3px 10px;border-radius:20px}
+.event-card .ev-days.soon{color:#e8b14d;background:rgba(232,177,77,.12)}
+.event-card .ev-days.today{color:#ff8a78;background:rgba(255,138,120,.14)}
+.event-card .ev-days.passed{color:#7a93b4;background:rgba(122,147,180,.1)}
+.mini-tbl{margin-top:8px;max-height:128px;overflow-y:auto;border:1px solid #14283f;border-radius:6px}
+.mini-tbl table{width:100%;border-collapse:collapse;font-size:9.5px}
+.mini-tbl th{position:sticky;top:0;background:#0d1e38;color:#7fa3c8;font-weight:600;text-align:right;padding:3px 8px;letter-spacing:.3px;border-bottom:1px solid #1a3050}
+.mini-tbl th:first-child,.mini-tbl td:first-child{text-align:left}
+.mini-tbl td{padding:3px 8px;border-bottom:1px solid #0f2138;color:#cfe0f2}
+.mini-tbl tr:last-child td{border-bottom:none}
+.mini-tbl tr:first-child td{color:#fff;font-weight:700}
+.mini-tbl .chg-up{color:#6dd4a0}.mini-tbl .chg-dn{color:#ff8a78}
+.np{color:#5a7a9a;font-size:11px;font-style:italic;padding:10px;text-align:center;border:1px dashed #1a3050;border-radius:6px;margin-top:6px}
+</style>
+</head>
 <body>
-<h1>MVS Market Data — Editor</h1>
-<div class="sub">Import <code>MarketData.xlsx</code>, review &amp; edit each section, then publish sections individually or all at once.</div>
 
-<!-- 1 GITHUB -->
-<div class="card" id="setup-box">
-  <h2>1 · Connect GitHub (one-time)</h2>
-  <div class="cfg-grid">
-    <div class="fg" style="grid-column:1/-1"><label>GitHub Personal Access Token (fine-grained)</label><input id="gh-token" type="password" placeholder="github_pat_..."></div>
-    <div class="fg"><label>GitHub Username / Org</label><input id="gh-owner" placeholder="kavindyamaheshi303-beep"></div>
-    <div class="fg"><label>Repository Name</label><input id="gh-repo" placeholder="mvs-market"></div>
-    <div class="fg"><label>Branch</label><input id="gh-branch" value="main"></div>
-    <div class="fg"><label>Path to data.json</label><input id="gh-path" value="data.json"></div>
+<div id="dashboard">
+  <div class="report-hdr">
+    <div class="hdr-left">
+      <div class="logo" style="background:none;padding:0;overflow:hidden;"><img src="data:image/jpeg;base64,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" class="logo-img"></div>
+      <div class="hdr-info"><h1>Daily Market Report</h1><p>FX | Government Securities | Money Markets</p></div>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-date" id="dateDisplay">—</div>
+      <span class="hdr-live">LIVE</span>
+      <span id="last-updated" style="font-size:10px;color:#7fa3c8;margin-right:8px"></span>
+    </div>
   </div>
-  <div class="row" style="margin-top:8px"><button class="btn-gold" onclick="saveGithubConfig()">Save &amp; Test Connection</button><button class="btn-ghost" onclick="document.getElementById('setup-box').style.display='none'">Hide</button></div>
-  <div class="status" id="setup-result"></div>
-</div>
-<div class="badge" id="connected-badge">Connected to <strong id="connected-repo"></strong> — <span id="connected-path"></span>
-  <button class="btn-ghost btn-sm" style="margin-left:10px" onclick="document.getElementById('setup-box').style.display='block'">Edit</button></div>
 
-<!-- 2 IMPORT -->
-<div class="card">
-  <h2>2 · Import the Excel</h2>
-  <div class="row">
-    <button class="btn-blue" onclick="document.getElementById('xl-input').click()">⬆ Import MarketData.xlsx</button>
-    <input type="file" id="xl-input" accept=".xlsx,.xls" style="display:none" onchange="importExcel(event)">
-    <button class="btn-red" onclick="clearAll()">✕ Clear All Data</button>
-    <button class="btn-ghost" onclick="loadPublished()">↻ Reload Published</button>
+  <!-- LIVE MARKET NEWS RIBBON -->
+  <div class="ticker-wrap news-ribbon" id="tickerWrap">
+    <div class="ticker-track"><div class="ticker-inner" id="tickerInner"></div></div>
   </div>
-  <div class="status" id="import-status"></div>
-</div>
 
-<!-- 3 FRESHNESS -->
-<div class="card">
-  <h2>3 · Data freshness check</h2>
-  <div id="fresh-banner" class="fresh-banner" style="display:none"></div>
-  <div class="fresh-grid" id="freshness"><div class="hint">Import the Excel to check which sections are up to date for today's Sri Lankan / US working day.</div></div>
-</div>
+  <div id="loading-bar"></div>
+  <div id="load-err"></div>
 
-<!-- 4 SECTIONS -->
-<div class="card">
-  <h2>4 · Sections — edit &amp; publish</h2>
-  <div class="bulkbar row">
-    <button class="btn-green" onclick="publishKeys('all')">🚀 Publish ALL sections</button>
-    <button class="btn-ghost btn-sm" onclick="toggleAll(true)">Expand all</button>
-    <button class="btn-ghost btn-sm" onclick="toggleAll(false)">Collapse all</button>
-    <span class="hint" id="sections-hint">Import an Excel to load sections.</span>
+
+  <!-- PAGE NAV -->
+  <div class="nav-bar">
+    <button class="nav-btn active" onclick="showPage('page-open',this)">Opening Report</button>
+    <button class="nav-btn" onclick="showPage('page-mm',this)">Money Market</button>
+    <button class="nav-btn" onclick="showPage('page-fi',this)">Fixed Income</button>
+    <button class="nav-btn" onclick="showPage('page-fx',this)">FX</button>
+    <button class="nav-btn" onclick="showPage('page-macro',this)">Macro Economy</button>
+    <button class="nav-btn" onclick="showPage('page-global',this)">Global Market</button>
+    <button class="nav-btn" onclick="showPage('page-news',this)">Announcements</button>
   </div>
-  <div id="sections"></div>
+
+  <!-- PAGE: MARKET OPEN REPORT (full Summary-report replica from get_data) -->
+  <div class="page" id="page-open" style="display:block">
+        <div class="grid-2x2">
+      <div class="panel">
+        <div class="panel-title" id="op-fxsum-title">Volume of FX Market</div>
+        <canvas id="opFxSumChart" style="max-height:190px"></canvas>
+        <table style="font-size:11px;margin-top:10px">
+          <thead><tr><th>Tenor</th><th>Volume (USD Mn)</th><th>W/A Rate</th></tr></thead>
+          <tbody id="dyn-op-fxsum"></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Value Dates</div>
+        <div style="max-height:430px;overflow-y:auto"><table style="font-size:11px">
+          <thead><tr><th>Tenor</th><th>Value Date</th><th>NOD</th></tr></thead>
+          <tbody id="dyn-op-vd"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: MONEY MARKET -->
+  <div class="page" id="page-mm">
+  <!-- MONEY MARKET HEADER -->
+  
+  <div class="grid-2x2">
+    <div class="panel">
+      <div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
+      <table>
+        <thead><tr><th></th><th>Call</th><th>Repo</th></tr></thead>
+        <tbody>
+          <tr><td>Minimum Rate(%)</td><td id="cmmin">—</td><td id="rmmin">—</td></tr>
+          <tr><td>Maximum Rate(%)</td><td id="cmmax">—</td><td id="rmmax">—</td></tr>
+          <tr><td>W.A Yield (%)</td><td id="cmwa">—</td><td id="rmwa">—</td></tr>
+          <tr><td>Gross Volume(Rs.Bn)</td><td id="cmvol">—</td><td id="rmvol">—</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Standing Facilities (Rs.Bn)</div>
+      <table style="font-size:12px">
+        <thead><tr><th>Instrument</th><th>Latest</th><th>Previous</th></tr></thead>
+        <tbody id="dyn-windows"></tbody>
+      </table>
+    </div>
+    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px;margin-bottom:14px" class="opr-srr-grid">
+    <div class="panel">
+      <div class="panel-title" data-sec="opr">Policy Rate (OPR) History</div>
+      <div style="overflow-x:auto"><table style="font-size:12px">
+        <thead><tr><th>Effective Date</th><th>OPR (%)</th></tr></thead>
+        <tbody id="dyn-opr"></tbody>
+      </table></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title" data-sec="srr">Statutory Reserve Requirement (SRR)</div>
+      <div style="overflow-x:auto"><table style="font-size:12px">
+        <thead><tr><th>Effective Date</th><th>SRR (%)</th></tr></thead>
+        <tbody id="dyn-srr"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+
+  </div>
+
+  <!-- PAGE: FIXED INCOME -->
+  <div class="page" id="page-fi">
+  <!-- GOVT SECURITIES SECTION -->
+  <div class="full-grid">
+    <div class="panel">
+      <div class="panel-title"><span>Treasury Bill<span class="close-date" id="tbill-close"></span></span></div>
+      <canvas id="tbillChart" style="max-height:160px;margin-bottom:10px"></canvas>
+      <table style="font-size:10px;margin-bottom:12px">
+        <thead><tr><th>Auction Date</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
+        <tbody id="tbillRows"></tbody>
+      </table>
+      <!-- Auction Detail Table inside T-Bill panel -->
+      <div style="border-top:1px solid #1a3050;padding-top:10px;margin-top:2px">
+        <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px">Auction Details</div>
+        <div class="tbill-auction-wrap">
+          <table class="tbill-auction-table" id="tbillAuctionTable">
+            <thead>
+              <tr>
+                <th>Auction Date</th>
+                <th>Maturity</th>
+                <th>Offered (Rs.Mn)</th>
+                <th>Accepted (Rs.Mn)</th>
+                <th>Accepted %</th>
+              </tr>
+            </thead>
+            <tbody id="tbillAuctionBody">
+              <tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:10px">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Treasury Bond Average Yield(%)<span class="close-date" id="tbond-close"></span></div>
+      <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
+      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#ff8a78">low</span> → <span style="color:#7ee0a8">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
+      <div style="overflow-x:auto;max-width:100%">
+        <table style="font-size:9px">
+          <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
+          <tbody id="bondRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel full-width">
+    <div class="panel-title" data-sec="secondary">T-Bill Secondary Market Closing Yield(%)<span class="close-date" id="secondary-close"></span></div>
+    <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
+      <table style="font-size:10px">
+        <thead><tr><th>Maturity Date</th><th>Bid (%)</th><th>Ask (%)</th></tr></thead>
+        <tbody id="dyn-secondary"></tbody>
+      </table>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- PAGE: FX -->
+  <div class="page" id="page-fx">
+
+  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">USD/LKR FX</div></div>
+
+  <div class="grid-2x2">
+    <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
+    <div class="panel">
+      <div class="panel-title">Swaps (per day)<span class="close-date" id="fx-close"></span></div>
+      <table>
+        <thead><tr><th>Tenor</th><th>Sell/Buy</th><th>Buy/Sell</th></tr></thead>
+        <tbody>
+          <tr><td>1 Week</td><td id="sw1ws">—</td><td id="sw1wb">—</td></tr>
+          <tr><td>1 Month</td><td id="sw1ms">—</td><td id="sw1mb">—</td></tr>
+          <tr><td>2 Months</td><td id="sw2ms">—</td><td id="sw2mb">—</td></tr>
+          <tr><td>3 Months</td><td id="sw3ms">—</td><td id="sw3mb">—</td></tr>
+          <tr><td>6 Months</td><td id="sw6ms">—</td><td id="sw6mb">—</td></tr>
+          <tr><td>1 Year</td><td id="sw1ys">—</td><td id="sw1yb">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2x2" style="margin-top:0">
+    <div class="panel">
+      <div class="panel-title">Market Overview (Spot)<span class="close-date" id="fxov-close"></span></div>
+      <table style="font-size:12px">
+        <tbody id="dyn-spot"></tbody>
+      </table>
+    </div>
+    <div class="panel" style="opacity:0;pointer-events:none"></div>
+  </div>
+
+  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">Cross-Currency Rates</div></div>
+
+  <div class="grid-2x2">
+    <div class="panel">
+      <div class="panel-title">Cross-Currency Rates<span class="close-date" id="cross-close"></span></div>
+      <table style="font-size:11px">
+        <thead><tr><th>Currency</th><th>Buying</th><th>Selling</th></tr></thead>
+        <tbody id="dyn-cross"></tbody>
+      </table>
+    </div>
+    <div class="panel" style="opacity:0;pointer-events:none"></div>
+  </div>
+
+  </div>
+
+  <!-- PAGE: MACRO ECONOMY -->
+  <div class="page" id="page-macro">
+        <div class="grid-2x2">
+      <div class="panel">
+        <div class="panel-title">Inflation (CCPI vs NCPI)</div>
+        <canvas id="inflChart" style="max-height:185px;margin-bottom:10px"></canvas>
+        <table style="font-size:11px">
+          <thead><tr><th>Index / Metric</th><th>April 2026</th><th>May 2026</th></tr></thead>
+          <tbody id="dyn-inflation"></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Foreign Currency Reserves</div>
+        <table style="font-size:12px">
+          <thead><tr><th>Month</th><th>Reserve ($)</th></tr></thead>
+          <tbody id="dyn-reserves"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid-2x2">
+      <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div><div class="mini-tbl" id="cbslTbl"></div></div>
+      <div class="panel"><div class="panel-title pt-row"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fhStat"></div><div class="mini-tbl" id="fhTbl"></div></div>
+    </div>
+    <div class="grid-3col">
+      <div class="panel">
+        <div class="panel-title">Quarterly Real GDP Growth</div>
+        <canvas id="gdpChart" style="max-height:170px;margin-bottom:8px"></canvas>
+        <div class="mini-tbl" id="gdpTbl"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Balance of Payment (USD bn)</div>
+        <canvas id="bopChart" style="max-height:170px;margin-bottom:8px"></canvas>
+        <div class="mini-tbl" id="bopTbl"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Debt to GDP (%)</div>
+        <canvas id="debtChart" style="max-height:170px;margin-bottom:8px"></canvas>
+        <div class="mini-tbl" id="debtTbl"></div>
+      </div>
+    </div>
+
+    <div class="panel full-width">
+      <div class="panel-title">Tourism &amp; Remittances</div>
+      <div class="grid-2x2" style="margin-top:4px">
+        <table style="font-size:11px">
+          <thead><tr><th>Tourism (USD)</th><th>Apr 2026</th><th>May 2026</th><th>Y-o-Y</th></tr></thead>
+          <tbody id="dyn-tourism"></tbody>
+        </table>
+        <table style="font-size:11px">
+          <thead><tr><th>Remittances (USD)</th><th>Apr 2025</th><th>May 2026</th><th>Y-o-Y</th></tr></thead>
+          <tbody id="dyn-remit"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: GLOBAL MARKET -->
+  <div class="page" id="page-global">
+    
+    <!-- US bond rate + Fed rate -->
+    <div class="grid-2x2">
+      <div class="panel">
+        <div class="panel-title pt-row"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('g10',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('g10','all',this)" title="Full year (all data)">Y</button></span></div>
+        <canvas id="g10Chart" style="max-height:210px"></canvas><div class="chart-stat-bar" id="g10Stat"></div><div class="mini-tbl" id="g10Tbl"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">US Fed Rate — FOMC Decisions</div>
+        <table style="font-size:11px">
+          <thead><tr><th>Date</th><th>Range</th><th>O/N REPO</th><th>O/N R/REPO</th></tr></thead>
+          <tbody id="dyn-fomc"></tbody>
+        </table>
+        <div class="rpt-note" style="color:#c8a84b;font-weight:700" id="dyn-fomc-next">Next FOMC Meeting: 28 &ndash; 29 July 2026</div>
+      </div>
+    </div>
+
+    <!-- Gold + DXY -->
+    <div class="grid-2x2">
+      <div class="panel"><div class="panel-title">Gold Price (USD / oz)</div><canvas id="goldChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="goldStat"></div><div class="mini-tbl" id="goldTbl"></div><div class="rpt-note" id="goldNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="mini-tbl" id="dxyTbl"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
+    </div>
+
+    <!-- Brent + WTI -->
+    <div class="grid-2x2">
+      <div class="panel"><div class="panel-title">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
+    </div>
+  </div>
+
+  <!-- PAGE: LATEST MARKET ANNOUNCEMENTS -->
+  <div class="page" id="page-news">
+    <div class="panel full-width" style="border:1px solid #c8a84b;background:linear-gradient(135deg,#0d1e38,#152a45)">
+      <div class="panel-title" style="font-size:13px;letter-spacing:1.5px;color:#c8a84b;border-bottom:2px solid #c8a84b;padding-bottom:10px;margin-bottom:12px">📋 Latest Results</div>
+      <div id="news-list" class="news-list"></div>
+    </div>
+    <div class="panel full-width" style="margin-top:14px">
+      <div class="panel-title">Upcoming Key Dates &amp; Announcements</div>
+    </div>
+    <div id="events-grid" class="events-grid" style="margin-top:10px"></div>
+  </div>
+
+    <div class="footer">MVS Money Brokers Limited — Confidential. For authorised recipients only.</div>
 </div>
 
-<div class="toast" id="toast"></div>
 
 <script>
-let LOADED=null;        // working copy being edited
-let PUBLISHED=null;     // last-known published JSON (to mark live/draft)
+const DATA_URL="https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-market/main/data.json";
+const POLL_INTERVAL = 20000;
+let charts={}, pollTimer=null;
+// Sri Lanka bank working day (Mon–Fri). back=0 -> today's working day, 1 -> previous working day…
+function slWorkDay(back){
+  // Sri Lanka public holidays + Poya days 2026
+  const SL_HOL=new Set(["2026-01-01","2026-01-14","2026-01-15","2026-02-04","2026-02-12",
+    "2026-02-26","2026-03-14","2026-03-28","2026-04-03","2026-04-13","2026-04-14",
+    "2026-04-15","2026-05-01","2026-05-11","2026-05-22","2026-05-23","2026-06-09",
+    "2026-06-29","2026-06-30","2026-07-08","2026-07-29","2026-08-20","2026-09-18",
+    "2026-09-23","2026-10-16","2026-10-20","2026-10-26","2026-11-11","2026-11-14",
+    "2026-12-14","2026-12-25","2026-12-30"]);
+  const isSLWork=d=>{if(d.getDay()===0||d.getDay()===6)return false;
+    const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    return !SL_HOL.has(iso);};
+  let d=new Date();
+  while(!isSLWork(d))d.setDate(d.getDate()-1);
+  for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
+  return d;
+}
+const _MON3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const _MONF=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function fmtShort(d){return d.getDate()+" "+_MON3[d.getMonth()];}                 // 24 Jun
+function fmtLong(d){return d.getDate()+" "+_MONF[d.getMonth()]+" "+d.getFullYear();} // 24 June 2026
+function fmtOrd(d){const v=d.getDate()%100,o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return d.getDate()+"<sup>"+o+"</sup> "+_MONF[d.getMonth()]+" "+d.getFullYear();}
+let GRANS={liq:"all",cbsl:"all",fh:"all",fx:"all",tbill:"all",g10:"all"};  // per-chart: number of last data points to show, or "all"
+let lastData=null;       // most recent dataset, for re-render on interval change
 
-const SECTIONS=[
- {id:'dates',title:'Report Dates (blank = auto · SL working days)',keys:['openingDate','closingDate','secondaryDate']},
- {id:'mmrates',title:'Money Market & Repo Rates',keys:['callMarket','repoMarket']},
- {id:'windows',title:'Standing Facilities (SDF / SLF)',keys:['windows']},
- {id:'opr',title:'Policy Rate (OPR) History',keys:['opr']},
- {id:'liquidity',title:'Market Liquidity',keys:['liquidity']},
- {id:'cbsl',title:'CBSL Holdings of Govt Securities',keys:['cbsl','cbslHoldings']},
- {id:'foreign',title:'Foreign Holdings of Govt Securities',keys:['foreign']},
- {id:'usdlkr',title:'USD/LKR Rate',keys:['usdlkr']},
- {id:'fxswaps',title:'FX Swaps',keys:['fxSwaps']},
- {id:'spot',title:'FX Spot Overview',keys:['spot']},
- {id:'fxsummary',title:'FX Market Summary',keys:['fxSummary']},
- {id:'valuedates',title:'Value Dates',keys:['valueDates']},
- {id:'cross',title:'Cross-Currency Rates',keys:['crossRates']},
- {id:'tbills',title:'T-Bill Auctions (Primary Yields)',keys:['tbills','tbillRef']},
- {id:'tbillauction',title:'T-Bill Auction Details',keys:['tbillAuction']},
- {id:'tbillcurve',title:'T-Bill Yield Curve (series)',keys:['tbillCurve']},
- {id:'bonds',title:'Treasury Bonds (daily rates)',keys:['bonds']},
- {id:'secondary',title:'T-Bond Secondary Yields',keys:['bondSecondary']},
- {id:'reserves',title:'Foreign Currency Reserves',keys:['reserves']},
- {id:'inflation',title:'Inflation (CCPI / NCPI)',keys:['inflation']},
- {id:'srr',title:'Statutory Reserve Requirement (SRR)',keys:['srr']},
- {id:'tourism',title:'Tourism',keys:['tourism']},
- {id:'remittances',title:'Remittances',keys:['remittances']},
- {id:'gdp',title:'Quarterly Real GDP Growth',keys:['gdpGrowth']},
- {id:'bop',title:'Balance of Payment',keys:['bop']},
- {id:'debtgdp',title:'Debt to GDP',keys:['debtGdp']},
- {id:'global10y',title:'US 10Y Treasury',keys:['global10y']},
- {id:'gold',title:'Gold (XAU/USD)',keys:['gold']},
- {id:'brent',title:'Brent Crude Oil',keys:['brent']},
- {id:'wti',title:'WTI Crude Oil',keys:['wti']},
- {id:'dxy',title:'US Dollar Index (DXY)',keys:['dxy']},
- {id:'fomc',title:'FOMC Decisions',keys:['fomc']},
- {id:'keydates',title:'Key Dates / Announcements (tick = show on live bar)',keys:['keyDates']},
- {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews']},
-];
-const META_KEYS=['execSummary','date','marketNews'];
-
-// ── CONFIG / GITHUB ──────────────────────────────────────
-function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'',repo:localStorage.getItem('mvs_gh_repo')||'',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
-async function saveGithubConfig(){
-  const token=val('gh-token'),owner=val('gh-owner'),repo=val('gh-repo'),branch=val('gh-branch')||'main',path=val('gh-path')||'data.json';
-  const r=document.getElementById('setup-result');
-  if(!token||!owner||!repo){r.style.color='#e8917a';r.textContent='Fill in all fields.';return;}
-  r.style.color='#c8a84b';r.textContent='Testing…';
-  try{const res=await ghGet(owner,repo,branch,path,token);
-    localStorage.setItem('mvs_gh_token',token);localStorage.setItem('mvs_gh_owner',owner);localStorage.setItem('mvs_gh_repo',repo);localStorage.setItem('mvs_gh_branch',branch);localStorage.setItem('mvs_gh_path',path);
-    r.style.color='#6dd4a0';r.textContent=res.sha?('✓ Connected. Found data.json ('+res.sha.slice(0,8)+'…).'):'✓ Connected. data.json will be created on first publish.';
-    showBadge();showToast('✓ GitHub connected');loadPublished();
-  }catch(e){r.style.color='#e8917a';r.textContent='✗ '+e.message;}
-}
-async function ghGet(owner,repo,branch,path,token){
-  const res=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}});
-  if(res.status===404)return{sha:null};
-  if(!res.ok){const d=await res.json();throw new Error(d.message||'GitHub error '+res.status);}
-  return res.json();
-}
-async function ghPut(owner,repo,branch,path,token,content,sha){
-  const body={message:'Update market data — '+new Date().toLocaleString('en-GB',{timeZone:'Asia/Colombo'}),content:btoa(unescape(encodeURIComponent(content))),branch};
-  if(sha)body.sha=sha;
-  const res=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`,{method:'PUT',headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-  if(!res.ok){const d=await res.json();throw new Error(d.message||'GitHub error '+res.status);}
-  return res.json();
-}
-async function getPublished(cfg){
-  let json={},sha=null;
-  try{const g=await ghGet(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token);sha=g.sha||null;
-    if(g.content){json=JSON.parse(decodeURIComponent(escape(atob(g.content.replace(/\n/g,'')))));}}catch(e){}
-  return {json,sha};
+// Tooltips: show the value when the cursor is near any point (no need to hit it exactly)
+if(window.Chart){
+  Chart.defaults.interaction.mode="index";
+  Chart.defaults.interaction.intersect=false;
+  Chart.defaults.plugins.tooltip.enabled=true;
+  Chart.defaults.elements.point.hoverRadius=5;
+  Chart.defaults.elements.point.hitRadius=10;
 }
 
-// ── EXCEL IMPORT ─────────────────────────────────────────
-function importExcel(ev){
-  const f=ev.target.files[0];if(!f)return;
-  const st=document.getElementById('import-status');st.style.color='#c8a84b';st.textContent='Reading '+f.name+'…';
-  const r=new FileReader();
-  r.onload=e=>{
-    try{
-      const wb=XLSX.read(e.target.result,{type:'binary',cellDates:true});
-      window._lastWB=wb;
-      LOADED=parseWorkbook(wb,XLSX);
-      try{renderFreshness(analyzeFreshness(wb,XLSX));}catch(fe){}
-      renderSections();
-      st.style.color='#6dd4a0';st.textContent='✓ Imported '+f.name+'. Edit any section, then publish.';
-      showToast('✓ Excel imported');
-    }catch(err){st.style.color='#e8917a';st.textContent='✗ '+err.message;showToast('Import failed: '+err.message,'err');}
-    ev.target.value='';
-  };
-  r.readAsBinaryString(f);
+// ── Time-interval aggregation ───────────────────────────
+const MON_=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function parseLabel(lb){
+  if(lb==null)return null;
+  const s=String(lb).trim();
+  let m=s.match(/^(\d{1,2})[\s-]([A-Za-z]{3})/);            // "1 Jan" or "4-Jun"
+  if(m){const idx=MON_.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());
+        if(idx>=0)return new Date(2026,idx,parseInt(m[1]));}
+  m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);              // "6/17/2026"
+  if(m)return new Date(+m[3],+m[1]-1,+m[2]);
+  const d=new Date(s); return isNaN(d)?null:d;
 }
-function clearAll(){
-  LOADED=null;
-  document.getElementById('sections').innerHTML='';
-  document.getElementById('sections-hint').textContent='Cleared. Import an Excel to load sections.';
-  const fb=document.getElementById('fresh-banner');if(fb)fb.style.display='none';
-  document.getElementById('freshness').innerHTML='<div class="hint">Import the Excel to check freshness.</div>';
-  document.getElementById('import-status').textContent='';
-  showToast('All data cleared');
+function bucketKey(d,gran){
+  const y=d.getFullYear();
+  if(gran==="yearly")return ""+y;
+  if(gran==="monthly")return y+"-"+d.getMonth();
+  if(gran==="weekly"){const st=new Date(y,0,1);const doy=Math.floor((d-st)/86400000);return y+"-W"+Math.floor(doy/7);}
+  return null;
 }
-async function loadPublished(){
-  const cfg=loadConfig();if(!(cfg.owner&&cfg.repo&&cfg.path))return false;
+// Show the last N data points (or all). Keeps the raw points, just trims the start.
+function aggregateIdx(labels,n){
+  const all={labels:labels||[],idx:(labels||[]).map((_,i)=>i)};
+  if(!labels||!labels.length||n==="all"||!(n>0)||n>=labels.length)return all;
+  const idx=[];for(let i=labels.length-n;i<labels.length;i++)idx.push(i);
+  return{labels:idx.map(i=>labels[i]),idx};
+}
+function pick(values,idx){return idx.map(i=>(values&&values[i]!==undefined)?values[i]:null);}
+
+// Bond helpers: mid (average) of a "bid/offer" cell, and a heat-map colour
+function bondMid(v){
+  if(v==null)return null;
+  const s=String(v).trim();
+  if(!s||s==="0"||s==="—")return null;
+  if(s.indexOf("/")>-1){const p=s.split("/");const a=parseFloat(p[0]),b=parseFloat(p[1]);if(isNaN(a))return null;return isNaN(b)?a:+(((a+b)/2).toFixed(3));}
+  const n=parseFloat(s);return isNaN(n)?null:n;
+}
+function heatColor(v,min,max){
+  if(v==null||!(max>min))return "transparent";
+  const t=Math.max(0,Math.min(1,(v-min)/(max-min)));
+  const hue=t*140;               // low yield = red (0), high yield = green (140)ld = red (0)
+  return "hsla("+hue.toFixed(0)+",75%,50%,"+(0.18+t*0.22).toFixed(2)+")";  // transparent, deeper for higher
+}
+// Colour a cell by the DIRECTION of yield change vs the previous day: down = green, up = red.
+function changeColor(delta){
+  if(delta==null||delta===0)return "transparent";
+  const mag=Math.min(1,Math.abs(delta)/0.40);            // ~0.40% move = full intensity
+  const alpha=(0.16+mag*0.34).toFixed(2);
+  return delta<0 ? "hsla(145,70%,45%,"+alpha+")"          // yield fell  -> green
+                 : "hsla(2,80%,52%,"+alpha+")";           // yield rose  -> red
+}
+
+function setChartGran(key,g,btn){
+  GRANS[key]=g;
+  if(btn&&btn.parentNode){btn.parentNode.querySelectorAll(".mg-btn").forEach(b=>b.classList.toggle("active",b===btn));}
+  if(lastData)buildCharts(lastData);
+}
+
+function startPolling(){stopPolling();pollTimer=setInterval(()=>loadData(true),POLL_INTERVAL);}
+function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
+
+let _lastDataHash=null;
+async function loadData(silent=false){
+  const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
+  if(!silent){bar.style.display="block";errEl.style.display="none";}
   try{
-    const url=`https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch||'main'}/${cfg.path}?t=`+Date.now();
-    const res=await fetch(url,{cache:'no-store'});if(!res.ok)return false;
-    PUBLISHED=await res.json();
-    if(!LOADED){LOADED=JSON.parse(JSON.stringify(PUBLISHED));renderSections();
-      document.getElementById('import-status').style.color='#9fb6d4';
-      document.getElementById('import-status').textContent='Loaded currently-published data. Re-import the Excel to update it.';}
-    else markPublishStates();
-    return true;
-  }catch(e){return false;}
-}
-
-// ── SECTION ENGINE ───────────────────────────────────────
-function escAttr(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-function inp(path,val,kind){return `<input class="ed" data-path="${escAttr(path)}" data-kind="${kind}" value="${escAttr(val)}">`;}
-function renderNode(value,path){
-  if(value===null||value===undefined)return inp(path,'','null');
-  if(typeof value==='boolean')return `<input type="checkbox" class="ed" data-path="${escAttr(path)}" data-kind="bool" ${value?'checked':''} title="Tick = show on dashboard">`;
-  if(typeof value!=='object')return inp(path,value,typeof value==='number'?'num':'str');
-  if(Array.isArray(value)){
-    if(value.length===0)return '<span class="muted">(empty)</span>';
-    if(value.every(x=>x&&typeof x==='object'&&!Array.isArray(x))){
-      const cols=[...new Set(value.flatMap(o=>Object.keys(o)))];
-      let h='<div class="ed-scroll"><table class="ed-tbl"><thead><tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr></thead><tbody>';
-      value.forEach((o,i)=>{h+='<tr>'+cols.map(c=>`<td>${renderNode(o[c],path+'.'+i+'.'+c)}</td>`).join('')+'</tr>';});
-      return h+'</tbody></table></div>';
-    }
-    return '<div class="ed-arr">'+value.map((x,i)=>renderNode(x,path+'.'+i)).join('')+'</div>';
-  }
-  const keys=Object.keys(value);if(keys.length===0)return '<span class="muted">(empty)</span>';
-  const arrKeys=keys.filter(k=>Array.isArray(value[k])&&value[k].every(x=>x===null||typeof x!=='object'));
-  if(arrKeys.length>=1&&arrKeys.every(k=>value[k].length===value[arrKeys[0]].length)&&value[arrKeys[0]].length>3){
-    const scalarKeys=keys.filter(k=>!arrKeys.includes(k));let h='';
-    if(scalarKeys.length)h+='<div class="ed-fields">'+scalarKeys.map(k=>`<div><label>${k}</label>${renderNode(value[k],path+'.'+k)}</div>`).join('')+'</div>';
-    h+='<div class="ed-scroll"><table class="ed-tbl"><thead><tr><th>#</th>'+arrKeys.map(k=>`<th>${k}</th>`).join('')+'</tr></thead><tbody>';
-    const n=value[arrKeys[0]].length;
-    for(let i=0;i<n;i++){h+=`<tr><td style="color:#5a7a9a">${i+1}</td>`+arrKeys.map(k=>`<td>${renderNode(value[k][i],path+'.'+k+'.'+i)}</td>`).join('')+'</tr>';}
-    return h+'</tbody></table></div>';
-  }
-  return '<div class="ed-fields">'+keys.map(k=>{
-    const v=value[k];
-    if(v&&typeof v==='object')return `<div class="ed-sub"><div class="ed-sub-t">${k}</div>${renderNode(v,path+'.'+k)}</div>`;
-    return `<div><label>${k}</label>${renderNode(v,path+'.'+k)}</div>`;
-  }).join('')+'</div>';
-}
-function countPoints(secKey){
-  const v=LOADED[secKey];
-  if(v==null)return 0;
-  if(Array.isArray(v))return v.length;
-  if(typeof v==='object'){if(Array.isArray(v.values))return v.values.length;return Object.keys(v).length;}
-  return 1;
-}
-function renderSections(){
-  if(!LOADED){return;}
-  document.getElementById('sections-hint').textContent='Click a section to edit. Each has its own publish button.';
-  const host=document.getElementById('sections');
-  host.innerHTML=SECTIONS.map(sec=>{
-    const present=sec.keys.some(k=>LOADED[k]!=null);
-    const pts=sec.keys.reduce((n,k)=>n+countPoints(k),0);
-    let body;
-    if(sec.id==='results'){
-      const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:[];
-      const N=Math.max(6,cur.length+1);
-      let rows='';for(let i=0;i<N;i++){rows+=`<div style="margin-bottom:6px"><input class="ed" data-path="marketNews.${i}" data-kind="str" placeholder="Result / announcement ${i+1} (leave blank to skip)" value="${escAttr(cur[i]||'')}" style="width:100%"></div>`;}
-      body=`<div class="ed-sub"><div class="ed-sub-t">Latest results — shown on the dashboard Announcements tab &amp; live bar</div>${rows}</div>`;
-    } else {
-      body=sec.keys.map(k=>{
-        if(LOADED[k]==null)return `<div class="ed-sub"><div class="ed-sub-t">${k}</div><span class="muted">No data in this workbook.</span></div>`;
-        return `<div class="ed-sub"><div class="ed-sub-t">${k}</div>${renderNode(LOADED[k],k)}</div>`;
-      }).join('');
-    }
-    const presentEff=sec.id==='results'?true:present;
-    return `<div class="sec" id="sec-${sec.id}">
-      <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
-        <div><div class="st">${sec.title}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
-        <div class="right"><span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
-      </div>
-      <div class="sec-body">
-        ${presentEff?body:'<span class="muted">This section has no data in the imported workbook.</span>'}
-        <div class="sec-foot"><div class="ps" id="ps-${sec.id}"></div>
-          <button class="btn-green btn-sm" onclick="event.stopPropagation();publishKeys(${JSON.stringify(sec.keys)},'${sec.id}')">🚀 Publish this section</button>
-        </div>
-      </div></div>`;
-  }).join('');
-  markPublishStates();
-}
-function toggleAll(open){document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('open',open));}
-function markPublishStates(){
-  SECTIONS.forEach(sec=>{
-    const el=document.getElementById('pst-'+sec.id);if(!el)return;
-    const live=PUBLISHED&&sec.keys.some(k=>PUBLISHED[k]!=null);
-    el.className='sec-pub-state '+(live?'live':'draft');el.textContent=live?'LIVE':'DRAFT';
-  });
-}
-
-// read every input back into LOADED (keeps edits)
-function setByPath(root,path,v){const s=path.split('.');let o=root;for(let i=0;i<s.length-1;i++){const k=s[i];if(o[k]==null)o[k]=/^\d+$/.test(s[i+1])?[]:{};o=o[k];}o[s[s.length-1]]=v;}
-function applyEdits(){
-  document.querySelectorAll('#sections input.ed').forEach(el=>{
-    const p=el.getAttribute('data-path'),kind=el.getAttribute('data-kind');let v;
-    if(kind==='bool'){v=el.checked;}
-    else{v=el.value;if(kind==='num'||kind==='null'){const s=v.trim();v=s===''?(kind==='num'?null:null):(isNaN(+s)||/[^0-9.+\-eE]/.test(s)?s:+s);}}
-    setByPath(LOADED,p,v);
-  });
-}
-function recomputeMeta(p){
-  p.date=new Date().toISOString().slice(0,10);
-  const es={usdlkr:(p.spot&&p.spot.close)||(p.usdlkr&&p.usdlkr.close)||'',liqDir:'',liqDelta:''};
-  if(p.liquidity&&p.liquidity.current!=null&&p.liquidity.previous!=null){const dl=+(p.liquidity.current-p.liquidity.previous).toFixed(2);es.liqDir=dl>=0?'increased':'decreased';es.liqDelta=Math.abs(dl);}
-  p.execSummary=es;if(!Array.isArray(p.marketNews))p.marketNews=[];
-}
-
-// ── PUBLISH (per-section merge, or all) ──────────────────
-async function publishKeys(keys,secId){
-  if(!LOADED){showToast('Import an Excel first.','err');return;}
-  const cfg=loadConfig();
-  if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Complete the GitHub setup first.','err');document.getElementById('setup-box').style.display='block';return;}
-  applyEdits();
-  // ── Freshness guard: block publish if any daily section is stale or missing ──
-  try{
-    const wb2=window._lastWB;
-    if(wb2){
-      const checks=analyzeFreshness(wb2,XLSX);
-      const bad=checks.filter(c=>c.status==='stale'||c.status==='missing');
-      if(bad.length){
-        const names=bad.map(c=>c.label).join(', ');
-        const go=confirm('⚠ '+bad.length+' section'+(bad.length>1?'s are':' is')+' NOT updated for today:\n\n'+names+'\n\nYour Excel does not have today\'s data for these sections.\nAdd today\'s data to Excel and re-import before publishing.\n\nPress OK to publish anyway, or Cancel to go back.');
-        if(!go)return;
-      }
-    }
-  }catch(e){}
-  const isAll=keys==='all';
-  const stEl=secId?document.getElementById('ps-'+secId):document.getElementById('sections-hint');
-  const setSt=(c,m)=>{if(stEl){stEl.style.color=c;stEl.textContent=m;}};
-  setSt('#c8a84b','Publishing…');
-  for(let a=1;a<=5;a++){
-    try{
-      const {json,sha}=await getPublished(cfg);
-      let published=isAll?JSON.parse(JSON.stringify(LOADED)):(json&&typeof json==='object'?json:{});
-      if(!isAll){keys.forEach(k=>{if(LOADED[k]!=null)published[k]=LOADED[k];});}
-      recomputeMeta(published);
-      await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,JSON.stringify(published,null,1),sha||null);
-      PUBLISHED=published;markPublishStates();
-      setSt('#6dd4a0','✓ Published '+new Date().toLocaleTimeString());
-      showToast(isAll?'✓ All sections published':'✓ Section published');return;
-    }catch(e){
-      const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
-      if(conflict&&a<5){setSt('#c8a84b','Conflict — retry '+a+'/5…');await new Promise(r=>setTimeout(r,800*a));continue;}
-      setSt('#e8917a','✗ '+e.message);showToast(e.message,'err');return;
-    }
+    const res=await fetch(DATA_URL+"?t="+Date.now(),{cache:"no-store"});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const txt=await res.text();
+    bar.style.display="none";
+    // Only re-render (and rebuild charts) when the published data has actually changed.
+    // This stops the every-30s flicker — the dashboard refreshes only after you publish.
+    if(txt===_lastDataHash)return;
+    _lastDataHash=txt;
+    render(JSON.parse(txt));
+  }catch(e){
+    bar.style.display="none";
+    if(!silent){errEl.style.display="block";errEl.textContent="Could not load data — "+e.message;}
   }
 }
 
-// ── HELPERS ──────────────────────────────────────────────
-function val(id){return document.getElementById(id).value.trim();}
-function showBadge(){const cfg=loadConfig();if(cfg.token&&cfg.owner&&cfg.repo){document.getElementById('setup-box').style.display='none';const b=document.getElementById('connected-badge');b.style.display='block';document.getElementById('connected-repo').textContent=cfg.owner+'/'+cfg.repo;document.getElementById('connected-path').textContent=cfg.path+' ('+cfg.branch+')';['token','owner','repo','branch','path'].forEach(k=>{const el=document.getElementById('gh-'+k);if(el)el.value=cfg[k];});}}
-let toastT;function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type==='err'?' err':'');clearTimeout(toastT);toastT=setTimeout(()=>t.className='toast'+(type==='err'?' err':''),3200);}
-
-// ── FRESHNESS ────────────────────────────────────────────
-function analyzeFreshness(wb,XLSX,nowOverride){
-  const S=n=>{const ws=wb.Sheets[n];return ws?XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null}):[];};
-  const sheets=wb.SheetNames, _IGN=/dailydata|weeklydata|monthlydata|others/, find=name=>sheets.find(s=>{const t=s.toLowerCase().replace(/\s+/g,"");return !_IGN.test(t)&&t.includes(name);});
-  const MON3=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"],MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const US_HOL=new Set(["2026-01-01","2026-01-19","2026-02-16","2026-05-25","2026-06-19","2026-07-03","2026-09-07","2026-10-12","2026-11-11","2026-11-26","2026-12-25"]);
-  const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,'0')+"-"+String(d.getDate()).padStart(2,'0');
-  const fmt=d=>d.getDate()+" "+MONF[d.getMonth()];
-  const isWknd=d=>{const g=d.getDay();return g===0||g===6;};
-  const isWork=(d,cal)=>!isWknd(d)&&!(cal==='US'&&US_HOL.has(iso(d)));
-  const lastWork=(d,cal)=>{let x=new Date(d.getFullYear(),d.getMonth(),d.getDate());while(!isWork(x,cal))x.setDate(x.getDate()-1);return x;};
-  const wdBetween=(a,b,cal)=>{let c=0,x=new Date(a.getTime());while(x<b){x.setDate(x.getDate()+1);if(isWork(x,cal))c++;}return c;};
-  const now=nowOverride||new Date();
-  const todayUTC=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const usNow=new Date(now.getTime()-10.5*3600*1000);const usTodayUTC=new Date(usNow.getFullYear(),usNow.getMonth(),usNow.getDate());
-  const xlDate=v=>{if(v instanceof Date)return new Date(v.getFullYear(),v.getMonth(),v.getDate());if(typeof v==='number'&&v>40000&&v<60000){const d=new Date(Math.round((v-(v>59?25569:25568))*86400*1000));return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());}if(typeof v==='string'){const s=v.trim();const m1=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);if(m1)return new Date(+m1[3],+m1[1]-1,+m1[2]);const m2=s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);if(m2)return new Date(+m2[1],+m2[2]-1,+m2[3]);}return null;};
-  const latestDate=(rows,col,sr)=>{sr=sr||2;let mx=null;for(let i=sr;i<rows.length;i++){const v=rows[i]&&rows[i][col];const d=xlDate(v);if(d&&(!mx||d>mx))mx=d;}return mx;};
-  const parseDM=s=>{const m=String(s||'').trim().match(/^(\d{1,2})[\s\-]([A-Za-z]{3})/);if(!m)return null;const mi=MON3.indexOf(m[2].toLowerCase());if(mi<0)return null;return new Date(now.getFullYear(),mi,parseInt(m[1]));};
-  const out=[];
-  const daily=(label,cal,last,secId)=>{const ref=cal==='US'?usTodayUTC:todayUTC,exp=lastWork(ref,cal);
-    if(!last){out.push({label,cadence:'Daily',cal,secId,status:'missing',msg:'No dates found in this section.'});return;}
-    if(last>=exp){out.push({label,cadence:'Daily',cal,secId,status:'ok',msg:'Up to date — latest '+fmt(last)+'.'});return;}
-    const gap=wdBetween(last,exp,cal);out.push({label,cadence:'Daily',cal,secId,status:gap>=2?'stale':'pending',msg:(gap>=2?'NOT updated — ':'Today still pending — ')+'latest '+fmt(last)+', expected '+fmt(exp)+' ('+gap+' working day'+(gap>1?'s':'')+' behind).'});};
-  const weekly=(label,cal,last,secId)=>{const ref=cal==='US'?usTodayUTC:todayUTC;
-    if(!last){out.push({label,cadence:'Weekly',cal,secId,status:'missing',msg:'No dates found.'});return;}
-    const days=Math.round((ref-last)/86400000);out.push({label,cadence:'Weekly',cal,secId,status:days>9?'stale':(days>7?'pending':'ok'),msg:(days>9?'NOT updated — ':'')+'latest '+fmt(last)+' ('+days+' day'+(days===1?'':'s')+' ago).'});};
-  const mm=S(find('moneymorket')||find('moneymarket')||'');daily('Money Market & Liquidity','SL',latestDate(mm,7),'liquidity');
-  const fx=S(find('fx')||'');daily('USD/LKR & FX Spot','SL',latestDate(fx,0),'usdlkr');
-  const fi=S(find('fixedincome')||'');{let last=latestDate(fi,10);daily('Daily Bond / Yield Rates','SL',last,'bonds');}
-  const gl=S(find('globalmarket')||'');daily('US 10Y Treasury','US',latestDate(gl,0),'global10y');daily('Gold (XAU/USD)','US',latestDate(gl,10),'gold');daily('Crude Oil (WTI / Brent)','US',latestDate(gl,3),'brent');daily('US Dollar Index (DXY)','US',latestDate(gl,7),'dxy');
-  const mc=S(find('macroeconomy')||'');weekly('Foreign Holdings of Govt Securities','SL',latestDate(mc,0),'foreign');weekly('T-Bill Auction (Primary)','SL',latestDate(fi,15),'tbills');
-  const monthLbl=(mc[1]&&mc[1][11])?String(mc[1][11]).trim():'';
-  out.push({label:'Reserves · Inflation · Tourism · Remittances',cadence:'Monthly',cal:'SL',secId:'reserves',status:'info',msg:'Monthly series — latest column: '+(monthLbl||'n/a')+'. Update when the new month is released.'});
-  const an=S(find('announcement')||'');let passed=[];for(let i=2;i<an.length;i++){const v=an[i]&&an[i][1];if(v){const m=String(v).match(/^(\d{1,2})(?:-\d{1,2})?[.\-/](\d{1,2})[.\-/](\d{4})/);if(m){const dt=new Date(Date.UTC(+m[3],+m[2]-1,+m[1]));if(dt<todayUTC)passed.push(String(an[i][0]).trim());}}}
-  out.push({label:'OPR · SRR · FOMC · Key Dates',cadence:'Fixed / Special',cal:'—',secId:'keydates',status:passed.length?'pending':'info',msg:passed.length?('A scheduled date has passed — update: '+passed.join(', ')):'Event-driven — update only when a new policy decision or date occurs.'});
-  return out;
+function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=(val!=null&&val!=="")? val:"—";}
+function setFmt(id,val){const el=document.getElementById(id);if(!el)return;if(val==null||String(val).trim()===""){el.textContent="—";return;}const n=parseFloat(String(val).replace(/,/g,""));el.textContent=isNaN(n)?String(val):n.toFixed(2);}
+function escHtml(s){return String(s==null?"":s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+// Upcoming key dates with live "days remaining" countdown
+function getKeyEvents(d){
+  const defaults=[
+    {label:"Next T-Bill Auction",date:"2026-06-24"},
+    {label:"Next T-Bond Auction",date:"2026-06-26"},
+    {label:"Next CCPI Inflation Release",date:"2026-06-30",est:true},
+    {label:"Next NCPI Inflation Release",date:"2026-07-21",est:true},
+    {label:"Next Monetary Policy Review",date:"2026-07-22"}
+  ];
+  return (d&&Array.isArray(d.keyDates)&&d.keyDates.length)?d.keyDates:defaults;
 }
-function renderFreshness(checks){
-  const grid=document.getElementById('freshness'),banner=document.getElementById('fresh-banner');
-  const bad=checks.filter(c=>c.status==='stale'||c.status==='missing').length,pend=checks.filter(c=>c.status==='pending').length;
-  if(banner){banner.style.display='block';
-    if(bad){banner.className='fresh-banner bad';banner.textContent='⚠ '+bad+' section'+(bad>1?'s are':' is')+' NOT updated for today — review the red items before you publish.';}
-    else if(pend){banner.className='fresh-banner warn';banner.textContent='● '+pend+' section'+(pend>1?'s':'')+' may still be pending today (1 working day behind). Confirm today\u2019s figures are out.';}
-    else{banner.className='fresh-banner ok';banner.textContent='✓ All daily & weekly sections are up to date for the latest working day.';}}
-  const cal=c=>c.cal==='—'?'':(c.cal==='US'?' · US days':' · SL days');
-  grid.innerHTML=checks.map(c=>{const icon=c.status==='ok'?'✓':c.status==='info'?'ⓘ':c.status==='pending'?'●':'⚠';
-    const clickable=c.secId&&(c.status==='stale'||c.status==='missing'||c.status==='pending');
-    const onclick=clickable?` onclick="gotoSection('${c.secId}')" style="cursor:pointer"`:'';
-    const hint=clickable?'<div class="fi-go">→ click to open &amp; edit this section</div>':'';
-    return `<div class="fresh-item ${c.status}"${onclick}><div class="fi-top"><span class="fi-name">${icon} ${c.label}</span><span class="fi-tag">${c.cadence}${cal(c)}</span></div><div class="fi-msg">${c.msg}</div>${hint}</div>`;}).join('');
+function parseEventDate(s){
+  s=String(s||"").trim();if(!s)return null;
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);                       // YYYY-MM-DD
+  if(m)return new Date(+m[1],+m[2]-1,+m[3]);
+  m=s.match(/^(\d{1,2})(?:\s*-\s*\d{1,2})?[.\/-](\d{1,2})[.\/-](\d{4})/); // DD.MM.YYYY / DD/MM/YYYY (range -> first day)
+  if(m)return new Date(+m[3],+m[2]-1,+m[1]);
+  m=s.match(/^(\d{1,2})\s*(?:st|nd|rd|th)?\s+([A-Za-z]{3,})\.?\s*(\d{4})?/); // D Mon [YYYY]
+  if(m){const mi=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"].indexOf(m[2].slice(0,3).toLowerCase());if(mi>=0)return new Date(m[3]?+m[3]:new Date().getFullYear(),mi,+m[1]);}
+  const d=new Date(s);return isNaN(d.getTime())?null:d;
 }
-function gotoSection(id){
-  const el=document.getElementById('sec-'+id);if(!el)return;
-  el.classList.add('open');
-  el.scrollIntoView({behavior:'smooth',block:'start'});
-  el.style.transition='box-shadow .3s';el.style.boxShadow='0 0 0 2px #c8a84b';
-  setTimeout(()=>{el.style.boxShadow='';},1800);
-}
-
-// ── PARSER ───────────────────────────────────────────────
-function parseWorkbook(wb,XLSX){
-  const S=n=>{const ws=wb.Sheets[n];return ws?XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null}):[];};
-  const sheets=wb.SheetNames, _IGN=/dailydata|weeklydata|monthlydata|others/, find=name=>sheets.find(s=>{const t=s.toLowerCase().replace(/\s+/g,"");return !_IGN.test(t)&&t.includes(name);});
+function eventDayInfo(dateStr){
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const xlDate=v=>{if(v instanceof Date)return v;if(typeof v==='number'&&v>40000&&v<60000){const d=new Date(Math.round((v-(v>59?25569:25568))*86400*1000));return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate());}if(typeof v==='string'){const s=v.trim();const m1=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);if(m1)return new Date(+m1[3],+m1[1]-1,+m1[2]);const m2=s.match(/^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);if(m2)return new Date(+m2[1],+m2[2]-1,+m2[3]);}return null;};
-  const lbl=d=>{const dt=xlDate(d);if(dt)return dt.getDate()+" "+MON[dt.getMonth()];return d==null?"":String(d).trim();};
-  const num=v=>{if(v==null||v==="")return null;const n=parseFloat(String(v).replace(/,/g,'').replace('%',''));return isNaN(n)?null:n;};
-  const pct=v=>{if(v==null||v==="")return"";let n=parseFloat(String(v).replace('%',''));if(isNaN(n))return String(v);if(Math.abs(n)<=1.0001)n=n*100;return n.toFixed(2).replace(/\.00$/,'.0')+"%";};
-  const toISO=s=>{s=String(s).trim();const m=s.match(/^(\d{1,2})(?:-\d{1,2})?[.\-/](\d{1,2})[.\-/](\d{4})/);return m?(m[3]+"-"+String(m[2]).padStart(2,'0')+"-"+String(m[1]).padStart(2,'0')):s;};
-  const o={};
-  const mm=S(find('moneymorket')||find('moneymarket')||'');
-  if(mm.length){
-    o.opr=[];for(let i=2;i<mm.length;i++)if(mm[i][0]&&mm[i][1]!=null)o.opr.push({date:String(mm[i][0]).trim(),rate:String(mm[i][1]).trim(),show:true});
-    o.callMarket={min:num(mm[2][4]),max:num(mm[3][4]),wa:num(mm[4][4]),vol:num(mm[5][4])};
-    o.repoMarket={min:num(mm[2][5]),max:num(mm[3][5]),wa:num(mm[4][5]),vol:num(mm[5][5])};
-    o.windows={sdf:{cur:num(mm[8]&&mm[8][4]),prev:num(mm[8]&&mm[8][5])},slf:{cur:num(mm[9]&&mm[9][4]),prev:num(mm[9]&&mm[9][5])}};
-    let L=[],V=[];for(let i=2;i<mm.length;i++)if(mm[i][7]!=null&&mm[i][8]!=null){L.push(lbl(mm[i][7]));V.push(num(mm[i][8]));}
-    let rl=[];for(let i=2;i<mm.length;i++)if(mm[i][10]!=null&&mm[i][11]!=null)rl.push(num(mm[i][11]));
-    o.liquidity={labels:L,values:V,current:rl.length?rl[rl.length-1]:(V.length?V[V.length-1]:null),previous:rl.length>1?rl[rl.length-2]:(V.length>1?V[V.length-2]:null)};
-  }
-  const fi=S(find('fixedincome')||'');
-  if(fi.length){
-    // Bond column dates: try row1 col3-8 as dates first, else use text
-    const parseDMlocal=s=>{const MON3l=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];const m=String(s||'').trim().match(/^(\d{1,2})[\s\-]([A-Za-z]{3})/i);if(!m)return null;const mi=MON3l.indexOf(m[2].toLowerCase());if(mi<0)return null;const yr=new Date().getFullYear();return new Date(yr,mi,parseInt(m[1]));};
-    let bh=[];for(let c=3;c<=8;c++){const v=fi[1][c];if(v==null)continue;const dtx=xlDate(v);bh.push(dtx?lbl(dtx):(parseDMlocal(v)?lbl(parseDMlocal(v)):String(v).trim()));}
-    let br=[];for(let i=2;i<fi.length;i++)if(fi[i][0]){const vals=[];for(let c=3;c<=8;c++)vals.push(fi[i][c]);br.push({bond:String(fi[i][0]).trim(),eoy:fi[i][1],eom:fi[i][2],values:vals});}
-    o.bonds={headers:bh,rows:br};
-    let tcL=[],t3=[],t6=[],t12=[];for(let i=2;i<fi.length;i++)if(fi[i][10]!=null){tcL.push(lbl(fi[i][10]));t3.push(num(fi[i][11]));t6.push(num(fi[i][12]));t12.push(num(fi[i][13]));}
-    o.tbillCurve={labels:tcL,m3:t3,m6:t6,m12:t12};
-    let tb=[],tref={};for(let i=2;i<fi.length;i++){const a=fi[i][15];if(a==null)continue;const dtx=xlDate(a);if(dtx)tb.push({date:lbl(dtx),m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18]),show:true});else{const t=String(a).toLowerCase();if(t.includes('last month'))tref.lastMonth={m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])};else if(t.includes('last year'))tref.lastYear={m3:num(fi[i][16]),m6:num(fi[i][17]),m12:num(fi[i][18])};}}
-    o.tbills=tb;o.tbillRef=tref;
-    let auc=[];for(let i=2;i<fi.length;i++){const d=fi[i][20],mat=fi[i][21];if(mat==null)continue;const dtx=xlDate(d);if(dtx)auc.push({date:lbl(dtx),maturities:[]});if(auc.length)auc[auc.length-1].maturities.push({maturity:String(mat).trim(),offered:num(fi[i][22]),accepted:num(fi[i][23]),yield:num(fi[i][24])});}
-    o.tbillAuction=auc;
-    let sec=[];for(let i=2;i<fi.length;i++)if(fi[i][26]!=null)sec.push({maturity:String(fi[i][26]).trim(),bid:num(fi[i][27]),ask:num(fi[i][28]),show:true});
-    o.bondSecondary=sec;
-  }
-  const fx=S(find('fx')||'');
-  if(fx.length){
-    let L=[],V=[];for(let i=2;i<fx.length;i++)if(fx[i][0]!=null&&fx[i][1]!=null){L.push(lbl(fx[i][0]));V.push(num(fx[i][1]));}
-    const swMap={'1 week':'1w','1 month':'1m','2 month':'2m','3 month':'3m','6 month':'6m','1 year':'1y'};
-    let sw={};for(let i=2;i<fx.length;i++){const k=fx[i][3];if(k==null)continue;const key=swMap[String(k).toLowerCase().trim()];if(key)sw[key]={sell:num(fx[i][4]),buy:num(fx[i][5])};}
-    let spot={};for(let i=2;i<fx.length;i++){const it=fx[i][7];if(it==null)continue;const t=String(it).toLowerCase();if(t.includes('opening'))spot.open=String(fx[i][8]).trim();else if(t.includes('closing'))spot.close=String(fx[i][8]).trim();else if(t.includes('lowest'))spot.low=String(fx[i][8]).trim();else if(t.includes('highest'))spot.high=String(fx[i][8]).trim();}
-    let cross=[];for(let i=2;i<fx.length;i++)if(fx[i][11]!=null)cross.push({pair:String(fx[i][11]).trim(),buy:num(fx[i][12]),sell:num(fx[i][13]),show:true});
-    o.usdlkr={labels:L,values:V,close:spot.close||(V.length?V[V.length-1]:null)};
-    o.fxSwaps=sw;o.spot=spot;o.crossRates=cross;
-  }
-  // FX Market Summary + Value Dates now live in the Opening Report sheet (cols 0-2 and 4-6)
-  const orp=S(find('opening')||'');
-  o.fxSummary=[];o.valueDates=[];
-  if(orp.length){
-    for(let i=2;i<orp.length;i++)if(orp[i][0]!=null)o.fxSummary.push({tenor:String(orp[i][0]).trim(),volume:num(orp[i][1]),wa:num(orp[i][2])});
-    for(let i=2;i<orp.length;i++)if(orp[i][4]!=null)o.valueDates.push({tenor:String(orp[i][4]).trim(),date:orp[i][5]instanceof Date?lbl(orp[i][5]):(orp[i][5]==null?'':String(orp[i][5]).trim()),nod:orp[i][6]==null?'':String(orp[i][6]).trim(),show:true});
-  }
-  const mc=S(find('macroeconomy')||'');
-  if(mc.length){
-    let fL=[],fV=[];for(let i=2;i<mc.length;i++)if(mc[i][0]!=null&&mc[i][1]!=null){fL.push(lbl(mc[i][0]));fV.push(num(mc[i][1]));}
-    o.foreign={labels:fL,values:fV};
-    let cL=[],cV=[];for(let i=2;i<mc.length;i++)if(mc[i][3]!=null&&mc[i][4]!=null){cL.push(lbl(mc[i][3]));cV.push(num(mc[i][4]));}
-    o.cbsl={labels:cL,values:cV};o.cbslHoldings=cV.length?cV[cV.length-1]:null;
-    let res=[];for(let i=2;i<mc.length;i++)if(mc[i][6]!=null)res.push({month:String(mc[i][6]).trim(),value:String(mc[i][7]).trim(),show:true});o.reserves=res;
-    let inf=[];for(let i=2;i<mc.length;i++)if(mc[i][9]!=null)inf.push({metric:String(mc[i][9]).trim(),apr:pct(mc[i][10]),may:pct(mc[i][11]),show:true});o.inflation=inf;
-    let srr=[];for(let i=2;i<mc.length;i++)if(mc[i][13]!=null)srr.push({date:String(mc[i][13]).trim(),rate:pct(mc[i][14]),show:true});o.srr=srr;
-    if(mc[2])o.tourism={apr:mc[2][17]==null?'':String(mc[2][17]).trim(),may:mc[2][18]==null?'':String(mc[2][18]).trim(),yoy:pct(mc[2][19])};
-    if(mc[6])o.remittances={apr:mc[6][17]==null?'':String(mc[6][17]).trim(),may:mc[6][18]==null?'':String(mc[6][18]).trim(),yoy:pct(mc[6][19])};
-    // New macro tables (each grows by row): GDP growth (21-22), Balance of Payment (24-25), Debt-to-GDP (27-28)
-    let gdp=[];for(let i=2;i<mc.length;i++)if(mc[i][21]!=null){let g=num(mc[i][22]);if(g!=null&&Math.abs(g)<=1.0001)g=g*100;gdp.push({period:String(mc[i][21]).trim(),growth:g==null?null:+g.toFixed(2),show:true});}o.gdpGrowth=gdp;
-    let bop=[];for(let i=2;i<mc.length;i++)if(mc[i][24]!=null)bop.push({period:String(mc[i][24]).trim(),value:num(mc[i][25]),show:true});o.bop=bop;
-    let dgd=[];for(let i=2;i<mc.length;i++)if(mc[i][27]!=null){let r=num(mc[i][28]);if(r!=null&&Math.abs(r)<=3)r=r*100;dgd.push({period:String(mc[i][27]).trim(),ratio:r==null?null:+r.toFixed(1),show:true});}o.debtGdp=dgd;
-  }
-  const gl=S(find('globalmarket')||'');
-  if(gl.length){
-    const ser=(dc,vc)=>{let L=[],V=[];for(let i=2;i<gl.length;i++)if(gl[i][dc]!=null&&gl[i][vc]!=null){L.push(lbl(gl[i][dc]));V.push(num(gl[i][vc]));}return{labels:L,values:V};};
-    o.global10y=ser(0,1);o.wti=ser(3,4);o.brent=ser(3,5);o.dxy=ser(7,8);o.gold=ser(10,11);
-    let fomc=[];for(let i=2;i<gl.length;i++)if(gl[i][13]!=null)fomc.push({date:String(gl[i][13]).trim(),range:String(gl[i][14]).trim(),repo:pct(gl[i][15]),rrepo:pct(gl[i][16]),show:true});o.fomc=fomc;
-  }
-  const an=S(find('announcement')||'');
-  if(an.length){let kd=[];for(let i=2;i<an.length;i++)if(an[i][0]!=null&&an[i][1]!=null)kd.push({label:String(an[i][0]).trim(),date:toISO(an[i][1]),show:true});o.keyDates=kd;}
-  o.execSummary={usdlkr:(o.spot&&o.spot.close)||(o.usdlkr&&o.usdlkr.close)||'',liqDir:'',liqDelta:''};
-  if(o.liquidity&&o.liquidity.current!=null&&o.liquidity.previous!=null){const dlt=+(o.liquidity.current-o.liquidity.previous).toFixed(2);o.execSummary.liqDir=dlt>=0?'increased':'decreased';o.execSummary.liqDelta=Math.abs(dlt);}
-  o.marketNews=o.marketNews||[];o.date=new Date().toISOString().slice(0,10);
-  // Report dates — leave blank so dashboard auto-uses SL working days
-  o.openingDate="";o.closingDate="";o.secondaryDate="";
-  return o;
+  const dt=parseEventDate(dateStr);
+  if(!dt||isNaN(dt.getTime()))return {dstr:String(dateStr),daysTxt:"",cls:""};
+  dt.setHours(0,0,0,0);
+  const today=new Date();today.setHours(0,0,0,0);
+  const diff=Math.round((dt-today)/86400000);   // plain calendar days (no working-day logic)
+  let daysTxt,cls;
+  if(diff<0){daysTxt=Math.abs(diff)+" day"+(Math.abs(diff)===1?"":"s")+" ago";cls="passed";}
+  else if(diff===0){daysTxt="Today";cls="today";}
+  else if(diff===1){daysTxt="Tomorrow (1 day)";cls="soon";}
+  else{daysTxt="in "+diff+" days";cls=diff<=5?"soon":"";}
+  return {dstr:dt.getDate()+" "+MON[dt.getMonth()]+" "+dt.getFullYear(),daysTxt:daysTxt,cls:cls,diff:diff};
+}
+function renderEvents(d){
+  const grid=document.getElementById("events-grid");if(!grid)return;
+  grid.innerHTML=getKeyEvents(d).map(e=>{
+    const i=eventDayInfo(e.date);
+    const est=e.est?' <span style="color:#5a7a9a;font-size:8px;text-transform:none">(est.)</span>':'';
+    return '<div class="event-card"><div class="ev-label">'+escHtml(e.label)+est+'</div><div class="ev-date">'+escHtml(i.dstr)+'</div><div class="ev-days '+i.cls+'">'+(i.daysTxt||"—")+'</div></div>';
+  }).join("");
+}
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  const pg=document.getElementById(id);if(pg)pg.style.display='block';
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  // charts built while their tab was hidden render at 0px — resize once visible
+  setTimeout(()=>{Object.values(charts).forEach(c=>{try{c.resize();}catch(e){}});},40);
 }
 
-// ── INIT ─────────────────────────────────────────────────
-showBadge();
-loadPublished();
+function buildTicker(items){
+  const wrap=document.getElementById("tickerWrap"),inner=document.getElementById("tickerInner");
+  let list=[];
+  if(Array.isArray(items))list=items.map(s=>String(s).trim()).filter(Boolean);
+  else if(items&&String(items).trim())list=String(items).split(/\s*\u25C6\s*/).map(s=>s.trim()).filter(Boolean);
+  if(!list.length){wrap.classList.remove("visible");return;}
+  const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  const sep=' <span style="color:#c8a84b;font-weight:700">\u25C6</span> ';
+  const html=list.map(esc).join(sep)+sep;
+  inner.innerHTML="";
+  const s1=document.createElement("span");s1.innerHTML=html;
+  const s2=document.createElement("span");s2.innerHTML=html;
+  inner.appendChild(s1);inner.appendChild(s2);
+  wrap.classList.add("visible");
+  requestAnimationFrame(()=>{
+    const w=s1.offsetWidth+60;
+    inner.style.animationDuration=Math.max(12,w/80)+"s";
+  });
+}
+
+// ── RENDER TBILL AUCTION TABLE ──────────────────────────
+function renderTbillAuction(data,targetId){
+  const tbody=document.getElementById(targetId||"tbillAuctionBody");
+  if(!tbody)return;
+  tbody.innerHTML="";
+  if(!data||!data.length){
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:14px">No auction data available</td></tr>';
+    return;
+  }
+  const groupBgs=["rgba(26,48,80,0.55)","rgba(10,28,52,0.30)"];
+  data.forEach((entry,ei)=>{
+    const mats=entry.maturities||[];
+    const rowCount=mats.length||1;
+    const groupBg=groupBgs[ei%2];
+    const isFirst=ei===0;
+    mats.forEach((m,mi)=>{
+      const tr=document.createElement("tr");
+      const topBorder=(!isFirst&&mi===0)?"2px solid #c8a84b":"none";
+      if(mi===0){
+        const dateTd=document.createElement("td");
+        dateTd.rowSpan=rowCount;
+        dateTd.textContent=(()=>{const t=String(entry.date||"—").trim();if(t==="—"||/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();})();
+        dateTd.style.fontWeight="800";
+        dateTd.style.color="#c8a84b";
+        dateTd.style.borderRight="2px solid #c8a84b";
+        dateTd.style.borderTop=topBorder;
+        dateTd.style.verticalAlign="middle";
+        dateTd.style.background=groupBg;
+        dateTd.style.fontSize="9.5px";
+        tr.appendChild(dateTd);
+      }
+      const matTd=document.createElement("td");matTd.className="mat-cell";matTd.textContent=m.maturity||"—";
+      matTd.style.background=groupBg;matTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";matTd.style.fontWeight="600";
+      const offTd=document.createElement("td");offTd.textContent=(m.offered!=null&&m.offered!=="")?parseFloat(String(m.offered).replace(/,/g,"")).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}):"—";
+      offTd.style.background=groupBg;offTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
+      const accTd=document.createElement("td");accTd.textContent=(m.accepted!=null&&m.accepted!=="")?parseFloat(String(m.accepted).replace(/,/g,"")).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}):"—";
+      accTd.style.background=groupBg;accTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
+      const yldTd=document.createElement("td");
+      {const yv=parseFloat(m.yield);yldTd.textContent=(m.yield==null||m.yield===""||isNaN(yv))?"—":(Math.round(yv)+"%");}
+      yldTd.style.background=groupBg;yldTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
+      if(m.yield&&m.yield!=="—"){yldTd.style.color="#6dd4a0";yldTd.style.fontWeight="700";}
+      tr.appendChild(matTd);tr.appendChild(offTd);tr.appendChild(accTd);tr.appendChild(yldTd);
+      tbody.appendChild(tr);
+    });
+  });
+}
+
+function render(d){
+  lastData=d;
+  const td=new Date();
+  {const el=document.getElementById("dateDisplay");if(el)el.innerHTML=fmtOrd(td);}
+  const lu=document.getElementById("last-updated");
+  if(lu)lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  setFmt("cmmin",d.callMarket?.min);setFmt("rmmin",d.repoMarket?.min);
+  setFmt("cmmax",d.callMarket?.max);setFmt("rmmax",d.repoMarket?.max);
+  setFmt("cmwa",d.callMarket?.wa); setFmt("rmwa",d.repoMarket?.wa);
+  setFmt("cmvol",d.callMarket?.vol);setFmt("rmvol",d.repoMarket?.vol);
+  setFmt("liqcur",d.liquidity?.current);setFmt("liqprev",d.liquidity?.previous);
+  setFmt("sw1ws",d.fxSwaps?.["1w"]?.sell);setFmt("sw1wb",d.fxSwaps?.["1w"]?.buy);
+  setFmt("sw1ms",d.fxSwaps?.["1m"]?.sell);setFmt("sw1mb",d.fxSwaps?.["1m"]?.buy);
+  setFmt("sw2ms",d.fxSwaps?.["2m"]?.sell);setFmt("sw2mb",d.fxSwaps?.["2m"]?.buy);
+  setFmt("sw3ms",d.fxSwaps?.["3m"]?.sell);setFmt("sw3mb",d.fxSwaps?.["3m"]?.buy);
+  setFmt("sw6ms",d.fxSwaps?.["6m"]?.sell);setFmt("sw6mb",d.fxSwaps?.["6m"]?.buy);
+  setFmt("sw1ys",d.fxSwaps?.["1y"]?.sell);setFmt("sw1yb",d.fxSwaps?.["1y"]?.buy);
+
+  const tb=document.getElementById("tbillRows");tb.innerHTML="";
+  // Helper: append current year to short dates like "16 Jun" → "16 Jun 2026"
+  const fmtDY=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
+  // show only the 4 most recent auctions (d.tbills is newest-first)
+  (d.tbills||[]).slice(0,4).forEach(r=>{const tr=document.createElement("tr");const v=x=>(x==null||String(x).trim()===""||String(x).trim()==="0")?"—":x;tr.innerHTML=`<td>${fmtDY(r.date)}</td><td>${v(r.m3)}</td><td>${v(r.m6)}</td><td>${v(r.m12)}</td>`;tb.appendChild(tr);});
+  // Last Month / Last Year reference rows
+  {const v=x=>(x==null||String(x).trim()===""||String(x).trim()==="0")?"—":x;const ref=d.tbillRef||{};
+   [["Last Month",ref.lastMonth],["Last Year",ref.lastYear]].forEach(([lbl,o])=>{if(!o)return;const tr=document.createElement("tr");tr.style.borderTop="2px solid #2a4566";tr.style.background="rgba(200,168,75,.07)";tr.innerHTML=`<td style="color:#c8a84b;font-weight:700">${lbl}</td><td>${v(o.m3)}</td><td>${v(o.m6)}</td><td>${v(o.m12)}</td>`;tb.appendChild(tr);});}
+
+  // ── Bond table: AVERAGE (mid) rates with professional transparent heat-map
+  const bhr=document.getElementById("bondHeaderRow");bhr.innerHTML="<th>Maturity</th><th>Last Year</th><th>Last Month</th>";
+  const bHeadersAll=d.bonds?.headers||[], bRows=d.bonds?.rows||[];
+  const isRef=h=>{const t=String(h||'').toLowerCase().trim();return t==='last year'||t==='last month'||t==='end of year'||t==='end of month';};
+  const lyIdx=bHeadersAll.findIndex(h=>{const t=String(h||'').toLowerCase().trim();return t==='last year'||t==='end of year';});
+  const lmIdx=bHeadersAll.findIndex(h=>{const t=String(h||'').toLowerCase().trim();return t==='last month'||t==='end of month';});
+  const dateIdx=bHeadersAll.map((h,i)=>i).filter(i=>!isRef(bHeadersAll[i]));   // real date columns only
+  const bHeaders=dateIdx.map(i=>bHeadersAll[i]);
+  // Auto-generate SL banking working day labels for bond date columns
+  const SL_HOL=new Set(["2026-01-01","2026-01-14","2026-01-15","2026-02-04","2026-02-26","2026-04-03","2026-04-13","2026-04-14","2026-05-01","2026-05-22","2026-06-30","2026-07-29","2026-08-20","2026-09-23","2026-10-20","2026-10-26","2026-11-11","2026-12-25"]);
+  const isSLWork=d=>{const g=d.getDay();if(g===0||g===6)return false;const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");return !SL_HOL.has(iso);};
+  const MON_B=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const ordB=n=>{const v=n%100;const o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return n+o;};
+  const fmtBH=d=>ordB(d.getDate())+" "+MON_B[d.getMonth()];
+  const autoLabels=(()=>{
+    // Use SL time (UTC+5:30) to decide if today's bond data is ready (after 3 PM)
+    const slNow=new Date(Date.now()+330*60000);
+    const slHour=slNow.getUTCHours();
+    const slDow=slNow.getUTCDay();
+    const todayReady=(slDow>=1&&slDow<=5)&&slHour>=15;
+    // Start from today if ready, else from previous SL working day
+    let d=new Date();
+    if(!todayReady||!isSLWork(d)){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
+    const labels=[];
+    for(let i=0;i<bHeaders.length;i++){
+      labels.unshift(fmtBH(d));
+      do{d.setDate(d.getDate()-1);}while(!isSLWork(d));
+    }
+    return labels;
+  })();
+  bHeaders.forEach((_,ci)=>{const th=document.createElement("th");th.textContent=autoLabels[ci]||bHeaders[ci];bhr.appendChild(th);});
+  const midMatrix=bRows.map(r=>dateIdx.map(i=>bondMid((r.values||[])[i])));
+  const bb=document.getElementById("bondRows");bb.innerHTML="";
+  bRows.forEach((r,ri)=>{
+    const tr=document.createElement("tr");
+    const td0=document.createElement("td");td0.textContent=r.bond;tr.appendChild(td0);
+    // Last Year / Last Month reference rates (prefer dedicated fields; fall back to embedded columns), 2 dp
+    const fmt2=v=>{if(v==null||String(v).trim()===''||String(v).trim()==="0")return"—";const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v).trim():n.toFixed(2);};
+    const eoyVal=(r.eoy!=null&&String(r.eoy).trim()!=='')?r.eoy:(lyIdx>=0?(r.values||[])[lyIdx]:'');
+    const eomVal=(r.eom!=null&&String(r.eom).trim()!=='')?r.eom:(lmIdx>=0?(r.values||[])[lmIdx]:'');
+    const tdY=document.createElement("td");tdY.textContent=fmt2(eoyVal);tdY.style.color="#c8a84b";tdY.style.fontSize="9px";tr.appendChild(tdY);
+    const tdM=document.createElement("td");tdM.textContent=fmt2(eomVal);tdM.style.color="#9fb6d4";tdM.style.fontSize="9px";tr.appendChild(tdM);
+    const mids=midMatrix[ri]||[];
+    // per-row heat scale: this bond's own low (green) → high (red) across the dates
+    const rv=mids.filter(m=>m!=null);
+    const rmn=rv.length?Math.min(...rv):0, rmx=rv.length?Math.max(...rv):1;
+    mids.forEach((m,ci)=>{
+      const td=document.createElement("td");
+      if(m!=null){
+        // direction arrow vs the previous day that has a value (oldest→newest)
+        let prev=null;for(let k=ci-1;k>=0;k--){if(mids[k]!=null){prev=mids[k];break;}}
+        const delta=prev!=null?+(m-prev).toFixed(3):null;
+        let arrow="",acol="";
+        if(delta!=null&&delta!==0){ if(delta<0){arrow="\u25be";acol="#ff8a78";}else{arrow="\u25b4";acol="#7ee0a8";} }
+        td.innerHTML=m.toFixed(2)+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
+        td.style.background=heatColor(m,rmn,rmx);   // per-row colour
+        td.style.color="#eaf2fb";td.style.fontWeight="600";
+        if(delta!=null&&delta!==0)td.title=(delta<0?"Yield down ":"Yield up ")+Math.abs(delta).toFixed(2)+" vs previous";
+      }else{td.textContent="—";td.style.color="#3a5575";}
+      tr.appendChild(td);
+    });
+    bb.appendChild(tr);
+  });
+
+  setText("exusd",d.execSummary?.usdlkr);
+  setText("exdir",d.execSummary?.liqDir);
+  setText("exdelta",d.execSummary?.liqDelta);
+  // Live ribbon = upcoming announcement dates with countdown (not market news)
+  buildTicker(getKeyEvents(d).filter(e=>e.show!==false).map(e=>{const i=eventDayInfo(e.date);return e.label+" — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":"");}));
+
+  // ── NEW: render T-Bill Auction Detail table
+  renderTbillAuction(d.tbillAuction||[]);
+
+  // ── NEW: Market Open Report (full Summary-report replica from get_data) ──
+  setText("op-cmmin",d.callMarket?.min);setText("op-rmmin",d.repoMarket?.min);
+  setText("op-cmmax",d.callMarket?.max);setText("op-rmmax",d.repoMarket?.max);
+  setText("op-cmwa",d.callMarket?.wa); setText("op-rmwa",d.repoMarket?.wa);
+  setText("op-cmvol",d.callMarket?.vol);setText("op-rmvol",d.repoMarket?.vol);
+  setText("op-liqcur",d.liquidity?.current);setText("op-liqprev",d.liquidity?.previous);
+  // FX swaps
+  setText("op-sw1ws",d.fxSwaps?.["1w"]?.sell);setText("op-sw1wb",d.fxSwaps?.["1w"]?.buy);
+  setText("op-sw1ms",d.fxSwaps?.["1m"]?.sell);setText("op-sw1mb",d.fxSwaps?.["1m"]?.buy);
+  setText("op-sw2ms",d.fxSwaps?.["2m"]?.sell);setText("op-sw2mb",d.fxSwaps?.["2m"]?.buy);
+  setText("op-sw3ms",d.fxSwaps?.["3m"]?.sell);setText("op-sw3mb",d.fxSwaps?.["3m"]?.buy);
+  setText("op-sw6ms",d.fxSwaps?.["6m"]?.sell);setText("op-sw6mb",d.fxSwaps?.["6m"]?.buy);
+  setText("op-sw1ys",d.fxSwaps?.["1y"]?.sell);setText("op-sw1yb",d.fxSwaps?.["1y"]?.buy);
+  // T-bill auction table: last 4 dated rows + End of Month / End of Year reference rows
+  const opt=document.getElementById("op-tbill-rows");
+  if(opt){opt.innerHTML="";
+    const v=x=>(x==null||String(x).trim()===""||String(x).trim()==="0")?"—":x;
+    (d.tbills||[]).slice(0,4).forEach(r=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${fmtDY(r.date)}</td><td>${v(r.m3)}</td><td>${v(r.m6)}</td><td>${v(r.m12)}</td>`;opt.appendChild(tr);});
+    const ref=d.tbillRef||{};
+    [["End of Month",ref.lastMonth],["End of Year",ref.lastYear]].forEach(([lbl,o])=>{
+      if(!o)return;const tr=document.createElement("tr");tr.style.borderTop="2px solid #2a4566";tr.style.background="rgba(200,168,75,.07)";
+      tr.innerHTML=`<td style="color:#c8a84b;font-weight:700">${lbl}</td><td>${v(o.m3)}</td><td>${v(o.m6)}</td><td>${v(o.m12)}</td>`;opt.appendChild(tr);
+    });
+  }
+  // Auction Details (reuse the same renderer, target the Open Report tbody)
+  renderTbillAuction(d.tbillAuction||[],"op-auction-body");
+  // Treasury Bond table — same heat-map view as Fixed Income tab
+  const opbh=document.getElementById("op-bond-header");
+  if(opbh){opbh.innerHTML="<th>Bond</th><th>Last Year</th><th>Last Month</th>";bHeaders.forEach((_,ci)=>{const th=document.createElement("th");th.textContent=autoLabels[ci]||bHeaders[ci];opbh.appendChild(th);});}
+  const opb=document.getElementById("op-bond-rows");
+  if(opb){opb.innerHTML="";
+    const f2=v=>{if(v==null||String(v).trim()===''||String(v).trim()==="0")return"—";const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v).trim():n.toFixed(2);};
+    bRows.forEach((r,ri)=>{
+      const tr=document.createElement("tr");
+      const td0=document.createElement("td");td0.textContent=r.bond;tr.appendChild(td0);
+      const eoyV=(r.eoy!=null&&String(r.eoy).trim()!=='')?r.eoy:(lyIdx>=0?(r.values||[])[lyIdx]:'');
+      const eomV=(r.eom!=null&&String(r.eom).trim()!=='')?r.eom:(lmIdx>=0?(r.values||[])[lmIdx]:'');
+      const tdY=document.createElement("td");tdY.textContent=f2(eoyV);tdY.style.color="#c8a84b";tdY.style.fontSize="9px";tr.appendChild(tdY);
+      const tdM=document.createElement("td");tdM.textContent=f2(eomV);tdM.style.color="#9fb6d4";tdM.style.fontSize="9px";tr.appendChild(tdM);
+      const mids=midMatrix[ri]||[];
+      const rv=mids.filter(m=>m!=null);
+      const rmn=rv.length?Math.min(...rv):0, rmx=rv.length?Math.max(...rv):1;
+      mids.forEach((m,ci)=>{
+        const td=document.createElement("td");
+        if(m!=null){
+          let prev=null;for(let k=ci-1;k>=0;k--){if(mids[k]!=null){prev=mids[k];break;}}
+          const delta=prev!=null?+(m-prev).toFixed(3):null;
+          let arrow="",acol="";
+          if(delta!=null&&delta!==0){if(delta<0){arrow="\u25be";acol="#ff8a78";}else{arrow="\u25b4";acol="#7ee0a8";}}
+          td.innerHTML=m.toFixed(2)+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
+          td.style.background=heatColor(m,rmn,rmx);td.style.color="#eaf2fb";td.style.fontWeight="600";
+        }else{td.textContent="—";td.style.color="#3a5575";}
+        tr.appendChild(td);
+      });
+      opb.appendChild(tr);
+    });
+  }
+  // Executive summary (Open copy)
+  setText("op-exusd",d.execSummary?.usdlkr);
+  setText("op-exdir",d.execSummary?.liqDir);
+  setText("op-exdelta",d.execSummary?.liqDelta);
+
+  // ── NEW: Closing Report ──
+  setFmt("cl-usd",d.usdlkr?.close||d.execSummary?.usdlkr);
+  setFmt("cl-liq",d.liquidity?.current);
+  const lt=((d.tbills||[]).filter(r=>r.show!==false))[0]||{};
+  setFmt("cl-3m",lt.m3);setFmt("cl-6m",lt.m6);setFmt("cl-12m",lt.m12);
+  const cn=document.getElementById("cl-news");
+  if(cn){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());cn.innerHTML=items.length?items.map(t=>"• "+escHtml(t)).join("<br>"):"—";}
+
+  // ── NEW: Latest Market Announcements ──
+  renderEvents(d);
+  const nl=document.getElementById("news-list");
+  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());nl.innerHTML=items.length?`<div class="news-card" style="line-height:2;font-size:13px;white-space:pre-wrap">${escHtml(items.join("\n"))}</div>`:'<div class="news-card">No announcements published.</div>';}
+
+  applyHidden(d);
+  renderExtras(d);
+  buildCharts(d);
+}
+
+// ── Populate all data-driven tables that aren't handled inline above ──
+function renderExtras(d){
+  const E=id=>document.getElementById(id);
+  const dash=v=>(v==null||String(v).trim()===''||String(v).trim()==='0')?'—':v;
+  const fmt2=v=>{if(v==null||String(v).trim()===''||String(v).trim()==='0')return'—';const s=String(v).trim();if(/%$/.test(s)){const n=parseFloat(s);return isNaN(n)?s:n.toFixed(2)+'%';}const n=parseFloat(s.replace(/,/g,''));if(isNaN(n))return s;const parts=n.toFixed(2).split('.');return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.'+parts[1];};
+  const set=(id,html)=>{const el=E(id);if(el)el.innerHTML=html;};
+  // Macro — inflation
+  set('dyn-inflation',(d.inflation||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.metric)}</td><td>${fmt2(r.apr)}</td><td style="color:#c8a84b">${fmt2(r.may)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  // Macro — reserves (highlight last)
+  {const r=(d.reserves||[]).filter(x=>x.show!==false);set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  // Macro — tourism & remittances
+  {const t=d.tourism||{};set('dyn-tourism',`<tr><td>Earnings</td><td>${fmt2(t.apr)}</td><td>${fmt2(t.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(t.yoy)}</td></tr>`);}
+  {const r=d.remittances||{};set('dyn-remit',`<tr><td>Inflows</td><td>${fmt2(r.apr)}</td><td>${fmt2(r.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(r.yoy)}</td></tr>`);}
+  // Global — FOMC
+  set('dyn-fomc',(d.fomc||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.date)}</td><td>${escHtml(r.range)}</td><td>${fmt2(r.repo)}</td><td>${fmt2(r.rrepo)}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  {const fk=(d.keyDates||[]).find(k=>/fomc/i.test(k.label));if(fk&&E('dyn-fomc-next')){const i=eventDayInfo(fk.date);E('dyn-fomc-next').textContent='Next FOMC Meeting: '+i.dstr+(i.daysTxt?'  ('+i.daysTxt+')':'');}}
+  // FX — spot overview + cross rates
+  {const s=d.spot||{};set('dyn-spot',`<tr><td>Opening Spot</td><td style="text-align:right">${dash(s.open)}</td></tr><tr><td>Closing Spot</td><td style="text-align:right;color:#c8a84b;font-weight:700">${dash(s.close)}</td></tr><tr><td>Intraday Lowest</td><td style="text-align:right">${dash(s.low)}</td></tr><tr><td>Intraday Highest</td><td style="text-align:right">${dash(s.high)}</td></tr>`);}
+  set('dyn-cross',(d.crossRates||[]).filter(c=>c.show!==false).map(c=>`<tr><td>${escHtml(c.pair)}</td><td>${fmt2(c.buy)}</td><td>${fmt2(c.sell)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  // Money Market — OPR + standing facilities
+  {const o=(d.opr||[]).filter(r=>r.show!==false);set('dyn-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  {const sr=(d.srr||[]).filter(r=>r.show!==false);set('dyn-srr',sr.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===sr.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  {const w=d.windows||{};set('dyn-windows',`<tr><td>Standing Deposit (SDF)</td><td>${fmt2(w.sdf&&w.sdf.cur)}</td><td style="color:#7fa3c8">${fmt2(w.sdf&&w.sdf.prev)}</td></tr><tr><td>Standing Lending (SLF)</td><td>${fmt2(w.slf&&w.slf.cur)}</td><td style="color:#7fa3c8">${fmt2(w.slf&&w.slf.prev)}</td></tr>`);}
+  // FI — secondary yields (table)
+  set('dyn-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.maturity)}</td><td>${fmt2(s.bid)}</td><td>${fmt2(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+
+  // ── Opening Report mirror tables ──
+  {const w=d.windows||{},lq=d.liquidity||{};
+   set('dyn-op-cbsl',`<tr><td>Standing Deposit Facility (SDF)</td><td style="text-align:right">${fmt2(w.sdf&&w.sdf.cur)}</td><td style="text-align:right">${fmt2(w.sdf&&w.sdf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
+     `<tr><td>Standing Lending Facility (SLF)</td><td style="text-align:right">${fmt2(w.slf&&w.slf.cur)}</td><td style="text-align:right">${fmt2(w.slf&&w.slf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
+     `<tr><td style="font-weight:700">Net Market Liquidity</td><td style="color:#c8a84b;font-weight:700;text-align:right">${fmt2(lq.current)}</td><td style="text-align:right">${fmt2(lq.previous)}</td><td colspan="2" style="color:#6dd4a0;font-weight:700;text-align:right">CBSL Holdings: ${fmt2(d.cbslHoldings)} Bn</td></tr>`);}
+  {const c=d.callMarket||{},r=d.repoMarket||{};
+   set('dyn-op-mm',`<tr><td>Call Money</td><td>${fmt2(c.max)}</td><td>${fmt2(c.min)}</td><td style="color:#c8a84b">${fmt2(c.wa)}</td><td>${fmt2(c.vol)}</td></tr>`+
+     `<tr><td>Repo</td><td>${fmt2(r.max)}</td><td>${fmt2(r.min)}</td><td style="color:#c8a84b">${fmt2(r.wa)}</td><td>${fmt2(r.vol)}</td></tr>`);}
+  {const o=(d.opr||[]).filter(r=>r.show!==false);set('dyn-op-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  {const lt=(d.tbills||[])[0]||{};const rows=[['3 Months','91 Days',lt.m3],['6 Months','182 Days',lt.m6],['1 Year','364 Days',lt.m12]];
+   set('dyn-op-tbill3',rows.map(([t,dys,v])=>`<tr><td>${t}</td><td>${dys}</td><td style="color:#c8a84b">${dash(v)}</td></tr>`).join(''));}
+  {const s=d.spot||{};const row=(l,v)=>`<div class="fx-ov-row"><span class="lbl">${l}</span><span class="val">${dash(v)}</span></div>`;
+   set('dyn-op-fxov',row('Opening Spot',s.open)+row('Closing Spot',s.close)+row('Intraday Lowest Rate',s.low)+row('Intraday Highest Rate',s.high));}
+  set('dyn-op-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map(s=>`<div class="by-row"><span class="by-mat">${escHtml(s.maturity)}</span><span class="by-rate">${fmt2(s.bid)} / ${fmt2(s.ask)}</span></div>`).join(''));
+  set('dyn-op-fxsum',(d.fxSummary||[]).filter(f=>f.show!==false).map(f=>{const bold=/total/i.test(f.tenor);return `<tr${bold?' style="font-weight:700"':''}><td>${escHtml(f.tenor)}</td><td>${fmt2(f.volume)}</td><td>${f.wa?fmt2(f.wa):''}</td></tr>`;}).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  {// Auto report dates (Sri Lanka bank working days) with optional editor overrides
+   const todayD=slWorkDay(0), yestD=slWorkDay(1);
+   const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
+   const ot=document.getElementById("opening-report-title");
+   if(ot){const od=ov(d.openingDate)||fmtOrd(todayD);ot.innerHTML="Opening Report — "+od;}
+   const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(todayD);
+   ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=cdEl?"Closing: "+cdEl:"";});
+
+   const ft=document.getElementById("op-fxsum-title");
+   if(ft)ft.innerHTML="Volume of FX Market"+(yestD?'<span class="close-date">'+fmtOrd(yestD)+"</span>":"");}
+  set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>`<tr><td>${escHtml(v.tenor)}</td><td>${escHtml(v.date)}</td><td style="color:#9fb6d4">${escHtml(v.nod||'')}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-op-srr',(d.srr||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${fmt2(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+}
+
+function applyHidden(d){
+  const h=(d&&d.hidden&&typeof d.hidden==='object')?d.hidden:{};
+  document.querySelectorAll('[data-sec]').forEach(el=>{
+    const p=el.closest('.panel')||el;
+    p.style.display=h[el.getAttribute('data-sec')]?'none':'';
+  });
+  document.querySelectorAll('[data-sec-self]').forEach(el=>{
+    el.style.display=h[el.getAttribute('data-sec-self')]?'none':'';
+  });
+}
+function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
+
+// Compact "recent values" table under a chart: newest-first, with day-on-day change
+function recentTable(elId,labels,values,unit,dec,n){
+  const el=document.getElementById(elId);if(!el)return;
+  n=n||8;
+  const L=labels||[],V=(values||[]).map(v=>{const x=parseFloat(v);return isNaN(x)?null:x;});
+  const idx=[];for(let i=V.length-1;i>=0&&idx.length<n;i--){if(V[i]!=null)idx.push(i);}
+  if(idx.length<1){el.innerHTML='<div class="np">Not published yet</div>';return;}
+  const rows=idx.map(i=>{
+    const cur=V[i];let prev=null;for(let k=i-1;k>=0;k--){if(V[k]!=null){prev=V[k];break;}}
+    const diff=prev!=null?+(cur-prev).toFixed(dec):null;
+    const cls=diff==null||diff===0?"":diff>0?"chg-up":"chg-dn";
+    const arr=diff==null||diff===0?"":diff>0?"▲":"▼";
+    return `<tr><td>${escHtml(L[i]!=null?L[i]:i)}</td><td>${cur.toFixed(dec)}</td><td class="${cls}">${diff==null?"—":(arr+" "+Math.abs(diff).toFixed(dec))}</td></tr>`;
+  }).join("");
+  el.innerHTML=`<table><thead><tr><th>Date</th><th>${escHtml(unit||"")}</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function buildCharts(d){
+  const gc="rgba(26,48,80,.5)",tc="#7fa3c8",tf={size:10};
+  const xt={color:tc,font:{size:8},autoSkip:true,maxTicksLimit:12,maxRotation:0};
+  destroyChart("liq");
+  const liqAg=aggregateIdx(d.liquidity?.labels||[],GRANS.liq);
+  charts.liq=new Chart(document.getElementById("liqChart"),{type:"line",data:{labels:liqAg.labels,datasets:[{label:"Rs.Bn",data:pick(d.liquidity?.values||[],liqAg.idx),borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("liqStat",pick(d.liquidity?.values||[],liqAg.idx),liqAg.labels,"Rs.Bn",2);
+  recentTable("liqTbl",d.liquidity?.labels||[],d.liquidity?.values||[],"Rs.Bn",2);
+  // ── STAT BARS ──────────────────────────────────────────────
+  function renderStatBar(elId,values,labels,unit,decimals){
+    const el=document.getElementById(elId);if(!el)return;
+    const vals=values.filter(v=>v!=null&&!isNaN(v));
+    if(vals.length===0){el.innerHTML='<div class="np">Not published yet</div>';return;}
+    if(vals.length<2){el.innerHTML="";return;}
+    const prev=vals[vals.length-2], curr=vals[vals.length-1];
+    const diff=+(curr-prev).toFixed(decimals);
+    const pct=prev!==0?+((diff/Math.abs(prev))*100).toFixed(2):0;
+    const isUp=diff>0,isFlat=diff===0;
+    const arrow=isFlat?"▸":isUp?"▲":"▼";
+    const cls=isFlat?"flat":isUp?"up":"down";
+    const fmt=v=>v!=null?v.toFixed(decimals):"—";
+    // prev label
+    const prevLbl=labels&&labels.length>=2?labels[labels.length-2]:"Prev";
+    const currLbl=labels&&labels.length>=1?labels[labels.length-1]:"Latest";
+    el.innerHTML=`<div class="chart-stats">
+      <div class="cs-item">
+        <div class="cs-label">Previous <span style="color:#3a5a7a">(${prevLbl})</span></div>
+        <div class="cs-val">${fmt(prev)}<span class="cs-unit"> ${unit}</span></div>
+      </div>
+      <div class="cs-item">
+        <div class="cs-label">Latest <span style="color:#3a5a7a">(${currLbl})</span></div>
+        <div class="cs-val" style="color:#fff">${fmt(curr)}<span class="cs-unit"> ${unit}</span></div>
+      </div>
+      <div class="cs-item">
+        <div class="cs-label">Difference</div>
+        <div class="cs-chg ${cls}">${arrow} ${Math.abs(diff).toFixed(decimals)} <span style="opacity:.75">(${isUp?"+":""}${pct}%)</span></div>
+      </div>
+    </div>`;
+  }
+  // ──────────────────────────────────────────────────────────
+  destroyChart("cbsl");
+  const cbAg=aggregateIdx(d.cbsl?.labels||[],GRANS.cbsl);
+  const cbv=pick(d.cbsl?.values||[],cbAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
+  const cbn=cbv.filter(v=>v!=null);
+  charts.cbsl=new Chart(document.getElementById("cbslChart"),{type:"line",data:{labels:cbAg.labels,datasets:[{label:"Rs.Bn",data:cbv,borderColor:"#e08a3c",backgroundColor:"rgba(224,138,60,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:cbn.length?(Math.min(...cbn)-2):undefined,max:cbn.length?(Math.max(...cbn)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("cbslStat",cbv,cbAg.labels,"Rs.Bn",2);
+  recentTable("cbslTbl",d.cbsl?.labels||[],d.cbsl?.values||[],"Rs.Bn",2);
+  destroyChart("fh");
+  const fhAg=aggregateIdx(d.foreign?.labels||[],GRANS.fh);
+  const fhv=pick(d.foreign?.values||[],fhAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
+  const fhn=fhv.filter(v=>v!=null);
+  charts.fh=new Chart(document.getElementById("fhChart"),{type:"line",data:{labels:fhAg.labels,datasets:[{label:"Rs.Mn",data:fhv,borderColor:"#3cb6a8",backgroundColor:"rgba(60,182,168,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fhn.length?(Math.min(...fhn)-500):undefined,max:fhn.length?(Math.max(...fhn)+500):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("fhStat",fhv,fhAg.labels,"Rs.Mn",0);
+  recentTable("fhTbl",d.foreign?.labels||[],d.foreign?.values||[],"Rs.Mn",0);
+  // Inflation — horizontal bars, April vs May (2 months)
+  destroyChart("infl");
+  if(document.getElementById("inflChart")){
+    const inf=d.inflation||[];
+    const pv=s=>{if(s==null)return null;const n=parseFloat(String(s).replace('%',''));return isNaN(n)?null:n;};
+    if(inf.length){
+      charts.infl=new Chart(document.getElementById("inflChart"),{type:"bar",data:{labels:inf.map(r=>r.metric),datasets:[
+        {label:"April 2026",data:inf.map(r=>pv(r.apr)),backgroundColor:"#c8a84b",borderRadius:3,maxBarThickness:13},
+        {label:"May 2026",data:inf.map(r=>pv(r.may)),backgroundColor:"#e0443a",borderRadius:3,maxBarThickness:13}]},
+        options:{indexAxis:"y",responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:10}},title:{display:true,text:"INFLATION (%)",color:"#c8a84b",font:{size:12,weight:"700"}}},scales:{x:{ticks:{color:tc,font:tf},grid:{color:gc},suggestedMin:-2,suggestedMax:6},y:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
+    }
+  }
+  // Tourism & Remittances — table only, no chart
+  // New macro tables — each a simple bar chart + recent table (no granularity buttons)
+  const barChart=(key,rows,labelKey,valKey,color,unit,dec)=>{rows=(rows||[]).filter(r=>r.show!==false);
+    destroyChart(key);
+    const cv=document.getElementById(key+"Chart");if(!cv)return;
+    const r=(rows||[]).filter(x=>x&&x[valKey]!=null);
+    if(!r.length){const t=document.getElementById(key+"Tbl");if(t)t.innerHTML='<div class="np">Not published yet</div>';return;}
+    charts[key]=new Chart(cv,{type:"bar",data:{labels:r.map(x=>x[labelKey]),datasets:[{label:unit,data:r.map(x=>x[valKey]),backgroundColor:r.map(x=>x[valKey]<0?"#e0443a":color),borderRadius:4,maxBarThickness:30}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
+    recentTable(key+"Tbl",r.map(x=>x[labelKey]),r.map(x=>x[valKey]),unit,dec,r.length);
+  };
+  barChart("gdp",d.gdpGrowth,"period","growth","#4da3e8","%",2);
+  barChart("bop",d.bop,"period","value","#c8a84b","USD bn",3);
+  barChart("debt",d.debtGdp,"period","ratio","#9b8cff","%",1);
+  destroyChart("fx");
+  const fxAg=aggregateIdx(d.fx?.labels||d.usdlkr?.labels||[],GRANS.fx);
+  const fxData=pick((d.fx?.values||d.usdlkr?.values||[]).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;}),fxAg.idx);
+  const fv=fxData.filter(v=>v!=null&&v>0);
+  charts.fx=new Chart(document.getElementById("fxChart"),{type:"line",data:{labels:fxAg.labels,datasets:[{label:"LKR",data:fxData,borderColor:"#4da3e8",backgroundColor:"rgba(77,163,232,0.1)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:fv.length?Math.floor(Math.min(...fv)-2):undefined,max:fv.length?Math.ceil(Math.max(...fv)+2):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("fxStat",fxData,fxAg.labels,"LKR",2);
+  destroyChart("tbill");
+  const tbr=[...(d.tbills||[])].reverse();
+  const fmtDY2=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
+  const tbAg={labels:tbr.map(r=>fmtDY2(r.date)),idx:tbr.map((_,i)=>i)};
+  charts.tbill=new Chart(document.getElementById("tbillChart"),{type:"line",data:{labels:tbAg.labels,datasets:[{label:"3M",data:pick(tbr.map(r=>parseFloat(r.m3)||null),tbAg.idx),borderColor:"#4da3e8",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"6M",data:pick(tbr.map(r=>parseFloat(r.m6)||null),tbAg.idx),borderColor:"#c8a84b",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"12M",data:pick(tbr.map(r=>parseFloat(r.m12)||null),tbAg.idx),borderColor:"#6dd4a0",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  destroyChart("yield");
+  const yBHead=d.bonds?.headers||[], yBRows=d.bonds?.rows||[];
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const fmtBond=b=>{const p=String(b).split(".");if(p.length===3){const m=parseInt(p[1])-1,y=parseInt(p[2]);if(!isNaN(m)&&!isNaN(y)&&m>=0&&m<=11)return MON[m]+" "+y;}return b;};
+  const yLabels=yBRows.map(r=>fmtBond(r.bond));
+  // find the two most recent columns that actually have data
+  let tCol=-1,yCol=-1;
+  for(let ci=yBHead.length-1;ci>=0;ci--){
+    const has=yBRows.some(r=>bondMid((r.values||[])[ci])!=null);
+    if(has){ if(tCol<0)tCol=ci; else { yCol=ci; break; } }
+  }
+  const todayD=tCol>=0?yBRows.map(r=>bondMid((r.values||[])[tCol])):[];
+  const yestD =yCol>=0?yBRows.map(r=>bondMid((r.values||[])[yCol])):[];
+  const yDS=[];
+  if(yCol>=0)yDS.push({label:"Previous ("+yBHead[yCol]+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
+  yDS.push({label:"Latest ("+(tCol>=0?yBHead[tCol]:"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
+  charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels,datasets:yDS},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:10},boxWidth:18,usePointStyle:false,padding:12}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
+
+  // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
+  destroyChart("g10");
+  const gAg=aggregateIdx(d.global10y?.labels||[],GRANS.g10);
+  const g10raw=pick(d.global10y?.values||[],gAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
+  const g10n=g10raw.filter(v=>v!=null);
+  charts.g10=new Chart(document.getElementById("g10Chart"),{type:"line",data:{labels:gAg.labels,datasets:[{label:"US 10Y %",data:g10raw,borderColor:"#a77ad4",backgroundColor:"rgba(167,122,212,0.15)",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:g10n.length?(Math.min(...g10n)-0.1):undefined,max:g10n.length?(Math.max(...g10n)+0.1):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+  renderStatBar("g10Stat",g10raw,gAg.labels,"%",3);
+  recentTable("g10Tbl",d.global10y?.labels||[],d.global10y?.values||[],"%",2);
+
+  // ── NEW: Global Market commodity & FX-index charts (populate once data.json carries them) ──
+  [["gold","goldChart","goldStat","goldNote","#c8a84b","USD/oz",2],
+   ["dxy","dxyChart","dxyStat","dxyNote","#4da3e8","DXY",2],
+   ["brent","brentChart","brentStat","brentNote","#e08a3c","USD/bbl",2],
+   ["wti","wtiChart","wtiStat","wtiNote","#6dd4a0","USD/bbl",2]].forEach(([key,cv,statId,noteId,color,unit,dec])=>{
+    const el=document.getElementById(cv);if(!el)return;
+    destroyChart(key);
+    const series=d[key]||{};
+    const labs=series.labels||[], vals=(series.values||[]).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;});
+    const nn=vals.filter(v=>v!=null);
+    const note=document.getElementById(noteId);
+    if(note)note.style.display=nn.length?"none":"block";
+    charts[key]=new Chart(el,{type:"line",data:{labels:labs,datasets:[{label:unit,data:vals,borderColor:color,backgroundColor:color+"22",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc},min:nn.length?(Math.min(...nn)-(Math.max(...nn)-Math.min(...nn)||1)*0.1):undefined,max:nn.length?(Math.max(...nn)+(Math.max(...nn)-Math.min(...nn)||1)*0.1):undefined},x:{ticks:xt,grid:{color:gc}}}}});
+    if(statId)renderStatBar(statId,vals,labs,unit,dec);
+    recentTable(key+"Tbl",labs,vals,unit,dec);
+  });
+
+  // ── NEW: Market Open Report charts — weekly view (last points) with markers, matching the printed report ──
+  const OPEN_PTS=7;
+  const lastN=(a,n)=>(a&&a.length>n)?a.slice(a.length-n):(a||[]);
+  const vlab={id:'vlab',afterDatasetsDraw(ch){const ctx=ch.ctx,ca=ch.chartArea;ctx.save();ctx.font='700 9px Segoe UI,Arial';ctx.fillStyle='#eaf2fb';ctx.textBaseline='bottom';const placed=[];ch.data.datasets.forEach((ds,di)=>{const meta=ch.getDatasetMeta(di);meta.data.forEach((pt,i)=>{const val=ds.data[i];if(val==null||isNaN(val))return;const txt=(+val).toFixed(2);const w=ctx.measureText(txt).width;ctx.textAlign='center';let x=pt.x;if(x-w/2<ca.left+1)x=ca.left+1+w/2;if(x+w/2>ca.right-1)x=ca.right-1-w/2;let y=pt.y-6;let g=0;while(g<5&&placed.some(p=>Math.abs(p.x-x)<(p.w+w)/2+2&&Math.abs(p.y-y)<11)){y-=11;g++;}if(y-9<ca.top)y=pt.y+15;placed.push({x:x,y:y,w:w});ctx.fillText(txt,x,y);});});ctx.restore();}};
+  // Opening Report — FX Market Summary volume by tenor (excludes subtotal/grand-total rows)
+  destroyChart("opFxSum");
+  if(document.getElementById("opFxSumChart")){
+    const fsRows=(d.fxSummary||[]).filter(r=>!/^\s*(grand\s+)?total\s*$/i.test(r.tenor)&&r.volume!=null);
+    charts.opFxSum=new Chart(document.getElementById("opFxSumChart"),{type:"bar",data:{labels:fsRows.map(r=>r.tenor),datasets:[{label:"Volume (USD Mn)",data:fsRows.map(r=>parseFloat(r.volume)||0),backgroundColor:fsRows.map(r=>/sub.?total/i.test(r.tenor)?"#c8a84b":"#4da3e8"),borderRadius:4,maxBarThickness:34}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
+  }
+}
+
+// no login required — load immediately
+loadData();
+startPolling();
+
+
 </script>
-</body></html>
+</body>
+</html>
