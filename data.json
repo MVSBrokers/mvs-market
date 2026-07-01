@@ -3161,7 +3161,6 @@
  "fxVolDate": "",
  "hidden": {
   "secondary": true,
-  "tbills": true,
-  "valuedates": true
+  "tbills": true
  }
 }
