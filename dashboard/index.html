@@ -602,7 +602,21 @@ function slValueDay(){
   const slNow=new Date(Date.now()+330*60000);
   const slHour=slNow.getUTCHours();
   const after4pm=slHour>=16;
-  if(!after4pm)return slWorkDay(0);
+if(!after4pm){
+  let base=slWorkDay(0);
+  let nxt=new Date(base);
+  nxt.setDate(nxt.getDate()+1);
+
+  const isSLWork=x=>{
+    if(x.getDay()===0||x.getDay()===6)return false;
+    const iso=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+    return !SL_FX_HOL_SET.has(iso);
+  };
+
+  while(!isSLWork(nxt))nxt.setDate(nxt.getDate()+1);
+  return nxt;
+}
+`
   // After 4 PM: step forward from today's SL working day to the next SL working day
   let base=slWorkDay(0);
   let nxt=new Date(base.getFullYear(),base.getMonth(),base.getDate()+1);
