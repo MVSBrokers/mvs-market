@@ -1072,11 +1072,16 @@ function renderExtras(d){
    const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
    const ot=document.getElementById("opening-report-title");
    if(ot){const od=ov(d.openingDate)||fmtOrd(slOpeningDay());ot.innerHTML="Opening Report — "+od;}
-   const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(todayD);
+   // Closing date: before 4 PM SL → yesterday (T-1); after 4 PM SL → today (T)
+   const slNow_cd=new Date(Date.now()+330*60000);
+   const cdAuto=slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);
+   const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(cdAuto);
    ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=cdEl?"Closing: "+cdEl:"";});
 
+   // Volume of FX Market = slOpeningDay(): before 8:30 AM → T-2, after 8:30 AM → T-1
    const ft=document.getElementById("op-fxsum-title");
-   if(ft)ft.innerHTML="Volume of FX Market"+(cdEl?'<span class="close-date">'+cdEl+"</span>":"");
+   if(ft)ft.innerHTML="Volume of FX Market"+'<span class="close-date">'+fmtOrd(slOpeningDay())+"</span>";
+   // Value Dates heading = slValueDay(): before 4 PM → today(T), after 4 PM → next working day
    const vdt=document.getElementById("vd-title");
    if(vdt)vdt.innerHTML="Value Dates"+'<span class="close-date">'+fmtOrd(slValueDay())+"</span>";}
   set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>{
