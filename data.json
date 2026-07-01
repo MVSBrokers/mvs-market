@@ -479,7 +479,8 @@
    "3 Jun",
    "10 Jun",
    "17 Jun",
-   "24 Jun"
+   "24 Jun",
+   "1 Jul"
   ],
   "m3": [
    7.74,
@@ -507,7 +508,8 @@
    9.84,
    10.09,
    10.02,
-   10.14
+   10.14,
+   null
   ],
   "m6": [
    8.27,
@@ -535,7 +537,8 @@
    10.01,
    10.27,
    10.16,
-   10.21
+   10.21,
+   null
   ],
   "m12": [
    8.45,
@@ -563,7 +566,8 @@
    10.02,
    10.16,
    10.16,
-   10.17
+   10.17,
+   null
   ]
  },
  "tbills": [
@@ -619,6 +623,29 @@
  ],
  "tbillRef": {},
  "tbillAuction": [
+  {
+   "date": "1 Jul",
+   "maturities": [
+    {
+     "maturity": "3M",
+     "offered": null,
+     "accepted": null,
+     "yield": null
+    },
+    {
+     "maturity": "6M",
+     "offered": null,
+     "accepted": null,
+     "yield": null
+    },
+    {
+     "maturity": "12M",
+     "offered": null,
+     "accepted": null,
+     "yield": null
+    }
+   ]
+  },
   {
    "date": "24 Jun",
    "maturities": [
@@ -685,29 +712,6 @@
      "offered": 20000,
      "accepted": 6222,
      "yield": 31.11
-    }
-   ]
-  },
-  {
-   "date": "3 Jun",
-   "maturities": [
-    {
-     "maturity": "3M",
-     "offered": 65000,
-     "accepted": 55207,
-     "yield": 84.93384615384615
-    },
-    {
-     "maturity": "6M",
-     "offered": 55000,
-     "accepted": 46311,
-     "yield": 84.20181818181818
-    },
-    {
-     "maturity": "12M",
-     "offered": 20000,
-     "accepted": 9646,
-     "yield": 48.230000000000004
     }
    ]
   }
@@ -1136,10 +1140,10 @@
   }
  },
  "spot": {
-  "open": "336.25/ 336.75",
+  "open": "336.15/ 336.35",
   "close": "336.20 / 336.40",
-  "low": "336.00",
-  "high": "336.25"
+  "low": "336.2",
+  "high": "336.3"
  },
  "crossRates": [
   {
@@ -1182,22 +1186,22 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 38.75,
-   "wa": 336.66
+   "volume": 24.1,
+   "wa": 336.67
   },
   {
    "tenor": "Tom",
-   "volume": 8.5,
-   "wa": 336.64
+   "volume": 10.5,
+   "wa": 336.13
   },
   {
    "tenor": "Cash",
-   "volume": 26.9,
-   "wa": 336.56
+   "volume": 24,
+   "wa": 336.04
   },
   {
    "tenor": "Sub Total (Spot)",
-   "volume": 74.15,
+   "volume": 58.6,
    "wa": null
   },
   {
@@ -1207,17 +1211,17 @@
   },
   {
    "tenor": "1W",
-   "volume": 6,
-   "wa": 337.23
+   "volume": 5.25,
+   "wa": 336.41
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 17,
+   "volume": 39.85,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 91.15,
+   "volume": 98.45,
    "wa": null
   }
  ],
@@ -3133,7 +3137,7 @@
   "15 Oct 2030 Maturity: 11.44%",
   "15 Mar 2035 Maturity: 11.88%"
  ],
- "date": "2026-06-30",
+ "date": "2026-07-01",
  "openingDate": "",
  "closingDate": "",
  "secondaryDate": "",
