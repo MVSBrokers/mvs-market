@@ -281,8 +281,8 @@
    61.62,
    82.56
   ],
-  "current": 82.56,
-  "previous": 61.62
+  "current": 85,
+  "previous": 82.56
  },
  "bonds": {
   "headers": [
@@ -1202,7 +1202,7 @@
    "wa": 336.04
   },
   {
-   "tenor": "Sub Total (Spot)",
+   "tenor": "Sub Total (Short)",
    "volume": 58.6,
    "wa": null
   },
@@ -3143,7 +3143,7 @@
  "execSummary": {
   "usdlkr": "336.20 / 336.40",
   "liqDir": "increased",
-  "liqDelta": 20.94
+  "liqDelta": 2.44
  },
  "marketNews": [
   "Treasury Bond Auction Results",
