@@ -102,11 +102,11 @@ canvas{max-width:100%!important}
 .cs-chg{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap}
 .series-toggle{display:flex;align-items:center;gap:5px;margin:7px 0 5px}
 .series-toggle .st-lbl{font-size:9px;color:#5a7a9a;text-transform:uppercase;letter-spacing:.6px;margin-right:2px}
-.cs-chg.up{color:#ff8a78;background:rgba(255,138,120,0.12)}
-.cs-chg.down{color:#6dd4a0;background:rgba(109,212,160,0.12)}
+.cs-chg.up{color:#6dd4a0;background:rgba(109,212,160,0.12)}
+.cs-chg.down{color:#ff8a78;background:rgba(255,138,120,0.12)}
 .cs-chg.flat{color:#7fa3c8;background:rgba(77,163,232,0.10)}
 @media(max-width:1024px){.grid-2x2,.full-grid{grid-template-columns:1fr}}
-@media(max-width:600px){
+@media(max-width:600px){.opr-srr-grid{grid-template-columns:1fr!important}
   .report-hdr{flex-direction:row;flex-wrap:nowrap;align-items:center;padding:8px 10px;gap:8px}
   .hdr-left{flex-direction:row;gap:8px;align-items:center}
   .logo{width:36px;height:36px;flex-shrink:0}
@@ -124,8 +124,12 @@ canvas{max-width:100%!important}
 .nav-btn.active{background:linear-gradient(135deg,#c8a84b,#a8893a);color:#060f1e;border-color:#c8a84b;}
 .page{display:none;}
 .big-stat{font-size:34px;font-weight:800;color:#c8a84b;text-align:center;padding:18px 0;letter-spacing:1px;}
-.news-list{display:flex;flex-direction:column;gap:10px;}
-.news-card{background:#0d1e38;border:1px solid #1a3050;border-left:3px solid #c8a84b;border-radius:7px;padding:13px 16px;font-size:13px;line-height:1.6;color:#d4e4f4;}
+.news-list{display:flex;flex-direction:column;gap:0;}
+.news-card{background:transparent;border:none;border-radius:0;padding:0;font-size:13px;line-height:1.8;color:#d4e4f4;}
+.news-card div{padding:9px 12px;border-bottom:1px solid rgba(200,168,75,0.15);transition:background .15s;}
+.news-card div:last-child{border-bottom:none;}
+.news-card div:before{content:"◆";color:#c8a84b;font-size:8px;margin-right:10px;vertical-align:middle;}
+.news-card div:hover{background:rgba(200,168,75,0.06);}
 .news-card .news-idx{color:#c8a84b;font-weight:700;margin-right:8px;}
 .op-split{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;}
 .op-col{flex:1;min-width:190px;}
@@ -209,8 +213,7 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: MARKET OPEN REPORT (full Summary-report replica from get_data) -->
   <div class="page" id="page-open" style="display:block">
-    <div class="panel full-width"><div class="panel-title" id="opening-report-title">Opening Report</div></div>
-    <div class="grid-2x2">
+        <div class="grid-2x2">
       <div class="panel">
         <div class="panel-title" id="op-fxsum-title">Volume of FX Market</div>
         <canvas id="opFxSumChart" style="max-height:190px"></canvas>
@@ -220,7 +223,7 @@ canvas{max-width:100%!important}
         </table>
       </div>
       <div class="panel">
-        <div class="panel-title">Value Dates</div>
+        <div class="panel-title" id="vd-title">Value Dates</div>
         <div style="max-height:430px;overflow-y:auto"><table style="font-size:11px">
           <thead><tr><th>Tenor</th><th>Value Date</th><th>NOD</th></tr></thead>
           <tbody id="dyn-op-vd"></tbody>
@@ -232,8 +235,7 @@ canvas{max-width:100%!important}
   <!-- PAGE: MONEY MARKET -->
   <div class="page" id="page-mm">
   <!-- MONEY MARKET HEADER -->
-  <div class="panel full-width"><div class="panel-title">Money Market</div></div>
-
+  
   <div class="grid-2x2">
     <div class="panel">
       <div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
@@ -255,13 +257,20 @@ canvas{max-width:100%!important}
     <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
   </div>
 
-  <div style="display:flex;justify-content:flex-start;margin-bottom:14px">
-    <div class="panel" style="width:320px;flex-shrink:0">
-      <div class="panel-title">Policy Rate (OPR) History</div>
-      <table style="font-size:12px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px;margin-bottom:14px" class="opr-srr-grid">
+    <div class="panel">
+      <div class="panel-title" data-sec="opr">Policy Rate (OPR) History</div>
+      <div style="overflow-x:auto"><table style="font-size:12px">
         <thead><tr><th>Effective Date</th><th>OPR (%)</th></tr></thead>
         <tbody id="dyn-opr"></tbody>
-      </table>
+      </table></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title" data-sec="srr">Statutory Reserve Requirement (SRR)</div>
+      <div style="overflow-x:auto"><table style="font-size:12px">
+        <thead><tr><th>Effective Date</th><th>SRR (%)</th></tr></thead>
+        <tbody id="dyn-srr"></tbody>
+      </table></div>
     </div>
   </div>
 
@@ -301,9 +310,9 @@ canvas{max-width:100%!important}
       </div>
     </div>
     <div class="panel">
-      <div class="panel-title">Treasury Bond (Yield Curve)<span class="close-date" id="tbond-close"></span></div>
+      <div class="panel-title">Treasury Bond Average Yield(%)<span class="close-date" id="tbond-close"></span></div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
-      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span> → <span style="color:#ff8a78">high</span> yield · <span style="color:#ff8a78">▴ up</span> / <span style="color:#7ee0a8">▾ down</span> vs prev day</div>
+      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#ff8a78">low</span> → <span style="color:#7ee0a8">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
         <table style="font-size:9px">
           <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
@@ -314,7 +323,7 @@ canvas{max-width:100%!important}
   </div>
 
   <div class="panel full-width">
-    <div class="panel-title">T-Bond Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
+    <div class="panel-title" data-sec="secondary">T-Bill Secondary Market Closing Yield(%)<span class="close-date" id="secondary-close"></span></div>
     <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
       <table style="font-size:10px">
         <thead><tr><th>Maturity Date</th><th>Bid (%)</th><th>Ask (%)</th></tr></thead>
@@ -327,13 +336,13 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: FX -->
   <div class="page" id="page-fx">
-  <!-- FX MARKET HEADER -->
-  <div class="panel full-width"><div class="panel-title">USD / FX Market</div></div>
+
+  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">USD/LKR FX</div></div>
 
   <div class="grid-2x2">
     <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
     <div class="panel">
-      <div class="panel-title">FX Swaps (per day)<span class="close-date" id="fx-close"></span></div>
+      <div class="panel-title">Swaps (per day)<span class="close-date" id="fx-close"></span></div>
       <table>
         <thead><tr><th>Tenor</th><th>Sell/Buy</th><th>Buy/Sell</th></tr></thead>
         <tbody>
@@ -348,28 +357,34 @@ canvas{max-width:100%!important}
     </div>
   </div>
 
-  <div class="grid-2x2">
+  <div class="grid-2x2" style="margin-top:0">
     <div class="panel">
-      <div class="panel-title">FX Market Overview (Spot)</div>
+      <div class="panel-title">Market Overview (Spot)<span class="close-date" id="fxov-close"></span></div>
       <table style="font-size:12px">
         <tbody id="dyn-spot"></tbody>
       </table>
     </div>
+    <div class="panel" style="opacity:0;pointer-events:none"></div>
+  </div>
+
+  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">Cross-Currency Rates</div></div>
+
+  <div class="grid-2x2">
     <div class="panel">
-      <div class="panel-title">Cross-Currency Rates</div>
+      <div class="panel-title">Cross-Currency Rates<span class="close-date" id="cross-close"></span></div>
       <table style="font-size:11px">
         <thead><tr><th>Currency</th><th>Buying</th><th>Selling</th></tr></thead>
         <tbody id="dyn-cross"></tbody>
       </table>
     </div>
+    <div class="panel" style="opacity:0;pointer-events:none"></div>
   </div>
 
   </div>
 
   <!-- PAGE: MACRO ECONOMY -->
   <div class="page" id="page-macro">
-    <div class="panel full-width"><div class="panel-title">Macro Economy — Sri Lanka</div></div>
-    <div class="grid-2x2">
+        <div class="grid-2x2">
       <div class="panel">
         <div class="panel-title">Inflation (CCPI vs NCPI)</div>
         <canvas id="inflChart" style="max-height:185px;margin-bottom:10px"></canvas>
@@ -425,8 +440,7 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: GLOBAL MARKET -->
   <div class="page" id="page-global">
-    <div class="panel full-width"><div class="panel-title">Global Market</div></div>
-
+    
     <!-- US bond rate + Fed rate -->
     <div class="grid-2x2">
       <div class="panel">
@@ -458,12 +472,14 @@ canvas{max-width:100%!important}
 
   <!-- PAGE: LATEST MARKET ANNOUNCEMENTS -->
   <div class="page" id="page-news">
-    <div class="panel full-width"><div class="panel-title">Upcoming Key Dates &amp; Announcements</div></div>
-    <div id="events-grid" class="events-grid"></div>
-    <div class="panel full-width" style="margin-top:14px">
-      <div class="panel-title">Latest Results</div>
+    <div class="panel full-width" style="border:1px solid #c8a84b;background:linear-gradient(135deg,#0d1e38,#152a45)">
+      <div class="panel-title" style="font-size:13px;letter-spacing:1.5px;color:#c8a84b;border-bottom:2px solid #c8a84b;padding-bottom:10px;margin-bottom:12px">📋 Latest Results</div>
       <div id="news-list" class="news-list"></div>
     </div>
+    <div class="panel full-width" style="margin-top:14px">
+      <div class="panel-title">Upcoming Key Dates &amp; Announcements</div>
+    </div>
+    <div id="events-grid" class="events-grid" style="margin-top:10px"></div>
   </div>
 
     <div class="footer">MVS Money Brokers Limited — Confidential. For authorised recipients only.</div>
@@ -476,10 +492,121 @@ const POLL_INTERVAL = 20000;
 let charts={}, pollTimer=null;
 // Sri Lanka bank working day (Mon–Fri). back=0 -> today's working day, 1 -> previous working day…
 function slWorkDay(back){
+  // Sri Lanka public holidays + Poya days 2026
+  const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04",
+    "2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13",
+    "2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29",
+    "2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08",
+    "2026-11-24","2026-12-23","2026-12-25"]);
+  const isSLWork=d=>{if(d.getDay()===0||d.getDay()===6)return false;
+    const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    return !SL_HOL.has(iso);};
   let d=new Date();
-  while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()-1);
-  for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(d.getDay()===0||d.getDay()===6);}
+  while(!isSLWork(d))d.setDate(d.getDate()-1);
+  for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
   return d;
+}
+// Opening Report date: report data is updated each morning around 8:30 AM SL time.
+// Before 8:30 AM, the report still shows the previous SL working day (not yet updated).
+// After 8:30 AM, it shifts to the working day before that (since today's update just happened).
+function slOpeningDay(){
+  const slNow=new Date(Date.now()+330*60000);
+  const slHour=slNow.getUTCHours(), slMin=slNow.getUTCMinutes();
+  const after830=(slHour>8)||(slHour===8&&slMin>=30);
+  return after830?slWorkDay(2):slWorkDay(1);
+}
+// Value Dates: from today's 4 PM SL time until the next working day's 4 PM, show the NEXT SL working day.
+// Before 4 PM today: shows today's SL working day. After 4 PM: shows the next SL working day.
+// ── FX Value Date Calculator (USD/LKR cross-currency convention) ──
+// Spot = T+2 from today, skipping both SL and US non-working days.
+// Forward periods (1W, 1M, 3M etc.) roll from the Spot date using modified-following convention.
+const US_FED_HOL_SET=new Set(["2026-01-01","2026-01-19","2026-02-16","2026-05-25","2026-06-19",
+  "2026-07-03","2026-09-07","2026-10-12","2026-11-11","2026-11-26","2026-12-25"]);
+const SL_FX_HOL_SET=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04",
+  "2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13",
+  "2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29",
+  "2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08",
+  "2026-11-24","2026-12-23","2026-12-25"]);
+function _isoD(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function _isUSWork(d){if(d.getDay()===0||d.getDay()===6)return false;return !US_FED_HOL_SET.has(_isoD(d));}
+function _isSLFXWork(d){if(d.getDay()===0||d.getDay()===6)return false;return !SL_FX_HOL_SET.has(_isoD(d));}
+function _isBothWork(d){return _isUSWork(d)&&_isSLFXWork(d);}  // both SL and US must be open for USD/LKR settlement
+function _addWorkDays(d,n,checker){let x=new Date(d);let c=0;const dir=n>=0?1:-1;n=Math.abs(n);
+  while(c<n){x.setDate(x.getDate()+dir);if(checker(x))c++;}return x;}
+function _spotDate(today){return _addWorkDays(today,2,_isBothWork);}
+// modified-following: add calendar period, if it lands on non-working day roll forward;
+// if that rolls into the next month, roll backward instead (standard FX/IRS convention)
+function _addMonthsMF(spot,months){
+  const tgt=new Date(spot.getFullYear(),spot.getMonth()+months,spot.getDate());
+  let x=new Date(tgt);
+  if(_isBothWork(x))return x;
+  let fwd=new Date(x);while(!_isBothWork(fwd))fwd.setDate(fwd.getDate()+1);
+  if(fwd.getMonth()===tgt.getMonth())return fwd;
+  let bwd=new Date(x);while(!_isBothWork(bwd))bwd.setDate(bwd.getDate()-1);
+  return bwd;
+}
+function _addDaysMF(spot,days){
+  let x=new Date(spot.getFullYear(),spot.getMonth(),spot.getDate()+days);
+  while(!_isBothWork(x))x.setDate(x.getDate()+1);
+  return x;
+}
+function calcValueDate(tenorRaw){
+  const t=String(tenorRaw||"").toLowerCase().trim();
+  // Everything anchors from the same "Cash" date (slValueDay) — before 4 PM that's today's
+  // SL working day; after 4 PM it's the next SL working day. Tom/Spot/forward tenors all
+  // count forward from this single anchor so the whole table stays internally consistent.
+  const anchor=slValueDay();
+  const spot=_addWorkDays(anchor,2,_isBothWork);
+  let result=null;
+  if(/cash|^today/.test(t))result=anchor;
+  else if(/^tom/.test(t))result=_addWorkDays(anchor,1,_isBothWork);
+  else if(/^spot$/.test(t))result=spot;
+  else if(/^snn$/.test(t))result=_addWorkDays(spot,2,_isBothWork);   // Spot/Next/Next = Spot + 2 working days
+  else if(/^sn$/.test(t))result=_addWorkDays(spot,1,_isBothWork);    // Spot/Next = Spot + 1 working day
+  else{
+    const wkM=t.match(/(\d+)\s*week/);
+    const moM=t.match(/(\d+)\s*month/);
+    const yrM=t.match(/(\d+)\s*year/);
+    if(wkM)result=_addDaysMF(spot,parseInt(wkM[1])*7);
+    else if(moM)result=_addMonthsMF(spot,parseInt(moM[1]));
+    else if(yrM)result=_addMonthsMF(spot,parseInt(yrM[1])*12);
+  }
+  return result;
+}
+function fmtValueDate(d){if(!d)return"";const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];return d.getDate()+" "+MON[d.getMonth()]+" "+d.getFullYear();}
+function calcNOD(tenorRaw){
+  const t=String(tenorRaw||"").toLowerCase().trim();
+  const d=calcValueDate(tenorRaw);if(!d)return"";
+  const dd=new Date(d);dd.setHours(0,0,0,0);
+  // Cash/Tom/Spot count from the Cash anchor date; forward tenors (SN, SNN, 1 Week, 1 Month etc.)
+  // count from the Spot date instead, so NOD reflects days-from-spot for forward tenors.
+  let base;
+  if(/cash|^today/.test(t)||/^tom/.test(t)||/^spot$/.test(t)){
+    base=slValueDay();base.setHours(0,0,0,0);
+  }else{
+    base=_addWorkDays(slValueDay(),2,_isBothWork);base.setHours(0,0,0,0);
+  }
+  return Math.round((dd-base)/86400000);
+}
+
+function slValueDay(){
+  const slNow=new Date(Date.now()+330*60000);
+  const slHour=slNow.getUTCHours();
+  const after4pm=slHour>=16;
+  if(!after4pm)return slWorkDay(0);
+  // After 4 PM: step forward from today's SL working day to the next SL working day
+  let base=slWorkDay(0);
+  let nxt=new Date(base.getFullYear(),base.getMonth(),base.getDate()+1);
+  const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04",
+    "2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13",
+    "2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29",
+    "2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08",
+    "2026-11-24","2026-12-23","2026-12-25"]);
+  const isSLWork=x=>{if(x.getDay()===0||x.getDay()===6)return false;
+    const iso=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+    return !SL_HOL.has(iso);};
+  while(!isSLWork(nxt))nxt.setDate(nxt.getDate()+1);
+  return nxt;
 }
 const _MON3=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const _MONF=["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -534,10 +661,23 @@ function bondMid(v){
   if(s.indexOf("/")>-1){const p=s.split("/");const a=parseFloat(p[0]),b=parseFloat(p[1]);if(isNaN(a))return null;return isNaN(b)?a:+(((a+b)/2).toFixed(3));}
   const n=parseFloat(s);return isNaN(n)?null:n;
 }
+// Display value exactly as entered: "10.50/11.25" stays as-is (formatted to 2dp each side), single numbers get 2dp
+function bondDisplay(v){
+  if(v==null)return null;
+  const s=String(v).trim();
+  if(!s||s==="0"||s==="—")return null;
+  if(s.indexOf("/")>-1){
+    const p=s.split("/");
+    const a=parseFloat(p[0]),b=parseFloat(p[1]);
+    if(isNaN(a))return null;
+    return isNaN(b)?a.toFixed(2):(a.toFixed(2)+"/"+b.toFixed(2));
+  }
+  const n=parseFloat(s);return isNaN(n)?null:n.toFixed(2);
+}
 function heatColor(v,min,max){
   if(v==null||!(max>min))return "transparent";
   const t=Math.max(0,Math.min(1,(v-min)/(max-min)));
-  const hue=(1-t)*140;           // low yield = green (140), high yield = red (0)
+  const hue=t*140;               // low yield = red (0), high yield = green (140)ld = red (0)
   return "hsla("+hue.toFixed(0)+",75%,50%,"+(0.18+t*0.22).toFixed(2)+")";  // transparent, deeper for higher
 }
 // Colour a cell by the DIRECTION of yield change vs the previous day: down = green, up = red.
@@ -559,6 +699,7 @@ function startPolling(){stopPolling();pollTimer=setInterval(()=>loadData(true),P
 function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
 
 let _lastDataHash=null;
+let _lastNewsHash=null;
 async function loadData(silent=false){
   const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
   if(!silent){bar.style.display="block";errEl.style.display="none";}
@@ -579,6 +720,7 @@ async function loadData(silent=false){
 }
 
 function setText(id,val){const el=document.getElementById(id);if(el)el.textContent=(val!=null&&val!=="")? val:"—";}
+function setFmt(id,val){const el=document.getElementById(id);if(!el)return;if(val==null||String(val).trim()===""){el.textContent="—";return;}const n=parseFloat(String(val).replace(/,/g,""));el.textContent=isNaN(n)?String(val):n.toFixed(2);}
 function escHtml(s){return String(s==null?"":s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 // Upcoming key dates with live "days remaining" countdown
 function getKeyEvents(d){
@@ -685,9 +827,9 @@ function renderTbillAuction(data,targetId){
       }
       const matTd=document.createElement("td");matTd.className="mat-cell";matTd.textContent=m.maturity||"—";
       matTd.style.background=groupBg;matTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";matTd.style.fontWeight="600";
-      const offTd=document.createElement("td");offTd.textContent=m.offered||"—";
+      const offTd=document.createElement("td");offTd.textContent=(m.offered!=null&&m.offered!=="")?parseFloat(String(m.offered).replace(/,/g,"")).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}):"—";
       offTd.style.background=groupBg;offTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
-      const accTd=document.createElement("td");accTd.textContent=m.accepted||"—";
+      const accTd=document.createElement("td");accTd.textContent=(m.accepted!=null&&m.accepted!=="")?parseFloat(String(m.accepted).replace(/,/g,"")).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}):"—";
       accTd.style.background=groupBg;accTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
       const yldTd=document.createElement("td");
       {const yv=parseFloat(m.yield);yldTd.textContent=(m.yield==null||m.yield===""||isNaN(yv))?"—":(Math.round(yv)+"%");}
@@ -706,17 +848,17 @@ function render(d){
   const lu=document.getElementById("last-updated");
   if(lu)lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
-  setText("cmmin",d.callMarket?.min);setText("rmmin",d.repoMarket?.min);
-  setText("cmmax",d.callMarket?.max);setText("rmmax",d.repoMarket?.max);
-  setText("cmwa",d.callMarket?.wa); setText("rmwa",d.repoMarket?.wa);
-  setText("cmvol",d.callMarket?.vol);setText("rmvol",d.repoMarket?.vol);
-  setText("liqcur",d.liquidity?.current);setText("liqprev",d.liquidity?.previous);
-  setText("sw1ws",d.fxSwaps?.["1w"]?.sell);setText("sw1wb",d.fxSwaps?.["1w"]?.buy);
-  setText("sw1ms",d.fxSwaps?.["1m"]?.sell);setText("sw1mb",d.fxSwaps?.["1m"]?.buy);
-  setText("sw2ms",d.fxSwaps?.["2m"]?.sell);setText("sw2mb",d.fxSwaps?.["2m"]?.buy);
-  setText("sw3ms",d.fxSwaps?.["3m"]?.sell);setText("sw3mb",d.fxSwaps?.["3m"]?.buy);
-  setText("sw6ms",d.fxSwaps?.["6m"]?.sell);setText("sw6mb",d.fxSwaps?.["6m"]?.buy);
-  setText("sw1ys",d.fxSwaps?.["1y"]?.sell);setText("sw1yb",d.fxSwaps?.["1y"]?.buy);
+  setFmt("cmmin",d.callMarket?.min);setFmt("rmmin",d.repoMarket?.min);
+  setFmt("cmmax",d.callMarket?.max);setFmt("rmmax",d.repoMarket?.max);
+  setFmt("cmwa",d.callMarket?.wa); setFmt("rmwa",d.repoMarket?.wa);
+  setFmt("cmvol",d.callMarket?.vol);setFmt("rmvol",d.repoMarket?.vol);
+  setFmt("liqcur",d.liquidity?.current);setFmt("liqprev",d.liquidity?.previous);
+  setFmt("sw1ws",d.fxSwaps?.["1w"]?.sell);setFmt("sw1wb",d.fxSwaps?.["1w"]?.buy);
+  setFmt("sw1ms",d.fxSwaps?.["1m"]?.sell);setFmt("sw1mb",d.fxSwaps?.["1m"]?.buy);
+  setFmt("sw2ms",d.fxSwaps?.["2m"]?.sell);setFmt("sw2mb",d.fxSwaps?.["2m"]?.buy);
+  setFmt("sw3ms",d.fxSwaps?.["3m"]?.sell);setFmt("sw3mb",d.fxSwaps?.["3m"]?.buy);
+  setFmt("sw6ms",d.fxSwaps?.["6m"]?.sell);setFmt("sw6mb",d.fxSwaps?.["6m"]?.buy);
+  setFmt("sw1ys",d.fxSwaps?.["1y"]?.sell);setFmt("sw1yb",d.fxSwaps?.["1y"]?.buy);
 
   const tb=document.getElementById("tbillRows");tb.innerHTML="";
   // Helper: append current year to short dates like "16 Jun" → "16 Jun 2026"
@@ -735,8 +877,32 @@ function render(d){
   const lmIdx=bHeadersAll.findIndex(h=>{const t=String(h||'').toLowerCase().trim();return t==='last month'||t==='end of month';});
   const dateIdx=bHeadersAll.map((h,i)=>i).filter(i=>!isRef(bHeadersAll[i]));   // real date columns only
   const bHeaders=dateIdx.map(i=>bHeadersAll[i]);
-  bHeaders.forEach(h=>{const th=document.createElement("th");th.textContent=h;bhr.appendChild(th);});
+  // Bond date columns: the LAST column always matches the same Closing date shown elsewhere on the page;
+  // earlier columns auto-fill backwards through Sri Lanka bank working days (official CBSL calendar).
+  const isSLWork=x=>{const g=x.getDay();if(g===0||g===6)return false;
+    const iso=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+    return !SL_FX_HOL_SET.has(iso);};
+  const MON_B=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const ordB=n=>{const v=n%100;const o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return n+o;};
+  const fmtBH=x=>ordB(x.getDate())+" "+MON_B[x.getMonth()];
+  const autoLabels=(()=>{
+    const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
+    const ovClose=ov(d.closingDate);
+    let last;
+    if(ovClose){const m=String(ovClose).match(/(\d{1,2})\D+([A-Za-z]+)\D+(\d{4})/);
+      if(m){const mi=MON_B.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());if(mi>=0)last=new Date(+m[3],mi,+m[1]);}}
+    if(!last)last=slWorkDay(0);
+    const labels=[];
+    let x=new Date(last.getFullYear(),last.getMonth(),last.getDate());
+    for(let i=0;i<bHeaders.length;i++){
+      labels.unshift(fmtBH(x));
+      do{x.setDate(x.getDate()-1);}while(!isSLWork(x));
+    }
+    return labels;
+  })();
+  bHeaders.forEach((_,ci)=>{const th=document.createElement("th");th.textContent=autoLabels[ci]||bHeaders[ci];bhr.appendChild(th);});
   const midMatrix=bRows.map(r=>dateIdx.map(i=>bondMid((r.values||[])[i])));
+  const rawMatrix=bRows.map(r=>dateIdx.map(i=>bondDisplay((r.values||[])[i])));
   const bb=document.getElementById("bondRows");bb.innerHTML="";
   bRows.forEach((r,ri)=>{
     const tr=document.createElement("tr");
@@ -748,6 +914,7 @@ function render(d){
     const tdY=document.createElement("td");tdY.textContent=fmt2(eoyVal);tdY.style.color="#c8a84b";tdY.style.fontSize="9px";tr.appendChild(tdY);
     const tdM=document.createElement("td");tdM.textContent=fmt2(eomVal);tdM.style.color="#9fb6d4";tdM.style.fontSize="9px";tr.appendChild(tdM);
     const mids=midMatrix[ri]||[];
+    const raws=rawMatrix[ri]||[];
     // per-row heat scale: this bond's own low (green) → high (red) across the dates
     const rv=mids.filter(m=>m!=null);
     const rmn=rv.length?Math.min(...rv):0, rmx=rv.length?Math.max(...rv):1;
@@ -758,8 +925,8 @@ function render(d){
         let prev=null;for(let k=ci-1;k>=0;k--){if(mids[k]!=null){prev=mids[k];break;}}
         const delta=prev!=null?+(m-prev).toFixed(3):null;
         let arrow="",acol="";
-        if(delta!=null&&delta!==0){ if(delta<0){arrow="\u25be";acol="#7ee0a8";}else{arrow="\u25b4";acol="#ff8a78";} }
-        td.innerHTML=m.toFixed(2)+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
+        if(delta!=null&&delta!==0){ if(delta<0){arrow="\u25be";acol="#ff8a78";}else{arrow="\u25b4";acol="#7ee0a8";} }
+        td.innerHTML=(raws[ci]||m.toFixed(2))+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
         td.style.background=heatColor(m,rmn,rmx);   // per-row colour
         td.style.color="#eaf2fb";td.style.fontWeight="600";
         if(delta!=null&&delta!==0)td.title=(delta<0?"Yield down ":"Yield up ")+Math.abs(delta).toFixed(2)+" vs previous";
@@ -806,7 +973,7 @@ function render(d){
   renderTbillAuction(d.tbillAuction||[],"op-auction-body");
   // Treasury Bond table — same heat-map view as Fixed Income tab
   const opbh=document.getElementById("op-bond-header");
-  if(opbh){opbh.innerHTML="<th>Bond</th><th>Last Year</th><th>Last Month</th>";bHeaders.forEach(h=>{const th=document.createElement("th");th.textContent=h;opbh.appendChild(th);});}
+  if(opbh){opbh.innerHTML="<th>Bond</th><th>Last Year</th><th>Last Month</th>";bHeaders.forEach((_,ci)=>{const th=document.createElement("th");th.textContent=autoLabels[ci]||bHeaders[ci];opbh.appendChild(th);});}
   const opb=document.getElementById("op-bond-rows");
   if(opb){opb.innerHTML="";
     const f2=v=>{if(v==null||String(v).trim()===''||String(v).trim()==="0")return"—";const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v).trim():n.toFixed(2);};
@@ -818,6 +985,7 @@ function render(d){
       const tdY=document.createElement("td");tdY.textContent=f2(eoyV);tdY.style.color="#c8a84b";tdY.style.fontSize="9px";tr.appendChild(tdY);
       const tdM=document.createElement("td");tdM.textContent=f2(eomV);tdM.style.color="#9fb6d4";tdM.style.fontSize="9px";tr.appendChild(tdM);
       const mids=midMatrix[ri]||[];
+      const raws=rawMatrix[ri]||[];
       const rv=mids.filter(m=>m!=null);
       const rmn=rv.length?Math.min(...rv):0, rmx=rv.length?Math.max(...rv):1;
       mids.forEach((m,ci)=>{
@@ -826,8 +994,8 @@ function render(d){
           let prev=null;for(let k=ci-1;k>=0;k--){if(mids[k]!=null){prev=mids[k];break;}}
           const delta=prev!=null?+(m-prev).toFixed(3):null;
           let arrow="",acol="";
-          if(delta!=null&&delta!==0){if(delta<0){arrow="\u25be";acol="#7ee0a8";}else{arrow="\u25b4";acol="#ff8a78";}}
-          td.innerHTML=m.toFixed(2)+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
+          if(delta!=null&&delta!==0){if(delta<0){arrow="\u25be";acol="#ff8a78";}else{arrow="\u25b4";acol="#7ee0a8";}}
+          td.innerHTML=(raws[ci]||m.toFixed(2))+(arrow?' <span style="font-size:9px;color:'+acol+'">'+arrow+'</span>':'');
           td.style.background=heatColor(m,rmn,rmx);td.style.color="#eaf2fb";td.style.fontWeight="600";
         }else{td.textContent="—";td.style.color="#3a5575";}
         tr.appendChild(td);
@@ -841,18 +1009,19 @@ function render(d){
   setText("op-exdelta",d.execSummary?.liqDelta);
 
   // ── NEW: Closing Report ──
-  setText("cl-usd",d.usdlkr?.close||d.execSummary?.usdlkr);
-  setText("cl-liq",d.liquidity?.current);
+  setFmt("cl-usd",d.usdlkr?.close||d.execSummary?.usdlkr);
+  setFmt("cl-liq",d.liquidity?.current);
   const lt=((d.tbills||[]).filter(r=>r.show!==false))[0]||{};
-  setText("cl-3m",lt.m3);setText("cl-6m",lt.m6);setText("cl-12m",lt.m12);
+  setFmt("cl-3m",lt.m3);setFmt("cl-6m",lt.m6);setFmt("cl-12m",lt.m12);
   const cn=document.getElementById("cl-news");
   if(cn){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());cn.innerHTML=items.length?items.map(t=>"• "+escHtml(t)).join("<br>"):"—";}
 
   // ── NEW: Latest Market Announcements ──
   renderEvents(d);
   const nl=document.getElementById("news-list");
-  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());nl.innerHTML=items.length?items.map((t,i)=>`<div class="news-card"><span class="news-idx">${i+1}.</span>${escHtml(t)}</div>`).join(""):'<div class="news-card">No announcements published.</div>';}
+  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());const newsHash=JSON.stringify(items);if(newsHash!==_lastNewsHash){_lastNewsHash=newsHash;nl.innerHTML=items.length?`<div class="news-card" style="line-height:2;font-size:13px;white-space:pre-wrap">${escHtml(items.join("\n"))}</div>`:'<div class="news-card">No announcements published.</div>';}}
 
+  applyHidden(d);
   renderExtras(d);
   buildCharts(d);
 }
@@ -861,56 +1030,74 @@ function render(d){
 function renderExtras(d){
   const E=id=>document.getElementById(id);
   const dash=v=>(v==null||String(v).trim()===''||String(v).trim()==='0')?'—':v;
+  const fmt2=v=>{if(v==null||String(v).trim()===''||String(v).trim()==='0')return'—';const s=String(v).trim();if(/%$/.test(s)){const n=parseFloat(s);return isNaN(n)?s:n.toFixed(2)+'%';}const n=parseFloat(s.replace(/,/g,''));if(isNaN(n))return s;const parts=n.toFixed(2).split('.');return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,',')+'.'+parts[1];};
   const set=(id,html)=>{const el=E(id);if(el)el.innerHTML=html;};
   // Macro — inflation
-  set('dyn-inflation',(d.inflation||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.metric)}</td><td>${dash(r.apr)}</td><td style="color:#c8a84b">${dash(r.may)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-inflation',(d.inflation||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.metric)}</td><td>${fmt2(r.apr)}</td><td style="color:#c8a84b">${fmt2(r.may)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   // Macro — reserves (highlight last)
-  {const r=(d.reserves||[]).filter(x=>x.show!==false);set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${dash(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  {const r=(d.reserves||[]).filter(x=>x.show!==false);set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
   // Macro — tourism & remittances
-  {const t=d.tourism||{};set('dyn-tourism',`<tr><td>Earnings</td><td>${dash(t.apr)}</td><td>${dash(t.may)}</td><td style="color:#6dd4a0;font-weight:700">${dash(t.yoy)}</td></tr>`);}
-  {const r=d.remittances||{};set('dyn-remit',`<tr><td>Inflows</td><td>${dash(r.apr)}</td><td>${dash(r.may)}</td><td style="color:#6dd4a0;font-weight:700">${dash(r.yoy)}</td></tr>`);}
+  {const t=d.tourism||{};set('dyn-tourism',`<tr><td>Earnings</td><td>${fmt2(t.apr)}</td><td>${fmt2(t.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(t.yoy)}</td></tr>`);}
+  {const r=d.remittances||{};set('dyn-remit',`<tr><td>Inflows</td><td>${fmt2(r.apr)}</td><td>${fmt2(r.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(r.yoy)}</td></tr>`);}
   // Global — FOMC
-  set('dyn-fomc',(d.fomc||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.date)}</td><td>${escHtml(r.range)}</td><td>${dash(r.repo)}</td><td>${dash(r.rrepo)}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-fomc',(d.fomc||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.date)}</td><td>${escHtml(r.range)}</td><td>${fmt2(r.repo)}</td><td>${fmt2(r.rrepo)}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   {const fk=(d.keyDates||[]).find(k=>/fomc/i.test(k.label));if(fk&&E('dyn-fomc-next')){const i=eventDayInfo(fk.date);E('dyn-fomc-next').textContent='Next FOMC Meeting: '+i.dstr+(i.daysTxt?'  ('+i.daysTxt+')':'');}}
   // FX — spot overview + cross rates
   {const s=d.spot||{};set('dyn-spot',`<tr><td>Opening Spot</td><td style="text-align:right">${dash(s.open)}</td></tr><tr><td>Closing Spot</td><td style="text-align:right;color:#c8a84b;font-weight:700">${dash(s.close)}</td></tr><tr><td>Intraday Lowest</td><td style="text-align:right">${dash(s.low)}</td></tr><tr><td>Intraday Highest</td><td style="text-align:right">${dash(s.high)}</td></tr>`);}
-  set('dyn-cross',(d.crossRates||[]).filter(c=>c.show!==false).map(c=>`<tr><td>${escHtml(c.pair)}</td><td>${dash(c.buy)}</td><td>${dash(c.sell)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-cross',(d.crossRates||[]).filter(c=>c.show!==false).map(c=>`<tr><td>${escHtml(c.pair)}</td><td>${fmt2(c.buy)}</td><td>${fmt2(c.sell)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   // Money Market — OPR + standing facilities
-  {const o=(d.opr||[]).filter(r=>r.show!==false);set('dyn-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${dash(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
-  {const w=d.windows||{};set('dyn-windows',`<tr><td>Standing Deposit (SDF)</td><td>${dash(w.sdf&&w.sdf.cur)}</td><td style="color:#7fa3c8">${dash(w.sdf&&w.sdf.prev)}</td></tr><tr><td>Standing Lending (SLF)</td><td>${dash(w.slf&&w.slf.cur)}</td><td style="color:#7fa3c8">${dash(w.slf&&w.slf.prev)}</td></tr>`);}
+  {const o=(d.opr||[]).filter(r=>r.show!==false);set('dyn-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  {const sr=(d.srr||[]).filter(r=>r.show!==false);set('dyn-srr',sr.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===sr.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+  {const w=d.windows||{};set('dyn-windows',`<tr><td>Standing Deposit (SDF)</td><td>${fmt2(w.sdf&&w.sdf.cur)}</td><td style="color:#7fa3c8">${fmt2(w.sdf&&w.sdf.prev)}</td></tr><tr><td>Standing Lending (SLF)</td><td>${fmt2(w.slf&&w.slf.cur)}</td><td style="color:#7fa3c8">${fmt2(w.slf&&w.slf.prev)}</td></tr>`);}
   // FI — secondary yields (table)
-  set('dyn-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.maturity)}</td><td>${dash(s.bid)}</td><td>${dash(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.maturity)}</td><td>${fmt2(s.bid)}</td><td>${fmt2(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
 
   // ── Opening Report mirror tables ──
   {const w=d.windows||{},lq=d.liquidity||{};
-   set('dyn-op-cbsl',`<tr><td>Standing Deposit Facility (SDF)</td><td style="text-align:right">${dash(w.sdf&&w.sdf.cur)}</td><td style="text-align:right">${dash(w.sdf&&w.sdf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
-     `<tr><td>Standing Lending Facility (SLF)</td><td style="text-align:right">${dash(w.slf&&w.slf.cur)}</td><td style="text-align:right">${dash(w.slf&&w.slf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
-     `<tr><td style="font-weight:700">Net Market Liquidity</td><td style="color:#c8a84b;font-weight:700;text-align:right">${dash(lq.current)}</td><td style="text-align:right">${dash(lq.previous)}</td><td colspan="2" style="color:#6dd4a0;font-weight:700;text-align:right">CBSL Holdings: ${dash(d.cbslHoldings)} Bn</td></tr>`);}
+   set('dyn-op-cbsl',`<tr><td>Standing Deposit Facility (SDF)</td><td style="text-align:right">${fmt2(w.sdf&&w.sdf.cur)}</td><td style="text-align:right">${fmt2(w.sdf&&w.sdf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
+     `<tr><td>Standing Lending Facility (SLF)</td><td style="text-align:right">${fmt2(w.slf&&w.slf.cur)}</td><td style="text-align:right">${fmt2(w.slf&&w.slf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
+     `<tr><td style="font-weight:700">Net Market Liquidity</td><td style="color:#c8a84b;font-weight:700;text-align:right">${fmt2(lq.current)}</td><td style="text-align:right">${fmt2(lq.previous)}</td><td colspan="2" style="color:#6dd4a0;font-weight:700;text-align:right">CBSL Holdings: ${fmt2(d.cbslHoldings)} Bn</td></tr>`);}
   {const c=d.callMarket||{},r=d.repoMarket||{};
-   set('dyn-op-mm',`<tr><td>Call Money</td><td>${dash(c.max)}</td><td>${dash(c.min)}</td><td style="color:#c8a84b">${dash(c.wa)}</td><td>${dash(c.vol)}</td></tr>`+
-     `<tr><td>Repo</td><td>${dash(r.max)}</td><td>${dash(r.min)}</td><td style="color:#c8a84b">${dash(r.wa)}</td><td>${dash(r.vol)}</td></tr>`);}
-  {const o=(d.opr||[]).filter(r=>r.show!==false);set('dyn-op-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${dash(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+   set('dyn-op-mm',`<tr><td>Call Money</td><td>${fmt2(c.max)}</td><td>${fmt2(c.min)}</td><td style="color:#c8a84b">${fmt2(c.wa)}</td><td>${fmt2(c.vol)}</td></tr>`+
+     `<tr><td>Repo</td><td>${fmt2(r.max)}</td><td>${fmt2(r.min)}</td><td style="color:#c8a84b">${fmt2(r.wa)}</td><td>${fmt2(r.vol)}</td></tr>`);}
+  {const o=(d.opr||[]).filter(r=>r.show!==false);set('dyn-op-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
   {const lt=(d.tbills||[])[0]||{};const rows=[['3 Months','91 Days',lt.m3],['6 Months','182 Days',lt.m6],['1 Year','364 Days',lt.m12]];
    set('dyn-op-tbill3',rows.map(([t,dys,v])=>`<tr><td>${t}</td><td>${dys}</td><td style="color:#c8a84b">${dash(v)}</td></tr>`).join(''));}
   {const s=d.spot||{};const row=(l,v)=>`<div class="fx-ov-row"><span class="lbl">${l}</span><span class="val">${dash(v)}</span></div>`;
    set('dyn-op-fxov',row('Opening Spot',s.open)+row('Closing Spot',s.close)+row('Intraday Lowest Rate',s.low)+row('Intraday Highest Rate',s.high));}
-  set('dyn-op-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map(s=>`<div class="by-row"><span class="by-mat">${escHtml(s.maturity)}</span><span class="by-rate">${dash(s.bid)} / ${dash(s.ask)}</span></div>`).join(''));
-  set('dyn-op-fxsum',(d.fxSummary||[]).filter(f=>f.show!==false).map(f=>{const bold=/total/i.test(f.tenor);return `<tr${bold?' style="font-weight:700"':''}><td>${escHtml(f.tenor)}</td><td>${dash(f.volume)}</td><td>${f.wa?dash(f.wa):''}</td></tr>`;}).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-op-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map(s=>`<div class="by-row"><span class="by-mat">${escHtml(s.maturity)}</span><span class="by-rate">${fmt2(s.bid)} / ${fmt2(s.ask)}</span></div>`).join(''));
+  set('dyn-op-fxsum',(d.fxSummary||[]).filter(f=>f.show!==false).map(f=>{const bold=/total/i.test(f.tenor);return `<tr${bold?' style="font-weight:700"':''}><td>${escHtml(f.tenor)}</td><td>${fmt2(f.volume)}</td><td>${f.wa?fmt2(f.wa):''}</td></tr>`;}).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   {// Auto report dates (Sri Lanka bank working days) with optional editor overrides
    const todayD=slWorkDay(0), yestD=slWorkDay(1);
    const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
    const ot=document.getElementById("opening-report-title");
-   if(ot){const od=ov(d.openingDate)||fmtOrd(todayD);ot.innerHTML="Opening Report — "+od;}
-   const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(yestD);
-   ["mm-close","fx-close","tbill-close","tbond-close","secondary-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML="Closing: "+cdEl;});
-   // FX Volume date = last Friday (the most recent Friday before today, not including today even if today is Friday)
-   const lastFriday=(()=>{let x=new Date();x.setHours(0,0,0,0);do{x.setDate(x.getDate()-1);}while(x.getDay()!==5);return x;})();
+   if(ot){const od=ov(d.openingDate)||fmtOrd(slOpeningDay());ot.innerHTML="Opening Report — "+od;}
+   const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(todayD);
+   ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=cdEl?"Closing: "+cdEl:"";});
+
    const ft=document.getElementById("op-fxsum-title");
-   if(ft)ft.innerHTML="Volume of FX Market"+'<span class="close-date">'+fmtOrd(lastFriday)+"</span>";}
-  set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>`<tr><td>${escHtml(v.tenor)}</td><td>${escHtml(v.date)}</td><td style="color:#9fb6d4">${escHtml(v.nod||'')}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
-  set('dyn-op-srr',(d.srr||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${dash(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+   if(ft)ft.innerHTML="Volume of FX Market"+(cdEl?'<span class="close-date">'+cdEl+"</span>":"");
+   const vdt=document.getElementById("vd-title");
+   if(vdt)vdt.innerHTML="Value Dates"+'<span class="close-date">'+fmtOrd(slValueDay())+"</span>";}
+  set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>{
+    const autoDate=calcValueDate(v.tenor);
+    const dateStr=autoDate?fmtValueDate(autoDate):escHtml(v.date);
+    const nodStr=autoDate?calcNOD(v.tenor):escHtml(v.nod||'');
+    return `<tr><td>${escHtml(v.tenor)}</td><td>${dateStr}</td><td style="color:#9fb6d4">${nodStr}</td></tr>`;
+  }).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-op-srr',(d.srr||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${escHtml(s.date)}</td><td>${fmt2(s.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
 }
 
+function applyHidden(d){
+  const h=(d&&d.hidden&&typeof d.hidden==='object')?d.hidden:{};
+  document.querySelectorAll('[data-sec]').forEach(el=>{
+    const p=el.closest('.panel')||el;
+    p.style.display=h[el.getAttribute('data-sec')]?'none':'';
+  });
+  document.querySelectorAll('[data-sec-self]').forEach(el=>{
+    el.style.display=h[el.getAttribute('data-sec-self')]?'none':'';
+  });
+}
 function destroyChart(k){if(charts[k]){charts[k].destroy();delete charts[k];}}
 
 // Compact "recent values" table under a chart: newest-first, with day-on-day change
@@ -1025,6 +1212,26 @@ function buildCharts(d){
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const fmtBond=b=>{const p=String(b).split(".");if(p.length===3){const m=parseInt(p[1])-1,y=parseInt(p[2]);if(!isNaN(m)&&!isNaN(y)&&m>=0&&m<=11)return MON[m]+" "+y;}return b;};
   const yLabels=yBRows.map(r=>fmtBond(r.bond));
+  // Re-derive the same auto-generated SL working-day date labels used for the bond table headers
+  // (last column = same Closing date as elsewhere on the page), so the chart legend shows real
+  // dates ("30th Jun") instead of raw Excel headers ("Day 6").
+  const autoLabels=(()=>{
+    const isSLW=x=>{const g=x.getDay();if(g===0||g===6)return false;
+      const iso=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+      return !SL_FX_HOL_SET.has(iso);};
+    const ordA=n=>{const v=n%100;const o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return n+o;};
+    const fmtA=x=>ordA(x.getDate())+" "+MON[x.getMonth()];
+    const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
+    const ovClose=ov(d.closingDate);
+    let last;
+    if(ovClose){const m=String(ovClose).match(/(\d{1,2})\D+([A-Za-z]+)\D+(\d{4})/);
+      if(m){const mi=MON.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());if(mi>=0)last=new Date(+m[3],mi,+m[1]);}}
+    if(!last)last=slWorkDay(0);
+    let x=new Date(last.getFullYear(),last.getMonth(),last.getDate());
+    const labels=[];
+    for(let i=0;i<yBHead.length;i++){labels.unshift(fmtA(x));do{x.setDate(x.getDate()-1);}while(!isSLW(x));}
+    return labels;
+  })();
   // find the two most recent columns that actually have data
   let tCol=-1,yCol=-1;
   for(let ci=yBHead.length-1;ci>=0;ci--){
@@ -1034,8 +1241,8 @@ function buildCharts(d){
   const todayD=tCol>=0?yBRows.map(r=>bondMid((r.values||[])[tCol])):[];
   const yestD =yCol>=0?yBRows.map(r=>bondMid((r.values||[])[yCol])):[];
   const yDS=[];
-  if(yCol>=0)yDS.push({label:"Yesterday ("+yBHead[yCol]+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
-  yDS.push({label:"Today ("+(tCol>=0?yBHead[tCol]:"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
+  if(yCol>=0)yDS.push({label:"Previous ("+(autoLabels[yCol]||yBHead[yCol])+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
+  yDS.push({label:"Latest ("+(tCol>=0?(autoLabels[tCol]||yBHead[tCol]):"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
   charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels,datasets:yDS},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:10},boxWidth:18,usePointStyle:false,padding:12}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
 
   // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
@@ -1071,8 +1278,8 @@ function buildCharts(d){
   // Opening Report — FX Market Summary volume by tenor (excludes subtotal/grand-total rows)
   destroyChart("opFxSum");
   if(document.getElementById("opFxSumChart")){
-    const fsRows=(d.fxSummary||[]).filter(r=>!/total/i.test(r.tenor)&&r.volume!=null);
-    charts.opFxSum=new Chart(document.getElementById("opFxSumChart"),{type:"bar",data:{labels:fsRows.map(r=>r.tenor),datasets:[{label:"Volume (USD Mn)",data:fsRows.map(r=>parseFloat(r.volume)||0),backgroundColor:"#4da3e8",borderRadius:4,maxBarThickness:34}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
+    const fsRows=(d.fxSummary||[]).filter(r=>!/^\s*(grand\s+)?total\s*$/i.test(r.tenor)&&r.volume!=null);
+    charts.opFxSum=new Chart(document.getElementById("opFxSumChart"),{type:"bar",data:{labels:fsRows.map(r=>r.tenor),datasets:[{label:"Volume (USD Mn)",data:fsRows.map(r=>parseFloat(r.volume)||0),backgroundColor:fsRows.map(r=>/sub.?total/i.test(r.tenor)?"#c8a84b":"#4da3e8"),borderRadius:4,maxBarThickness:34}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
   }
 }
 
