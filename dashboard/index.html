@@ -1040,7 +1040,7 @@ function render(d){
   // ── NEW: Latest Market Announcements ──
   renderEvents(d);
   const nl=document.getElementById("news-list");
-  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());const newsHash=JSON.stringify(items);if(newsHash!==_lastNewsHash){_lastNewsHash=newsHash;nl.innerHTML=items.length?`<div class="news-card" style="line-height:2;font-size:13px;white-space:pre-wrap">${escHtml(items.join("\n"))}</div>`:'<div class="news-card">No announcements published.</div>';}}
+  if(nl){const items=(d.marketNews||[]).filter(t=>String(t==null?"":t).trim());const newsHash=JSON.stringify(items);if(newsHash!==_lastNewsHash){_lastNewsHash=newsHash;nl.innerHTML=items.length?`<div class="news-card" style="line-height:2;font-size:13px;white-space:pre-wrap">${escHtml(items.join(" "))}</div>`:'<div class="news-card">No announcements published.</div>';}}
 
   applyHidden(d);
   renderExtras(d);
