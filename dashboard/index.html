@@ -1097,7 +1097,17 @@ function renderExtras(d){
    const slNow_cd=new Date(Date.now()+330*60000);
    const cdAuto=slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(cdAuto);
-   ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=cdEl?"Closing: "+cdEl:"";});
+ ["mm-close","fx-close","tbill-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{
+  const e=document.getElementById(id);
+  if(!e)return;
+
+  if(id==="mm-close"){
+    const mmDate=slNow_cd.getUTCHours()>=17 ? slWorkDay(0) : slWorkDay(1);
+    e.innerHTML="Closing: "+fmtOrd(mmDate);
+  }else{
+    e.innerHTML=cdEl?"Closing: "+cdEl:"";
+  }
+});
 
    // Volume of FX Market = slOpeningDay(): before 8:30 AM → T-2, after 8:30 AM → T-1
    const ft=document.getElementById("op-fxsum-title");
