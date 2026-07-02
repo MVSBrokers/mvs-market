@@ -1165,7 +1165,7 @@ function buildCharts(d){
   destroyChart("liq");
   const liqAg=aggregateIdx(d.liquidity?.labels||[],GRANS.liq);
   charts.liq=new Chart(document.getElementById("liqChart"),{type:"line",data:{labels:liqAg.labels,datasets:[{label:"Rs.Bn",data:pick(d.liquidity?.values||[],liqAg.idx),borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
-  renderStatBar("liqStat",pick(d.liquidity?.values||[],liqAg.idx),liqAg.labels,"Rs.Bn",2);
+  renderStatBar("liqStat",pick(d.liquidity?.values||[],liqAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;}),liqAg.labels,"Rs.Bn",2);
   recentTable("liqTbl",d.liquidity?.labels||[],d.liquidity?.values||[],"Rs.Bn",2);
   // ── STAT BARS ──────────────────────────────────────────────
   function renderStatBar(elId,values,labels,unit,decimals){
@@ -1179,7 +1179,7 @@ function buildCharts(d){
     const isUp=diff>0,isFlat=diff===0;
     const arrow=isFlat?"▸":isUp?"▲":"▼";
     const cls=isFlat?"flat":isUp?"up":"down";
-    const fmt=v=>v!=null?v.toFixed(decimals):"—";
+    const fmt=v=>{if(v==null)return"—";const n=typeof v==="number"?v:parseFloat(v);return isNaN(n)?"—":n.toFixed(decimals);};
     // prev label
     const prevLbl=labels&&labels.length>=2?labels[labels.length-2]:"Prev";
     const currLbl=labels&&labels.length>=1?labels[labels.length-1]:"Latest";
