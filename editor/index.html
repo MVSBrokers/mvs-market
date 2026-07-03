@@ -82,6 +82,11 @@ code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-siz
 .vis-btn.off:hover{background:rgba(255,138,120,.24)}
 .sec.is-hidden{opacity:.6}
 .hid-tag{font-size:9px;font-weight:700;color:#ff8a78;background:rgba(255,138,120,.13);border:1px solid #7d3a30;border-radius:5px;padding:1px 6px;margin-left:8px;text-transform:uppercase;letter-spacing:.4px;vertical-align:middle}
+.hdr-grp{border:1px solid #1a3050;border-radius:8px;padding:10px 12px;margin:8px 0;background:rgba(13,30,56,.4)}
+.hdr-name{font-size:12px;font-weight:700;color:#c8a84b;margin-bottom:8px}
+.hdr-cols{display:flex;flex-wrap:wrap;gap:10px}
+.hdr-col{display:flex;flex-direction:column;min-width:130px;flex:1}
+.hdr-lbl{font-size:9px;color:#7a93b4;margin-bottom:3px;text-transform:uppercase;letter-spacing:.4px}
 </style></head>
 <body>
 <h1>MVS Market Data — Editor</h1>
@@ -149,7 +154,7 @@ function val(id){
 let LOADED=null;
 let PUBLISHED=null;
 const SECTIONS=[
- {id:'dates',title:'Report Dates (blank = auto · SL working days)',keys:['openingDate','closingDate','secondaryDate','fxVolDate']},
+ {id:'dates',title:'Report Dates (auto-filled on import · edit any to correct)',keys:['openingDate','closingDate','secondaryDate','fxVolDate']},
  {id:'mmrates',title:'Money Market & Repo Rates',keys:['callMarket','repoMarket']},
  {id:'windows',title:'Standing Facilities (SDF / SLF)',keys:['windows']},
  {id:'opr',title:'Policy Rate (OPR) History',keys:['opr']},
@@ -182,13 +187,18 @@ const SECTIONS=[
  {id:'dxy',title:'US Dollar Index (DXY)',keys:['dxy']},
  {id:'fomc',title:'FOMC Decisions',keys:['fomc']},
  {id:'keydates',title:'Key Dates / Announcements (tick = show on live bar)',keys:['keyDates']},
+ {id:'billauc',title:'T-Bill Auction Schedule',keys:['billAuctions']},
+ {id:'bondauc',title:'T-Bond Auction Schedule',keys:['bondAuctions']},
+ {id:'tbillout',title:'T-Bill Outstanding',keys:['tbillOut']},
+ {id:'tbondout',title:'T-Bond Outstanding',keys:['tbondOut']},
+ {id:'headers',title:'Column Headers (bond · inflation · tourism · remittances · reserves)',keys:['headers']},
  {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews']},
 ];
 const META_KEYS=['execSummary','date','marketNews'];
-const NO_HIDE=new Set(['dates']); // sections with no standalone panel on the dashboard
+const NO_HIDE=new Set(['dates','headers','billauc','bondauc','tbillout','tbondout']); // sections with no standalone panel on the dashboard
 
 // ── CONFIG / GITHUB ──────────────────────────────────────
-function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'',repo:localStorage.getItem('mvs_gh_repo')||'',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
+function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'kavindyamaheshi303-beep',repo:localStorage.getItem('mvs_gh_repo')||'mvs-market',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
 async function saveGithubConfig(){
   const token=val('gh-token'),owner=val('gh-owner'),repo=val('gh-repo'),branch=val('gh-branch')||'main',path=val('gh-path')||'data.json';
   const r=document.getElementById('setup-result');
@@ -220,6 +230,82 @@ async function getPublished(cfg){
   return {json,sha};
 }
 
+// ── SL/US date engine (mirrors the dashboard) — pre-fills auto dates so they show & can be corrected ──
+const _MON3_ED=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const _MONF_ED=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function slWorkDay(back){
+  const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04","2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13","2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29","2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08","2026-11-24","2026-12-23","2026-12-25"]);
+  const isSLWork=d=>{if(d.getDay()===0||d.getDay()===6)return false;const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");return !SL_HOL.has(iso);};
+  let d=new Date();while(!isSLWork(d))d.setDate(d.getDate()-1);
+  for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
+  return d;
+}
+function slOpeningDay(){const slNow=new Date(Date.now()+330*60000);const h=slNow.getUTCHours(),m=slNow.getUTCMinutes();return ((h>8)||(h===8&&m>=30))?slWorkDay(1):slWorkDay(2);}
+function slClosingDay(){const slNow=new Date(Date.now()+330*60000);return slNow.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);}
+const US_FED_HOL_SET=new Set(["2026-01-01","2026-01-19","2026-02-16","2026-05-25","2026-06-19","2026-09-07","2026-10-12","2026-11-11","2026-11-26","2026-12-25"]);
+const SL_FX_HOL_SET=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04","2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13","2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29","2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08","2026-11-24","2026-12-23","2026-12-25"]);
+function _isoD(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function _isUSWork(d){if(d.getDay()===0||d.getDay()===6)return false;return !US_FED_HOL_SET.has(_isoD(d));}
+function _isSLFXWork(d){if(d.getDay()===0||d.getDay()===6)return false;return !SL_FX_HOL_SET.has(_isoD(d));}
+function _isBothWork(d){return _isUSWork(d)&&_isSLFXWork(d);}
+function _addWorkDays(d,n,checker){let x=new Date(d);let c=0;const dir=n>=0?1:-1;n=Math.abs(n);while(c<n){x.setDate(x.getDate()+dir);if(checker(x))c++;}return x;}
+function _addMonthsMF(spot,months){const tgt=new Date(spot.getFullYear(),spot.getMonth()+months,spot.getDate());let x=new Date(tgt);if(_isBothWork(x))return x;let fwd=new Date(x);while(!_isBothWork(fwd))fwd.setDate(fwd.getDate()+1);if(fwd.getMonth()===tgt.getMonth())return fwd;let bwd=new Date(x);while(!_isBothWork(bwd))bwd.setDate(bwd.getDate()-1);return bwd;}
+function _addDaysMF(spot,days){let x=new Date(spot.getFullYear(),spot.getMonth(),spot.getDate()+days);while(!_isBothWork(x))x.setDate(x.getDate()+1);return x;}
+function slValueDay(){const slNow=new Date(Date.now()+330*60000);if(slNow.getUTCHours()<16)return slWorkDay(0);let b=slWorkDay(0);let nxt=new Date(b.getFullYear(),b.getMonth(),b.getDate()+1);while(!_isSLFXWork(nxt))nxt.setDate(nxt.getDate()+1);return nxt;}
+function calcValueDate(tenorRaw){
+  const t=String(tenorRaw||"").toLowerCase().trim();
+  const anchor=slValueDay();const spot=_addWorkDays(anchor,2,_isBothWork);let result=null;
+  if(/cash|^today/.test(t))result=anchor;
+  else if(/^tom/.test(t))result=_addWorkDays(anchor,1,_isBothWork);
+  else if(/^spot$/.test(t))result=spot;
+  else if(/^snn$/.test(t))result=_addWorkDays(spot,2,_isBothWork);
+  else if(/^sn$/.test(t))result=_addWorkDays(spot,1,_isBothWork);
+  else{const wkM=t.match(/(\d+)\s*week/),moM=t.match(/(\d+)\s*month/),yrM=t.match(/(\d+)\s*year/);
+    if(wkM)result=_addDaysMF(spot,parseInt(wkM[1])*7);else if(moM)result=_addMonthsMF(spot,parseInt(moM[1]));else if(yrM)result=_addMonthsMF(spot,parseInt(yrM[1])*12);}
+  return result;
+}
+function fmtValueDate(d){if(!d)return"";return d.getDate()+" "+_MON3_ED[d.getMonth()]+" "+d.getFullYear();}
+function calcNOD(tenorRaw){
+  const t=String(tenorRaw||"").toLowerCase().trim();const d=calcValueDate(tenorRaw);if(!d)return"";
+  const dd=new Date(d);dd.setHours(0,0,0,0);let base;
+  if(/cash|^today/.test(t)||/^tom/.test(t)||/^spot$/.test(t)){base=slValueDay();base.setHours(0,0,0,0);}
+  else{base=_addWorkDays(slValueDay(),2,_isBothWork);base.setHours(0,0,0,0);}
+  return Math.round((dd-base)/86400000);
+}
+function fmtOrdPlain(d){const v=d.getDate()%100,o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return d.getDate()+o+" "+_MONF_ED[d.getMonth()]+" "+d.getFullYear();}
+// Fill auto dates on import so the editor shows them; the user can correct any before publishing.
+function autofillDates(o){
+  try{
+    if(!o.openingDate)o.openingDate=fmtOrdPlain(slOpeningDay());
+    if(!o.closingDate)o.closingDate=fmtOrdPlain(slClosingDay());
+    if(!o.secondaryDate)o.secondaryDate=fmtOrdPlain(slClosingDay());
+    (o.valueDates||[]).forEach(v=>{const ad=calcValueDate(v.tenor);if(ad){v.date=fmtValueDate(ad);v.nod=String(calcNOD(v.tenor));}});
+    // bond date-column headers → last N SL working days ending at the closing day (matches the dashboard)
+    if(o.bonds&&Array.isArray(o.bonds.headers)&&o.bonds.headers.length){
+      const generic=o.bonds.headers.every(h=>h==null||/^day\s*\d+$/i.test(String(h).trim())||String(h).trim()==='');
+      if(generic){
+        const ordB=n=>{const q=n%100,s=["th","st","nd","rd"][(q-20)%10]||["th","st","nd","rd"][q]||"th";return n+s;};
+        const nH=o.bonds.headers.length,out=[];let x=slClosingDay();
+        for(let i=0;i<nH;i++){out.unshift(ordB(x.getDate())+" "+_MON3_ED[x.getMonth()]);do{x=new Date(x.getFullYear(),x.getMonth(),x.getDate()-1);}while(!_isSLFXWork(x));}
+        o.bonds.headers=out;
+      }
+    }
+  }catch(e){}
+}
+
+// ── Editable column headers (selected tables) ──
+const HDR_TABLES={
+  bond:{name:'Treasury Bond table',defaults:["Maturity","Last Year","Last Month"]},
+  inflation:{name:'Inflation table',defaults:["Index / Metric","Previous","Latest"]},
+  tourism:{name:'Tourism table',defaults:["Tourism (USD)","Apr 2026","May 2026","Y-o-Y"]},
+  remit:{name:'Remittances table',defaults:["Remittances (USD)","Apr 2025","May 2026","Y-o-Y"]},
+  reserves:{name:'Foreign Currency Reserves table',defaults:["Month","Reserve ($)"]}
+};
+function ensureHeaders(o){
+  if(!o.headers||typeof o.headers!=='object')o.headers={};
+  Object.keys(HDR_TABLES).forEach(key=>{ if(!Array.isArray(o.headers[key]))o.headers[key]=HDR_TABLES[key].defaults.slice(); });
+}
+
 // ── EXCEL IMPORT ─────────────────────────────────────────
 function ingestFile(file,auto){
   const st=document.getElementById('import-status');
@@ -239,6 +325,11 @@ const oldHidden =
     ? JSON.parse(JSON.stringify(LOADED.hidden))
     : {};
 
+const oldHeaders =
+  LOADED && LOADED.headers
+    ? JSON.parse(JSON.stringify(LOADED.headers))
+    : null;
+
 LOADED = parseWorkbook(wb, XLSX);
 
 // Restore Latest Results after import
@@ -249,6 +340,9 @@ if (oldNews.length) {
 // Restore hidden settings
 LOADED.hidden = oldHidden;
     try{const ph=JSON.parse(localStorage.getItem('mvs_editor_hidden')||'null');if(ph&&typeof ph==='object')LOADED.hidden=ph;}catch(e){}
+    autofillDates(LOADED);   // fill opening/closing/value dates + value-days so they show & are editable
+    if(oldHeaders)LOADED.headers=oldHeaders;   // keep any header edits across re-import
+    ensureHeaders(LOADED);   // make sure every editable-header table has its labels present
     try{const _ck=analyzeFreshness(wb,XLSX);renderFreshness(_ck);try{localStorage.setItem('mvs_editor_freshness',JSON.stringify(_ck));}catch(_e){}}catch(fe){}
     renderSections();
     saveLocal();   // keep this import across editor page refreshes
@@ -311,7 +405,7 @@ async function loadPublished(){
     const url=`https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch||'main'}/${cfg.path}?t=`+Date.now();
     const res=await fetch(url,{cache:'no-store'});if(!res.ok)return false;
     PUBLISHED=await res.json();
-    if(!LOADED){LOADED=JSON.parse(JSON.stringify(PUBLISHED));renderSections();
+    if(!LOADED){LOADED=JSON.parse(JSON.stringify(PUBLISHED));ensureHeaders(LOADED);renderSections();
       document.getElementById('import-status').style.color='#9fb6d4';
       document.getElementById('import-status').textContent='Loaded currently-published data. Re-import the Excel to update it.';}
     else markPublishStates();
@@ -331,7 +425,7 @@ function renderNode(value,path){
     if(value.length===0)return '<span class="muted">(empty)</span>';
     if(value.every(x=>x&&typeof x==='object'&&!Array.isArray(x))){
       const cols=[...new Set(value.flatMap(o=>Object.keys(o)))];
-      let h='<div class="ed-scroll"><table class="ed-tbl"><thead><tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'<th></th></tr></thead><tbody>';
+      let h='<div class="ed-scroll" data-sk="'+escAttr(path)+'"><table class="ed-tbl"><thead><tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'<th></th></tr></thead><tbody>';
       value.forEach((o,i)=>{h+='<tr>'+cols.map(c=>`<td>${renderNode(o[c],path+'.'+i+'.'+c)}</td>`).join('')+`<td><button type="button" class="row-del" onclick="rowDel('${path}',${i})" title="Delete this row">✕</button></td></tr>`;});
       return h+'</tbody></table></div><button type="button" class="row-add" onclick="rowAdd(\''+path+'\')">+ Add row</button>';
     }
@@ -342,7 +436,7 @@ function renderNode(value,path){
   if(arrKeys.length>=1&&arrKeys.every(k=>value[k].length===value[arrKeys[0]].length)&&value[arrKeys[0]].length>3){
     const scalarKeys=keys.filter(k=>!arrKeys.includes(k));let h='';
     if(scalarKeys.length)h+='<div class="ed-fields">'+scalarKeys.map(k=>`<div><label>${k}</label>${renderNode(value[k],path+'.'+k)}</div>`).join('')+'</div>';
-    h+='<div class="ed-scroll"><table class="ed-tbl"><thead><tr><th>#</th>'+arrKeys.map(k=>`<th>${k}</th>`).join('')+'<th></th></tr></thead><tbody>';
+    h+='<div class="ed-scroll" data-sk="'+escAttr(path)+'"><table class="ed-tbl"><thead><tr><th>#</th>'+arrKeys.map(k=>`<th>${k}</th>`).join('')+'<th></th></tr></thead><tbody>';
     const n=value[arrKeys[0]].length;
     for(let i=0;i<n;i++){h+=`<tr><td style="color:#5a7a9a">${i+1}</td>`+arrKeys.map(k=>`<td>${renderNode(value[k][i],path+'.'+k+'.'+i)}</td>`).join('')+`<td><button type="button" class="row-del" onclick="rowDelP('${path}',${i})" title="Delete this row">✕</button></td></tr>`;}
     return h+'</tbody></table></div><button type="button" class="row-add" onclick="rowAddP(\''+path+'\')">+ Add row</button>';
@@ -365,6 +459,7 @@ function renderSections(){
   // remember which sections are open + scroll position so add/delete-row doesn't collapse the table
   const openIds=[...document.querySelectorAll('#sections .sec.open')].map(el=>el.id);
   const sy=window.scrollY;
+  const _tblScroll={};document.querySelectorAll('#sections .ed-scroll[data-sk]').forEach(el=>{_tblScroll[el.getAttribute('data-sk')]=el.scrollTop;});
   document.getElementById('sections-hint').textContent='Click a section to edit. Each has its own publish button.';
   const host=document.getElementById('sections');
   host.innerHTML=SECTIONS.map(sec=>{
@@ -376,6 +471,35 @@ function renderSections(){
     if(sec.id==='results'){
       const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:[];
       body=`<div class="ed-sub"><div class="ed-sub-t">Latest results — type or paste freely, one item per line (shown on the dashboard's Announcements tab &amp; live bar)</div><textarea id="news-box" class="ed-news" rows="9" placeholder="Paste or type your latest results here…&#10;One per line, e.g.&#10;T-bill auction fully subscribed&#10;IMF 4th review completed">${escHtml(cur.join('\n'))}</textarea></div>`;
+    } else if(sec.id==='headers'){
+      const HH=LOADED.headers||{};
+      body='<div class="ed-sub"><div class="ed-sub-t">Edit any column header — these flow to the dashboard on publish. (The Treasury Bond date columns are set in the Treasury Bonds section.)</div>'+
+        Object.keys(HDR_TABLES).map(key=>{
+          const t=HDR_TABLES[key], cur=Array.isArray(HH[key])?HH[key]:t.defaults;
+          const cols=t.defaults.map((def,i)=>`<div class="hdr-col"><div class="hdr-lbl">Col ${i+1}</div>${inp('headers.'+key+'.'+i, cur[i]!=null?cur[i]:def, 'text')}</div>`).join('');
+          return `<div class="hdr-grp"><div class="hdr-name">${escHtml(t.name)}</div><div class="hdr-cols">${cols}</div></div>`;
+        }).join('')+'</div>';
+    } else if(sec.id==='bonds'){
+      const b=(LOADED.bonds&&typeof LOADED.bonds==='object')?LOADED.bonds:{headers:[],rows:[]};
+      const hdrs=Array.isArray(b.headers)?b.headers:[];
+      const rows=Array.isArray(b.rows)?b.rows:[];
+      const bh=(LOADED.headers&&Array.isArray(LOADED.headers.bond))?LOADED.headers.bond:['Maturity','Last Year','Last Month'];
+      let h='<div class="ed-sub"><div class="ed-sub-t">Treasury bond daily rates — same table layout as your Excel. Edit any cell; the date-column headers are editable, and you can add a maturity (row) or a date (column).</div>';
+      h+='<div class="ed-scroll" data-sk="bonds"><table class="ed-tbl"><thead><tr>';
+      h+='<th>'+escHtml(bh[0]||'Maturity')+'</th><th>'+escHtml(bh[1]||'Last Year')+'</th><th>'+escHtml(bh[2]||'Last Month')+'</th>';
+      hdrs.forEach((hd,j)=>{h+='<th style="min-width:78px">'+inp('bonds.headers.'+j,hd==null?'':hd,'str')+' <button type="button" class="row-del" onclick="bondDelCol('+j+')" title="Delete this date column">✕</button></th>';});
+      h+='<th></th></tr></thead><tbody>';
+      rows.forEach((r,i)=>{
+        const vals=Array.isArray(r.values)?r.values:[];
+        h+='<tr><td>'+inp('bonds.rows.'+i+'.bond',r.bond==null?'':r.bond,'str')+'</td>'+
+           '<td>'+inp('bonds.rows.'+i+'.eoy',r.eoy==null?'':r.eoy,'str')+'</td>'+
+           '<td>'+inp('bonds.rows.'+i+'.eom',r.eom==null?'':r.eom,'str')+'</td>'+
+           hdrs.map((hd,j)=>'<td>'+inp('bonds.rows.'+i+'.values.'+j,vals[j]!=null?vals[j]:'','str')+'</td>').join('')+
+           '<td><button type="button" class="row-del" onclick="rowDel(\'bonds.rows\','+i+')" title="Delete this maturity">✕</button></td></tr>';
+      });
+      h+='</tbody></table></div>';
+      h+='<button type="button" class="row-add" onclick="bondAddRow()">+ Add maturity (row)</button> <button type="button" class="row-add" onclick="bondAddCol()">+ Add date (column)</button></div>';
+      body=h;
     } else {
       body=sec.keys.map(k=>{
         if(LOADED[k]==null)return `<div class="ed-sub"><div class="ed-sub-t">${k}</div><span class="muted">No data in this workbook.</span></div>`;
@@ -396,6 +520,7 @@ function renderSections(){
       </div></div>`;
   }).join('');
   openIds.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('open');});
+  document.querySelectorAll('#sections .ed-scroll[data-sk]').forEach(el=>{const k=el.getAttribute('data-sk');if(_tblScroll[k]!=null)el.scrollTop=_tblScroll[k];});
   window.scrollTo(0,sy);
   markPublishStates();
 }
@@ -414,6 +539,10 @@ function getByPath(root,path){const s=path.split('.');let o=root;for(let i=0;i<s
 function saveLocal(){try{if(LOADED)localStorage.setItem('mvs_editor_loaded',JSON.stringify(LOADED));}catch(e){}}
 function rowDel(path,i){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)&&i>=0&&i<arr.length){arr.splice(i,1);saveLocal();renderSections();}}
 function rowAdd(path){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)){const cols=arr.length?[...new Set(arr.flatMap(o=>Object.keys(o)))]:['label','value'];const row={};cols.forEach(c=>{row[c]=(c==='show')?true:'';});arr.push(row);saveLocal();renderSections();}}
+// Bond table (Excel-like grid): add/remove maturities (rows) and date columns
+function bondAddRow(){applyEdits();if(!LOADED.bonds||typeof LOADED.bonds!=='object')LOADED.bonds={headers:[],rows:[]};if(!Array.isArray(LOADED.bonds.rows))LOADED.bonds.rows=[];const n=(Array.isArray(LOADED.bonds.headers)?LOADED.bonds.headers:[]).length;LOADED.bonds.rows.push({bond:'',eoy:'',eom:'',values:new Array(n).fill('')});saveLocal();renderSections();}
+function bondAddCol(){applyEdits();if(!LOADED.bonds||typeof LOADED.bonds!=='object')LOADED.bonds={headers:[],rows:[]};if(!Array.isArray(LOADED.bonds.headers))LOADED.bonds.headers=[];LOADED.bonds.headers.push('New date');(LOADED.bonds.rows||[]).forEach(r=>{if(!Array.isArray(r.values))r.values=[];r.values.push('');});saveLocal();renderSections();}
+function bondDelCol(j){applyEdits();if(!LOADED.bonds||!Array.isArray(LOADED.bonds.headers))return;LOADED.bonds.headers.splice(j,1);(LOADED.bonds.rows||[]).forEach(r=>{if(Array.isArray(r.values))r.values.splice(j,1);});saveLocal();renderSections();}
 // Parallel-array (series) tables: keep every column array the same length
 function _arrKeysOf(obj){return Object.keys(obj).filter(k=>Array.isArray(obj[k])&&obj[k].every(x=>x===null||typeof x!=='object'));}
 function rowDelP(path,i){applyEdits();const obj=getByPath(LOADED,path);if(obj&&typeof obj==='object'){_arrKeysOf(obj).forEach(k=>{if(i>=0&&i<obj[k].length)obj[k].splice(i,1);});saveLocal();renderSections();}}
@@ -546,13 +675,37 @@ function analyzeFreshness(wb,XLSX,nowOverride){
   out.push({label:'OPR · SRR · FOMC · Key Dates',cadence:'Fixed / Special',cal:'—',secId:'keydates',status:passed.length?'pending':'info',msg:passed.length?('A scheduled date has passed — update: '+passed.join(', ')):'Event-driven — update only when a new policy decision or date occurs.'});
   return out;
 }
+// Compare the uploaded data's latest date to today (recomputed every render, incl. on refresh)
+function dataFreshnessLine(L){
+  if(!L)return null;
+  const cands=[];[L.liquidity,L.usdlkr,L.global10y].forEach(o=>{if(o&&Array.isArray(o.labels)&&o.labels.length)cands.push(o.labels[o.labels.length-1]);});
+  const MON3=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"],MONF=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const now=new Date();
+  const parseLbl=s=>{const m=String(s||'').trim().match(/^(\d{1,2})\s+([A-Za-z]{3})/);if(!m)return null;const mi=MON3.indexOf(m[2].toLowerCase());if(mi<0)return null;let d=new Date(now.getFullYear(),mi,+m[1]);if(d-now>120*86400000)d=new Date(now.getFullYear()-1,mi,+m[1]);return d;};
+  let latest=null;cands.forEach(s=>{const d=parseLbl(s);if(d&&(!latest||d>latest))latest=d;});
+  if(!latest)return null;
+  const exp=(typeof slWorkDay==='function')?slWorkDay(0):now;const expD=new Date(exp.getFullYear(),exp.getMonth(),exp.getDate());
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const f=d=>d.getDate()+" "+MONF[d.getMonth()]+" "+d.getFullYear();
+  // gap counted in Sri Lanka working days (skips weekends + SL holidays)
+  let behind=0;{let x=new Date(latest);while(x<expD){x.setDate(x.getDate()+1);if(typeof _isSLFXWork==='function'?_isSLFXWork(x):(x.getDay()!==0&&x.getDay()!==6))behind++;}}
+  let status,cls;
+  if(latest>=expD){status='up to date';cls='ok';}
+  else{status=behind+' working day'+(behind===1?'':'s')+' behind';cls=behind>=2?'bad':'warn';}
+  return {html:'Your data: latest <b>'+f(latest)+'</b> &nbsp;·&nbsp; Today (SL working day): <b>'+f(expD)+'</b> — '+status, cls:cls};
+}
 function renderFreshness(checks){
   const grid=document.getElementById('freshness'),banner=document.getElementById('fresh-banner');
   const bad=checks.filter(c=>c.status==='stale'||c.status==='missing').length,pend=checks.filter(c=>c.status==='pending').length;
+  const df=dataFreshnessLine(LOADED);
   if(banner){banner.style.display='block';
-    if(bad){banner.className='fresh-banner bad';banner.textContent='⚠ '+bad+' section'+(bad>1?'s are':' is')+' NOT updated for today — review the red items before you publish.';}
-    else if(pend){banner.className='fresh-banner warn';banner.textContent='● '+pend+' section'+(pend>1?'s':'')+' may still be pending today (1 working day behind). Confirm today\u2019s figures are out.';}
-    else{banner.className='fresh-banner ok';banner.textContent='✓ All daily & weekly sections are up to date for the latest working day.';}}
+    let main;
+    if(bad){main='⚠ '+bad+' section'+(bad>1?'s are':' is')+' NOT updated for today — review the red items before you publish.';}
+    else if(pend){main='● '+pend+' section'+(pend>1?'s':'')+' may still be pending today (1 working day behind).';}
+    else{main='✓ All daily & weekly sections are up to date.';}
+    banner.className='fresh-banner '+(df?df.cls:(bad?'bad':pend?'warn':'ok'));
+    banner.innerHTML=(df?'<div style="font-size:13px">'+df.html+'</div>':'')+'<div style="font-size:11px;font-weight:400;margin-top:'+(df?'4px':'0')+';opacity:.9">'+main+'</div>';
+  }
   const cal=c=>c.cal==='—'?'':(c.cal==='US'?' · US days':' · SL days');
   grid.innerHTML=checks.map(c=>{const icon=c.status==='ok'?'✓':c.status==='info'?'ⓘ':c.status==='pending'?'●':'⚠';
     const clickable=c.secId&&(c.status==='stale'||c.status==='missing'||c.status==='pending');
@@ -584,7 +737,8 @@ function parseWorkbook(wb,XLSX){
     o.opr=[];for(let i=2;i<mm.length;i++)if(mm[i][0]&&mm[i][1]!=null)o.opr.push({date:String(mm[i][0]).trim(),rate:String(mm[i][1]).trim(),show:true});
     o.callMarket={min:num(mm[2][4]),max:num(mm[3][4]),wa:num(mm[4][4]),vol:num(mm[5][4])};
     o.repoMarket={min:num(mm[2][5]),max:num(mm[3][5]),wa:num(mm[4][5]),vol:num(mm[5][5])};
-    o.windows={sdf:{cur:num(mm[8]&&mm[8][4]),prev:num(mm[8]&&mm[8][5])},slf:{cur:num(mm[9]&&mm[9][4]),prev:num(mm[9]&&mm[9][5])}};
+    {let _sdf=null,_slf=null;for(let i=0;i<mm.length;i++){const _l=String((mm[i]&&mm[i][3])||'').toLowerCase();if((/sdf|standing deposit/.test(_l))&&!_sdf)_sdf=mm[i];if((/slf|standing lending/.test(_l))&&!_slf)_slf=mm[i];}
+     o.windows={sdf:{cur:num(_sdf&&_sdf[4]),prev:num(_sdf&&_sdf[5])},slf:{cur:num(_slf&&_slf[4]),prev:num(_slf&&_slf[5])}};}
     let L=[],V=[];for(let i=2;i<mm.length;i++)if(mm[i][7]!=null&&mm[i][8]!=null){L.push(lbl(mm[i][7]));V.push(num(mm[i][8]));}
     let rl=[];for(let i=2;i<mm.length;i++)if(mm[i][10]!=null&&mm[i][11]!=null)rl.push(num(mm[i][11]));
     o.liquidity={labels:L,values:V,current:rl.length?rl[rl.length-1]:(V.length?V[V.length-1]:null),previous:rl.length>1?rl[rl.length-2]:(V.length>1?V[V.length-2]:null)};
@@ -645,7 +799,15 @@ function parseWorkbook(wb,XLSX){
     let fomc=[];for(let i=2;i<gl.length;i++)if(gl[i][13]!=null)fomc.push({date:String(gl[i][13]).trim(),range:String(gl[i][14]).trim(),repo:pct(gl[i][15]),rrepo:pct(gl[i][16]),show:true});o.fomc=fomc;
   }
   const an=S(find('announcement')||'');
-  if(an.length){let kd=[];for(let i=2;i<an.length;i++)if(an[i][0]!=null&&an[i][1]!=null)kd.push({label:String(an[i][0]).trim(),date:toISO(an[i][1]),show:true});o.keyDates=kd;}
+  if(an.length){try{
+    let kd=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[0]!=null&&r[1]!=null)kd.push({label:String(r[0]).trim(),date:toISO(r[1]),show:true});}o.keyDates=kd;
+    const isoOf=v=>{if(v==null||v==='')return '';if(v instanceof Date){const t=new Date(v.getTime()+432e5);return t.getUTCFullYear()+"-"+String(t.getUTCMonth()+1).padStart(2,'0')+"-"+String(t.getUTCDate()).padStart(2,'0');}return toISO(v);};
+    let ba=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[3]!=null)ba.push({auction:isoOf(r[3]),settle:isoOf(r[4]),tenor:r[5]==null?'':String(r[5]).trim(),show:true});}o.billAuctions=ba;
+    let bo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[7]!=null)bo.push({auction:isoOf(r[7]),settle:isoOf(r[8]),tenor:r[9]==null?'':String(r[9]).trim(),amount:num(r[10]),show:true});}o.bondAuctions=bo;
+    let tbo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[12]!=null)tbo.push({maturity:isoOf(r[12]),isin:r[13]==null?'':String(r[13]).trim(),face:num(r[14]),show:true});}o.tbillOut=tbo;
+    let tdo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[16]!=null)tdo.push({maturity:isoOf(r[16]),isin:r[17]==null?'':String(r[17]).trim(),series:r[18]==null?'':String(r[18]).trim(),face:num(r[19]),show:true});}o.tbondOut=tdo;
+  }catch(e){}}
+  if(!Array.isArray(o.keyDates))o.keyDates=[];if(!Array.isArray(o.billAuctions))o.billAuctions=[];if(!Array.isArray(o.bondAuctions))o.bondAuctions=[];if(!Array.isArray(o.tbillOut))o.tbillOut=[];if(!Array.isArray(o.tbondOut))o.tbondOut=[];
   o.execSummary={usdlkr:(o.spot&&o.spot.close)||(o.usdlkr&&o.usdlkr.close)||'',liqDir:'',liqDelta:''};
   if(o.liquidity&&o.liquidity.current!=null&&o.liquidity.previous!=null){const dlt=+(o.liquidity.current-o.liquidity.previous).toFixed(2);o.execSummary.liqDir=dlt>=0?'increased':'decreased';o.execSummary.liqDelta=Math.abs(dlt);}
   
@@ -661,8 +823,8 @@ o.date=new Date().toISOString().slice(0,10);
 // ── INIT ─────────────────────────────────────────────────
 showBadge();
 // Restore the last imported/edited data so a page refresh doesn't wipe your work
-(function restoreLocal(){try{const s=localStorage.getItem('mvs_editor_loaded');if(s){LOADED=JSON.parse(s);renderSections();const st=document.getElementById('import-status');if(st){st.style.color='#9fb6d4';st.textContent='Restored your last imported data (kept across refresh). Re-import the Excel to refresh it.';}}
-  const f=localStorage.getItem('mvs_editor_freshness');if(f){const ck=JSON.parse(f);if(Array.isArray(ck)&&ck.length){renderFreshness(ck);const fb=document.getElementById('fresh-banner');if(fb&&fb.textContent)fb.textContent+='  (as of your last import — re-import to recheck for today)';}}
+(function restoreLocal(){try{const s=localStorage.getItem('mvs_editor_loaded');if(s){LOADED=JSON.parse(s);ensureHeaders(LOADED);renderSections();const st=document.getElementById('import-status');if(st){st.style.color='#9fb6d4';st.textContent='Restored your last imported data (kept across refresh). Re-import the Excel to refresh it.';}}
+  const f=localStorage.getItem('mvs_editor_freshness');if(f){const ck=JSON.parse(f);if(Array.isArray(ck)&&ck.length){renderFreshness(ck);}}
 }catch(e){}})();
 loadPublished();
 </script>
