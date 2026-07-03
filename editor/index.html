@@ -535,7 +535,16 @@ function markPublishStates(){
 }
 
 // read every input back into LOADED (keeps edits)
-function setByPath(root,path,v){const s=path.split('.');let o=root;for(let i=0;i<s.length-1;i++){const k=s[i];if(o[k]==null)o[k]=/^\d+$/.test(s[i+1])?[]:{};o=o[k];}o[s[s.length-1]]=v;}
+
+function setByPath(obj,path,value){
+
+  if(!path){
+    console.log("Missing data-path", path);
+    return;
+  }
+
+  const keys = path.split('.');
+
 function getByPath(root,path){const s=path.split('.');let o=root;for(let i=0;i<s.length;i++){if(o==null)return null;o=o[s[i]];}return o;}
 function saveLocal(){try{if(LOADED)localStorage.setItem('mvs_editor_loaded',JSON.stringify(LOADED));}catch(e){}}
 function rowDel(path,i){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)&&i>=0&&i<arr.length){arr.splice(i,1);saveLocal();renderSections();}}
