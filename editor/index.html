@@ -192,7 +192,7 @@ const SECTIONS=[
  {id:'tbillout',title:'T-Bill Outstanding',keys:['tbillOut']},
  {id:'tbondout',title:'T-Bond Outstanding',keys:['tbondOut']},
  {id:'headers',title:'Column Headers (bond · inflation · tourism · remittances · reserves)',keys:['headers']},
- {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews']},
+ {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews','newsLink']},
 ];
 const META_KEYS=['execSummary','date','marketNews'];
 const NO_HIDE=new Set(['dates','headers','billauc','bondauc','tbillout','tbondout']); // sections with no standalone panel on the dashboard
@@ -469,8 +469,9 @@ function renderSections(){
     const canHide=!NO_HIDE.has(sec.id);
     let body;
     if(sec.id==='results'){
-      const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:[];
-      body=`<div class="ed-sub"><div class="ed-sub-t">Latest results — type or paste freely, one item per line (shown on the dashboard's Announcements tab &amp; live bar)</div><textarea id="news-box" class="ed-news" rows="9" placeholder="Paste or type your latest results here…&#10;One per line, e.g.&#10;T-bill auction fully subscribed&#10;IMF 4th review completed">${escHtml(cur.join('\n'))}</textarea></div>`;
+      const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:(LOADED.marketNews?[String(LOADED.marketNews)]:[]);
+      body=`<div class="ed-sub"><div class="ed-sub-t">Latest results — write a paragraph (leave a blank line for spacing). Shown as a paragraph on the dashboard's Announcements tab.</div><textarea id="news-box" class="ed-news" rows="9" placeholder="Write your latest results / commentary here…&#10;&#10;Leave a blank line to start a new paragraph.">${escHtml(cur.join('\n'))}</textarea>
+        <div style="margin-top:12px"><div class="ed-sub-t">"More details" link (optional)</div><input id="news-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a 'More details' button that opens this" value="${escAttr(LOADED.newsLink||'')}"></div></div>`;
     } else if(sec.id==='headers'){
       const HH=LOADED.headers||{};
       body='<div class="ed-sub"><div class="ed-sub-t">Edit any column header — these flow to the dashboard on publish. (The Treasury Bond date columns are set in the Treasury Bonds section.)</div>'+
@@ -555,7 +556,9 @@ function applyEdits(){
     setByPath(LOADED,p,v);
   });
   const nb=document.getElementById('news-box');
-  if(nb&&LOADED)LOADED.marketNews=nb.value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  if(nb&&LOADED){let lines=nb.value.split(/\r?\n/).map(s=>s.replace(/\s+$/,''));while(lines.length&&!lines[0].trim())lines.shift();while(lines.length&&!lines[lines.length-1].trim())lines.pop();LOADED.marketNews=lines;}
+  const nlk=document.getElementById('news-link');
+  if(nlk&&LOADED)LOADED.newsLink=nlk.value.trim();
   saveLocal();
 }
 function recomputeMeta(p){
