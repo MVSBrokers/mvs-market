@@ -189,6 +189,17 @@ canvas{max-width:100%!important}
 .np{color:#5a7a9a;font-size:11px;font-style:italic;padding:10px;text-align:center;border:1px dashed #1a3050;border-radius:6px;margin-top:6px}
 .event-strip{position:sticky;top:0;z-index:500;display:none;flex-wrap:nowrap;align-items:center;gap:8px;overflow-x:auto;background:linear-gradient(90deg,#0d1e38,#0a1628);border:1px solid #c8a84b;border-radius:8px;margin-top:12px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
 .event-strip.show{display:flex}
+.latest-card{border:1px solid #1a3050;border-radius:9px;padding:12px 14px;background:rgba(13,30,56,0.5)}
+.lc-h{font-size:10px;font-weight:700;color:#c8a84b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.lc-row{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid #14243d}
+.lc-row:last-child{border-bottom:none}
+.lc-k{color:#7fa3c8;font-size:11px;flex-shrink:0}
+.lc-v{color:#eaf2fb;font-weight:600;font-size:11px;text-align:right}
+.lc-days{margin-top:9px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block}
+.lc-days.today{background:rgba(200,168,75,.22);color:#c8a84b}
+.lc-days.soon{background:rgba(255,138,120,.18);color:#ff8a78}
+.lc-days.far{background:rgba(77,163,232,.16);color:#4da3e8}
+.lc-none{color:#5a7a9a;font-style:italic;font-size:11px}
 .event-strip::-webkit-scrollbar{height:5px}
 .event-strip::-webkit-scrollbar-thumb{background:#1a3050;border-radius:3px}
 .es-lead{flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#c8a84b;padding-right:4px;white-space:nowrap}
@@ -518,30 +529,18 @@ canvas{max-width:100%!important}
     <div id="events-grid" class="events-grid" style="margin-top:10px"></div>
 
     <div class="panel full-width" id="panel-auction-sched" style="margin-top:14px">
-      <div class="panel-title">Auction Schedule <span style="font-size:9px;color:#7a93b4;font-weight:400;text-transform:none">· next auction highlighted (advances after 4 PM)</span></div>
+      <div class="panel-title">Latest Auction Details</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-        <div>
-          <div style="font-size:10px;font-weight:700;color:#c8a84b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">T-Bill</div>
-          <div style="overflow-x:auto;max-height:240px;overflow-y:auto"><table style="font-size:10px"><thead><tr><th>Auction Date</th><th>Settlement</th><th>Tenor</th></tr></thead><tbody id="dyn-billauc"></tbody></table></div>
-        </div>
-        <div>
-          <div style="font-size:10px;font-weight:700;color:#c8a84b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">T-Bond</div>
-          <div style="overflow-x:auto;max-height:240px;overflow-y:auto"><table style="font-size:10px"><thead><tr><th>Auction Date</th><th>Settlement</th><th>Tenor</th><th>Amount (Rs.Bn)</th></tr></thead><tbody id="dyn-bondauc"></tbody></table></div>
-        </div>
+        <div id="latest-bill-auc" class="latest-card">—</div>
+        <div id="latest-bond-auc" class="latest-card">—</div>
       </div>
     </div>
 
     <div class="panel full-width" id="panel-outstanding" style="margin-top:14px">
-      <div class="panel-title">Outstanding Stock</div>
+      <div class="panel-title">Outstanding Government Securities</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-        <div>
-          <div style="font-size:10px;font-weight:700;color:#c8a84b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">T-Bill</div>
-          <div style="overflow-x:auto;max-height:320px;overflow-y:auto"><table style="font-size:10px"><thead><tr><th>Maturity Date</th><th>ISIN</th><th>Face Value (Rs.Mn)</th></tr></thead><tbody id="dyn-tbillout"></tbody></table></div>
-        </div>
-        <div>
-          <div style="font-size:10px;font-weight:700;color:#c8a84b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px">T-Bond</div>
-          <div style="overflow-x:auto;max-height:320px;overflow-y:auto"><table style="font-size:10px"><thead><tr><th>Maturity Date</th><th>ISIN</th><th>Series</th><th>Face Value (Rs.Mn)</th></tr></thead><tbody id="dyn-tbondout"></tbody></table></div>
-        </div>
+        <div id="latest-tbill-mat" class="latest-card">—</div>
+        <div id="latest-tbond-mat" class="latest-card">—</div>
       </div>
     </div>
   </div>
@@ -877,12 +876,12 @@ function renderEventStrip(d){
   const strip=document.getElementById("event-strip");if(!strip)return;
   const items=[];
   getKeyEvents(d).filter(e=>e.show!==false).forEach(e=>{const dt=parseEventDate(e.date);if(dt)items.push({label:e.label,dt:dt,target:/auction/i.test(e.label)?"panel-auction-sched":"events-grid"});});
-  let matNearest=null;
-  (d.tbillOut||[]).concat(d.tbondOut||[]).filter(x=>x&&x.show!==false).forEach(x=>{const dt=parseEventDate(x.maturity);if(dt&&(matNearest==null||dt<matNearest.dt))matNearest={dt:dt,kind:(x.series!=null?'T-Bond':'T-Bill')};});
+  const _nrMat=(arr,kind)=>{let b=null;(arr||[]).filter(x=>x&&x.show!==false).forEach(x=>{const dt=parseEventDate(x.maturity);if(dt&&(b==null||dt<b.dt))b={dt:dt,kind:kind};});return b;};
+  const matBill=_nrMat(d.tbillOut,'T-Bill'), matBond=_nrMat(d.tbondOut,'T-Bond');
   const today=new Date();today.setHours(0,0,0,0);
   const diffOf=dt=>{const d0=new Date(dt);d0.setHours(0,0,0,0);return Math.round((d0-today)/86400000);};
   let within=items.map(it=>({...it,diff:diffOf(it.dt)})).filter(it=>it.diff>=0&&it.diff<=5);
-  if(matNearest){const md=diffOf(matNearest.dt);if(md>=0&&md<=5)within.push({label:matNearest.kind+" maturing",dt:matNearest.dt,diff:md,target:"panel-outstanding"});}
+  [matBill,matBond].forEach(m=>{if(m){const md=diffOf(m.dt);if(md>=0&&md<=5)within.push({label:m.kind+" maturing",dt:m.dt,diff:md,target:"panel-outstanding"});}});
   within.sort((a,b)=>a.diff-b.diff);
   if(!within.length){strip.className="event-strip";strip.innerHTML="";return;}
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -1067,7 +1066,12 @@ function render(d){
   setText("exdir",d.execSummary?.liqDir);
   setText("exdelta",d.execSummary?.liqDelta);
   // Live ribbon = upcoming announcement dates with countdown (not market news)
-  buildTicker(getKeyEvents(d).filter(e=>e.show!==false).map(e=>{const i=eventDayInfo(e.date);return e.label+" — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":"");}));
+  buildTicker((function(){
+    const items=getKeyEvents(d).filter(e=>e.show!==false).map(e=>{const i=eventDayInfo(e.date);return e.label+" — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":"");});
+    const nm=(arr,kind)=>{let best=null;(arr||[]).filter(x=>x&&x.show!==false).forEach(x=>{const dt=parseEventDate(x.maturity);if(!dt)return;const t=new Date();t.setHours(0,0,0,0);dt.setHours(0,0,0,0);const diff=Math.round((dt-t)/86400000);if(diff>=0&&(best==null||diff<best.diff))best={diff:diff,x:x};});if(best){const i=eventDayInfo(best.x.maturity);items.push(kind+" maturity — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":""));}};
+    nm(d.tbillOut,"Next T-Bill"); nm(d.tbondOut,"Next T-Bond");
+    return items;
+  })());
 
   // ── NEW: render T-Bill Auction Detail table
   renderTbillAuction(d.tbillAuction||[]);
@@ -1203,13 +1207,20 @@ function renderExtras(d){
   {const _MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
    const isoShort=s=>{const m=String(s||'').match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);return m?((+m[3])+' '+_MON[+m[2]-1]+' '+m[1]):(s?escHtml(s):'—');};
    const nb=nextAuctionDate(d.billAuctions),nbo=nextAuctionDate(d.bondAuctions);
-   const hl=(a,n)=>a&&n&&a===n?' style="background:rgba(200,168,75,0.16);font-weight:700"':'';
-   const none=n=>`<tr><td colspan="${n}" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>`;
-   set('dyn-billauc',(d.billAuctions||[]).filter(x=>x.show!==false).map(x=>`<tr${hl(x.auction,nb)}><td>${isoShort(x.auction)}</td><td>${isoShort(x.settle)}</td><td>${escHtml(x.tenor||'')}</td></tr>`).join('')||none(3));
-   set('dyn-bondauc',(d.bondAuctions||[]).filter(x=>x.show!==false).map(x=>`<tr${hl(x.auction,nbo)}><td>${isoShort(x.auction)}</td><td>${isoShort(x.settle)}</td><td>${escHtml(x.tenor||'')}</td><td>${fmt2(x.amount)}</td></tr>`).join('')||none(4));
-   set('dyn-tbillout',(d.tbillOut||[]).filter(x=>x.show!==false).map(x=>`<tr><td>${isoShort(x.maturity)}</td><td>${escHtml(x.isin||'')}</td><td>${fmt2(x.face)}</td></tr>`).join('')||none(3));
-   set('dyn-tbondout',(d.tbondOut||[]).filter(x=>x.show!==false).map(x=>`<tr><td>${isoShort(x.maturity)}</td><td>${escHtml(x.isin||'')}</td><td>${escHtml(x.series||'')}</td><td>${fmt2(x.face)}</td></tr>`).join('')||none(4));
+   const daysTo=iso=>{const dt=parseEventDate(iso);if(!dt)return null;const t=new Date();t.setHours(0,0,0,0);dt.setHours(0,0,0,0);return Math.round((dt-t)/86400000);};
+   const cdTxt=n=>n==null?'':(n<0?Math.abs(n)+' days ago':n===0?'Today':n===1?'Tomorrow (1 day)':'in '+n+' days');
+   const cdCls=n=>n==null?'far':(n<=1?'today':n<=5?'soon':'far');
    const billNext=(d.billAuctions||[]).find(x=>x.auction===nb), bondNext=(d.bondAuctions||[]).find(x=>x.auction===nbo);
+   const aucCard=(title,x,isBond)=>{if(!x)return '<div class="lc-h">'+title+'</div><div class="lc-none">No upcoming auction</div>';const dy=daysTo(x.auction);
+     return '<div class="lc-h">'+title+'</div><div class="lc-row"><span class="lc-k">Auction Date</span><span class="lc-v">'+isoShort(x.auction)+'</span></div><div class="lc-row"><span class="lc-k">Settlement</span><span class="lc-v">'+isoShort(x.settle)+'</span></div><div class="lc-row"><span class="lc-k">Tenor</span><span class="lc-v">'+escHtml(x.tenor||'—')+'</span></div>'+(isBond?'<div class="lc-row"><span class="lc-k">Amount</span><span class="lc-v">Rs. '+fmt2(x.amount)+' Bn</span></div>':'')+'<div class="lc-days '+cdCls(dy)+'">'+cdTxt(dy)+'</div>';};
+   {const e=document.getElementById('latest-bill-auc');if(e)e.innerHTML=aucCard('Next T-Bill Auction',billNext,false);}
+   {const e=document.getElementById('latest-bond-auc');if(e)e.innerHTML=aucCard('Next T-Bond Auction',bondNext,true);}
+   const nextMat=arr=>{let best=null;(arr||[]).filter(x=>x&&x.show!==false).forEach(x=>{const t=daysTo(x.maturity);if(t!=null&&t>=0&&(best==null||t<best.t))best={t:t,x:x};});return best;};
+   const matCard=(title,m,isBond)=>{if(!m)return '<div class="lc-h">'+title+'</div><div class="lc-none">None outstanding</div>';const x=m.x;
+     return '<div class="lc-h">'+title+'</div><div class="lc-row"><span class="lc-k">Maturity Date</span><span class="lc-v">'+isoShort(x.maturity)+'</span></div><div class="lc-row"><span class="lc-k">ISIN</span><span class="lc-v">'+escHtml(x.isin||'—')+'</span></div>'+(isBond?'<div class="lc-row"><span class="lc-k">Series</span><span class="lc-v">'+escHtml(x.series||'—')+'</span></div>':'')+'<div class="lc-row"><span class="lc-k">Face Value</span><span class="lc-v">Rs. '+fmt2(x.face)+' Mn</span></div><div class="lc-days '+cdCls(m.t)+'">Matures '+cdTxt(m.t)+'</div>';};
+   const tbm=nextMat(d.tbillOut), tdm=nextMat(d.tbondOut);
+   {const e=document.getElementById('latest-tbill-mat');if(e)e.innerHTML=matCard('Next T-Bill Maturity',tbm,false);}
+   {const e=document.getElementById('latest-tbond-mat');if(e)e.innerHTML=matCard('Next T-Bond Maturity',tdm,true);}
    const nbEl=document.getElementById('next-bill-auc');
    if(nbEl)nbEl.innerHTML=billNext?`<b style="color:#c8a84b;font-size:12px">Next T-Bill Auction</b><br>${isoShort(billNext.auction)} · settle ${isoShort(billNext.settle)}<br><span style="color:#7a93b4">${escHtml(billNext.tenor||'')}</span>`:'No upcoming T-Bill auction';
    const boEl=document.getElementById('next-bond-auc');
