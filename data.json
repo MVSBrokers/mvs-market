@@ -290,12 +290,12 @@
  },
  "bonds": {
   "headers": [
-   "24th Jun",
    "25th Jun",
    "26th Jun",
    "30th Jun",
    "1st Jul",
-   "2nd Jul"
+   "2nd Jul",
+   "3rd Jul"
   ],
   "rows": [
    {
@@ -1236,109 +1236,109 @@
  "valueDates": [
   {
    "tenor": "Cash",
-   "date": "3 Jul 2026",
+   "date": "6 Jul 2026",
    "nod": "0",
    "show": true
   },
   {
    "tenor": "Tom",
-   "date": "6 Jul 2026",
-   "nod": "3",
+   "date": "7 Jul 2026",
+   "nod": "1",
    "show": true
   },
   {
    "tenor": "Spot",
-   "date": "7 Jul 2026",
-   "nod": "4",
+   "date": "8 Jul 2026",
+   "nod": "2",
    "show": true
   },
   {
    "tenor": "1 Week",
-   "date": "14 Jul 2026",
+   "date": "15 Jul 2026",
    "nod": "7",
    "show": true
   },
   {
    "tenor": "2 Weeks",
-   "date": "21 Jul 2026",
+   "date": "22 Jul 2026",
    "nod": "14",
    "show": true
   },
   {
    "tenor": "3 Weeks",
-   "date": "28 Jul 2026",
-   "nod": "21",
+   "date": "30 Jul 2026",
+   "nod": "22",
    "show": true
   },
   {
    "tenor": "1 Month",
-   "date": "7 Aug 2026",
-   "nod": "31",
+   "date": "10 Aug 2026",
+   "nod": "33",
    "show": true
   },
   {
    "tenor": "2 Months",
    "date": "8 Sep 2026",
-   "nod": "63",
+   "nod": "62",
    "show": true
   },
   {
    "tenor": "3 Months",
-   "date": "7 Oct 2026",
+   "date": "8 Oct 2026",
    "nod": "92",
    "show": true
   },
   {
    "tenor": "4 Months",
    "date": "9 Nov 2026",
-   "nod": "125",
+   "nod": "124",
    "show": true
   },
   {
    "tenor": "5 Months",
-   "date": "7 Dec 2026",
+   "date": "8 Dec 2026",
    "nod": "153",
    "show": true
   },
   {
    "tenor": "6 Months",
-   "date": "7 Jan 2027",
+   "date": "8 Jan 2027",
    "nod": "184",
    "show": true
   },
   {
    "tenor": "7 Months",
    "date": "8 Feb 2027",
-   "nod": "216",
+   "nod": "215",
    "show": true
   },
   {
    "tenor": "8 Months",
    "date": "8 Mar 2027",
-   "nod": "244",
+   "nod": "243",
    "show": true
   },
   {
    "tenor": "9 Months",
-   "date": "7 Apr 2027",
+   "date": "8 Apr 2027",
    "nod": "274",
    "show": true
   },
   {
    "tenor": "10 Months",
-   "date": "7 May 2027",
-   "nod": "304",
+   "date": "10 May 2027",
+   "nod": "306",
    "show": true
   },
   {
    "tenor": "11 Months",
-   "date": "7 Jun 2027",
+   "date": "8 Jun 2027",
    "nod": "335",
    "show": true
   },
   {
    "tenor": "12 Months",
-   "date": "7 Jul 2027",
+   "date": "8 Jul 2027",
    "nod": "365",
    "show": true
   }
@@ -4496,8 +4496,8 @@
  ],
  "date": "2026-07-03",
  "openingDate": "2nd July 2026",
- "closingDate": "2nd July 2026",
- "secondaryDate": "2nd July 2026",
+ "closingDate": "3rd July 2026",
+ "secondaryDate": "3rd July 2026",
  "fxVolDate": "",
  "hidden": {
   "tbills": true,
