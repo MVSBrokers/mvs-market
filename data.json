@@ -283,10 +283,10 @@
    61.62,
    82.56,
    89.83,
-   "81.20"
+   81.2
   ],
-  "current": 89.83,
-  "previous": 82.56
+  "current": 81.2,
+  "previous": 89.83
  },
  "bonds": {
   "headers": [
@@ -1150,7 +1150,7 @@
  "spot": {
   "open": "336.10/ 336.40",
   "close": "335.95 / 336.10",
-  "low": "335.80",
+  "low": "335.8",
   "high": "336.39"
  },
  "crossRates": [
@@ -1194,42 +1194,42 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 91.5,
-   "wa": 336.29
+   "volume": 16.75,
+   "wa": 336.03
   },
   {
    "tenor": "Tom",
-   "volume": 16,
-   "wa": 336.21
+   "volume": 16.5,
+   "wa": 335.86
   },
   {
    "tenor": "Cash",
-   "volume": 15.5,
-   "wa": 336.14
+   "volume": 28.9,
+   "wa": 335.82
   },
   {
    "tenor": "Sub Total (Short)",
-   "volume": 123,
+   "volume": 62.15,
    "wa": null
   },
   {
    "tenor": "S+1",
-   "volume": null,
-   "wa": null
+   "volume": 5,
+   "wa": 336
   },
   {
    "tenor": "1W",
-   "volume": null,
-   "wa": null
+   "volume": 3.58,
+   "wa": 336.47
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 9.5,
+   "volume": 15.89,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 132.5,
+   "volume": 78.04,
    "wa": null
   }
  ],
@@ -3156,8 +3156,8 @@
  ],
  "execSummary": {
   "usdlkr": "335.95 / 336.10",
-  "liqDir": "increased",
-  "liqDelta": 7.27
+  "liqDir": "decreased",
+  "liqDelta": 8.63
  },
  "marketNews": [
   "Treasury Bill Auction Results",
@@ -3169,12 +3169,13 @@
   "Total Amount Accepted: Rs. 100.0 Billion",
   "Auction Date: 01 July 2026"
  ],
- "date": "2026-07-02",
+ "date": "2026-07-03",
  "openingDate": "",
  "closingDate": "",
  "secondaryDate": "",
  "fxVolDate": "",
  "hidden": {
-  "secondary": true
+  "secondary": true,
+  "tbills": true
  }
 }
