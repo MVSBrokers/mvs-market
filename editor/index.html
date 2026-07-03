@@ -535,13 +535,28 @@ function markPublishStates(){
 }
 
 // read every input back into LOADED (keeps edits)
-
-function setByPath(obj,path,value){
+function setByPath(root,path,v){
 
   if(!path){
-    console.log("Missing data-path", path);
+    console.warn('Missing data-path');
     return;
   }
+
+  const s = path.split('.');
+  let o = root;
+
+  for(let i=0;i<s.length-1;i++){
+    const k=s[i];
+
+    if(o[k]==null){
+      o[k]=/^\d+$/.test(s[i+1]) ? [] : {};
+    }
+
+    o=o[k];
+  }
+
+  o[s[s.length-1]]=v;
+}
 
   const keys = path.split('.');
 
