@@ -574,11 +574,30 @@ function rowDelP(path,i){applyEdits();const obj=getByPath(LOADED,path);if(obj&&t
 function rowAddP(path){applyEdits();const obj=getByPath(LOADED,path);if(obj&&typeof obj==='object'){_arrKeysOf(obj).forEach(k=>obj[k].push(''));saveLocal();renderSections();}}
 function applyEdits(){
   document.querySelectorAll('#sections input.ed').forEach(el=>{
-    const p=el.getAttribute('data-path'),kind=el.getAttribute('data-kind');let v;
-    if(kind==='bool'){v=el.checked;}
-    else{v=el.value;if(kind==='num'||kind==='null'){const s=v.trim();v=s===''?(kind==='num'?null:null):(isNaN(+s)||/[^0-9.+\-eE]/.test(s)?s:+s);}}
-    setByPath(LOADED,p,v);
-  });
+const p=el.getAttribute('data-path'),
+      kind=el.getAttribute('data-kind');
+
+if(!p){
+  console.warn('Missing data-path');
+  return;
+}
+
+let v;
+
+if(kind==='bool'){
+  v=el.checked;
+}
+else{
+  v=el.value;
+
+  if(kind==='num'||kind==='null'){
+    const s=v.trim();
+    v=s==='' ? null :
+      (isNaN(+s)||/[^0-9.+\-eE]/.test(s) ? s : +s);
+  }
+}
+
+setByPath(LOADED,p,v);
   const nb=document.getElementById('news-box');
   if(nb&&LOADED){let lines=nb.value.split(/\r?\n/).map(s=>s.replace(/\s+$/,''));while(lines.length&&!lines[0].trim())lines.shift();while(lines.length&&!lines[lines.length-1].trim())lines.pop();LOADED.marketNews=lines;}
   const nlk=document.getElementById('news-link');
