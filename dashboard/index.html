@@ -533,7 +533,7 @@ canvas{max-width:100%!important}
     <div class="panel full-width" id="panel-outstanding" style="margin-top:14px">
       <div class="panel-title">Outstanding Government Securities</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-        <div id="latest-tbill-mat"></div>
+        <div id="latest-tbill-mat" class="latest-card">—</div>
         <div id="latest-tbond-mat" class="latest-card">—</div>
       </div>
     </div>
@@ -1212,23 +1212,8 @@ function renderExtras(d){
    const nextMat=arr=>{let best=null;(arr||[]).filter(x=>x&&x.show!==false).forEach(x=>{const t=daysTo(x.maturity);if(t!=null&&t>=0&&(best==null||t<best.t))best={t:t,x:x};});return best;};
    const matCard=(title,m,isBond)=>{if(!m)return '<div class="lc-h">'+title+'</div><div class="lc-none">None outstanding</div>';const x=m.x;
      return '<div class="lc-h">'+title+'</div><div class="lc-row"><span class="lc-k">Maturity Date</span><span class="lc-v">'+isoShort(x.maturity)+'</span></div><div class="lc-row"><span class="lc-k">ISIN</span><span class="lc-v">'+escHtml(x.isin||'—')+'</span></div>'+(isBond?'<div class="lc-row"><span class="lc-k">Series</span><span class="lc-v">'+escHtml(x.series||'—')+'</span></div>':'')+'<div class="lc-row"><span class="lc-k">Face Value</span><span class="lc-v">Rs. '+fmt2(x.face)+' Mn</span></div><div class="lc-days '+cdCls(m.t)+'">Matures '+cdTxt(m.t)+'</div>';};
-  const tbm=nextMat(d.tbillOut), tdm=nextMat(d.tbondOut);
-
-{const e=document.getElementById('latest-tbill-mat');
- if(e)e.innerHTML=matCard('Next T-Bill Maturity',tbm,false);}
-   const tdm=nextMat(d.tbondOut);
-
-{
-  const e=document.getElementById('latest-tbill-mat');
-
-  if(e){
-    e.innerHTML =
-      '<pre style="color:white">' +
-      JSON.stringify(d.tbillOut,null,2) +
-      '</pre>';
-  }
-}
-
+   const tbm=nextMat(d.tbillOut), tdm=nextMat(d.tbondOut);
+   {const e=document.getElementById('latest-tbill-mat');if(e)e.innerHTML=matCard('Next T-Bill Maturity',tbm,false);}
    {const e=document.getElementById('latest-tbond-mat');if(e)e.innerHTML=matCard('Next T-Bond Maturity',tdm,true);}
    const nbEl=document.getElementById('next-bill-auc');
    if(nbEl)nbEl.innerHTML=billNext?`<b style="color:#c8a84b;font-size:12px">Next T-Bill Auction</b><br>${isoShort(billNext.auction)} · settle ${isoShort(billNext.settle)}<br><span style="color:#7a93b4">${escHtml(billNext.tenor||'')}</span>`:'No upcoming T-Bill auction';
