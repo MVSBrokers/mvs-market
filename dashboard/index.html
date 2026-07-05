@@ -1289,10 +1289,28 @@ function renderExtras(d){
   const e=document.getElementById(id);
   if(!e)return;
 
-  if(id==="mm-close"){
-    const mmDate=slNow_cd.getUTCHours()>=17 ? slWorkDay(0) : slWorkDay(1);
-    e.innerHTML="Closing: "+fmtOrd(mmDate);
+ if(id==="mm-close"){
+
+  let today = new Date(
+    slNow_cd.getUTCFullYear(),
+    slNow_cd.getUTCMonth(),
+    slNow_cd.getUTCDate()
+  );
+
+  let mmDate;
+
+  if(!_isSLFXWork(today)){
+    // weekend/holiday
+    mmDate = slWorkDay(0);
   }else{
+    // working day
+    mmDate = slNow_cd.getUTCHours() >= 17
+      ? slWorkDay(0)
+      : slWorkDay(1);
+  }
+
+  e.innerHTML = "Closing: " + fmtOrd(mmDate);
+}else{
     e.innerHTML=cdEl?"Closing: "+cdEl:"";
   }
 });
