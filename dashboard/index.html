@@ -558,6 +558,13 @@ const DATA_URL="https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-ma
 const POLL_INTERVAL = 20000;
 let charts={}, pollTimer=null;
 // Sri Lanka bank working day (Mon–Fri). back=0 -> today's working day, 1 -> previous working day…
+// Sri Lanka calendar "today" at midnight — used anywhere the code needs to compare against
+// "today" (countdowns, header date, event strips). Never use `new Date()` directly for this;
+// the viewer's device clock/timezone can disagree with Sri Lanka time.
+function slToday(){
+  const slNow=new Date(Date.now()+330*60000);
+  return new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
+}
 function slWorkDay(back){
   // Sri Lanka public holidays + Poya days 2026
   const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04",
@@ -855,7 +862,7 @@ function eventDayInfo(dateStr){
   const dt=parseEventDate(dateStr);
   if(!dt||isNaN(dt.getTime()))return {dstr:String(dateStr),daysTxt:"",cls:""};
   dt.setHours(0,0,0,0);
-  const today=new Date();today.setHours(0,0,0,0);
+  const today=slToday();
   const diff=Math.round((dt-today)/86400000);   // plain calendar days (no working-day logic)
   let daysTxt,cls;
   if(diff<0){daysTxt=Math.abs(diff)+" day"+(Math.abs(diff)===1?"":"s")+" ago";cls="passed";}
@@ -885,7 +892,7 @@ function renderEventStrip(d){
   getKeyEvents(d).filter(e=>e.show!==false).forEach(e=>{const dt=parseEventDate(e.date);if(dt)items.push({label:e.label,dt:dt,target:/auction/i.test(e.label)?"panel-auction-sched":"events-grid"});});
   const _nrMat=(arr,kind)=>{let b=null;(arr||[]).filter(x=>x&&x.show!==false).forEach(x=>{const dt=parseEventDate(x.maturity);if(dt&&(b==null||dt<b.dt))b={dt:dt,kind:kind};});return b;};
   const matBill=_nrMat(d.tbillOut,'T-Bill'), matBond=_nrMat(d.tbondOut,'T-Bond');
-  const today=new Date();today.setHours(0,0,0,0);
+  const today=slToday();
   const diffOf=dt=>{const d0=new Date(dt);d0.setHours(0,0,0,0);return Math.round((d0-today)/86400000);};
   let within=items.map(it=>({...it,diff:diffOf(it.dt)})).filter(it=>it.diff>=0&&it.diff<=5);
   [matBill,matBond].forEach(m=>{if(m){const md=diffOf(m.dt);if(md>=0&&md<=5)within.push({label:m.kind+" maturing",dt:m.dt,diff:md,target:"panel-outstanding"});}});
@@ -976,7 +983,7 @@ function renderTbillAuction(data,targetId){
 
 function render(d){
   lastData=d;
-  const td=new Date();
+  const td=slToday();
   {const el=document.getElementById("dateDisplay");if(el)el.innerHTML=fmtOrd(td);}
   const lu=document.getElementById("last-updated");
   if(lu)lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
@@ -1075,7 +1082,7 @@ function render(d){
   // Live ribbon = upcoming announcement dates with countdown (not market news)
   buildTicker((function(){
     const items=getKeyEvents(d).filter(e=>e.show!==false).map(e=>{const i=eventDayInfo(e.date);return e.label+" — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":"");});
-    const nm=(arr,kind)=>{let best=null;(arr||[]).filter(x=>x&&x.show!==false).forEach(x=>{const dt=parseEventDate(x.maturity);if(!dt)return;const t=new Date();t.setHours(0,0,0,0);dt.setHours(0,0,0,0);const diff=Math.round((dt-t)/86400000);if(diff>=0&&(best==null||diff<best.diff))best={diff:diff,x:x};});if(best){const i=eventDayInfo(best.x.maturity);items.push(kind+" maturity — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":""));}};
+    const nm=(arr,kind)=>{let best=null;(arr||[]).filter(x=>x&&x.show!==false).forEach(x=>{const dt=parseEventDate(x.maturity);if(!dt)return;const t=slToday();dt.setHours(0,0,0,0);const diff=Math.round((dt-t)/86400000);if(diff>=0&&(best==null||diff<best.diff))best={diff:diff,x:x};});if(best){const i=eventDayInfo(best.x.maturity);items.push(kind+" maturity — "+i.dstr+(i.daysTxt?"  ("+i.daysTxt+")":""));}};
     nm(d.tbillOut,"Next T-Bill"); nm(d.tbondOut,"Next T-Bond");
     return items;
   })());
@@ -1215,7 +1222,7 @@ function renderExtras(d){
   {const _MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
    const isoShort=s=>{const m=String(s||'').match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);return m?((+m[3])+' '+_MON[+m[2]-1]+' '+m[1]):(s?escHtml(s):'—');};
    const nb=nextAuctionDate(d.billAuctions),nbo=nextAuctionDate(d.bondAuctions);
-   const daysTo=iso=>{const dt=parseEventDate(iso);if(!dt)return null;const t=new Date();t.setHours(0,0,0,0);dt.setHours(0,0,0,0);return Math.round((dt-t)/86400000);};
+   const daysTo=iso=>{const dt=parseEventDate(iso);if(!dt)return null;const t=slToday();dt.setHours(0,0,0,0);return Math.round((dt-t)/86400000);};
    const cdTxt=n=>n==null?'':(n<0?Math.abs(n)+' days ago':n===0?'Today':n===1?'Tomorrow (1 day)':'in '+n+' days');
    const cdCls=n=>n==null?'far':(n<=1?'today':n<=5?'soon':'far');
    const billNext=(d.billAuctions||[]).find(x=>x.auction===nb), bondNext=(d.bondAuctions||[]).find(x=>x.auction===nbo);
