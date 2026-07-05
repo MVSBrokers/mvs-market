@@ -236,7 +236,11 @@ const _MONF_ED=["January","February","March","April","May","June","July","August
 function slWorkDay(back){
   const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04","2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13","2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29","2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08","2026-11-24","2026-12-23","2026-12-25"]);
   const isSLWork=d=>{if(d.getDay()===0||d.getDay()===6)return false;const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");return !SL_HOL.has(iso);};
-  let d=new Date();while(!isSLWork(d))d.setDate(d.getDate()-1);
+  // Anchor on the Sri Lanka calendar date (not the viewer's device timezone) — otherwise "today"
+  // can be off by a day for anyone whose device clock isn't set to Sri Lanka time.
+  const slNow=new Date(Date.now()+330*60000);
+  let d=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
+  while(!isSLWork(d))d.setDate(d.getDate()-1);
   for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
   return d;
 }
@@ -320,6 +324,12 @@ const oldNews =
     ? [...LOADED.marketNews]
     : [];
 
+// Preserve manually entered "More details" link (not derived from the Excel)
+const oldNewsLink =
+  LOADED && typeof LOADED.newsLink === 'string'
+    ? LOADED.newsLink
+    : '';
+
 const oldHidden =
   LOADED && LOADED.hidden
     ? JSON.parse(JSON.stringify(LOADED.hidden))
@@ -336,6 +346,9 @@ LOADED = parseWorkbook(wb, XLSX);
 if (oldNews.length) {
   LOADED.marketNews = oldNews;
 }
+
+// Restore the "More details" link after import
+LOADED.newsLink = oldNewsLink;
 
 // Restore hidden settings
 LOADED.hidden = oldHidden;
@@ -535,8 +548,8 @@ function markPublishStates(){
 }
 
 // read every input back into LOADED (keeps edits)
-function setByPath(root,path,v){const s=path.split('.');let o=root;for(let i=0;i<s.length-1;i++){const k=s[i];if(o[k]==null)o[k]=/^\d+$/.test(s[i+1])?[]:{};o=o[k];}o[s[s.length-1]]=v;}
-function getByPath(root,path){const s=path.split('.');let o=root;for(let i=0;i<s.length;i++){if(o==null)return null;o=o[s[i]];}return o;}
+function setByPath(root,path,v){if(!path)return;const s=path.split('.');let o=root;for(let i=0;i<s.length-1;i++){const k=s[i];if(o[k]==null)o[k]=/^\d+$/.test(s[i+1])?[]:{};o=o[k];}o[s[s.length-1]]=v;}
+function getByPath(root,path){if(!path)return null;const s=path.split('.');let o=root;for(let i=0;i<s.length;i++){if(o==null)return null;o=o[s[i]];}return o;}
 function saveLocal(){try{if(LOADED)localStorage.setItem('mvs_editor_loaded',JSON.stringify(LOADED));}catch(e){}}
 function rowDel(path,i){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)&&i>=0&&i<arr.length){arr.splice(i,1);saveLocal();renderSections();}}
 function rowAdd(path){applyEdits();const arr=getByPath(LOADED,path);if(Array.isArray(arr)){const cols=arr.length?[...new Set(arr.flatMap(o=>Object.keys(o)))]:['label','value'];const row={};cols.forEach(c=>{row[c]=(c==='show')?true:'';});arr.push(row);saveLocal();renderSections();}}
@@ -550,7 +563,9 @@ function rowDelP(path,i){applyEdits();const obj=getByPath(LOADED,path);if(obj&&t
 function rowAddP(path){applyEdits();const obj=getByPath(LOADED,path);if(obj&&typeof obj==='object'){_arrKeysOf(obj).forEach(k=>obj[k].push(''));saveLocal();renderSections();}}
 function applyEdits(){
   document.querySelectorAll('#sections input.ed').forEach(el=>{
-    const p=el.getAttribute('data-path'),kind=el.getAttribute('data-kind');let v;
+    const p=el.getAttribute('data-path'),kind=el.getAttribute('data-kind');
+    if(!p)return;   // skip inputs with no data-path — avoids setByPath(LOADED,null,...) crashing the whole save/publish
+    let v;
     if(kind==='bool'){v=el.checked;}
     else{v=el.value;if(kind==='num'||kind==='null'){const s=v.trim();v=s===''?(kind==='num'?null:null):(isNaN(+s)||/[^0-9.+\-eE]/.test(s)?s:+s);}}
     setByPath(LOADED,p,v);
