@@ -568,7 +568,10 @@ function slWorkDay(back){
   const isSLWork=d=>{if(d.getDay()===0||d.getDay()===6)return false;
     const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
     return !SL_HOL.has(iso);};
-  let d=new Date();
+  // Anchor on the Sri Lanka calendar date (not the viewer's device timezone) — otherwise "today"
+  // can be off by a day for anyone whose device clock isn't set to Sri Lanka time.
+  const slNow=new Date(Date.now()+330*60000);
+  let d=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
   while(!isSLWork(d))d.setDate(d.getDate()-1);
   for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
   return d;
