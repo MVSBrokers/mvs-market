@@ -277,26 +277,6 @@ function calcNOD(tenorRaw){
   return Math.round((dd-base)/86400000);
 }
 function fmtOrdPlain(d){const v=d.getDate()%100,o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return d.getDate()+o+" "+_MONF_ED[d.getMonth()]+" "+d.getFullYear();}
-// Fill auto dates on import so the editor shows them; the user can correct any before publishing.
-function autofillDates(o){
-  try{
-    if(!o.openingDate)o.openingDate=fmtOrdPlain(slOpeningDay());
-    if(!o.closingDate)o.closingDate=fmtOrdPlain(slClosingDay());
-    if(!o.secondaryDate)o.secondaryDate=fmtOrdPlain(slClosingDay());
-    (o.valueDates||[]).forEach(v=>{const ad=calcValueDate(v.tenor);if(ad){v.date=fmtValueDate(ad);v.nod=String(calcNOD(v.tenor));}});
-    // bond date-column headers → last N SL working days ending at the closing day (matches the dashboard)
-    if(o.bonds&&Array.isArray(o.bonds.headers)&&o.bonds.headers.length){
-      const generic=o.bonds.headers.every(h=>h==null||/^day\s*\d+$/i.test(String(h).trim())||String(h).trim()==='');
-      if(generic){
-        const ordB=n=>{const q=n%100,s=["th","st","nd","rd"][(q-20)%10]||["th","st","nd","rd"][q]||"th";return n+s;};
-        const nH=o.bonds.headers.length,out=[];let x=slClosingDay();
-        for(let i=0;i<nH;i++){out.unshift(ordB(x.getDate())+" "+_MON3_ED[x.getMonth()]);do{x=new Date(x.getFullYear(),x.getMonth(),x.getDate()-1);}while(!_isSLFXWork(x));}
-        o.bonds.headers=out;
-      }
-    }
-  }catch(e){}
-}
-
 // ── Editable column headers (selected tables) ──
 const HDR_TABLES={
   bond:{name:'Treasury Bond table',defaults:["Maturity","Last Year","Last Month"]},
@@ -353,7 +333,10 @@ LOADED.newsLink = oldNewsLink;
 // Restore hidden settings
 LOADED.hidden = oldHidden;
     try{const ph=JSON.parse(localStorage.getItem('mvs_editor_hidden')||'null');if(ph&&typeof ph==='object')LOADED.hidden=ph;}catch(e){}
-    //autofillDates(LOADED);   // fill opening/closing/value dates + value-days so they show & are editable
+    // Dates are intentionally NOT auto-filled here anymore — the editor leaves openingDate,
+    // closingDate, secondaryDate, fxVolDate, value-date rows, and bond headers exactly as
+    // parsed from the Excel (or blank). Only the dashboard computes/displays dates live,
+    // using its own slOpeningDay()/slClosingDay()/slValueDay()/calcValueDate() functions.
     if(oldHeaders)LOADED.headers=oldHeaders;   // keep any header edits across re-import
     ensureHeaders(LOADED);   // make sure every editable-header table has its labels present
     try{const _ck=analyzeFreshness(wb,XLSX);renderFreshness(_ck);try{localStorage.setItem('mvs_editor_freshness',JSON.stringify(_ck));}catch(_e){}}catch(fe){}
