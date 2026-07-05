@@ -353,7 +353,7 @@ LOADED.newsLink = oldNewsLink;
 // Restore hidden settings
 LOADED.hidden = oldHidden;
     try{const ph=JSON.parse(localStorage.getItem('mvs_editor_hidden')||'null');if(ph&&typeof ph==='object')LOADED.hidden=ph;}catch(e){}
-    autofillDates(LOADED);   // fill opening/closing/value dates + value-days so they show & are editable
+    //autofillDates(LOADED);   // fill opening/closing/value dates + value-days so they show & are editable
     if(oldHeaders)LOADED.headers=oldHeaders;   // keep any header edits across re-import
     ensureHeaders(LOADED);   // make sure every editable-header table has its labels present
     try{const _ck=analyzeFreshness(wb,XLSX);renderFreshness(_ck);try{localStorage.setItem('mvs_editor_freshness',JSON.stringify(_ck));}catch(_e){}}catch(fe){}
