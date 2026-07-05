@@ -602,6 +602,26 @@ function slOpeningDay(){
   return slWorkDay(2);
 }
 // Value Dates: from today's 4 PM SL time until the next working day's 4 PM, show the NEXT SL working day.
+
+  function slMoneyMarketDay(){
+  const slNow = new Date(Date.now() + 330 * 60000);
+
+  let today = new Date(
+    slNow.getUTCFullYear(),
+    slNow.getUTCMonth(),
+    slNow.getUTCDate()
+  );
+
+  // Weekend / holiday
+  if (!_isSLFXWork(today)) {
+    return slWorkDay(0);
+  }
+
+  // 5:00 PM cutoff
+  return slNow.getUTCHours() >= 17
+    ? slWorkDay(0)
+    : slWorkDay(1);
+}
 // Before 4 PM today: shows today's SL working day. After 4 PM: shows the next SL working day.
 // ── FX Value Date Calculator (USD/LKR cross-currency convention) ──
 // Spot = T+2 from today, skipping both SL and US non-working days.
