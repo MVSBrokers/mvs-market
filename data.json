@@ -4514,13 +4514,12 @@
   "Total Amount Accepted: Rs. 100.0 Billion",
   "Auction Date: 01 July 2026"
  ],
- "date": "2026-07-03",
+ "date": "2026-07-05",
  "openingDate": "2nd July 2026",
  "closingDate": "3rd July 2026",
  "secondaryDate": "3rd July 2026",
  "fxVolDate": "",
  "hidden": {
-  "tbills": true,
   "secondary": true
  },
  "headers": {
@@ -4550,5 +4549,6 @@
    "Month",
    "Reserve ($)"
   ]
- }
+ },
+ "newsLink": ""
 }
