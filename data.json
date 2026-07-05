@@ -4515,9 +4515,9 @@
   "Auction Date: 01 July 2026"
  ],
  "date": "2026-07-05",
- "openingDate": "2nd July 2026",
- "closingDate": "3rd July 2026",
- "secondaryDate": "3rd July 2026",
+ "openingDate": "",
+ "closingDate": "",
+ "secondaryDate": "",
  "fxVolDate": "",
  "hidden": {
   "secondary": true
