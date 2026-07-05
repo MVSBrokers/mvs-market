@@ -4519,9 +4519,7 @@
  "closingDate": "",
  "secondaryDate": "",
  "fxVolDate": "",
- "hidden": {
-  "secondary": true
- },
+ "hidden": {},
  "headers": {
   "bond": [
    "Maturity",
