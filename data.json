@@ -4533,8 +4533,7 @@
  "fxVolDate": "",
  "newsLink": "",
  "hidden": {
-  "tbills": true,
-  "secondary": true
+  "tbills": true
  },
  "headers": {
   "bond": [
