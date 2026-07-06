@@ -1123,7 +1123,7 @@
    335.95,
    335.25
   ],
-  "close": "335.30 / 335.50"
+  "close": "335.20 / 335.50"
  },
  "fxSwaps": {
   "1w": {
@@ -1153,7 +1153,7 @@
  },
  "spot": {
   "open": "335.80/ 336.00",
-  "close": "335.30 / 335.50",
+  "close": "335.20 / 335.50",
   "low": "335.2",
   "high": "335.3"
  },
@@ -1198,42 +1198,42 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 16.75,
-   "wa": 336.03
+   "volume": 47.5,
+   "wa": 335.26
   },
   {
    "tenor": "Tom",
-   "volume": 16.5,
-   "wa": 335.86
+   "volume": 3,
+   "wa": 335.29
   },
   {
    "tenor": "Cash",
-   "volume": 28.9,
-   "wa": 335.82
+   "volume": 19.25,
+   "wa": null
   },
   {
    "tenor": "Sub Total (Short)",
-   "volume": 62.15,
+   "volume": 69.75,
    "wa": null
   },
   {
    "tenor": "S+1",
-   "volume": 5,
-   "wa": 336
+   "volume": null,
+   "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 3.58,
-   "wa": 336.47
+   "volume": 4,
+   "wa": 335.77
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 15.89,
+   "volume": 18.5,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 78.04,
+   "volume": 88.25,
    "wa": null
   }
  ],
@@ -4500,7 +4500,7 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "335.30 / 335.50",
+  "usdlkr": "335.20 / 335.50",
   "liqDir": "increased",
   "liqDelta": 47.27
  },
