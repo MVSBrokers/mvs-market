@@ -618,7 +618,7 @@ function slOpeningDay(){
   }
 
   // 5:00 PM cutoff
-  return slNow.getUTCHours() >= 16.5
+  return slNow.getUTCHours() >= 17
     ? slWorkDay(0)
     : slWorkDay(1);
 }
