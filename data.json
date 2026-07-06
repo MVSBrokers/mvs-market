@@ -1127,27 +1127,27 @@
  },
  "fxSwaps": {
   "1w": {
-   "sell": 5.5,
-   "buy": 6.5
+   "sell": 4.5,
+   "buy": 5.5
   },
   "1m": {
-   "sell": 5.5,
-   "buy": 6
+   "sell": 4.5,
+   "buy": 5.5
   },
   "2m": {
-   "sell": 5.5,
-   "buy": 6
+   "sell": 4.5,
+   "buy": 5.5
   },
   "3m": {
-   "sell": 5.5,
-   "buy": 6
+   "sell": 4.5,
+   "buy": 5.5
   },
   "6m": {
-   "sell": 5.15,
+   "sell": 5.75,
    "buy": 6
   },
   "1y": {
-   "sell": 5,
+   "sell": 5.75,
    "buy": 6
   }
  },
@@ -4514,13 +4514,16 @@
   "Total Amount Accepted: Rs. 100.0 Billion",
   "Auction Date: 01 July 2026"
  ],
- "date": "2026-07-05",
+ "date": "2026-07-06",
  "openingDate": "",
  "closingDate": "",
  "secondaryDate": "",
  "fxVolDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/b4c50af6-2c42-4401-8d52-f82acad47899",
- "hidden": {},
+ "newsLink": "",
+ "hidden": {
+  "tbills": true,
+  "secondary": true
+ },
  "headers": {
   "bond": [
    "Maturity",
