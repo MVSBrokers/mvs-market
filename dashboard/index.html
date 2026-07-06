@@ -1072,7 +1072,7 @@ function render(d){
     const eoyVal=(r.eoy!=null&&String(r.eoy).trim()!=='')?r.eoy:(lyIdx>=0?(r.values||[])[lyIdx]:'');
     const eomVal=(r.eom!=null&&String(r.eom).trim()!=='')?r.eom:(lmIdx>=0?(r.values||[])[lmIdx]:'');
     const tdY=document.createElement("td");tdY.textContent=fmt2(eoyVal);tdY.style.color="#c8a84b";tdY.style.fontSize="9px";tr.appendChild(tdY);
-    const tdM=document.createElement("td");tdM.textContent=fmt2(eomVal);tdM.style.color="#9fb6d4";tdM.style.fontSize="9px";tr.appendChild(tdM);
+    const tdM=document.createElement("td");tdM.textContent=bondDisplay(eomVal)||"—";tdM.style.color="#9fb6d4";tdM.style.fontSize="9px";tr.appendChild(tdM);
     const mids=midMatrix[ri]||[];
     const raws=rawMatrix[ri]||[];
     // per-row heat scale: this bond's own low (green) → high (red) across the dates
