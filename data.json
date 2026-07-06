@@ -1199,32 +1199,47 @@
   {
    "tenor": "Spot",
    "volume": 47.5,
-   "wa": 335.26
+   "wa": 335.2555
   },
   {
    "tenor": "Tom",
    "volume": 3,
-   "wa": 335.29
+   "wa": 335.2867
   },
   {
    "tenor": "Cash",
    "volume": 19.25,
-   "wa": null
+   "wa": 335.186
   },
   {
-   "tenor": "Sub Total (Short)",
+   "tenor": "Sub Total",
    "volume": 69.75,
    "wa": null
   },
   {
-   "tenor": "S+1",
-   "volume": null,
-   "wa": null
+   "tenor": "S+2",
+   "volume": 2,
+   "wa": 335.435
   },
   {
    "tenor": "1W",
    "volume": 4,
-   "wa": 335.77
+   "wa": 335.765
+  },
+  {
+   "tenor": "2W",
+   "volume": 3,
+   "wa": 335.9667
+  },
+  {
+   "tenor": "1M",
+   "volume": 9,
+   "wa": 336.9408
+  },
+  {
+   "tenor": "4M",
+   "volume": 0.5,
+   "wa": 341.75
   },
   {
    "tenor": "Sub Total (Forwards)",
