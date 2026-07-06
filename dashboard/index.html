@@ -1304,7 +1304,7 @@ function renderExtras(d){
     mmDate = slWorkDay(0);
   }else{
     // working day
-    mmDate = slNow_cd.getUTCHours() >= 17
+    mmDate = slNow_cd.getUTCHours() >= 16.5
       ? slWorkDay(0)
       : slWorkDay(1);
   }
