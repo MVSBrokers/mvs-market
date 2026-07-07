@@ -1086,18 +1086,7 @@ function renderBondTxnVol(d){
     tbody.innerHTML='<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>';
     if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}return;
   }
-  let total=0;
-  tbody.innerHTML=rows.map(r=>{const amt=parseFloat(String(r.amount||0).replace(/,/g,''))||0;total+=amt;return `<tr><td style="color:#d4e4f4">${fmtMatDate(r.maturity)}</td><td style="text-align:right;color:#c8a84b;font-weight:600">${fmtN(r.amount)}</td></tr>`;}).join('')
-    +`<tr class="btxn-total"><td>Total</td><td style="text-align:right">${fmtN(total)}</td></tr>`;
-  if(!ctx)return;
-  if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}
-  const labels=rows.map(r=>fmtMatDate(r.maturity));
-  const amounts=rows.map(r=>parseFloat(String(r.amount||0).replace(/,/g,''))||0);
-  const maxAmt=Math.max(...amounts,1);
-  const colors=amounts.map(v=>v/maxAmt>0.6?'#c8a84b':v/maxAmt>0.25?'#4da3e8':'#6dd4a0');
-  _bondtxnChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Volume (Rs. Mn)',data:amounts,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>' Rs. '+fmtN(v.raw)+' Mn'}}},scales:{x:{ticks:{color:'#7fa3c8',font:{size:9},callback:v=>v>=1000?Math.round(v/1000)+'K':v},grid:{color:'rgba(77,163,232,.1)'},border:{color:'transparent'}},y:{ticks:{color:'#d4e4f4',font:{size:9}},grid:{display:false},border:{color:'transparent'}}}}});
-}
-
+ 
 function render(d){
   lastData=d;
   const td=slToday();
