@@ -62,14 +62,17 @@ table tr:hover td{background:#132540}
 
 /* ── TBILL AUCTION TABLE ───────────────────────────────── */
 .tbill-auction-wrap{overflow-x:auto;max-width:100%}
-.tbvol-wrap{overflow-x:auto;max-width:100%}
-.tbvol-table{width:100%;border-collapse:collapse;font-size:9.5px;min-width:340px}
-.tbvol-table th{color:#7fa3c8;font-weight:600;text-align:center;padding:3px 6px;font-size:8.5px;border-bottom:2px solid #1a3050;background:#091525;white-space:nowrap}
-.tbvol-table th:first-child{text-align:left}
-.tbvol-table td{padding:3px 6px;text-align:right;color:#d4e4f4;border-top:1px solid #0d2040;font-size:9px}
-.tbvol-table td:first-child{text-align:left;color:#7fa3c8;font-weight:600;white-space:nowrap}
-.tbvol-table td.todate-cell{color:#c8a84b;font-weight:700;border-left:2px solid #1a3050}
-.tbvol-table tr:hover td{background:#132540}
+
+.bondtxn-table{width:100%;border-collapse:collapse;font-size:10px}
+.bondtxn-table th{color:#7fa3c8;font-weight:600;padding:4px 8px;font-size:9.5px;border-bottom:2px solid #1a3050;background:#091525;white-space:nowrap}
+.bondtxn-table th:first-child{text-align:left}
+.bondtxn-table th:last-child,.bondtxn-table td:last-child{text-align:right}
+.bondtxn-table td{padding:4px 8px;color:#d4e4f4;border-top:1px solid #0d2040;font-size:9.5px}
+.bondtxn-table td:first-child{color:#7fa3c8;font-family:monospace;font-size:9px;letter-spacing:.2px}
+.bondtxn-table td:nth-child(2){color:#c8a84b;font-weight:600}
+.bondtxn-table td:nth-child(3){color:#7fa3c8;text-align:center}
+.bondtxn-table tr:hover td{background:#132540}
+.bondtxn-table tr.btxn-total td{border-top:2px solid #1a3050;color:#c8a84b;font-weight:700;background:#091525}
 .tbill-auction-table{width:100%;border-collapse:collapse;font-size:9.5px;min-width:340px}
 .tbill-auction-table th{color:#7fa3c8;font-weight:600;text-align:center;padding:3px 5px;font-size:8.5px;border-bottom:2px solid #1a3050;background:#091525;white-space:nowrap}
 .tbill-auction-table th:first-child{text-align:left}
@@ -300,18 +303,23 @@ canvas{max-width:100%!important}
         </table></div>
       </div>
     </div>
-  </div>
 
-  <div class="panel full-width" style="margin-top:14px">
-    <div class="panel-title">T-Bill Secondary Market Volume by Maturity (Rs.Mn)</div>
-    <canvas id="tbvolChart" style="max-height:220px;margin-bottom:10px"></canvas>
-    <div class="tbvol-wrap">
-      <table class="tbvol-table" id="op-tbvolTable">
-        <thead><tr id="op-tbvolHead"><th>Maturity Date</th><th class="todate-cell">To-Date (Mn)</th></tr></thead>
-        <tbody id="op-tbvolBody">
-          <tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>
-        </tbody>
-      </table>
+    <div class="panel full-width" style="margin-top:14px">
+      <div class="panel-title" id="bondtxn-title">Outright Treasury Bond Transaction Volumes</div>
+      <canvas id="bondtxnChart" style="max-height:230px;margin-bottom:14px"></canvas>
+      <div style="overflow-x:auto">
+        <table class="bondtxn-table" id="bondtxn-simple">
+          <thead>
+            <tr>
+              <th style="text-align:left">Maturity Date</th>
+              <th style="text-align:right">Volume (Rs. Mn)</th>
+            </tr>
+          </thead>
+          <tbody id="dyn-bondtxn">
+            <tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -412,18 +420,6 @@ canvas{max-width:100%!important}
       <table style="font-size:10px">
         <thead><tr><th>Maturity Date</th><th>Bid (%)</th><th>Ask (%)</th></tr></thead>
         <tbody id="dyn-secondary"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <div class="panel full-width" style="margin-top:14px">
-    <div class="panel-title">T-Bill Secondary Market Volume (Rs.Mn)</div>
-    <div class="tbvol-wrap">
-      <table class="tbvol-table" id="tbvolTable">
-        <thead><tr id="tbvolHead"><th>Maturity Date</th><th class="todate-cell">To-Date (Mn)</th></tr></thead>
-        <tbody id="tbvolBody">
-          <tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>
-        </tbody>
       </table>
     </div>
   </div>
@@ -1073,50 +1069,34 @@ function renderTbillAuction(data,targetId){
   });
 }
 
-// ── T-Bill Volume table + chart ──
-let _tbvolChart=null;
-function renderTbillVolume(d){
-  const tv=d.tbillVolume||{};
-  const dates=Array.isArray(tv.dates)?tv.dates:[];
-  const rows=Array.isArray(tv.rows)?tv.rows:[];
+
+// ── Outright Treasury Bond Transaction Volumes (Opening Report only) ──
+let _bondtxnChart=null;
+function renderBondTxnVol(d){
+  const bv=d.bondTransVol||{};
+  const rows=Array.isArray(bv.rows)?bv.rows.filter(r=>r&&r.show!==false):[];
+  const titleEl=document.getElementById('bondtxn-title');
+  const tbody=document.getElementById('dyn-bondtxn');
+  const ctx=document.getElementById('bondtxnChart');
+  if(!tbody)return;
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const fmtDt=iso=>{const m=String(iso||'').match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);return m?(+m[3]+' '+MON[+m[2]-1]+' '+String(m[1]).slice(2)):(iso?String(iso):'—');};
-  const fmtN=v=>{if(v==null||v==='')return'—';const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v):n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});};
-
-  // Build headers for BOTH tables
-  ['tbvolHead','op-tbvolHead'].forEach(hid=>{
-    const hdr=document.getElementById(hid);if(!hdr)return;
-    hdr.innerHTML='<th>Maturity Date</th>';
-    dates.forEach(dt=>{const th=document.createElement('th');th.textContent=fmtDt(dt);hdr.appendChild(th);});
-    const th2=document.createElement('th');th2.className='todate-cell';th2.textContent='To-Date (Mn)';hdr.appendChild(th2);
-  });
-
-  const colCount=dates.length+2;
-  const emptyMsg=`<tr><td colspan="${colCount}" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>`;
-  ['tbvolBody','op-tbvolBody'].forEach(bid=>{
-    const tbody=document.getElementById(bid);if(!tbody)return;
-    if(!rows.length){tbody.innerHTML=emptyMsg;return;}
-    tbody.innerHTML='';
-    rows.forEach(r=>{
-      const vols=Array.isArray(r.vols)?r.vols:[];
-      const total=vols.reduce((s,v)=>s+(parseFloat(String(v||0).replace(/,/g,''))||0),0);
-      const tr=document.createElement('tr');
-      const td0=document.createElement('td');td0.textContent=fmtDt(r.maturity);tr.appendChild(td0);
-      vols.forEach(v=>{const td=document.createElement('td');td.textContent=fmtN(v);tr.appendChild(td);});
-      const tdt=document.createElement('td');tdt.className='todate-cell';tdt.textContent=fmtN(total||null);tr.appendChild(tdt);
-      tbody.appendChild(tr);
-    });
-  });
-
-  // Build bar chart in Opening Report
-  const ctx=document.getElementById('tbvolChart');if(!ctx)return;
-  if(_tbvolChart){try{_tbvolChart.destroy();}catch(e){}_tbvolChart=null;}
-  if(!rows.length)return;
+  const fmtN=v=>{if(v==null||v==='')return'—';const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v):n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});};
+  if(titleEl){const ds=bv.date?fmtDt(bv.date):'';titleEl.textContent='Outright Treasury Bond Transaction Volumes'+(ds?' — '+ds:'');}
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>';
+    if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}return;
+  }
+  let total=0;
+  tbody.innerHTML=rows.map(r=>{const amt=parseFloat(String(r.amount||0).replace(/,/g,''))||0;total+=amt;return `<tr><td style="color:#d4e4f4">${fmtDt(r.maturity)}</td><td style="text-align:right;color:#c8a84b;font-weight:600">${fmtN(r.amount)}</td></tr>`;}).join('')
+    +`<tr class="btxn-total"><td>Total</td><td style="text-align:right">${fmtN(total)}</td></tr>`;
+  if(!ctx)return;
+  if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}
   const labels=rows.map(r=>fmtDt(r.maturity));
-  const palette=['#4da3e8','#6dd4a0','#c8a84b','#ff8a78','#a78bfa','#f59e0b'];
-  const datasets=dates.map((dt,di)=>({label:fmtDt(dt),data:rows.map(r=>{const vols=Array.isArray(r.vols)?r.vols:[];const v=parseFloat(String((vols[di])||0).replace(/,/g,''));return isNaN(v)?0:v;}),backgroundColor:palette[di%palette.length]+'cc',borderRadius:3}));
-  const todateLine={label:'To-Date',data:rows.map(r=>{const vols=Array.isArray(r.vols)?r.vols:[];return vols.reduce((s,v)=>s+(parseFloat(String(v||0).replace(/,/g,''))||0),0);}),type:'line',borderColor:'#c8a84b',backgroundColor:'transparent',borderWidth:2,pointRadius:4,pointBackgroundColor:'#c8a84b',yAxisID:'y'};
-  _tbvolChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[...datasets,todateLine]},options:{scales:{x:{ticks:{color:'#7fa3c8',font:{size:9}},grid:{color:'rgba(77,163,232,.08)'}},y:{ticks:{color:'#7fa3c8',font:{size:9}},grid:{color:'rgba(77,163,232,.08)'}}},plugins:{legend:{labels:{color:'#d4e4f4',font:{size:9},boxWidth:10}}},responsive:true}});
+  const amounts=rows.map(r=>parseFloat(String(r.amount||0).replace(/,/g,''))||0);
+  const maxAmt=Math.max(...amounts,1);
+  const colors=amounts.map(v=>v/maxAmt>0.6?'#c8a84b':v/maxAmt>0.25?'#4da3e8':'#6dd4a0');
+  _bondtxnChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Volume (Rs. Mn)',data:amounts,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},options:{indexAxis:'y',responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>' Rs. '+fmtN(v.raw)+' Mn'}}},scales:{x:{ticks:{color:'#7fa3c8',font:{size:9},callback:v=>v>=1000?Math.round(v/1000)+'K':v},grid:{color:'rgba(77,163,232,.1)'},border:{color:'transparent'}},y:{ticks:{color:'#d4e4f4',font:{size:9}},grid:{display:false},border:{color:'transparent'}}}}});
 }
 
 function render(d){
@@ -1227,7 +1207,7 @@ function render(d){
 
   // ── NEW: render T-Bill Auction Detail table
   renderTbillAuction(d.tbillAuction||[]);
-  renderTbillVolume(d);
+  renderBondTxnVol(d);
 
   // ── NEW: Market Open Report (full Summary-report replica from get_data) ──
   setFmt("op-cmmin",d.callMarket?.min);setFmt("op-rmmin",d.repoMarket?.min);
@@ -1372,8 +1352,9 @@ function renderExtras(d){
        +'<div class="lc-row"><span class="lc-k">Settlement</span><span class="lc-v">'+isoShort(x.settle)+'</span></div>'
        +'<div class="lc-row"><span class="lc-k">Tenor</span><span class="lc-v">'+escHtml(x.tenor||'—')+'</span></div>';
      if(x.amount!=null&&String(x.amount).trim()!==''&&String(x.amount).trim()!=='0'){
-       const unit=isBond?' Bn':' Mn';
-       html+='<div class="lc-row"><span class="lc-k">Amount</span><span class="lc-v">Rs. '+fmt2(x.amount)+unit+'</span></div>';
+       const amtStr=String(x.amount).trim();
+       const amtDisplay=amtStr==='TBD'?'To be decided':(fmt2(x.amount)+' Bn');
+       html+='<div class="lc-row"><span class="lc-k">Amount</span><span class="lc-v" style="'+(amtStr==='TBD'?'color:#7fa3c8;font-style:italic':'')+'">Rs. '+amtDisplay+'</span></div>';
      }
      html+='<div class="lc-days '+cdCls(dy)+'">'+cdTxt(dy)+'</div>';
      return html;};
