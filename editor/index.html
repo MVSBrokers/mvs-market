@@ -26,8 +26,15 @@ button{font-family:inherit;cursor:pointer;border:none;border-radius:8px;font-wei
 .status{font-size:12px;margin-top:8px;min-height:16px}
 .hint{font-size:11px;color:#5a7a9a}
 code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-size:11px}
-.toast{position:fixed;bottom:20px;right:20px;background:#0d2818;border:1px solid #1f7a4d;color:#6dd4a0;padding:13px 18px;border-radius:9px;font-size:13px;font-weight:600;opacity:0;transform:translateY(10px);transition:all .25s;z-index:100}
-.toast.show{opacity:1;transform:translateY(0)}.toast.err{background:#2a1212;border-color:#7a2e2e;color:#e8917a}
+.toast{position:fixed;bottom:24px;right:22px;background:#0a2016;border:1.5px solid #2a7a52;color:#d4e4f4;padding:14px 20px 14px 16px;border-radius:11px;font-size:12px;font-weight:500;opacity:0;transform:translateY(14px);transition:opacity .28s ease,transform .28s ease;z-index:9999;min-width:240px;max-width:340px;box-shadow:0 6px 24px rgba(0,0,0,.5);pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
+.toast.err{background:#1e0a0a;border-color:#7a3030;color:#d4e4f4}
+.toast-icon{font-size:18px;line-height:1;margin-right:10px;float:left}
+.toast-body{overflow:hidden}
+.toast-title{font-weight:700;font-size:12.5px;margin-bottom:2px}
+.toast-title.ok{color:#6dd4a0}
+.toast-title.er{color:#e8917a}
+.toast-sub{color:#8ab0cc;font-size:11px;font-weight:400;line-height:1.4}
 /* freshness */
 .fresh-banner{padding:11px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:12px}
 .fresh-banner.ok{background:#0d2818;border:1px solid #1f7a4d;color:#6dd4a0}
@@ -208,7 +215,7 @@ async function saveGithubConfig(){
   try{const res=await ghGet(owner,repo,branch,path,token);
     localStorage.setItem('mvs_gh_token',token);localStorage.setItem('mvs_gh_owner',owner);localStorage.setItem('mvs_gh_repo',repo);localStorage.setItem('mvs_gh_branch',branch);localStorage.setItem('mvs_gh_path',path);
     r.style.color='#6dd4a0';r.textContent=res.sha?('✓ Connected. Found data.json ('+res.sha.slice(0,8)+'…).'):'✓ Connected. data.json will be created on first publish.';
-    showBadge();showToast('✓ GitHub connected');loadPublished();
+    showBadge();showToast('GitHub connected', 'ok', 'Ready to publish to '+loadConfig().owner+'/'+loadConfig().repo+'.');loadPublished();
   }catch(e){r.style.color='#e8917a';r.textContent='✗ '+e.message;}
 }
 async function ghGet(owner,repo,branch,path,token){
@@ -347,8 +354,8 @@ LOADED.hidden = oldHidden;
     const liqN=(L.values||[]).length,liqLast=(L.labels||[]).slice(-1)[0]||'—',fxLast=(U.labels||[]).slice(-1)[0]||'—';
     st.style.color='#6dd4a0';
     st.textContent=(auto?'⟳ Auto-imported ':'✓ Imported ')+file.name+' — Liquidity '+liqN+' rows (last '+liqLast+') · USD/LKR last '+fxLast+(auto?'  ·  watching for changes…':'.  If a new row is missing here, the file you picked is an older copy.');
-    showToast(auto?'⟳ Auto-imported on save':'✓ Excel imported');
-  }).catch(err=>{st.style.color='#e8917a';st.textContent='✗ '+err.message;showToast('Import failed: '+err.message,'err');});
+    showToast(auto?'Auto-imported on save':'Excel imported', 'ok', 'All sections loaded from your workbook.');
+  }).catch(err=>{st.style.color='#e8917a';st.textContent='✗ '+err.message;showToast('Import failed', 'err', err.message);});
 }
 function importExcel(ev){const f=ev.target.files[0];if(!f)return;ingestFile(f,false);ev.target.value='';}
 
@@ -359,7 +366,7 @@ async function linkExcel(){
   if(!window.showOpenFilePicker){
     const st=document.getElementById('import-status');st.style.color='#e8917a';
     st.textContent='Auto-watch needs Google Chrome or Microsoft Edge. In other browsers use the Import button instead.';
-    showToast('Auto-watch needs Chrome/Edge','err');return;
+    showToast('Auto-watch not supported', 'err', 'Use Chrome or Edge to enable auto-import on save.');return;
   }
   try{
     const [handle]=await window.showOpenFilePicker({types:[{description:'Excel workbook',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx'],'application/vnd.ms-excel':['.xls']}}]});
@@ -380,7 +387,7 @@ async function watchTick(initial){
     const st=document.getElementById('import-status');if(st){st.style.color='#e8917a';st.textContent='Auto-watch stopped (file moved or permission lost). Click "Link Excel" again to resume.';}
   }
 }
-function unlinkExcel(){stopWatch();_fsHandle=null;updateWatchBtn(false);showToast('Auto-watch stopped');}
+function unlinkExcel(){stopWatch();_fsHandle=null;updateWatchBtn(false);showToast('Auto-watch stopped', 'ok', 'Link your Excel again to re-enable.');}
 function updateWatchBtn(on){
   const b=document.getElementById('watch-btn');if(!b)return;
   if(on){b.textContent='🔗 Watching — click to stop';b.classList.remove('btn-gold');b.classList.add('btn-green');}
@@ -394,7 +401,7 @@ function clearAll(){
   const fb=document.getElementById('fresh-banner');if(fb)fb.style.display='none';
   document.getElementById('freshness').innerHTML='<div class="hint">Import the Excel to check freshness.</div>';
   document.getElementById('import-status').textContent='';
-  showToast('All data cleared');
+  showToast('Data cleared', 'ok', 'Import a new Excel file to reload.');
 }
 async function loadPublished(){
   const cfg=loadConfig();if(!(cfg.owner&&cfg.repo&&cfg.path))return false;
@@ -572,13 +579,13 @@ function recomputeMeta(p){
 // JSON array (with double quotes) directly inside an HTML onclick="" attribute.
 function publishSection(id){
   const sec=SECTIONS.find(s=>s.id===id);
-  if(!sec){showToast('Unknown section: '+id,'err');return;}
+  if(!sec){showToast('Unknown section', 'err', 'Section ID not found: '+id);return;}
   publishKeys(sec.keys,sec.id);
 }
 async function publishKeys(keys,secId){
-  if(!LOADED){showToast('Import an Excel first.','err');return;}
+  if(!LOADED){showToast('No data loaded', 'err', 'Import your Excel workbook before publishing.');return;}
   const cfg=loadConfig();
-  if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Complete the GitHub setup first.','err');document.getElementById('setup-box').style.display='block';return;}
+  if(!cfg.token||!cfg.owner||!cfg.repo){showToast('GitHub not configured', 'err', 'Enter your token, repo owner, and repo name above.');document.getElementById('setup-box').style.display='block';return;}
   applyEdits();
   // ── Freshness guard: block publish if any daily section is stale or missing ──
   try{
@@ -588,7 +595,7 @@ async function publishKeys(keys,secId){
       const bad=checks.filter(c=>c.status==='stale'||c.status==='missing');
       if(bad.length){
         const names=bad.map(c=>c.label).join(', ');
-        const go=confirm('⚠ '+bad.length+' section'+(bad.length>1?'s are':' is')+' NOT updated for today:\n\n'+names+'\n\nYour Excel does not have today\'s data for these sections.\nAdd today\'s data to Excel and re-import before publishing.\n\nPress OK to publish anyway, or Cancel to go back.');
+        const go=confirm('⚠️  Data not updated for today\n\n'+bad.length+' section'+(bad.length>1?'s are':' is')+' missing today\'s data:\n• '+names.split(', ').join('\n• ')+'\n\nYour Excel does not have today\'s figures for these sections.\nUpdate them in Excel and re-import before publishing.\n\n─────────────────────────────\nPress OK to publish anyway\nPress Cancel to go back and update');
         if(!go)return;
       }
     }
@@ -605,19 +612,20 @@ async function publishKeys(keys,secId){
       recomputeMeta(published);
       await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,JSON.stringify(published,null,1),sha||null);
       PUBLISHED=published;markPublishStates();
-      setSt('#6dd4a0','✓ Published '+new Date().toLocaleTimeString());
-      showToast(isAll?'✓ All sections published':'✓ Section published');return;
+      setSt('#6dd4a0','✓ Published '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}));
+      const secLabel=secId?(SECTIONS.find(s=>s.id===secId)||{}).title||secId:'All sections';
+      showToast(isAll?'All sections published':'Section published','ok','"'+secLabel+'" is now live on the dashboard.');return;
     }catch(e){
       const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
       if(conflict&&a<5){setSt('#c8a84b','Conflict — retry '+a+'/5…');await new Promise(r=>setTimeout(r,800*a));continue;}
-      setSt('#e8917a','✗ '+e.message);showToast(e.message,'err');return;
+      setSt('#e8917a','✗ '+e.message);showToast('Publish failed',  'err', e.message);return;
     }
   }
 }
 
 // ── SHOW / HIDE a section on the dashboard ───────────────
 function toggleHide(id){
-  if(!LOADED){showToast('Import an Excel first.','err');return;}
+  if(!LOADED){showToast('No data loaded', 'err', 'Import your Excel workbook before publishing.');return;}
   applyEdits();
   if(!LOADED.hidden||typeof LOADED.hidden!=='object')LOADED.hidden={};
   if(LOADED.hidden[id])delete LOADED.hidden[id];else LOADED.hidden[id]=true;
@@ -627,7 +635,7 @@ function toggleHide(id){
 }
 async function publishHidden(){
   const cfg=loadConfig();
-  if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Saved here. Finish GitHub setup, then publish to apply on the dashboard.','err');return;}
+  if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Saved locally only', 'err', 'Complete GitHub setup to push to the dashboard.');return;}
   for(let a=1;a<=5;a++){
     try{
       const {json,sha}=await getPublished(cfg);
@@ -635,17 +643,28 @@ async function publishHidden(){
       published.hidden=(LOADED&&LOADED.hidden)||{};
       await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,JSON.stringify(published,null,1),sha||null);
       PUBLISHED=published;markPublishStates();
-      showToast('✓ Dashboard show/hide updated');return;
+      showToast('Visibility updated', 'ok', 'Section show/hide applied on the dashboard.');return;
     }catch(e){
       const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
       if(conflict&&a<5){await new Promise(r=>setTimeout(r,800*a));continue;}
-      showToast('Show/hide publish failed: '+e.message,'err');return;
+      showToast('Visibility update failed', 'err', e.message);return;
     }
   }
 }
 
 function showBadge(){const cfg=loadConfig();if(cfg.token&&cfg.owner&&cfg.repo){document.getElementById('setup-box').style.display='none';const b=document.getElementById('connected-badge');b.style.display='block';document.getElementById('connected-repo').textContent=cfg.owner+'/'+cfg.repo;document.getElementById('connected-path').textContent=cfg.path+' ('+cfg.branch+')';['token','owner','repo','branch','path'].forEach(k=>{const el=document.getElementById('gh-'+k);if(el)el.value=cfg[k];});}}
-let toastT;function showToast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type==='err'?' err':'');clearTimeout(toastT);toastT=setTimeout(()=>t.className='toast'+(type==='err'?' err':''),3200);}
+let toastT;
+function showToast(msg,type,sub){
+  const t=document.getElementById('toast');
+  const isErr=type==='err';
+  const icon=isErr?'⚠️':'✅';
+  const titleCls=isErr?'er':'ok';
+  const subText=sub||(isErr?'Check your GitHub token and connection.':'Dashboard will update within 20 seconds.');
+  t.innerHTML=`<span class="toast-icon">${icon}</span><div class="toast-body"><div class="toast-title ${titleCls}">${msg}</div><div class="toast-sub">${subText}</div></div>`;
+  t.className='toast show'+(isErr?' err':'');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>{t.classList.remove('show');},4500);
+}
 
 // ── FRESHNESS ────────────────────────────────────────────
 function analyzeFreshness(wb,XLSX,nowOverride){
@@ -818,9 +837,9 @@ function parseWorkbook(wb,XLSX){
     let kd=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[0]!=null&&r[1]!=null)kd.push({label:String(r[0]).trim(),date:toISO(r[1]),show:true});}o.keyDates=kd;
     const isoOf=v=>{if(v==null||v==='')return '';if(v instanceof Date){const t=new Date(v.getTime()+432e5);return t.getUTCFullYear()+"-"+String(t.getUTCMonth()+1).padStart(2,'0')+"-"+String(t.getUTCDate()).padStart(2,'0');}return toISO(v);};
     let ba=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[3]!=null){const amtRaw=r[6];const amtStr=amtRaw==null?null:String(amtRaw).trim();const amtVal=/to\s*be\s*decided/i.test(amtStr||'')?'TBD':num(amtRaw);ba.push({auction:isoOf(r[3]),settle:isoOf(r[4]),tenor:r[5]==null?'':String(r[5]).trim(),amount:amtVal,show:true});}}o.billAuctions=ba;
-    let bo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[7]!=null)bo.push({auction:isoOf(r[7]),settle:isoOf(r[8]),tenor:r[9]==null?'':String(r[9]).trim(),amount:num(r[10]),show:true});}o.bondAuctions=bo;
-    let tbo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[12]!=null)tbo.push({maturity:isoOf(r[12]),isin:r[13]==null?'':String(r[13]).trim(),face:num(r[14]),show:true});}o.tbillOut=tbo;
-    let tdo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[16]!=null)tdo.push({maturity:isoOf(r[16]),isin:r[17]==null?'':String(r[17]).trim(),series:r[18]==null?'':String(r[18]).trim(),face:num(r[19]),show:true});}o.tbondOut=tdo;
+    let bo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[8]!=null)bo.push({auction:isoOf(r[8]),settle:isoOf(r[9]),tenor:r[10]==null?'':String(r[10]).trim(),amount:num(r[11]),show:true});}o.bondAuctions=bo;
+    let tbo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[13]!=null)tbo.push({maturity:isoOf(r[13]),isin:r[14]==null?'':String(r[14]).trim(),face:num(r[15]),show:true});}o.tbillOut=tbo;
+    let tdo=[];for(let i=2;i<an.length;i++){const r=an[i];if(r&&r[17]!=null)tdo.push({maturity:isoOf(r[17]),isin:r[18]==null?'':String(r[18]).trim(),series:r[19]==null?'':String(r[19]).trim(),face:num(r[20]),show:true});}o.tbondOut=tdo;
   }catch(e){}}
   if(!Array.isArray(o.keyDates))o.keyDates=[];if(!Array.isArray(o.billAuctions))o.billAuctions=[];if(!Array.isArray(o.bondAuctions))o.bondAuctions=[];if(!Array.isArray(o.tbillOut))o.tbillOut=[];if(!Array.isArray(o.tbondOut))o.tbondOut=[];
   o.execSummary={usdlkr:(o.spot&&o.spot.close)||(o.usdlkr&&o.usdlkr.close)||'',liqDir:'',liqDelta:''};
