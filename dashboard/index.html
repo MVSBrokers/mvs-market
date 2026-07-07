@@ -215,12 +215,18 @@ canvas{max-width:100%!important}
 .mini-tbl .chg-up{color:#6dd4a0}.mini-tbl .chg-dn{color:#ff8a78}
 .np{color:#5a7a9a;font-size:11px;font-style:italic;padding:10px;text-align:center;border:1px dashed #1a3050;border-radius:6px;margin-top:6px}
 .event-strip{position:sticky;top:0;z-index:500;display:none;flex-wrap:nowrap;align-items:center;gap:8px;overflow-x:auto;background:linear-gradient(90deg,#0d1e38,#0a1628);border:1px solid #c8a84b;border-radius:8px;margin-top:12px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
-.bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1),.bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2),.bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){position:sticky;z-index:2;white-space:nowrap}
+.bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1),.bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2),.bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){position:sticky;z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){left:0;min-width:64px;max-width:64px}
 .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:64px;min-width:48px;max-width:48px}
-.bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:112px;min-width:52px;max-width:52px;box-shadow:4px 0 6px rgba(0,0,0,0.4)}
+.bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:112px;min-width:60px;max-width:60px;box-shadow:4px 0 6px rgba(0,0,0,0.4)}
 .bond-freeze td:nth-child(-n+3){background:#0d1e38!important}
 .bond-freeze th:nth-child(-n+3){background:#091525!important;z-index:3}
+@media(max-width:480px){
+  .bond-freeze{font-size:8px!important}
+  .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){min-width:56px;max-width:56px}
+  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:56px;min-width:42px;max-width:42px}
+  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:98px;min-width:54px;max-width:54px}
+}
 .event-strip.show{display:flex}
 .latest-card{border:1px solid #1a3050;border-radius:9px;padding:12px 14px;background:rgba(13,30,56,0.5)}
 .lc-h{font-size:10px;font-weight:700;color:#c8a84b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
@@ -1146,7 +1152,7 @@ function renderBondTxnVol(d){
 function render(d){
   lastData=d;
   const td=slToday();
-  {const el=document.getElementById("dateDisplay");if(el){const p=n=>String(n).padStart(2,'0');el.textContent=p(td.getDate())+'.'+p(td.getMonth()+1)+'.'+td.getFullYear();}}
+  {const el=document.getElementById("dateDisplay");if(el)el.innerHTML=fmtOrd(td);}
   const lu=document.getElementById("last-updated");
   if(lu)lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
