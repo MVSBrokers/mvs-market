@@ -876,7 +876,7 @@ async function loadData(silent=false){
     const isFirst=_lastDataHash===null;
     _lastDataHash=txt;
     render(JSON.parse(txt));
-    if(!isFirst)showUpdateToast();   // toast only on real updates, not on first load
+    // if(!isFirst)showUpdateToast();   // toast disabled per request — no popup on data refresh
   }catch(e){
     bar.style.display="none";
     if(!silent){errEl.style.display="block";errEl.textContent="Could not load data — "+e.message;}
