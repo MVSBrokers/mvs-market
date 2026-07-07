@@ -1080,19 +1080,18 @@ function renderBondTxnVol(d){
   const ctx=document.getElementById('bondtxnChart');
   if(!tbody)return;
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const fmtDt=iso=>{const m=String(iso||'').match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);return m?(+m[3]+' '+MON[+m[2]-1]+' '+String(m[1]).slice(2)):(iso?String(iso):'—');};
   const fmtN=v=>{if(v==null||v==='')return'—';const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v):n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});};
-  if(titleEl){const ds=bv.date?fmtDt(bv.date):'';titleEl.textContent='Outright Treasury Bond Transaction Volumes'+(ds?' — '+ds:'');}
+  if(titleEl){const ds=bv.date?fmtMatDate(bv.date):'';titleEl.textContent='Outright Treasury Bond Transaction Volumes'+(ds?' — '+ds:'');}
   if(!rows.length){
     tbody.innerHTML='<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>';
     if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}return;
   }
   let total=0;
-  tbody.innerHTML=rows.map(r=>{const amt=parseFloat(String(r.amount||0).replace(/,/g,''))||0;total+=amt;return `<tr><td style="color:#d4e4f4">${fmtDt(r.maturity)}</td><td style="text-align:right;color:#c8a84b;font-weight:600">${fmtN(r.amount)}</td></tr>`;}).join('')
+  tbody.innerHTML=rows.map(r=>{const amt=parseFloat(String(r.amount||0).replace(/,/g,''))||0;total+=amt;return `<tr><td style="color:#d4e4f4">${fmtMatDate(r.maturity)}</td><td style="text-align:right;color:#c8a84b;font-weight:600">${fmtN(r.amount)}</td></tr>`;}).join('')
     +`<tr class="btxn-total"><td>Total</td><td style="text-align:right">${fmtN(total)}</td></tr>`;
   if(!ctx)return;
   if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}
-  const labels=rows.map(r=>fmtDt(r.maturity));
+  const labels=rows.map(r=>fmtMatDate(r.maturity));
   const amounts=rows.map(r=>parseFloat(String(r.amount||0).replace(/,/g,''))||0);
   const maxAmt=Math.max(...amounts,1);
   const colors=amounts.map(v=>v/maxAmt>0.6?'#c8a84b':v/maxAmt>0.25?'#4da3e8':'#6dd4a0');
