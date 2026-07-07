@@ -748,6 +748,38 @@ function fmtShort(d){return d.getDate()+" "+_MON3[d.getMonth()];}               
 function fmtLong(d){return d.getDate()+" "+_MONF[d.getMonth()]+" "+d.getFullYear();} // 24 June 2026
 function fmtOrd(d){const v=d.getDate()%100,o=["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th";return d.getDate()+"<sup>"+o+"</sup> "+_MONF[d.getMonth()]+" "+d.getFullYear();}
 // Clean up a maturity/date cell for display: "7/3/2026 12:00:00 AM" -> "03.07.2026"; leaves already-clean values alone.
+// Day-first parser for manually-entered editor dates (D/M/YYYY, D.M.YYYY, D-M-YYYY) — avoids
+// JS's Date() defaulting to US month/day order, which flips 6/7/2026 into "June 7" instead of "6 July".
+function fmtDayFirst(s){
+  if(s==null||String(s).trim()==='')return '—';
+  const t=String(s).trim();
+  const m=t.match(/^(\d{1,2})[.\/\-](\d{1,2})[.\/\-](\d{2,4})/);
+  if(m){
+    let [, dd, mm, yyyy]=m;
+    if(yyyy.length===2)yyyy='20'+yyyy;
+    const p=n=>String(n).padStart(2,'0');
+    return p(dd)+'.'+p(mm)+'.'+yyyy;
+  }
+  const d=new Date(t);
+  if(!isNaN(d.getTime())){const p=n=>String(n).padStart(2,'0');return p(d.getDate())+'.'+p(d.getMonth()+1)+'.'+d.getFullYear();}
+  return t;
+}
+// Same day-first parsing, but rendered as "6th July 2026" style (matches fmtOrd's superscript look).
+function fmtDayFirstOrd(s){
+  if(s==null||String(s).trim()==='')return '—';
+  const t=String(s).trim();
+  const ord=n=>{const v=n%100;return (["th","st","nd","rd"][(v-20)%10]||["th","st","nd","rd"][v]||"th");};
+  const m=t.match(/^(\d{1,2})[.\/\-](\d{1,2})[.\/\-](\d{2,4})/);
+  if(m){
+    let [, dd, mm, yyyy]=m;
+    dd=parseInt(dd,10);mm=parseInt(mm,10);
+    if(yyyy.length===2)yyyy='20'+yyyy;
+    return dd+'<sup>'+ord(dd)+'</sup> '+_MONF[mm-1]+' '+yyyy;
+  }
+  const d=new Date(t);
+  if(!isNaN(d.getTime()))return d.getDate()+'<sup>'+ord(d.getDate())+'</sup> '+_MONF[d.getMonth()]+' '+d.getFullYear();
+  return t;
+}
 function fmtMatDate(s){
   if(s==null||String(s).trim()==='')return '—';
   const t=String(s).trim();
@@ -1062,7 +1094,7 @@ function renderBondTxnVol(d){
   const closeEl=document.getElementById('bondtxn-close');
   const ctx=document.getElementById('bondtxnChart');
   const fmtN=v=>{if(v==null||v==='')return'—';const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v):n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});};
-  if(closeEl)closeEl.textContent=bv.date?fmtMatDate(bv.date):'';
+  if(closeEl)closeEl.innerHTML=bv.date?fmtDayFirstOrd(bv.date):'';
   if(!ctx)return;
   if(!rows.length){
     if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}return;
