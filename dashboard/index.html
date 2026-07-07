@@ -379,11 +379,10 @@ canvas{max-width:100%!important}
                 <th>Offered (Rs.Mn)</th>
                 <th>Accepted (Rs.Mn)</th>
                 <th>Accepted %</th>
-                <th>WAR (%)</th>
               </tr>
             </thead>
             <tbody id="tbillAuctionBody">
-              <tr><td colspan="6" style="text-align:center;color:#7fa3c8;padding:10px">—</td></tr>
+              <tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:10px">—</td></tr>
             </tbody>
           </table>
         </div>
@@ -1012,7 +1011,7 @@ function renderTbillAuction(data,targetId){
   if(!tbody)return;
   tbody.innerHTML="";
   if(!data||!data.length){
-    tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#7fa3c8;padding:14px">No auction data available</td></tr>';
+    tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#7fa3c8;padding:14px">No auction data available</td></tr>';
     return;
   }
   const groupBgs=["rgba(26,48,80,0.55)","rgba(10,28,52,0.30)"];
@@ -1047,11 +1046,7 @@ function renderTbillAuction(data,targetId){
       {const yv=parseFloat(m.yield);yldTd.textContent=(m.yield==null||m.yield===""||isNaN(yv))?"—":(Math.round(yv)+"%");}
       yldTd.style.background=groupBg;yldTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
       if(m.yield&&m.yield!=="—"){yldTd.style.color="#6dd4a0";yldTd.style.fontWeight="700";}
-      const warTd=document.createElement("td");
-      {const wv=parseFloat(m.war);warTd.textContent=(m.war==null||m.war===""||isNaN(wv))?"—":wv.toFixed(2)+"%";}
-      warTd.style.background=groupBg;warTd.style.borderTop=(!isFirst&&mi===0)?topBorder:"none";
-      if(m.war!=null&&!isNaN(parseFloat(m.war))){warTd.style.color="#c8a84b";warTd.style.fontWeight="700";}
-      tr.appendChild(matTd);tr.appendChild(offTd);tr.appendChild(accTd);tr.appendChild(yldTd);tr.appendChild(warTd);
+      tr.appendChild(matTd);tr.appendChild(offTd);tr.appendChild(accTd);tr.appendChild(yldTd);
       tbody.appendChild(tr);
     });
   });
@@ -1119,7 +1114,7 @@ function renderBondTxnVol(d){
 function render(d){
   lastData=d;
   const td=slToday();
-  {const el=document.getElementById("dateDisplay");if(el)el.innerHTML=fmtOrd(td);}
+  {const el=document.getElementById("dateDisplay");if(el){const p=n=>String(n).padStart(2,'0');el.textContent=p(td.getDate())+'.'+p(td.getMonth()+1)+'.'+td.getFullYear();}}
   const lu=document.getElementById("last-updated");
   if(lu)lu.textContent="Updated: "+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 
