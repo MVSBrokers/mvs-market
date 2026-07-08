@@ -217,15 +217,15 @@ canvas{max-width:100%!important}
 .event-strip{position:sticky;top:0;z-index:500;display:none;flex-wrap:nowrap;align-items:center;gap:8px;overflow-x:auto;background:linear-gradient(90deg,#0d1e38,#0a1628);border:1px solid #c8a84b;border-radius:8px;margin-top:12px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
 .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1),.bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2),.bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){position:sticky;z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){left:0;min-width:64px;max-width:64px}
-.bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:64px;min-width:48px;max-width:48px}
-.bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:112px;min-width:60px;max-width:60px;box-shadow:4px 0 6px rgba(0,0,0,0.4)}
+.bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:64px;min-width:64px;max-width:64px}
+.bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:128px;min-width:72px;max-width:72px;box-shadow:4px 0 6px rgba(0,0,0,0.4)}
 .bond-freeze td:nth-child(-n+3){background:#0d1e38!important}
 .bond-freeze th:nth-child(-n+3){background:#091525!important;z-index:3}
 @media(max-width:480px){
   .bond-freeze{font-size:8px!important}
   .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){min-width:56px;max-width:56px}
-  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:56px;min-width:42px;max-width:42px}
-  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:98px;min-width:54px;max-width:54px}
+  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:56px;min-width:56px;max-width:56px}
+  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:112px;min-width:64px;max-width:64px}
 }
 .event-strip.show{display:flex}
 .latest-card{border:1px solid #1a3050;border-radius:9px;padding:12px 14px;background:rgba(13,30,56,0.5)}
@@ -313,7 +313,7 @@ canvas{max-width:100%!important}
 
     <div class="panel full-width" style="margin-top:14px">
       <div class="panel-title" id="bondtxn-title">Outright Treasury Bond Transaction Volumes (Rs.Mn)<span class="close-date" id="bondtxn-close"></span></div>
-      <canvas id="bondtxnChart" style="max-height:260px"></canvas>
+      <canvas id="bondtxnChart" style="height:280px;max-height:280px"></canvas>
     </div>
   </div>
 
@@ -395,7 +395,7 @@ canvas{max-width:100%!important}
       </div>
     </div>
     <div class="panel">
-      <div class="panel-title">Treasury Bond Average Yield(%)<span class="close-date" id="tbond-close"></span></div>
+      <div class="panel-title">Treasury Bond Yield(%)<span class="close-date" id="tbond-close"></span></div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
       <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#ff8a78">low</span> → <span style="color:#7ee0a8">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
@@ -407,12 +407,21 @@ canvas{max-width:100%!important}
     </div>
   </div>
 
-  <div class="panel full-width">
+
+  <div class="panel" style="width:fit-content;min-width:300px">
     <div class="panel-title" data-sec="secondary">T-Bill Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
-    <div style="overflow-x:auto;max-height:320px;overflow-y:auto">
-      <table style="font-size:10px">
-        <thead><tr><th>Maturity Date</th><th>Bid (%)</th><th>Ask (%)</th></tr></thead>
-        <tbody id="dyn-secondary"></tbody>
+    <div style="max-height:320px;overflow-y:auto">
+      <table style="font-size:10px;border-collapse:collapse;white-space:nowrap">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Maturity Date</th>
+            <th style="text-align:right;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Bid (%)</th>
+            <th style="text-align:right;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Ask (%)</th>
+          </tr>
+        </thead>
+        <tbody id="dyn-secondary">
+          <tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -1096,59 +1105,37 @@ let _bondtxnChart=null;
 function renderBondTxnVol(d){
   const bv=d.bondTransVol||{};
   const rows=Array.isArray(bv.rows)?bv.rows.filter(r=>r&&r.show!==false):[];
-  const titleEl=document.getElementById('bondtxn-title');
   const closeEl=document.getElementById('bondtxn-close');
   const ctx=document.getElementById('bondtxnChart');
   const fmtN=v=>{if(v==null||v==='')return'—';const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v):n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});};
-  if(closeEl)closeEl.innerHTML=bv.date?fmtDayFirstOrd(bv.date):'';
-  if(!ctx)return;
+  if(closeEl&&bv.date)closeEl.innerHTML=fmtDayFirstOrd(bv.date);
   if(!rows.length){
     if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}return;
   }
+  if(!ctx)return;
   if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}
   const labels=rows.map(r=>fmtMatDate(r.maturity));
   const amounts=rows.map(r=>parseFloat(String(r.amount||0).replace(/,/g,''))||0);
   const maxAmt=Math.max(...amounts,1);
+  const colors=amounts.map(v=>v/maxAmt>0.6?'#c8a84b':v/maxAmt>0.25?'#4da3e8':'#6dd4a0');
   _bondtxnChart=new Chart(ctx,{
     type:'bar',
-    data:{labels,datasets:[{
-      label:'Volume (Rs. Mn)',
-      data:amounts,
-      backgroundColor:'#c8a84b',
-      hoverBackgroundColor:'#e0c169',
-      borderRadius:5,
-      borderSkipped:false,
-      maxBarThickness:46
-    }]},
-    plugins:[ChartDataLabels],
+    data:{labels,datasets:[{label:'Volume (Rs. Mn)',data:amounts,backgroundColor:colors,borderRadius:3,borderSkipped:false,maxBarThickness:18}]},
     options:{
+      indexAxis:'y',
       responsive:true,
-      maintainAspectRatio:true,
-      layout:{padding:{top:22}},
+      maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:v=>' Rs. '+fmtN(v.raw)+' Mn'}},
-        datalabels:{
-          anchor:'end',
-          align:'top',
-          color:'#d4e4f4',
-          font:{size:10,weight:'600'},
-          formatter:v=>fmtN(v)
-        }
+        tooltip:{callbacks:{label:v=>' Rs. '+fmtN(v.raw)+' Mn'}}
       },
       scales:{
-        x:{ticks:{color:'#7fa3c8',font:{size:9.5}},grid:{display:false},border:{color:'transparent'}},
-        y:{
-          suggestedMax:maxAmt*1.18,
-          ticks:{color:'#7fa3c8',font:{size:9},callback:v=>v>=1000?Math.round(v/1000)+'K':v},
-          grid:{color:'rgba(77,163,232,.1)'},
-          border:{color:'transparent'}
-        }
+        x:{ticks:{color:'#7fa3c8',font:{size:8.5},callback:v=>v>=1000?Math.round(v/1000)+'K':v},grid:{color:'rgba(77,163,232,.08)'},border:{color:'transparent'}},
+        y:{ticks:{color:'#d4e4f4',font:{size:8.5}},grid:{display:false},border:{color:'transparent'}}
       }
     }
   });
 }
-
 function render(d){
   lastData=d;
   const td=slToday();
@@ -1386,7 +1373,7 @@ function renderExtras(d){
   {const sr=(d.srr||[]).filter(r=>r.show!==false);set('dyn-srr',sr.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===sr.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
   {const w=d.windows||{};set('dyn-windows',`<tr><td>Standing Deposit (SDF)</td><td>${fmt2(w.sdf&&w.sdf.cur)}</td><td style="color:#7fa3c8">${fmt2(w.sdf&&w.sdf.prev)}</td></tr><tr><td>Standing Lending (SLF)</td><td>${fmt2(w.slf&&w.slf.cur)}</td><td style="color:#7fa3c8">${fmt2(w.slf&&w.slf.prev)}</td></tr>`);}
   // FI — secondary yields (table)
-  set('dyn-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map(s=>`<tr><td>${fmtMatDate(s.maturity)}</td><td>${fmt2(s.bid)}</td><td>${fmt2(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+  set('dyn-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map((s,i)=>`<tr style="background:${i%2?'rgba(13,30,56,.4)':'transparent'}"><td style="padding:3px 10px;color:#d4e4f4;white-space:nowrap">${fmtMatDate(s.maturity)}</td><td style="padding:3px 10px;text-align:right;color:#6dd4a0;font-weight:600">${fmt2(s.bid)}</td><td style="padding:3px 10px;text-align:right;color:#4da3e8;font-weight:600">${fmt2(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>');
   // Announcement: auction schedules + outstanding (next auction highlighted)
   {const _MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
    const isoShort=s=>{const m=String(s||'').match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);return m?((+m[3])+' '+_MON[+m[2]-1]+' '+m[1]):(s?escHtml(s):'—');};
