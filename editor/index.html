@@ -174,7 +174,6 @@ const SECTIONS=[
  {id:'fxsummary',title:'FX Market Summary',keys:['fxSummary'],group:'Foreign Exchange'},
  {id:'valuedates',title:'Value Dates',keys:['valueDates'],group:'Foreign Exchange'},
  {id:'cross',title:'Cross-Currency Rates',keys:['crossRates'],group:'Foreign Exchange'},
- {id:'tbills',title:'T-Bill Auctions (Primary Yields)',keys:['tbills','tbillRef'],group:'Fixed Income'},
  {id:'tbillauction',title:'T-Bill Auction Details',keys:['tbillAuction'],group:'Fixed Income'},
  {id:'tbillcurve',title:'T-Bill Yield Curve (series)',keys:['tbillCurve'],group:'Fixed Income'},
  {id:'tbonds',title:'Treasury Bonds (daily rates)',keys:['bonds'],group:'Fixed Income'},
@@ -498,6 +497,19 @@ function renderSections(){
       h+=dRow('Money Market closing','mmDate','Before 5 PM → T-1 working day · After 5 PM → today','e.g. 7th July 2026');
       h+=dRow('FX Volume / Swaps date','fxVolDate','Before 8:30 AM → T-2 · After 8:30 AM → T-1','e.g. 7th July 2026');
       h+=dRow('T-Bill Secondary date','secondaryDate','Same as Closing date','e.g. 7th July 2026');
+      h+='</tbody></table></div>';
+      // Bond column date overrides
+      const bhdrs=Array.isArray(LOADED.bonds&&LOADED.bonds.headers)?LOADED.bonds.headers:[];
+      const isDayN=v=>!v||/^day\s*\d+$/i.test(String(v).trim());
+      h+='<div class="ed-sub-t" style="color:#9fb6d4;margin-top:12px">Bond column dates: <b>Day 1</b> = most recent. Leave blank → dashboard auto-calculates backwards from Closing date.</div>';
+      h+='<div class="ed-scroll"><table class="ed-tbl"><thead><tr><th>Column</th><th>Auto-calculated as</th><th>Override date <span style="color:#5a7a9a;font-weight:400">(blank = auto)</span></th></tr></thead><tbody>';
+      ['Day 1 (most recent)','Day 2','Day 3','Day 4','Day 5','Day 6 (oldest)'].forEach((label,i)=>{
+        const raw=bhdrs[i];
+        const val=isDayN(raw)?'':(raw?String(raw):'');
+        const autoHint=i===0?'Last SL working day (before 4 PM → T-1, after 4 PM → T)':'T-'+(i+1)+' SL working days ago';
+        const di=`<input class="ed" data-path="bonds.headers.${i}" data-kind="str" value="${escAttr(val)}" placeholder="e.g. 08.07.2026" style="min-width:110px">`;
+        h+='<tr><td style="color:#c8a84b;font-weight:600;white-space:nowrap">'+escHtml(label)+'</td><td style="font-size:9px;color:#7fa3c8">'+autoHint+'</td><td>'+di+'</td></tr>';
+      });
       h+='</tbody></table></div></div>';
       body=h;
     } else if(sec.id==='valuedates'){
@@ -720,12 +732,41 @@ function analyzeFreshness(wb,XLSX,nowOverride){
     const gap=wdBetween(last,exp,cal);out.push({label,cadence:'Daily',cal,secId,status:gap>=2?'stale':'pending',msg:(gap>=2?'NOT updated — ':'Today still pending — ')+'latest '+fmt(last)+', expected '+fmt(exp)+' ('+gap+' working day'+(gap>1?'s':'')+' behind).',latestRaw:iso(last)});};
   const weekly=(label,cal,last,secId)=>{const ref=cal==='US'?usTodayUTC:todayUTC;
     if(!last){out.push({label,cadence:'Weekly',cal,secId,status:'missing',msg:'No dates found.',latestRaw:null});return;}
-    const days=Math.round((ref-last)/86400000);out.push({label,cadence:'Weekly',cal,secId,status:days>9?'stale':(days>7?'pending':'ok'),msg:(days>9?'NOT updated — ':'')+'latest '+fmt(last)+' ('+days+' day'+(days===1?'':'s')+' ago).',latestRaw:iso(last)});};
+    const days=Math.round((ref-last)/86400000);out.push({label,cadence:'Weekly',cal,secId,status:days>9?'stale':(days>7?'pending':'ok'),msg:(days>9?'NOT updated — latest '+fmt(last)+' ('+days+' days ago) — re-import when new data is released.':'Up to date — latest '+fmt(last)+' ('+(days===0?'today':days+' day'+(days===1?'':'s')+' ago')+').'),latestRaw:iso(last)});};
+  // Weekly check for a specific day-of-week with SL time cutoff (e.g. Wednesday T-Bill after 4 PM)
+  const weeklyDay=(label,secId,last,targetDow,cutoffHour)=>{
+    const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const slNow=new Date(now.getTime()+330*60000);
+    const slHour=slNow.getUTCHours()+slNow.getUTCMinutes()/60;
+    const slTod=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
+    const curDow=slTod.getDay();
+    // Find expected date (most recent target day, accounting for cutoff)
+    let exp=new Date(slTod);
+    if(curDow===targetDow&&slHour>=cutoffHour){
+      // Today is the target day and past cutoff → expect today
+    } else {
+      const daysBack=curDow===targetDow?7:(curDow-targetDow+7)%7;
+      exp.setDate(exp.getDate()-daysBack);
+    }
+    if(!last){out.push({label,cadence:'Weekly ('+DAYS[targetDow]+')',cal:'SL',secId,status:'missing',msg:'No auction dates found.',latestRaw:null});return;}
+    if(last>=exp){out.push({label,cadence:'Weekly ('+DAYS[targetDow]+')',cal:'SL',secId,status:'ok',msg:'Up to date — latest '+fmt(last)+'.',latestRaw:iso(last)});return;}
+    const days=Math.round((exp-last)/86400000);
+    const isToday=(curDow===targetDow);
+    const status=days>=7?'stale':'pending';
+    const msg=status==='stale'
+      ?'NOT updated — latest '+fmt(last)+' ('+days+' days behind). Import after '+DAYS[targetDow]+' auction.'
+      :(isToday&&slHour<cutoffHour
+        ?'Today still pending — results expected after '+cutoffHour+':00 SL ('+DAYS[targetDow]+' auction).'
+        :'This week still pending — latest '+fmt(last)+'. Expected by '+DAYS[targetDow]+' after '+cutoffHour+':00 SL.');
+    out.push({label,cadence:'Weekly ('+DAYS[targetDow]+')',cal:'SL',secId,status,msg,latestRaw:iso(last)});
+  };
   const mm=S(find('moneymorket')||find('moneymarket')||'');daily('Money Market & Liquidity','SL',latestDate(mm,7),'liquidity');
   const fx=S(find('fx')||'');daily('USD/LKR & FX Spot','SL',latestDate(fx,0),'usdlkr');
   const fi=S(find('fixedincome')||'');{let last=latestDate(mm,7)||latestDate(fi,10);daily('Daily Bond / Yield Rates','SL',last,'bonds');}
   const gl=S(find('globalmarket')||'');daily('US 10Y Treasury','SL',latestDate(gl,0),'global10y');daily('Gold (XAU/USD)','SL',latestDate(gl,10),'gold');daily('Crude Oil (WTI / Brent)','SL',latestDate(gl,3),'brent');daily('US Dollar Index (DXY)','SL',latestDate(gl,7),'dxy');
-  const mc=S(find('macroeconomy')||'');weekly('Foreign Holdings of Govt Securities','SL',latestDate(mc,0),'foreign');weekly('T-Bill Auction (Primary)','SL',latestDate(fi,15),'tbills');
+  const mc=S(find('macroeconomy')||'');weekly('Foreign Holdings of Govt Securities','SL',latestDate(mc,0),'foreign');
+  // T-Bill Auction Details: weekly, updated Wednesday after 4 PM SL (auction results day)
+  weeklyDay('T-Bill Auction Details','tbillauction',latestDate(fi,20),3,16);
   const monthLbl=(mc[1]&&mc[1][11])?String(mc[1][11]).trim():'';
   out.push({label:'Reserves · Inflation · Tourism · Remittances',cadence:'Monthly',cal:'SL',secId:'reserves',status:'info',msg:'Monthly series — latest column: '+(monthLbl||'n/a')+'. Update when the new month is released.'});
   const an=S(find('announcement')||'');let passed=[];for(let i=2;i<an.length;i++){const v=an[i]&&an[i][1];if(v){const m=String(v).match(/^(\d{1,2})(?:-\d{1,2})?[.\-/](\d{1,2})[.\-/](\d{4})/);if(m){const dt=new Date(Date.UTC(+m[3],+m[2]-1,+m[1]));if(dt<todayUTC)passed.push(String(an[i][0]).trim());}}}
@@ -805,6 +846,8 @@ function parseWorkbook(wb,XLSX){
     // Bond column dates: try row1 col3-8 as dates first, else use text
     const parseDMlocal=s=>{const MON3l=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];const m=String(s||'').trim().match(/^(\d{1,2})[\s\-]([A-Za-z]{3})/i);if(!m)return null;const mi=MON3l.indexOf(m[2].toLowerCase());if(mi<0)return null;const yr=new Date().getFullYear();return new Date(yr,mi,parseInt(m[1]));};
     let bh=[];for(let c=3;c<=8;c++){const v=fi[1][c];if(v==null)continue;const dtx=xlDate(v);bh.push(dtx?lbl(dtx):(parseDMlocal(v)?lbl(parseDMlocal(v)):String(v).trim()));}
+    // Preserve any manually-set dates in bond headers (non-"Day N" values survive re-import)
+    {const existBH=LOADED&&LOADED.bonds&&Array.isArray(LOADED.bonds.headers)?LOADED.bonds.headers:[];bh=bh.map((v,i)=>{const ex=existBH[i];return(ex&&!/^day\s*\d+$/i.test(String(ex).trim()))?String(ex):v;});}
     let br=[];for(let i=2;i<fi.length;i++)if(fi[i][0]){const vals=[];for(let c=3;c<=8;c++)vals.push(fi[i][c]);br.push({bond:String(fi[i][0]).trim(),eoy:fi[i][1],eom:fi[i][2],values:vals});}
     o.bonds={headers:bh,rows:br};
     let tcL=[],t3=[],t6=[],t12=[];for(let i=2;i<fi.length;i++)if(fi[i][10]!=null){tcL.push(lbl(fi[i][10]));t3.push(num(fi[i][11]));t6.push(num(fi[i][12]));t12.push(num(fi[i][13]));}
@@ -823,6 +866,7 @@ function parseWorkbook(wb,XLSX){
      if(m1){const mo=MON3t.indexOf(m1[2].toLowerCase().slice(0,3));if(mo>=0)isoDate=m1[3]+'-'+String(mo+1).padStart(2,'0')+'-'+String(m1[1]).padStart(2,'0');}
      if(!isoDate){const m2=titleRow.match(/(\d{1,2})[.\-\/](\d{1,2})[.\-\/](\d{4})/);if(m2)isoDate=m2[3]+'-'+String(m2[2]).padStart(2,'0')+'-'+String(m2[1]).padStart(2,'0');}
      if(!isoDate){const m3=titleRow.match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);if(m3)isoDate=m3[1]+'-'+String(m3[2]).padStart(2,'0')+'-'+String(m3[3]).padStart(2,'0');}
+     if(!isoDate){const slN=new Date(Date.now()+330*60000);isoDate=slN.getUTCFullYear()+'-'+String(slN.getUTCMonth()+1).padStart(2,'0')+'-'+String(slN.getUTCDate()).padStart(2,'0');}
      let btvRows=[];for(let i=2;i<fi.length;i++){const isin=fi[i][30];if(!isin||typeof isin!=='string')continue;
        const matRaw=fi[i][31];let matISO='';
        if(matRaw instanceof Date){const dt=new Date(matRaw.getTime()+432e5);matISO=dt.getUTCFullYear()+'-'+String(dt.getUTCMonth()+1).padStart(2,'0')+'-'+String(dt.getUTCDate()).padStart(2,'0');}
@@ -932,11 +976,12 @@ function recomputeChecks(stored){
       const gap=wdBetween(last,exp,c.cal||'SL');
       return Object.assign({},c,{status:gap>=2?'stale':'pending',msg:(gap>=2?'NOT updated — ':'Today still pending — ')+'latest '+fmt(last)+', expected '+fmt(exp)+' ('+gap+' working day'+(gap>1?'s':'')+' behind).'});
     }
-    if(c.cadence==='Weekly'){
-      const ref=c.cal==='US'?usTodayUTC:todayUTC;
+    if(c.cadence==='Weekly'||c.cadence.startsWith('Weekly (')){
+      if(!c.latestRaw)return c;
       const last2=new Date(c.latestRaw);
+      const ref=c.cal==='US'?usTodayUTC:todayUTC;
       const days=Math.round((ref-last2)/86400000);
-      return Object.assign({},c,{status:days>9?'stale':(days>7?'pending':'ok'),msg:(days>9?'NOT updated — ':'')+'latest '+fmt(last2)+' ('+days+' day'+(days===1?'':'s')+' ago).'});
+      return Object.assign({},c,{status:days>9?'stale':(days>7?'pending':'ok'),msg:(days>9?'NOT updated — latest '+fmt(last2)+' ('+days+' days ago) — re-import when new data is released.':'Up to date — latest '+fmt(last2)+' ('+(days===0?'today':days+' day'+(days===1?'':'s')+' ago')+').')});
     }
     return c;
   });
