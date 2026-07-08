@@ -1257,7 +1257,7 @@
   }
  ],
  "bondTransVol": {
-  "date": "",
+  "date": "2026-07-08",
   "rows": [
    {
     "isin": "LKB00827J152",
@@ -1268,35 +1268,35 @@
    },
    {
     "isin": "LKB00530H016",
-    "maturity": "1930-08-01",
+    "maturity": "2030-08-01",
     "remYears": 4.071232877,
     "amount": 200,
     "show": true
    },
    {
     "isin": "LKB00730J158",
-    "maturity": "1930-10-15",
+    "maturity": "2030-10-15",
     "remYears": 4.276712329,
     "amount": 5971.201,
     "show": true
    },
    {
     "isin": "LKB02032J017",
-    "maturity": "1932-10-01",
+    "maturity": "2032-10-01",
     "remYears": 6.24109589,
     "amount": 1000,
     "show": true
    },
    {
     "isin": "LKB00934F154",
-    "maturity": "1934-06-15",
+    "maturity": "2034-06-15",
     "remYears": 7.945205479,
     "amount": 600,
     "show": true
    },
    {
     "isin": "LKB02035C155",
-    "maturity": "1935-03-15",
+    "maturity": "2035-03-15",
     "remYears": 8.693150685,
     "amount": 4100,
     "show": true
@@ -5014,8 +5014,9 @@
  "date": "2026-07-08",
  "openingDate": "",
  "closingDate": "",
- "secondaryDate": "",
+ "mmDate": "",
  "fxVolDate": "",
+ "secondaryDate": "",
  "newsLink": "https://www.treasury.gov.lk/api/file/b4c50af6-2c42-4401-8d52-f82acad47899",
  "hidden": {
   "tbills": true
