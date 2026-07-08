@@ -35,6 +35,7 @@ code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-siz
 .toast-title.ok{color:#6dd4a0}
 .toast-title.er{color:#e8917a}
 .toast-sub{color:#8ab0cc;font-size:11px;font-weight:400;line-height:1.4}
+.sec-group-hdr{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#4da3e8;padding:14px 0 6px;border-bottom:1px solid #1a3050;margin-bottom:4px}
 /* freshness */
 .fresh-banner{padding:11px 14px;border-radius:8px;font-size:13px;font-weight:700;margin-bottom:12px}
 .fresh-banner.ok{background:#0d2818;border:1px solid #1f7a4d;color:#6dd4a0}
@@ -103,9 +104,9 @@ code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-siz
 <div class="card" id="setup-box">
   <h2>1 · Connect GitHub (one-time)</h2>
   <div class="cfg-grid">
-    <div class="fg" style="grid-column:1/-1"><label>GitHub Personal Access Token (fine-grained)</label><input id="gh-token" type="password" placeholder="github_pat_..."></div>
-    <div class="fg"><label>GitHub Username / Org</label><input id="gh-owner" placeholder="kavindyamaheshi303-beep"></div>
-    <div class="fg"><label>Repository Name</label><input id="gh-repo" placeholder="mvs-market"></div>
+    <div class="fg" style="grid-column:1/-1"><label>GitHub Personal Access Token (fine-grained)</label><input id="gh-token" type="password" placeholder="github_pat_..." oninput="autoSaveCfg()"></div>
+    <div class="fg"><label>GitHub Username / Org</label><input id="gh-owner" placeholder="kavindyamaheshi303-beep" oninput="autoSaveCfg()"></div>
+    <div class="fg"><label>Repository Name</label><input id="gh-repo" placeholder="mvs-market" oninput="autoSaveCfg()"></div>
     <div class="fg"><label>Branch</label><input id="gh-branch" value="main"></div>
     <div class="fg"><label>Path to data.json</label><input id="gh-path" value="data.json"></div>
   </div>
@@ -161,52 +162,53 @@ function val(id){
 let LOADED=null;
 let PUBLISHED=null;
 const SECTIONS=[
- {id:'dates',title:'Report Dates (auto-filled on import · edit any to correct)',keys:['openingDate','closingDate','secondaryDate','fxVolDate']},
- {id:'mmrates',title:'Money Market & Repo Rates',keys:['callMarket','repoMarket']},
- {id:'windows',title:'Standing Facilities (SDF / SLF)',keys:['windows']},
- {id:'opr',title:'Policy Rate (OPR) History',keys:['opr']},
- {id:'liquidity',title:'Market Liquidity',keys:['liquidity']},
- {id:'cbsl',title:'CBSL Holdings of Govt Securities',keys:['cbsl','cbslHoldings']},
- {id:'foreign',title:'Foreign Holdings of Govt Securities',keys:['foreign']},
- {id:'usdlkr',title:'USD/LKR Rate',keys:['usdlkr']},
- {id:'fxswaps',title:'FX Swaps',keys:['fxSwaps']},
- {id:'spot',title:'FX Spot Overview',keys:['spot']},
- {id:'fxsummary',title:'FX Market Summary',keys:['fxSummary']},
- {id:'valuedates',title:'Value Dates',keys:['valueDates']},
- {id:'cross',title:'Cross-Currency Rates',keys:['crossRates']},
- {id:'tbills',title:'T-Bill Auctions (Primary Yields)',keys:['tbills','tbillRef']},
- {id:'tbillauction',title:'T-Bill Auction Details',keys:['tbillAuction']},
- {id:'tbillcurve',title:'T-Bill Yield Curve (series)',keys:['tbillCurve']},
- {id:'tbonds',title:'Treasury Bonds (daily rates)',keys:['bonds']},
- {id:'secondary',title:'T-Bond Secondary Yields',keys:['bondSecondary']},
- {id:'bondtransxn',title:'T-Bond Outright Transaction Volumes',keys:['bondTransVol']},
- {id:'reserves',title:'Foreign Currency Reserves',keys:['reserves']},
- {id:'inflation',title:'Inflation (CCPI / NCPI)',keys:['inflation']},
- {id:'srr',title:'Statutory Reserve Requirement (SRR)',keys:['srr']},
- {id:'tourism',title:'Tourism',keys:['tourism']},
- {id:'remittances',title:'Remittances',keys:['remittances']},
- {id:'gdp',title:'Quarterly Real GDP Growth',keys:['gdpGrowth']},
- {id:'bop',title:'Balance of Payment',keys:['bop']},
- {id:'debtgdp',title:'Debt to GDP',keys:['debtGdp']},
- {id:'global10y',title:'US 10Y Treasury',keys:['global10y']},
- {id:'gold',title:'Gold (XAU/USD)',keys:['gold']},
- {id:'brent',title:'Brent Crude Oil',keys:['brent']},
- {id:'wti',title:'WTI Crude Oil',keys:['wti']},
- {id:'dxy',title:'US Dollar Index (DXY)',keys:['dxy']},
- {id:'fomc',title:'FOMC Decisions',keys:['fomc']},
- {id:'keydates',title:'Key Dates / Announcements (tick = show on live bar)',keys:['keyDates']},
- {id:'billauc',title:'T-Bill Auction Schedule',keys:['billAuctions']},
- {id:'bondauc',title:'T-Bond Auction Schedule',keys:['bondAuctions']},
- {id:'tbillout',title:'T-Bill Outstanding',keys:['tbillOut']},
- {id:'tbondout',title:'T-Bond Outstanding',keys:['tbondOut']},
- {id:'headers',title:'Column Headers (bond · inflation · tourism · remittances · reserves)',keys:['headers']},
- {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews','newsLink']},
+ {id:'dates',title:'Report Dates (auto-filled on import · edit any to correct)',keys:['openingDate','closingDate','secondaryDate','fxVolDate'],group:'General'},
+ {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews','newsLink'],group:'General'},
+ {id:'mmrates',title:'Money Market & Repo Rates',keys:['callMarket','repoMarket'],group:'Money Market'},
+ {id:'windows',title:'Standing Facilities (SDF / SLF)',keys:['windows'],group:'Money Market'},
+ {id:'opr',title:'Policy Rate (OPR) History',keys:['opr'],group:'Money Market'},
+ {id:'liquidity',title:'Market Liquidity',keys:['liquidity'],group:'Money Market'},
+ {id:'usdlkr',title:'USD/LKR Rate',keys:['usdlkr'],group:'Foreign Exchange'},
+ {id:'fxswaps',title:'FX Swaps',keys:['fxSwaps'],group:'Foreign Exchange'},
+ {id:'spot',title:'FX Spot Overview',keys:['spot'],group:'Foreign Exchange'},
+ {id:'fxsummary',title:'FX Market Summary',keys:['fxSummary'],group:'Foreign Exchange'},
+ {id:'valuedates',title:'Value Dates',keys:['valueDates'],group:'Foreign Exchange'},
+ {id:'cross',title:'Cross-Currency Rates',keys:['crossRates'],group:'Foreign Exchange'},
+ {id:'tbills',title:'T-Bill Auctions (Primary Yields)',keys:['tbills','tbillRef'],group:'Fixed Income'},
+ {id:'tbillauction',title:'T-Bill Auction Details',keys:['tbillAuction'],group:'Fixed Income'},
+ {id:'tbillcurve',title:'T-Bill Yield Curve (series)',keys:['tbillCurve'],group:'Fixed Income'},
+ {id:'tbonds',title:'Treasury Bonds (daily rates)',keys:['bonds'],group:'Fixed Income'},
+ {id:'secondary',title:'T-Bond Secondary Yields',keys:['bondSecondary'],group:'Fixed Income'},
+ {id:'bondtransxn',title:'T-Bond Outright Transaction Volumes',keys:['bondTransVol'],group:'Fixed Income'},
+ {id:'cbsl',title:'CBSL Holdings of Govt Securities',keys:['cbsl','cbslHoldings'],group:'Macro Economy'},
+ {id:'foreign',title:'Foreign Holdings of Govt Securities',keys:['foreign'],group:'Macro Economy'},
+ {id:'reserves',title:'Foreign Currency Reserves',keys:['reserves'],group:'Macro Economy'},
+ {id:'inflation',title:'Inflation (CCPI / NCPI)',keys:['inflation'],group:'Macro Economy'},
+ {id:'srr',title:'Statutory Reserve Requirement (SRR)',keys:['srr'],group:'Macro Economy'},
+ {id:'tourism',title:'Tourism',keys:['tourism'],group:'Macro Economy'},
+ {id:'remittances',title:'Remittances',keys:['remittances'],group:'Macro Economy'},
+ {id:'gdp',title:'Quarterly Real GDP Growth',keys:['gdpGrowth'],group:'Macro Economy'},
+ {id:'bop',title:'Balance of Payment',keys:['bop'],group:'Macro Economy'},
+ {id:'debtgdp',title:'Debt to GDP',keys:['debtGdp'],group:'Macro Economy'},
+ {id:'global10y',title:'US 10Y Treasury',keys:['global10y'],group:'Global Markets'},
+ {id:'gold',title:'Gold (XAU/USD)',keys:['gold'],group:'Global Markets'},
+ {id:'brent',title:'Brent Crude Oil',keys:['brent'],group:'Global Markets'},
+ {id:'wti',title:'WTI Crude Oil',keys:['wti'],group:'Global Markets'},
+ {id:'dxy',title:'US Dollar Index (DXY)',keys:['dxy'],group:'Global Markets'},
+ {id:'fomc',title:'FOMC Decisions',keys:['fomc'],group:'Global Markets'},
+ {id:'keydates',title:'Key Dates / Announcements (tick = show on live bar)',keys:['keyDates'],group:'Announcements'},
+ {id:'billauc',title:'T-Bill Auction Schedule',keys:['billAuctions'],group:'Announcements'},
+ {id:'bondauc',title:'T-Bond Auction Schedule',keys:['bondAuctions'],group:'Announcements'},
+ {id:'tbillout',title:'T-Bill Outstanding',keys:['tbillOut'],group:'Announcements'},
+ {id:'tbondout',title:'T-Bond Outstanding',keys:['tbondOut'],group:'Announcements'},
+ {id:'headers',title:'Column Headers (bond · inflation · tourism · remittances · reserves)',keys:['headers'],group:'Settings'},
 ];
 const META_KEYS=['execSummary','date','marketNews'];
 const NO_HIDE=new Set(['dates','headers','billauc','bondauc','tbillout','tbondout']); // sections with no standalone panel on the dashboard
 
 // ── CONFIG / GITHUB ──────────────────────────────────────
 function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'kavindyamaheshi303-beep',repo:localStorage.getItem('mvs_gh_repo')||'mvs-market',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
+function autoSaveCfg(){const t=document.getElementById('gh-token'),o=document.getElementById('gh-owner'),r=document.getElementById('gh-repo');if(t&&t.value)localStorage.setItem('mvs_gh_token',t.value.trim());if(o&&o.value)localStorage.setItem('mvs_gh_owner',o.value.trim());if(r&&r.value)localStorage.setItem('mvs_gh_repo',r.value.trim());}
 async function saveGithubConfig(){
   const token=val('gh-token'),owner=val('gh-owner'),repo=val('gh-repo'),branch=val('gh-branch')||'main',path=val('gh-path')||'data.json';
   const r=document.getElementById('setup-result');
@@ -466,7 +468,10 @@ function renderSections(){
   const _tblScroll={};document.querySelectorAll('#sections .ed-scroll[data-sk]').forEach(el=>{_tblScroll[el.getAttribute('data-sk')]=el.scrollTop;});
   document.getElementById('sections-hint').textContent='Click a section to edit. Each has its own publish button.';
   const host=document.getElementById('sections');
+  let _lastGroup='';
   host.innerHTML=SECTIONS.map(sec=>{
+    let groupHdr='';
+    if(sec.group&&sec.group!==_lastGroup){_lastGroup=sec.group;groupHdr='<div class="sec-group-hdr">'+escHtml(sec.group)+'</div>';}
     const present=sec.keys.some(k=>LOADED[k]!=null);
     const pts=sec.keys.reduce((n,k)=>n+countPoints(k),0);
     const hid=!!(LOADED.hidden&&LOADED.hidden[sec.id]);
@@ -484,6 +489,17 @@ function renderSections(){
           const cols=t.defaults.map((def,i)=>`<div class="hdr-col"><div class="hdr-lbl">Col ${i+1}</div>${inp('headers.'+key+'.'+i, cur[i]!=null?cur[i]:def, 'text')}</div>`).join('');
           return `<div class="hdr-grp"><div class="hdr-name">${escHtml(t.name)}</div><div class="hdr-cols">${cols}</div></div>`;
         }).join('')+'</div>';
+    } else if(sec.id==='dates'){
+      const L=LOADED;
+      const dRow=(label,key,hint,ph)=>{const v=L[key]==null?'':L[key];return '<tr><td style="color:#c8a84b;font-weight:600;white-space:nowrap;padding:4px 8px">'+escHtml(label)+'</td><td style="padding:4px 8px;font-size:9px;color:#7fa3c8">'+escHtml(hint)+'</td><td style="padding:4px 4px"><input class="ed" data-path="'+key+'" data-kind="str" value="'+escAttr(v)+'" placeholder="'+escAttr(ph)+'" style="min-width:130px"></td></tr>';};
+      let h='<div class="ed-sub"><div class="ed-sub-t" style="color:#9fb6d4">Leave any date <b>blank</b> → dashboard auto-calculates from the SL working-day calendar. Enter a date to override when the auto-date is wrong (e.g. around public holidays). Format: <b>7<sup>th</sup> July 2026</b> or <b>07.07.2026</b>.</div>';
+      h+='<div class="ed-scroll"><table class="ed-tbl"><thead><tr><th>Panel / Section</th><th>Auto-calculated as</th><th>Override date <span style="color:#5a7a9a;font-weight:400">(blank = auto)</span></th></tr></thead><tbody>';
+      h+=dRow('Closing date (all panels)','closingDate','Before 4 PM → T-1 working day · After 4 PM → today','e.g. 7th July 2026');
+      h+=dRow('Money Market closing','mmDate','Before 5 PM → T-1 working day · After 5 PM → today','e.g. 7th July 2026');
+      h+=dRow('FX Volume / Swaps date','fxVolDate','Before 8:30 AM → T-2 · After 8:30 AM → T-1','e.g. 7th July 2026');
+      h+=dRow('T-Bill Secondary date','secondaryDate','Same as Closing date','e.g. 7th July 2026');
+      h+='</tbody></table></div></div>';
+      body=h;
     } else if(sec.id==='valuedates'){
       const vd=Array.isArray(LOADED.valueDates)?LOADED.valueDates:[];
       let h='<div class="ed-sub"><div class="ed-sub-t" style="color:#9fb6d4">Leave <b>Override Date</b> and <b>NOD</b> blank → dashboard auto-calculates from the SL calendar. Fill them in only when the auto-date is wrong (e.g. around local holidays).</div>';
@@ -525,7 +541,7 @@ function renderSections(){
       }).join('');
     }
     const presentEff=sec.id==='results'?true:present;
-    return `<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
+    return groupHdr+`<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
       <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
         <div><div class="st">${sec.title}${hid?' <span class="hid-tag">hidden on dashboard</span>':''}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
         <div class="right">${canHide?`<button class="vis-btn ${hid?'off':'on'}" onclick="event.stopPropagation();toggleHide('${sec.id}')" title="${hid?'Hidden on the dashboard — click to show it':'Showing on the dashboard — click to hide it'}">${hid?'🚫 Hidden':'👁 Shown'}</button>`:''}<span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
@@ -801,9 +817,22 @@ function parseWorkbook(wb,XLSX){
     o.bondSecondary=sec;
     // Outright Treasury Bond Transaction Volumes — cols 30-33
     {const titleRow=fi[0]&&fi[0][30]?String(fi[0][30]):'';
-     const dateM=titleRow.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
-     const isoDate=dateM?(()=>{const MON3=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];const mo=MON3.indexOf(dateM[2].toLowerCase().slice(0,3));return mo>=0?(dateM[3]+'-'+String(mo+1).padStart(2,'0')+'-'+String(dateM[1]).padStart(2,'0')):null;})():null;
-     let btvRows=[];for(let i=2;i<fi.length;i++){const isin=fi[i][30];if(!isin||typeof isin!=='string')continue;const matRaw=fi[i][31];let matISO='';if(matRaw instanceof Date){const dt=new Date(matRaw.getTime()+432e5);matISO=dt.getUTCFullYear()+'-'+String(dt.getUTCMonth()+1).padStart(2,'0')+'-'+String(dt.getUTCDate()).padStart(2,'0');}else if(matRaw){matISO=toISO(String(matRaw));}btvRows.push({isin:isin.trim(),maturity:matISO,remYears:num(fi[i][32]),amount:num(fi[i][33]),show:true});}
+     const MON3t=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+     let isoDate=null;
+     const m1=titleRow.match(/(\d{1,2})[\s\-]+([A-Za-z]+)[\s\-]+(\d{4})/);
+     if(m1){const mo=MON3t.indexOf(m1[2].toLowerCase().slice(0,3));if(mo>=0)isoDate=m1[3]+'-'+String(mo+1).padStart(2,'0')+'-'+String(m1[1]).padStart(2,'0');}
+     if(!isoDate){const m2=titleRow.match(/(\d{1,2})[.\-\/](\d{1,2})[.\-\/](\d{4})/);if(m2)isoDate=m2[3]+'-'+String(m2[2]).padStart(2,'0')+'-'+String(m2[1]).padStart(2,'0');}
+     if(!isoDate){const m3=titleRow.match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);if(m3)isoDate=m3[1]+'-'+String(m3[2]).padStart(2,'0')+'-'+String(m3[3]).padStart(2,'0');}
+     let btvRows=[];for(let i=2;i<fi.length;i++){const isin=fi[i][30];if(!isin||typeof isin!=='string')continue;
+       const matRaw=fi[i][31];let matISO='';
+       if(matRaw instanceof Date){const dt=new Date(matRaw.getTime()+432e5);matISO=dt.getUTCFullYear()+'-'+String(dt.getUTCMonth()+1).padStart(2,'0')+'-'+String(dt.getUTCDate()).padStart(2,'0');}
+       else if(matRaw){const ms=String(matRaw).trim();
+         const tm1=ms.match(/^(\d{1,2})[.\-\/](\d{1,2})[.\-\/](\d{4})/);
+         if(tm1)matISO=tm1[3]+'-'+String(tm1[2]).padStart(2,'0')+'-'+String(tm1[1]).padStart(2,'0');
+         else{const tm2=ms.match(/^(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);if(tm2)matISO=tm2[1]+'-'+String(tm2[2]).padStart(2,'0')+'-'+String(tm2[3]).padStart(2,'0');}
+         if(!matISO){const tm3=ms.match(/^(\d{1,2})[\s\-]([A-Za-z]{3,})[\s\-](\d{4})/);if(tm3){const mo=MON3t.indexOf(tm3[2].toLowerCase().slice(0,3));if(mo>=0)matISO=tm3[3]+'-'+String(mo+1).padStart(2,'0')+'-'+String(tm3[1]).padStart(2,'0');}}
+         if(!matISO)matISO=ms;}
+       btvRows.push({isin:isin.trim(),maturity:matISO,remYears:num(fi[i][32]),amount:num(fi[i][33]),show:true});}
      o.bondTransVol={date:isoDate||'',rows:btvRows};}
   }
   const fx=S(find('fx')||'');
@@ -870,7 +899,10 @@ if (!Array.isArray(o.marketNews)) {
 }
 o.date=new Date().toISOString().slice(0,10);
   // Report dates — leave blank so dashboard auto-uses SL working days
-  o.openingDate="";o.closingDate="";o.secondaryDate="";o.fxVolDate="";
+  // Preserve any manual topic-date overrides across re-import (blank = auto on dashboard)
+  const _keepDates=['openingDate','closingDate','mmDate','fxVolDate','secondaryDate'];
+  _keepDates.forEach(k=>{if(!o[k]&&LOADED&&LOADED[k])o[k]=LOADED[k];});
+  o.openingDate=o.openingDate||"";o.closingDate=o.closingDate||"";o.mmDate=o.mmDate||"";o.fxVolDate=o.fxVolDate||"";o.secondaryDate=o.secondaryDate||"";
   return o;
 }
 
