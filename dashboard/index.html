@@ -367,8 +367,14 @@ canvas{max-width:100%!important}
   <!-- GOVT SECURITIES SECTION -->
   <div class="full-grid">
     <div class="panel">
-      <div class="panel-title"><span>Treasury Bill</span></div>
-      <canvas id="tbillChart" style="max-height:160px;margin-bottom:10px"></canvas>
+      <div class="panel-title pt-row"><span>Treasury Bill</span><span class="mini-gran" id="tbill-gran-btns">
+        <button class="mg-btn" id="tbill-btn-3m" onclick="selectTbillTenure('3m',this)" style="color:#4da3e8;border-color:#4da3e8">3M</button>
+        <button class="mg-btn" id="tbill-btn-6m" onclick="selectTbillTenure('6m',this)" style="color:#c8a84b;border-color:#c8a84b">6M</button>
+        <button class="mg-btn" id="tbill-btn-12m" onclick="selectTbillTenure('12m',this)" style="color:#6dd4a0;border-color:#6dd4a0">12M</button>
+        <button class="mg-btn active" id="tbill-btn-all" onclick="selectTbillTenure('all',this)" style="color:#fff;border-color:#5a7a9a;background:#1a3050">All</button>
+      </span></div>
+      <canvas id="tbillChart" style="max-height:160px;margin-bottom:6px"></canvas>
+      <div id="tbill-stat" class="chart-stat-bar" style="display:none;margin-bottom:8px"></div>
       <table style="font-size:10px;margin-bottom:12px">
         <thead><tr><th>Auction Date</th><th>3M</th><th>6M</th><th>12M</th></tr></thead>
         <tbody id="tbillRows"></tbody>
@@ -885,6 +891,44 @@ function setChartGran(key,g,btn){
   if(lastData)buildCharts(lastData);
 }
 
+// Toggle individual 3M / 6M / 12M T-Bill lines
+// T-Bill tenure selector — 3M / 6M / 12M / All
+let _tbillTenure='all';  // current selection
+function selectTbillTenure(tenure,btn){
+  const chart=charts&&charts.tbill;if(!chart)return;
+  _tbillTenure=tenure;
+  // Button states
+  const clr={'3m':'#4da3e8','6m':'#c8a84b','12m':'#6dd4a0','all':'#fff'};
+  const ids={'3m':'tbill-btn-3m','6m':'tbill-btn-6m','12m':'tbill-btn-12m','all':'tbill-btn-all'};
+  const vis={0:tenure==='3m'||tenure==='all',1:tenure==='6m'||tenure==='all',2:tenure==='12m'||tenure==='all'};
+  Object.keys(ids).forEach(t=>{
+    const b=document.getElementById(ids[t]);if(!b)return;
+    const on=t===tenure;
+    b.classList.toggle('active',on);
+    b.style.color=on?clr[t]:'#5a7a9a';
+    b.style.borderColor=on?(t==='all'?'#5a7a9a':clr[t]):'#1a3050';
+    b.style.background=on?(t==='all'?'#1a3050':'rgba(13,30,56,0.8)'):'#0a1628';
+  });
+  [0,1,2].forEach(i=>{chart.getDatasetMeta(i).hidden=!vis[i];});
+  chart.update();
+  // Stat bar
+  const statEl=document.getElementById('tbill-stat');
+  if(!statEl)return;
+  if(tenure==='all'){statEl.style.display='none';statEl.innerHTML='';return;}
+  // Build comparison bar from global data
+  const d=window._lastRenderData;
+  const rows=(d&&d.tbills)||[];
+  const keyMap={'3m':'m3','6m':'m6','12m':'m12'};
+  const key=keyMap[tenure];
+  const latest=rows[0]||{},prev=rows[1]||{};
+  const lv=parseFloat(latest[key])||null,pv=parseFloat(prev[key])||null;
+  // Use same renderStatBar as other charts — [prev, latest] order, labels [prevDate, latestDate]
+  const latDate=latest.date?fmtDY(latest.date):'Latest';
+  const prevDate=prev.date?fmtDY(prev.date):'Previous';
+  statEl.style.display='block';
+  renderStatBar('tbill-stat',[pv,lv],[prevDate,latDate],'%',2);
+}
+
 function startPolling(){stopPolling();pollTimer=setInterval(()=>loadData(true),POLL_INTERVAL);}
 function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
 
@@ -1140,8 +1184,42 @@ function renderBondTxnVol(d){
     }
   });
 }
+function renderStatBar(elId,values,labels,unit,decimals){
+  const el=document.getElementById(elId);if(!el)return;
+  const vals=values.filter(v=>v!=null&&!isNaN(v));
+  if(vals.length===0){el.innerHTML='<div class="np">Not published yet</div>';return;}
+  if(vals.length<2){el.innerHTML="";return;}
+  const prev=vals[vals.length-2], curr=vals[vals.length-1];
+  const diff=+(curr-prev).toFixed(decimals);
+  const pct=prev!==0?+((diff/Math.abs(prev))*100).toFixed(2):0;
+  const isUp=diff>0,isFlat=diff===0;
+  const arrow=isFlat?"▸":isUp?"▲":"▼";
+  const cls=isFlat?"flat":isUp?"up":"down";
+  const fmt=v=>{if(v==null)return"—";const n=typeof v==="number"?v:parseFloat(v);return isNaN(n)?"—":n.toFixed(decimals);};
+  // prev label
+  const prevLbl=labels&&labels.length>=2?labels[labels.length-2]:"Prev";
+  const currLbl=labels&&labels.length>=1?labels[labels.length-1]:"Latest";
+  el.innerHTML=`<div class="chart-stats">
+    <div class="cs-item">
+      <div class="cs-label">Previous <span style="color:#3a5a7a">(${prevLbl})</span></div>
+      <div class="cs-val">${fmt(prev)}<span class="cs-unit"> ${unit}</span></div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-label">Latest <span style="color:#3a5a7a">(${currLbl})</span></div>
+      <div class="cs-val" style="color:#fff">${fmt(curr)}<span class="cs-unit"> ${unit}</span></div>
+    </div>
+    <div class="cs-item">
+      <div class="cs-label">Difference</div>
+      <div class="cs-chg ${cls}">${arrow} ${Math.abs(diff).toFixed(decimals)} <span style="opacity:.75">(${isUp?"+":""}${pct}%)</span></div>
+    </div>
+  </div>`;
+}
+
+// ── Global date helpers (used by selectTbillTenure and render) ──
+function fmtDY(s){if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();}
+
 function render(d){
-  lastData=d;
+  lastData=d;window._lastRenderData=d;
   const td=slToday();
   {const el=document.getElementById("dateDisplay");if(el)el.innerHTML=fmtOrd(td);}
   const lu=document.getElementById("last-updated");
@@ -1161,7 +1239,7 @@ function render(d){
 
   const tb=document.getElementById("tbillRows");tb.innerHTML="";
   // Helper: append current year to short dates like "16 Jun" → "16 Jun 2026"
-  const fmtDY=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
+  const fmtDY_local=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};// alias kept for safety
   // show only the 4 most recent auctions (d.tbills is newest-first)
   (d.tbills||[]).slice(0,4).forEach(r=>{const tr=document.createElement("tr");const v=x=>{if(x==null||String(x).trim()===""||String(x).trim()==="0")return"—";const _n=parseFloat(String(x).replace(/,/g,""));return isNaN(_n)?String(x).trim():_n.toFixed(2);};tr.innerHTML=`<td>${fmtDY(r.date)}</td><td>${v(r.m3)}</td><td>${v(r.m6)}</td><td>${v(r.m12)}</td>`;tb.appendChild(tr);});
   // Last Month / Last Year reference rows
@@ -1508,37 +1586,7 @@ function buildCharts(d){
   charts.liq=new Chart(document.getElementById("liqChart"),{type:"line",data:{labels:liqAg.labels,datasets:[{label:"Rs.Bn",data:pick(d.liquidity?.values||[],liqAg.idx),borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
   renderStatBar("liqStat",pick(d.liquidity?.values||[],liqAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;}),liqAg.labels,"Rs.Bn",2);
   recentTable("liqTbl",d.liquidity?.labels||[],d.liquidity?.values||[],"Rs.Bn",2);
-  // ── STAT BARS ──────────────────────────────────────────────
-  function renderStatBar(elId,values,labels,unit,decimals){
-    const el=document.getElementById(elId);if(!el)return;
-    const vals=values.filter(v=>v!=null&&!isNaN(v));
-    if(vals.length===0){el.innerHTML='<div class="np">Not published yet</div>';return;}
-    if(vals.length<2){el.innerHTML="";return;}
-    const prev=vals[vals.length-2], curr=vals[vals.length-1];
-    const diff=+(curr-prev).toFixed(decimals);
-    const pct=prev!==0?+((diff/Math.abs(prev))*100).toFixed(2):0;
-    const isUp=diff>0,isFlat=diff===0;
-    const arrow=isFlat?"▸":isUp?"▲":"▼";
-    const cls=isFlat?"flat":isUp?"up":"down";
-    const fmt=v=>{if(v==null)return"—";const n=typeof v==="number"?v:parseFloat(v);return isNaN(n)?"—":n.toFixed(decimals);};
-    // prev label
-    const prevLbl=labels&&labels.length>=2?labels[labels.length-2]:"Prev";
-    const currLbl=labels&&labels.length>=1?labels[labels.length-1]:"Latest";
-    el.innerHTML=`<div class="chart-stats">
-      <div class="cs-item">
-        <div class="cs-label">Previous <span style="color:#3a5a7a">(${prevLbl})</span></div>
-        <div class="cs-val">${fmt(prev)}<span class="cs-unit"> ${unit}</span></div>
-      </div>
-      <div class="cs-item">
-        <div class="cs-label">Latest <span style="color:#3a5a7a">(${currLbl})</span></div>
-        <div class="cs-val" style="color:#fff">${fmt(curr)}<span class="cs-unit"> ${unit}</span></div>
-      </div>
-      <div class="cs-item">
-        <div class="cs-label">Difference</div>
-        <div class="cs-chg ${cls}">${arrow} ${Math.abs(diff).toFixed(decimals)} <span style="opacity:.75">(${isUp?"+":""}${pct}%)</span></div>
-      </div>
-    </div>`;
-  }
+  // renderStatBar is now global (defined before render)
   // ──────────────────────────────────────────────────────────
   destroyChart("cbsl");
   const cbAg=aggregateIdx(d.cbsl?.labels||[],GRANS.cbsl);
@@ -1593,7 +1641,9 @@ function buildCharts(d){
     : [...(d.tbills||[])].reverse();
   const fmtDY2=s=>{if(!s)return s;const t=String(s).trim();if(/\d{4}/.test(t))return t;return t+" "+new Date().getFullYear();};
   const tbAg={labels:tbr.map(r=>fmtDY2(r.date)),idx:tbr.map((_,i)=>i)};
-  charts.tbill=new Chart(document.getElementById("tbillChart"),{type:"line",data:{labels:tbAg.labels,datasets:[{label:"3M",data:pick(tbr.map(r=>parseFloat(r.m3)||null),tbAg.idx),borderColor:"#4da3e8",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"6M",data:pick(tbr.map(r=>parseFloat(r.m6)||null),tbAg.idx),borderColor:"#c8a84b",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"12M",data:pick(tbr.map(r=>parseFloat(r.m12)||null),tbAg.idx),borderColor:"#6dd4a0",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:9},boxWidth:8}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  charts.tbill=new Chart(document.getElementById("tbillChart"),{type:"line",data:{labels:tbAg.labels,datasets:[{label:"3M",data:pick(tbr.map(r=>parseFloat(r.m3)||null),tbAg.idx),borderColor:"#4da3e8",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"6M",data:pick(tbr.map(r=>parseFloat(r.m6)||null),tbAg.idx),borderColor:"#c8a84b",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false},{label:"12M",data:pick(tbr.map(r=>parseFloat(r.m12)||null),tbAg.idx),borderColor:"#6dd4a0",tension:0.3,pointRadius:0,pointHoverRadius:5,borderWidth:1.5,fill:false}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
+  // Re-apply tenure selection after chart rebuild (keeps state across data refreshes)
+  setTimeout(()=>selectTbillTenure(_tbillTenure,document.getElementById('tbill-btn-'+(_tbillTenure==='all'?'all':_tbillTenure))),0);
   destroyChart("yield");
   const yBHead=d.bonds?.headers||[], yBRows=d.bonds?.rows||[];
   const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
