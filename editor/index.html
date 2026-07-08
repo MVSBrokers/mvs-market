@@ -484,6 +484,19 @@ function renderSections(){
           const cols=t.defaults.map((def,i)=>`<div class="hdr-col"><div class="hdr-lbl">Col ${i+1}</div>${inp('headers.'+key+'.'+i, cur[i]!=null?cur[i]:def, 'text')}</div>`).join('');
           return `<div class="hdr-grp"><div class="hdr-name">${escHtml(t.name)}</div><div class="hdr-cols">${cols}</div></div>`;
         }).join('')+'</div>';
+    } else if(sec.id==='valuedates'){
+      const vd=Array.isArray(LOADED.valueDates)?LOADED.valueDates:[];
+      let h='<div class="ed-sub"><div class="ed-sub-t" style="color:#9fb6d4">Leave <b>Override Date</b> and <b>NOD</b> blank → dashboard auto-calculates from the SL calendar. Fill them in only when the auto-date is wrong (e.g. around local holidays).</div>';
+      h+='<div class="ed-scroll"><table class="ed-tbl"><thead><tr><th>Tenor</th><th>Override Date <span style="color:#5a7a9a;font-weight:400">(blank = auto)</span></th><th>Override NOD <span style="color:#5a7a9a;font-weight:400">(blank = auto)</span></th><th>Show</th></tr></thead><tbody>';
+      vd.forEach((v,i)=>{
+        const di=`<input class="ed" data-path="valueDates.${i}.date" data-kind="str" value="${escAttr(v.date==null?'':v.date)}" placeholder="e.g. 09.07.2026" style="min-width:110px">`;
+        const ni=`<input class="ed" data-path="valueDates.${i}.nod" data-kind="str" value="${escAttr(v.nod==null?'':v.nod)}" placeholder="e.g. 2" style="min-width:50px">`;
+        h+='<tr><td style="color:#c8a84b;font-weight:600;white-space:nowrap">'+escHtml(v.tenor||'')+'</td>'+
+          '<td>'+di+'</td><td>'+ni+'</td>'+
+          '<td><input type="checkbox" class="ed" data-path="valueDates.'+i+'.show" data-kind="bool"'+(v.show!==false?' checked':'')+'></td></tr>';
+      });
+      h+='</tbody></table></div></div>';
+      body=h;
     } else if(sec.id==='tbonds'){
       const b=(LOADED.bonds&&typeof LOADED.bonds==='object')?LOADED.bonds:{headers:[],rows:[]};
       const hdrs=Array.isArray(b.headers)?b.headers:[];
@@ -808,7 +821,14 @@ function parseWorkbook(wb,XLSX){
   o.fxSummary=[];o.valueDates=[];
   if(orp.length){
     for(let i=2;i<orp.length;i++)if(orp[i][0]!=null)o.fxSummary.push({tenor:String(orp[i][0]).trim(),volume:num(orp[i][1]),wa:num(orp[i][2])});
-    for(let i=2;i<orp.length;i++)if(orp[i][4]!=null)o.valueDates.push({tenor:String(orp[i][4]).trim(),date:orp[i][5]instanceof Date?lbl(orp[i][5]):(orp[i][5]==null?'':String(orp[i][5]).trim()),nod:orp[i][6]==null?'':String(orp[i][6]).trim(),show:true});
+    for(let i=2;i<orp.length;i++)if(orp[i][4]!=null){
+      const tenor=String(orp[i][4]).trim();
+      const excelDate=orp[i][5] instanceof Date?lbl(orp[i][5]):(orp[i][5]==null?null:String(orp[i][5]).trim());
+      const excelNod=orp[i][6]==null?null:String(orp[i][6]).trim();
+      // Preserve any manual override already in LOADED — only overwrite if Excel has a real value
+      const existing=Array.isArray(LOADED&&LOADED.valueDates)?LOADED.valueDates.find(v=>v.tenor===tenor):null;
+      o.valueDates.push({tenor,date:excelDate!=null?excelDate:(existing&&existing.date||''),nod:excelNod!=null?excelNod:(existing&&existing.nod||''),show:true});
+    }
   }
   const mc=S(find('macroeconomy')||'');
   if(mc.length){
