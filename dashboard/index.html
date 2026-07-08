@@ -1108,7 +1108,11 @@ function renderBondTxnVol(d){
   const closeEl=document.getElementById('bondtxn-close');
   const ctx=document.getElementById('bondtxnChart');
   const fmtN=v=>{if(v==null||v==='')return'—';const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v):n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});};
-  if(closeEl&&bv.date)closeEl.innerHTML=fmtDayFirstOrd(bv.date);
+  // Persist date across renders — only update when a real date is available, restore from localStorage otherwise
+  const _storedBtDate=localStorage.getItem('mvs_btxn_date')||'';
+  const _bvDate=bv.date||(d&&d.closingDate&&String(d.closingDate).trim())||_storedBtDate||null;
+  if(bv.date)localStorage.setItem('mvs_btxn_date',bv.date);
+  if(closeEl&&_bvDate)closeEl.innerHTML=fmtDayFirstOrd(_bvDate);
   if(!rows.length){
     if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}return;
   }
