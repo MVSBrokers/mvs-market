@@ -5072,5 +5072,7 @@
    "Month",
    "Reserve ($)"
   ]
- }
+ },
+ "billAucLink": "",
+ "bondAucLink": "https://www.treasury.gov.lk/api/file/ab68605d-fab8-40d6-b2aa-9b4823daca4d"
 }
