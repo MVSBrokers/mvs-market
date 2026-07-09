@@ -1466,7 +1466,8 @@ function renderExtras(d){
    const cdCls=n=>n==null?'far':(n<=1?'today':n<=5?'soon':'far');
    const billNext=(d.billAuctions||[]).find(x=>x.auction===nb), bondNext=(d.bondAuctions||[]).find(x=>x.auction===nbo);
    // For T-bill card: look up matching tbillAuction entry to get offered/accepted totals
-   const aucCard=(title,x,isBond)=>{if(!x)return '<div class="lc-h">'+title+'</div><div class="lc-none">No upcoming auction</div>';const dy=daysTo(x.auction);
+   const aucLinkBtn=lk=>{lk=lk&&String(lk).trim();return (lk&&/^https?:\/\//i.test(lk))?'<a href="'+escHtml(lk)+'" target="_blank" rel="noopener noreferrer" class="news-more-btn" style="margin-top:9px;margin-left:8px;padding:3px 10px;font-size:10px;vertical-align:middle">More details →</a>':'';};
+   const aucCard=(title,x,isBond,link)=>{if(!x)return '<div class="lc-h">'+title+'</div><div class="lc-none">No upcoming auction</div>';const dy=daysTo(x.auction);
      let html='<div class="lc-h">'+title+'</div>'
        +'<div class="lc-row"><span class="lc-k">Auction Date</span><span class="lc-v">'+isoShort(x.auction)+'</span></div>'
        +'<div class="lc-row"><span class="lc-k">Settlement</span><span class="lc-v">'+isoShort(x.settle)+'</span></div>'
@@ -1476,10 +1477,10 @@ function renderExtras(d){
        const amtDisplay=amtStr==='TBD'?'To be decided':(fmt2(x.amount)+' Bn');
        html+='<div class="lc-row"><span class="lc-k">Amount</span><span class="lc-v" style="'+(amtStr==='TBD'?'color:#7fa3c8;font-style:italic':'')+'">Rs. '+amtDisplay+'</span></div>';
      }
-     html+='<div class="lc-days '+cdCls(dy)+'">'+cdTxt(dy)+'</div>';
+     html+='<div class="lc-days '+cdCls(dy)+'" style="display:inline-block">'+cdTxt(dy)+'</div>'+aucLinkBtn(link);
      return html;};
-   {const e=document.getElementById('latest-bill-auc');if(e)e.innerHTML=aucCard('Next T-Bill Auction',billNext,false);}
-   {const e=document.getElementById('latest-bond-auc');if(e)e.innerHTML=aucCard('Next T-Bond Auction',bondNext,true);}
+   {const e=document.getElementById('latest-bill-auc');if(e)e.innerHTML=aucCard('Next T-Bill Auction',billNext,false,d.billAucLink);}
+   {const e=document.getElementById('latest-bond-auc');if(e)e.innerHTML=aucCard('Next T-Bond Auction',bondNext,true,d.bondAucLink);}
    const nextMats=(arr,n)=>(arr||[]).filter(x=>x&&x.show!==false&&_matUpcoming(x.maturity)).map(x=>({t:daysTo(x.maturity),x:x})).filter(m=>m.t!=null).sort((a,b)=>a.t-b.t).slice(0,n);
    const matEntry=(m,isBond)=>{const x=m.x;return '<div style="padding:7px 0;border-bottom:1px solid #14243d">'+
      '<div class="lc-row" style="border:none;padding:1px 0"><span class="lc-k">Maturity</span><span class="lc-v">'+isoShort(x.maturity)+' <span class="lc-days '+cdCls(m.t)+'" style="margin:0;padding:1px 7px">'+cdTxt(m.t)+'</span></span></div>'+
