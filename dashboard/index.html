@@ -1728,6 +1728,11 @@ function buildCharts(d){
 // no login required — load immediately
 loadData();
 startPolling();
+// When the tab/app comes back into view (phone unlocked, tab refocused, browser un-minimized after
+// being backgrounded a long time), fetch immediately instead of waiting for the next 20s poll tick —
+// background tabs/apps can have their timers throttled or fully suspended by the OS/browser.
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){loadData(true);startPolling();}});
+window.addEventListener('focus',()=>{loadData(true);});
 
 
 </script>
