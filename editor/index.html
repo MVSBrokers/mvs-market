@@ -196,8 +196,8 @@ const SECTIONS=[
  {id:'dxy',title:'US Dollar Index (DXY)',keys:['dxy'],group:'Global Markets'},
  {id:'fomc',title:'FOMC Decisions',keys:['fomc'],group:'Global Markets'},
  {id:'keydates',title:'Key Dates / Announcements (tick = show on live bar)',keys:['keyDates'],group:'Announcements'},
- {id:'billauc',title:'T-Bill Auction Schedule',keys:['billAuctions'],group:'Announcements'},
- {id:'bondauc',title:'T-Bond Auction Schedule',keys:['bondAuctions'],group:'Announcements'},
+ {id:'billauc',title:'T-Bill Auction Schedule',keys:['billAuctions','billAucLink'],group:'Announcements'},
+ {id:'bondauc',title:'T-Bond Auction Schedule',keys:['bondAuctions','bondAucLink'],group:'Announcements'},
  {id:'tbillout',title:'T-Bill Outstanding',keys:['tbillOut'],group:'Announcements'},
  {id:'tbondout',title:'T-Bond Outstanding',keys:['tbondOut'],group:'Announcements'},
  {id:'headers',title:'Column Headers (bond · inflation · tourism · remittances · reserves)',keys:['headers'],group:'Settings'},
@@ -319,6 +319,16 @@ const oldNewsLink =
     ? LOADED.newsLink
     : '';
 
+// Preserve manually entered "More details" links for the auction cards (not derived from the Excel)
+const oldBillAucLink =
+  LOADED && typeof LOADED.billAucLink === 'string'
+    ? LOADED.billAucLink
+    : '';
+const oldBondAucLink =
+  LOADED && typeof LOADED.bondAucLink === 'string'
+    ? LOADED.bondAucLink
+    : '';
+
 const oldHidden =
   LOADED && LOADED.hidden
     ? JSON.parse(JSON.stringify(LOADED.hidden))
@@ -338,6 +348,10 @@ if (oldNews.length) {
 
 // Restore the "More details" link after import
 LOADED.newsLink = oldNewsLink;
+
+// Restore the auction "More details" links after import
+LOADED.billAucLink = oldBillAucLink;
+LOADED.bondAucLink = oldBondAucLink;
 
 // Restore hidden settings
 LOADED.hidden = oldHidden;
@@ -546,6 +560,12 @@ function renderSections(){
       h+='</tbody></table></div>';
       h+='<button type="button" class="row-add" onclick="bondAddRow()">+ Add maturity (row)</button> <button type="button" class="row-add" onclick="bondAddCol()">+ Add date (column)</button></div>';
       body=h;
+    } else if(sec.id==='billauc'){
+      body='<div class="ed-sub"><div class="ed-sub-t">"More details" link for Next T-Bill Auction (optional)</div><input id="billauc-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'More details\' button under Next T-Bill Auction that opens this" value="'+escAttr(LOADED.billAucLink||'')+'"></div>'
+        + (LOADED.billAuctions!=null?`<div class="ed-sub"><div class="ed-sub-t">billAuctions</div>${renderNode(LOADED.billAuctions,'billAuctions')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">billAuctions</div><span class="muted">No data in this workbook.</span></div>');
+    } else if(sec.id==='bondauc'){
+      body='<div class="ed-sub"><div class="ed-sub-t">"More details" link for Next T-Bond Auction (optional)</div><input id="bondauc-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'More details\' button under Next T-Bond Auction that opens this" value="'+escAttr(LOADED.bondAucLink||'')+'"></div>'
+        + (LOADED.bondAuctions!=null?`<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div>${renderNode(LOADED.bondAuctions,'bondAuctions')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div><span class="muted">No data in this workbook.</span></div>');
     } else {
       body=sec.keys.map(k=>{
         if(LOADED[k]==null)return `<div class="ed-sub"><div class="ed-sub-t">${k}</div><span class="muted">No data in this workbook.</span></div>`;
@@ -606,6 +626,10 @@ function applyEdits(){
   if(nb&&LOADED){let lines=nb.value.split(/\r?\n/).map(s=>s.replace(/\s+$/,''));while(lines.length&&!lines[0].trim())lines.shift();while(lines.length&&!lines[lines.length-1].trim())lines.pop();LOADED.marketNews=lines;}
   const nlk=document.getElementById('news-link');
   if(nlk&&LOADED)LOADED.newsLink=nlk.value.trim();
+  const balk=document.getElementById('billauc-link');
+  if(balk&&LOADED)LOADED.billAucLink=balk.value.trim();
+  const bolk=document.getElementById('bondauc-link');
+  if(bolk&&LOADED)LOADED.bondAucLink=bolk.value.trim();
   saveLocal();
 }
 function recomputeMeta(p){
