@@ -17,25 +17,25 @@
   }
  ],
  "callMarket": {
-  "min": 9.1,
+  "min": 9,
   "max": 9.25,
-  "wa": 9.15,
-  "vol": 16.6
+  "wa": 9.09,
+  "vol": 23.32
  },
  "repoMarket": {
-  "min": 9.08,
-  "max": 9.25,
-  "wa": 9.16,
-  "vol": 96.61
+  "min": 9.03,
+  "max": 9.23,
+  "wa": 9.1,
+  "vol": 84.92
  },
  "windows": {
   "sdf": {
-   "cur": 96.08,
-   "prev": 120.97
+   "cur": 104.04,
+   "prev": 96.08
   },
   "slf": {
-   "cur": 0.19,
-   "prev": 0
+   "cur": 0.03,
+   "prev": 0.19
   }
  },
  "liquidity": {
@@ -164,7 +164,8 @@
    "3 Jul",
    "6 Jul",
    "7 Jul",
-   "8 Jul"
+   "8 Jul",
+   "9 Jul"
   ],
   "values": [
    128.14,
@@ -291,10 +292,11 @@
    128.47,
    132.29,
    134.77,
-   125.89
+   125.89,
+   139.01
   ],
-  "current": 125.89,
-  "previous": 134.77
+  "current": 139.01,
+  "previous": 125.89
  },
  "bonds": {
   "headers": [
@@ -2023,7 +2025,8 @@
    "3 Jul",
    "6 Jul",
    "7 Jul",
-   "8 Jul"
+   "8 Jul",
+   "9 Jul"
   ],
   "values": [
    2508.92,
@@ -2124,6 +2127,7 @@
    2507.92,
    2507.92,
    2507.92,
+   2498.12,
    2498.12,
    2498.12,
    2498.12,
@@ -5088,8 +5092,8 @@
  ],
  "execSummary": {
   "usdlkr": "335.90/ 336.30",
-  "liqDir": "decreased",
-  "liqDelta": 8.88
+  "liqDir": "increased",
+  "liqDelta": 13.12
  },
  "marketNews": [
   "Treasury Bill Auction Results",
