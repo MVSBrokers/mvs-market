@@ -1263,7 +1263,7 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-07-07",
+  "date": "2026-07-09",
   "rows": [
    {
     "isin": "LKB00827J152",
@@ -1639,57 +1639,47 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 37.25,
-   "wa": 33471
+   "volume": 13.9,
+   "wa": 335.46
   },
   {
    "tenor": "Tom",
-   "volume": 1,
-   "wa": 334.62
+   "volume": null,
+   "wa": null
   },
   {
    "tenor": "Cash",
-   "volume": 28.25,
-   "wa": 334.6
+   "volume": 14.9,
+   "wa": 335.38
   },
   {
    "tenor": "Sub Total",
-   "volume": 66.5,
+   "volume": 28.8,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 10.5,
-   "wa": 335.12
+   "volume": 9,
+   "wa": 336.09
   },
   {
-   "tenor": "2M",
-   "volume": 0.25,
-   "wa": 337.66
+   "tenor": "2W",
+   "volume": 0.4,
+   "wa": 336.35
   },
   {
-   "tenor": "3M",
-   "volume": 3.5,
-   "wa": 339.68
-  },
-  {
-   "tenor": "4M",
-   "volume": 0.17,
-   "wa": 341.6
-  },
-  {
-   "tenor": "5M",
-   "volume": 0.5,
-   "wa": 343.5
+   "tenor": "1M",
+   "volume": 5.5,
+   "wa": 337.07
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 14.92,
+   "volume": 14.9,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 81.42,
+   "volume": 43.7,
    "wa": null
   }
  ],
@@ -3659,7 +3649,7 @@
   },
   {
    "label": "Next T-Bill Auction Day",
-   "date": "2026-07-08",
+   "date": "2026-07-15",
    "show": true
   },
   {
