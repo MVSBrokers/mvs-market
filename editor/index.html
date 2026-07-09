@@ -859,14 +859,9 @@ function parseWorkbook(wb,XLSX){
     let sec=[];for(let i=2;i<fi.length;i++)if(fi[i][26]!=null)sec.push({maturity:String(fi[i][26]).trim(),bid:num(fi[i][27]),ask:num(fi[i][28]),show:true});
     o.bondSecondary=sec;
     // Outright Treasury Bond Transaction Volumes — cols 30-33
-    {const titleRow=fi[0]&&fi[0][30]?String(fi[0][30]):'';
-     const MON3t=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
-     let isoDate=null;
-     const m1=titleRow.match(/(\d{1,2})[\s\-]+([A-Za-z]+)[\s\-]+(\d{4})/);
-     if(m1){const mo=MON3t.indexOf(m1[2].toLowerCase().slice(0,3));if(mo>=0)isoDate=m1[3]+'-'+String(mo+1).padStart(2,'0')+'-'+String(m1[1]).padStart(2,'0');}
-     if(!isoDate){const m2=titleRow.match(/(\d{1,2})[.\-\/](\d{1,2})[.\-\/](\d{4})/);if(m2)isoDate=m2[3]+'-'+String(m2[2]).padStart(2,'0')+'-'+String(m2[1]).padStart(2,'0');}
-     if(!isoDate){const m3=titleRow.match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);if(m3)isoDate=m3[1]+'-'+String(m3[2]).padStart(2,'0')+'-'+String(m3[3]).padStart(2,'0');}
-     if(!isoDate){const slN=new Date(Date.now()+330*60000);isoDate=slN.getUTCFullYear()+'-'+String(slN.getUTCMonth()+1).padStart(2,'0')+'-'+String(slN.getUTCDate()).padStart(2,'0');}
+    // Date is MANUAL ONLY: never auto-parsed from the Excel title cell, never defaulted to today's date.
+    // It is preserved from whatever was previously loaded/edited, and stays blank until the user sets it by hand in the editor.
+    {const isoDate=(LOADED&&LOADED.bondTransVol&&LOADED.bondTransVol.date)?LOADED.bondTransVol.date:'';
      let btvRows=[];for(let i=2;i<fi.length;i++){const isin=fi[i][30];if(!isin||typeof isin!=='string')continue;
        const matRaw=fi[i][31];let matISO='';
        if(matRaw instanceof Date){const dt=new Date(matRaw.getTime()+432e5);matISO=dt.getUTCFullYear()+'-'+String(dt.getUTCMonth()+1).padStart(2,'0')+'-'+String(dt.getUTCDate()).padStart(2,'0');}
