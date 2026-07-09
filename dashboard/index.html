@@ -404,7 +404,7 @@ canvas{max-width:100%!important}
     <div class="panel">
       <div class="panel-title">Treasury Bond Yield(%)<span class="close-date" id="tbond-close"></span></div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
-      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#ff8a78">low</span> → <span style="color:#7ee0a8">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
+      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span> → <span style="color:#ff8a78">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
         <table class="bond-freeze" style="font-size:9px">
           <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
@@ -874,7 +874,7 @@ function bondDisplay(v){
 function heatColor(v,min,max){
   if(v==null||!(max>min))return "transparent";
   const t=Math.max(0,Math.min(1,(v-min)/(max-min)));
-  const hue=t*140;               // low yield = red (0), high yield = green (140)ld = red (0)
+  const hue=(1-t)*140;           // low yield = green (140), high yield = red (0)
   return "hsla("+hue.toFixed(0)+",78%,52%,"+(0.30+t*0.26).toFixed(2)+")";  // brighter, deeper for higher yields
 }
 // Colour a cell by the DIRECTION of yield change vs the previous day: down = green, up = red.
