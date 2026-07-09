@@ -223,9 +223,9 @@ canvas{max-width:100%!important}
 .bond-freeze th:nth-child(-n+3){background:#091525!important;z-index:3}
 @media(max-width:480px){
   .bond-freeze{font-size:8px!important}
-  .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){min-width:56px;max-width:56px}
-  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:56px;min-width:56px;max-width:56px}
-  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:112px;min-width:64px;max-width:64px}
+  .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){min-width:80px;max-width:80px;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}
+  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:80px;min-width:52px;max-width:52px}
+  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:132px;min-width:56px;max-width:56px}
 }
 .event-strip.show{display:flex}
 .latest-card{border:1px solid #1a3050;border-radius:9px;padding:12px 14px;background:rgba(13,30,56,0.5)}
@@ -416,8 +416,8 @@ canvas{max-width:100%!important}
 
   <div class="panel" style="width:fit-content;min-width:300px">
     <div class="panel-title" data-sec="secondary">T-Bill Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
-    <div style="max-height:320px;overflow-y:auto;overflow-x:auto;-webkit-overflow-scrolling:touch">
-      <table style="font-size:10px;border-collapse:collapse;white-space:nowrap;min-width:260px;width:100%">
+    <div style="max-height:320px;overflow-y:auto">
+      <table style="font-size:10px;border-collapse:collapse;white-space:nowrap">
         <thead>
           <tr>
             <th style="text-align:left;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Maturity Date</th>
