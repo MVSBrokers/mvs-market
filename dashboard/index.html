@@ -102,6 +102,7 @@ table tr:hover td{background:#132540}
 #load-err{display:none;background:#1a0808;border:1px solid #5a2020;border-radius:8px;padding:14px;color:#e87a4d;font-size:12px;margin-bottom:14px;text-align:center}
 #loading-bar{height:3px;background:linear-gradient(90deg,#c8a84b,#4da3e8);border-radius:2px;margin-bottom:14px;animation:slide 1.2s ease-in-out infinite;display:none}
 #data-toast{position:fixed;bottom:22px;right:18px;z-index:9999;background:#0d2a14;border:1.5px solid #4caf50;border-radius:10px;padding:11px 20px 11px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 18px rgba(0,0,0,0.45);opacity:0;pointer-events:none;transition:opacity 0.35s ease;min-width:200px}
+#event-notif-card{position:fixed;bottom:84px;right:18px;z-index:9998;background:#0b1830;border:1.5px solid #c8a84b;border-radius:12px;padding:13px 15px;min-width:255px;max-width:310px;box-shadow:0 8px 28px rgba(0,0,0,.6);display:none;opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease}
 #data-toast.show{opacity:1;pointer-events:auto}
 #data-toast .dt-icon{font-size:18px;line-height:1}
 #data-toast .dt-body{display:flex;flex-direction:column;gap:2px}
@@ -223,10 +224,10 @@ canvas{max-width:100%!important}
 .bond-freeze th:nth-child(-n+3){background:#091525!important;z-index:3}
 @media(max-width:480px){
   .bond-freeze{font-size:8px!important}
-  .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){min-width:74px;max-width:74px;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.15}
-  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:74px;min-width:44px;max-width:44px}
-  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:118px;min-width:44px;max-width:44px}
-  .bond-freeze th:nth-child(2),.bond-freeze th:nth-child(3){white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1;padding-top:3px;padding-bottom:3px}
+  .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){min-width:70px;max-width:70px;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.2}
+  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:70px;min-width:52px;max-width:52px;white-space:normal;overflow:visible;text-overflow:clip;text-align:center}
+  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:122px;min-width:52px;max-width:52px;white-space:normal;overflow:visible;text-overflow:clip;text-align:center;box-shadow:3px 0 5px rgba(0,0,0,.4)}
+  .bond-freeze th:nth-child(2),.bond-freeze th:nth-child(3){line-height:1.15;padding-top:3px;padding-bottom:3px}
 }
 .event-strip.show{display:flex}
 .latest-card{border:1px solid #1a3050;border-radius:9px;padding:12px 14px;background:rgba(13,30,56,0.5)}
@@ -242,7 +243,23 @@ canvas{max-width:100%!important}
 .lc-none{color:#5a7a9a;font-style:italic;font-size:11px}
 .news-more-btn{display:inline-block;font-size:12px;font-weight:700;color:#0a1628;background:#c8a84b;padding:8px 16px;border-radius:7px;text-decoration:none;transition:.15s}
 .news-more-btn:hover{background:#dcc069}
-.event-strip::-webkit-scrollbar{height:5px}
+#notif-btn{background:transparent;border:1.5px solid #1a3050;border-radius:7px;cursor:pointer;font-size:16px;line-height:1;padding:5px 9px;color:#5a7a9a;transition:border-color .15s,color .15s,background .15s;flex-shrink:0}
+#notif-btn:hover{border-color:#4da3e8;color:#4da3e8}
+#notif-btn.notif-on{border-color:#6dd4a0;color:#6dd4a0;background:rgba(109,212,160,0.09)}
+#notif-btn.notif-blocked{border-color:#5a2e2e;color:#ff8a78;cursor:not-allowed}
+/* notif-drop */
+#notif-drop{position:fixed;top:60px;right:16px;z-index:9998;background:#0b1830;border:1.5px solid #1a3050;border-radius:12px;padding:14px 16px;min-width:230px;box-shadow:0 8px 32px rgba(0,0,0,.55);display:none}
+#notif-drop.open{display:block}
+#notif-drop .nd-title{font-size:12px;font-weight:700;color:#c8a84b;margin-bottom:8px;letter-spacing:.4px}
+#notif-drop .nd-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:11px;color:#9fb6d4}
+#notif-drop .nd-toggle{position:relative;display:inline-block;width:38px;height:20px;flex-shrink:0}
+#notif-drop .nd-toggle input{opacity:0;width:0;height:0}
+#notif-drop .nd-slider{position:absolute;inset:0;background:#1a3050;border-radius:20px;transition:.2s;cursor:pointer}
+#notif-drop .nd-slider:before{content:"";position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:#5a7a9a;border-radius:50%;transition:.2s}
+#notif-drop .nd-toggle input:checked+.nd-slider{background:#1f7a4d}
+#notif-drop .nd-toggle input:checked+.nd-slider:before{transform:translateX(18px);background:#6dd4a0}
+#notif-drop .nd-hint{font-size:9.5px;color:#5a7a9a;margin-top:8px;line-height:1.4}
+
 .event-strip::-webkit-scrollbar-thumb{background:#1a3050;border-radius:3px}
 .es-lead{flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#c8a84b;padding-right:4px;white-space:nowrap}
 .es-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;background:rgba(13,30,56,0.7);border:1px solid #1a3050;border-radius:7px;padding:4px 10px;white-space:nowrap;cursor:pointer;transition:.15s}
@@ -266,8 +283,18 @@ canvas{max-width:100%!important}
     <div class="hdr-right">
       <div class="hdr-date" id="dateDisplay">—</div>
       <span class="hdr-live">LIVE</span>
+      <button id="notif-btn" onclick="toggleNotifDrop()" title="Notifications">🔕</button>
       <span id="last-updated" style="font-size:10px;color:#7fa3c8;margin-right:8px"></span>
     </div>
+  </div>
+  <!-- Notification settings dropdown -->
+  <div id="notif-drop">
+    <div class="nd-title">🔔 Push Notifications</div>
+    <div class="nd-row">
+      <span>Notify when data updates</span>
+      <label class="nd-toggle"><input type="checkbox" id="notif-chk" onchange="onNotifChk(this)"><span class="nd-slider"></span></label>
+    </div>
+    <div class="nd-hint" id="notif-hint">Enable to receive a notification whenever MVS Market Watch data is refreshed.</div>
   </div>
 
   <!-- LIVE MARKET NEWS RIBBON -->
@@ -635,6 +662,97 @@ function slWorkDay(back){
   for(let n=back||0;n>0;n--){do{d.setDate(d.getDate()-1);}while(!isSLWork(d));}
   return d;
 }
+function slNextWork(){
+  const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04",
+    "2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13",
+    "2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29",
+    "2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08",
+    "2026-11-24","2026-12-23","2026-12-25","2027-02-04"]);
+  const isSLWork=d=>{if(d.getDay()===0||d.getDay()===6)return false;
+    const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    return !SL_HOL.has(iso);};
+  const slNow=new Date(Date.now()+330*60000);
+  let d=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
+  d.setDate(d.getDate()+1);
+  while(!isSLWork(d))d.setDate(d.getDate()+1);
+  return d;
+}
+
+// ── TOMORROW-EVENT NOTIFICATIONS ─────────────────────────────
+let _lastEvNotifDate=localStorage.getItem('mvs_evn_date')||'';
+const _MON_S=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const _dISO=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const _dFmt=d=>d.getDate()+' '+_MON_S[d.getMonth()];
+
+function _checkTomorrowEvents(data){
+  const today=slToday();
+  const todayISO=_dISO(today);
+  if(_lastEvNotifDate===todayISO)return; // already checked today
+  const next=slNextWork();
+  const nextISO=_dISO(next);
+  const nextFmt=_dFmt(next);
+  const eqDay=dateStr=>{const dt=parseEventDate(dateStr);return dt&&_dISO(dt)===nextISO;};
+  const events=[];
+  // Key dates
+  (data.keyDates||[]).filter(e=>e.show!==false&&eqDay(e.date)).forEach(e=>{
+    events.push({label:e.label,page:'page-news',anchor:null});});
+  // T-Bill auctions
+  (data.billAuctions||[]).filter(e=>e.show!==false&&eqDay(e.auction)).forEach(e=>{
+    events.push({label:'T-Bill Auction'+(e.tenor?' · '+e.tenor:''),page:'page-fi',anchor:'tbillChart'});});
+  // T-Bond auctions
+  (data.bondAuctions||[]).filter(e=>e.show!==false&&eqDay(e.auction)).forEach(e=>{
+    events.push({label:'T-Bond Auction'+(e.tenor?' · '+e.tenor:''),page:'page-fi',anchor:'tbond-close'});});
+  // T-Bill maturities
+  (data.tbillOut||[]).filter(e=>e.show!==false&&eqDay(e.maturity)).forEach(e=>{
+    events.push({label:'T-Bill Maturity'+(e.isin?' · '+e.isin:''),page:'page-news',anchor:null});});
+  // T-Bond maturities
+  (data.tbondOut||[]).filter(e=>e.show!==false&&eqDay(e.maturity)).forEach(e=>{
+    events.push({label:'T-Bond Maturity'+(e.series?' · '+e.series:e.isin?' · '+e.isin:''),page:'page-fi',anchor:null});});
+  if(!events.length)return;
+  _lastEvNotifDate=todayISO;
+  localStorage.setItem('mvs_evn_date',todayISO);
+  events.forEach((ev,i)=>setTimeout(()=>_sendEventNotif(ev,nextFmt),i*600));
+}
+
+function _sendEventNotif(ev,dateFmt){
+  _showEventCard('Tomorrow — '+dateFmt,ev.label,ev.page,ev.anchor);
+  if(!_notifOn||!_notifSupported()||Notification.permission!=='granted')return;
+  try{
+    const n=new Notification('MVS Market Watch — Tomorrow',{
+      body:ev.label+'\n'+dateFmt+' · Tap to view →',
+      tag:'mvs-ev-'+ev.label.replace(/\W+/g,'-').toLowerCase().slice(0,30),
+      renotify:true,silent:false
+    });
+    n.onclick=()=>{
+      window.focus();
+      const btn=document.querySelector('.nav-btn[onclick*="'+ev.page+'"]');
+      if(btn)btn.click();
+      if(ev.anchor)setTimeout(()=>{const el=document.getElementById(ev.anchor);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},180);
+      _showEventCard('Tomorrow — '+dateFmt,ev.label,ev.page,ev.anchor);
+      n.close();
+    };
+    setTimeout(()=>n.close(),14000);
+  }catch(e){}
+}
+
+let _encTimer=null;
+function _showEventCard(title,label,page,anchor){
+  const card=document.getElementById('event-notif-card');if(!card)return;
+  const nav=`const b=document.querySelector('.nav-btn[onclick*="${page}"]');if(b)b.click();${anchor?`setTimeout(()=>{const e=document.getElementById('${anchor}');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},180);`:''}document.getElementById('event-notif-card').style.opacity='0';setTimeout(()=>document.getElementById('event-notif-card').style.display='none',350);`;
+  card.innerHTML=`<div style="display:flex;align-items:flex-start;gap:11px">
+    <span style="font-size:22px;line-height:1;margin-top:2px">📅</span>
+    <div style="flex:1;cursor:pointer" onclick="${nav.replace(/"/g,'&quot;')}">
+      <div style="font-size:9.5px;color:#c8a84b;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">${escHtml(title)}</div>
+      <div style="font-size:13px;color:#eaf2fb;font-weight:700;line-height:1.3">${escHtml(label)}</div>
+      <div style="font-size:9px;color:#5a7a9a;margin-top:5px">Tap to view →</div>
+    </div>
+    <span onclick="document.getElementById('event-notif-card').style.display='none'" style="cursor:pointer;color:#3a5a7a;font-size:16px;padding:0 2px;line-height:1;margin-top:1px">✕</span>
+  </div>`;
+  card.style.display='block';
+  requestAnimationFrame(()=>{card.style.opacity='1';card.style.transform='translateY(0)';});
+  clearTimeout(_encTimer);
+  _encTimer=setTimeout(()=>{card.style.opacity='0';card.style.transform='translateY(8px)';setTimeout(()=>card.style.display='none',350);},9000);
+}
 // Opening Report date: report data is updated each morning around 8:30 AM SL time.
 // Before 8:30 AM, the report still shows the previous SL working day (not yet updated).
 // After 8:30 AM, it shifts to the working day before that (since today's update just happened).
@@ -955,7 +1073,126 @@ function showUpdateToast(){
   _toastTimer=setTimeout(()=>{toast.classList.remove('show');},4000);
 }
 
-let _lastDataHash=null;
+// ── SMART NOTIFICATIONS — section-aware ──────────────────────
+// Groups: what keys → what label → which page → scroll-to anchor
+const _NOTIF_GROUPS=[
+  {id:'mm',      keys:['callMarket','repoMarket','liquidity','windows','opr'],
+                 label:'Money Market rates updated',           page:'page-mm',  anchor:'mm-close'},
+  {id:'tbill',   keys:['tbillCurve','tbillAuction','tbillRef'],
+                 label:'T-Bill rates updated',                 page:'page-fi',  anchor:'tbillChart'},
+  {id:'bonds',   keys:['bonds','bondSecondary'],
+                 label:'Treasury Bond rates updated',          page:'page-fi',  anchor:'tbond-close'},
+  {id:'bondvol', keys:['bondTransVol'],
+                 label:'Bond Transaction Volumes updated',     page:'page-fi',  anchor:'bondtxnChart'},
+  {id:'fx',      keys:['usdlkr','fxSwaps','spot','crossRates','valueDates'],
+                 label:'USD/LKR & FX rates updated',           page:'page-fx',  anchor:'fxChart'},
+  {id:'fxvol',   keys:['fxSummary'],
+                 label:'FX Market Volume updated',             page:'page-fx',  anchor:'fxChart'},
+  {id:'inflation',keys:['inflation'],
+                 label:'Inflation data updated',               page:'page-macro',anchor:null},
+  {id:'news',    keys:['marketNews','execSummary'],
+                 label:'New market announcement',              page:'page-open', anchor:null},
+  // removed: macro (reserves/foreign/cbsl/etc), auc (billAuctions/bondAuctions)
+  // removed: global10y, gold, brent, wti, dxy, fomc
+];
+let _lastGroupHashes={};
+_NOTIF_GROUPS.forEach(g=>{_lastGroupHashes[g.id]=null;});
+
+function _groupHash(data,keys){
+  return JSON.stringify(keys.map(k=>data[k]??null));
+}
+function _checkAndNotify(newData){
+  _NOTIF_GROUPS.forEach(g=>{
+    const h=_groupHash(newData,g.keys);
+    const prev=_lastGroupHashes[g.id];
+    if(prev!==null&&prev!==h)_sendSectionNotif(g.label,g.page,g.anchor,g.id);
+    _lastGroupHashes[g.id]=h;
+  });
+}
+function _sendSectionNotif(label,page,anchor,gid){
+  // In-app toast shows what changed
+  _showDetailToast(label);
+  // Push notification
+  if(!_notifOn||!_notifSupported()||Notification.permission!=='granted')return;
+  const slNow=new Date(Date.now()+330*60000);
+  const hh=String(slNow.getUTCHours()).padStart(2,'0');
+  const mm_=String(slNow.getUTCMinutes()).padStart(2,'0');
+  try{
+    const n=new Notification('MVS Market Watch',{
+      body:label+'\n'+hh+':'+mm_+' SL  ·  Tap to view →',
+      tag:'mvs-'+gid,   // one slot per group — updates in-place, no stacking
+      renotify:true,
+      silent:false
+    });
+    n.onclick=()=>{
+      window.focus();
+      const btn=document.querySelector('.nav-btn[onclick*="'+page+'"]');
+      if(btn)btn.click();
+      if(anchor){setTimeout(()=>{const el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},150);}
+      n.close();
+    };
+    setTimeout(()=>n.close(),14000);
+  }catch(e){}
+}
+// Detail toast (shows what section changed — replaces generic toast)
+let _detailToastTimer=null;
+function _showDetailToast(label){
+  const toast=document.getElementById('data-toast');
+  const timeEl=document.getElementById('toast-time');
+  const titleEl=toast&&toast.querySelector('.dt-title');
+  if(!toast)return;
+  const slNow=new Date(Date.now()+330*60000);
+  const hh=String(slNow.getUTCHours()).padStart(2,'0');
+  const mm_=String(slNow.getUTCMinutes()).padStart(2,'0');
+  const MON_=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const dd=slNow.getUTCDate(),mo=MON_[slNow.getUTCMonth()];
+  if(titleEl)titleEl.textContent=label;
+  if(timeEl)timeEl.textContent=dd+' '+mo+' · '+hh+':'+mm_+' SL';
+  toast.classList.add('show');
+  clearTimeout(_detailToastTimer);
+  _detailToastTimer=setTimeout(()=>toast.classList.remove('show'),5000);
+}
+function _notifSupported(){return 'Notification' in window;}
+function _updateNotifUI(){
+  const btn=document.getElementById('notif-btn');
+  const chk=document.getElementById('notif-chk');
+  const hint=document.getElementById('notif-hint');
+  if(!_notifSupported()){
+    if(btn)btn.style.display='none';
+    if(hint)hint.textContent='Push notifications are not supported in this browser.';
+    return;
+  }
+  const perm=Notification.permission;
+  if(perm==='denied'){
+    if(btn){btn.textContent='🔕';btn.className='notif-blocked';btn.title='Notifications blocked — enable in browser/device settings';}
+    if(chk)chk.checked=false;
+    if(hint)hint.textContent='Notifications are blocked. Go to your browser/device Settings → Site Settings → Notifications and allow this site.';
+    _notifOn=false;return;
+  }
+  const on=_notifOn&&perm==='granted';
+  if(btn){btn.textContent=on?'🔔':'🔕';btn.className=on?'notif-on':'';btn.title=on?'Notifications ON':'Enable notifications';}
+  if(chk)chk.checked=on;
+  if(hint)hint.textContent=on?'You will receive a notification whenever Market Watch data is refreshed.':'Toggle on to receive push notifications when data updates.';
+}
+async function onNotifChk(chk){
+  if(!_notifSupported())return;
+  if(!chk.checked){_notifOn=false;localStorage.setItem('mvs_notif','0');_updateNotifUI();return;}
+  if(Notification.permission==='denied'){chk.checked=false;_updateNotifUI();return;}
+  const perm=await Notification.requestPermission();
+  _notifOn=perm==='granted';
+  localStorage.setItem('mvs_notif',_notifOn?'1':'0');
+  _updateNotifUI();
+  if(_notifOn){try{new Notification('MVS Market Watch',{body:'Notifications enabled ✓ You will be alerted when data updates.',tag:'mvs-notif-test',silent:true});}catch(e){}}
+}
+function toggleNotifDrop(){
+  const drop=document.getElementById('notif-drop');
+  if(!drop)return;
+  drop.classList.toggle('open');
+  if(drop.classList.contains('open'))_updateNotifUI();
+}
+// Close dropdown when clicking outside
+document.addEventListener('click',e=>{const d=document.getElementById('notif-drop');const b=document.getElementById('notif-btn');if(d&&!d.contains(e.target)&&e.target!==b)d.classList.remove('open');});
+_updateNotifUI();
 let _lastNewsHash=null;
 async function loadData(silent=false){
   const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
@@ -970,8 +1207,10 @@ async function loadData(silent=false){
     if(txt===_lastDataHash)return;
     const isFirst=_lastDataHash===null;
     _lastDataHash=txt;
-    render(JSON.parse(txt));
-    // if(!isFirst)showUpdateToast();   // toast disabled per request — no popup on data refresh
+    const parsed=JSON.parse(txt);
+    render(parsed);
+    _checkTomorrowEvents(parsed);
+    if(!isFirst)_checkAndNotify(parsed);
   }catch(e){
     bar.style.display="none";
     if(!silent){errEl.style.display="block";errEl.textContent="Could not load data — "+e.message;}
@@ -1519,9 +1758,12 @@ function renderExtras(d){
    const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
    const ot=document.getElementById("opening-report-title");
    if(ot){const od=ov(d.openingDate)||fmtOrd(slOpeningDay());ot.innerHTML="Opening Report — "+od;}
-   // Closing date: before 4 PM SL → yesterday (T-1); after 4 PM SL → today (T)
+   // Closing date: on a real trading day, before 4 PM SL → yesterday (T-1), after 4 PM SL → today (T).
+   // On a weekend/holiday there's no live session at all, so always show the last working day's close
+   // regardless of the time of day (same safe pattern as slMoneyMarketDay()).
    const slNow_cd=new Date(Date.now()+330*60000);
-   const cdAuto=slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);
+   const todayCal_cd=new Date(slNow_cd.getUTCFullYear(),slNow_cd.getUTCMonth(),slNow_cd.getUTCDate());
+   const cdAuto = !_isSLFXWork(todayCal_cd) ? slWorkDay(0) : (slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(cdAuto);
  ["mm-close","fx-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{
   const e=document.getElementById(id);
@@ -1748,5 +1990,6 @@ window.addEventListener('focus',()=>{loadData(true);});
     <span class="dt-time" id="toast-time"></span>
   </div>
 </div>
-</body>
-</html>
+<!-- Event notification card (tomorrow events) -->
+<div id="event-notif-card"></div>
+</body></html>
