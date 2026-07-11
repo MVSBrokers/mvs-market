@@ -642,6 +642,14 @@ function slOpeningDay(){
   const slNow=new Date(Date.now()+330*60000);
   const slHour=slNow.getUTCHours();
   const slMin=slNow.getUTCMinutes();
+  const today=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
+
+  // Non-working "today" (weekend/holiday): no new report is ever generated today, so the
+  // date stays frozen at whatever the last working day's post-8:30 report showed — regardless
+  // of what time it currently is. Don't let the clock swing this around on a day off.
+  if(!_isSLFXWork(today)){
+    return slWorkDay(1);
+  }
 
   const after830 =
     (slHour > 8) ||
@@ -751,11 +759,7 @@ function calcNOD(tenorRaw){
 function slValueDay(){
   const slNow=new Date(Date.now()+330*60000);
   const slHour=slNow.getUTCHours();
-  const after4pm=slHour>=16;
-  if(!after4pm)return slWorkDay(0);
-  // After 4 PM: step forward from today's SL working day to the next SL working day
-  let base=slWorkDay(0);
-  let nxt=new Date(base.getFullYear(),base.getMonth(),base.getDate()+1);
+  const today=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
   const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04",
     "2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13",
     "2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29",
@@ -765,6 +769,18 @@ function slValueDay(){
   const isSLWork=x=>{if(x.getDay()===0||x.getDay()===6)return false;
     const iso=x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
     return !SL_HOL.has(iso);};
+  // Non-working "today" (weekend/holiday): a value date can never be in the past,
+  // so always show the NEXT working day, regardless of time of day.
+  if(!isSLWork(today)){
+    let nxt=new Date(today.getFullYear(),today.getMonth(),today.getDate()+1);
+    while(!isSLWork(nxt))nxt.setDate(nxt.getDate()+1);
+    return nxt;
+  }
+  const after4pm=slHour>=16;
+  if(!after4pm)return slWorkDay(0);
+  // After 4 PM: step forward from today's SL working day to the next SL working day
+  let base=slWorkDay(0);
+  let nxt=new Date(base.getFullYear(),base.getMonth(),base.getDate()+1);
   while(!isSLWork(nxt))nxt.setDate(nxt.getDate()+1);
   return nxt;
 }
@@ -1273,7 +1289,7 @@ function render(d){
     let last;
     if(ovClose){const m=String(ovClose).match(/(\d{1,2})\D+([A-Za-z]+)\D+(\d{4})/);
       if(m){const mi=MON_B.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());if(mi>=0)last=new Date(+m[3],mi,+m[1]);}}
-    if(!last){const slNow_b=new Date(Date.now()+330*60000);last=slNow_b.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);}
+    if(!last){const slNow_b=new Date(Date.now()+330*60000);const todayB_=new Date(slNow_b.getUTCFullYear(),slNow_b.getUTCMonth(),slNow_b.getUTCDate());last=!isSLWork(todayB_)?slWorkDay(0):(slNow_b.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));}
     const labels=[];
     let x=new Date(last.getFullYear(),last.getMonth(),last.getDate());
     for(let i=0;i<bHeaders.length;i++){
@@ -1519,9 +1535,12 @@ function renderExtras(d){
    const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
    const ot=document.getElementById("opening-report-title");
    if(ot){const od=ov(d.openingDate)||fmtOrd(slOpeningDay());ot.innerHTML="Opening Report — "+od;}
-   // Closing date: before 4 PM SL → yesterday (T-1); after 4 PM SL → today (T)
+   // Closing date: on a non-working day (weekend/holiday) always show the last completed
+   // working day, regardless of time. On a working day: before 4 PM SL → yesterday (T-1);
+   // after 4 PM SL → today (T).
    const slNow_cd=new Date(Date.now()+330*60000);
-   const cdAuto=slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);
+   const todayCd_=new Date(slNow_cd.getUTCFullYear(),slNow_cd.getUTCMonth(),slNow_cd.getUTCDate());
+   const cdAuto=!_isSLFXWork(todayCd_)?slWorkDay(0):(slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(cdAuto);
  ["mm-close","fx-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{
   const e=document.getElementById(id);
@@ -1672,7 +1691,7 @@ function buildCharts(d){
     let last;
     if(ovClose){const m=String(ovClose).match(/(\d{1,2})\D+([A-Za-z]+)\D+(\d{4})/);
       if(m){const mi=MON.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());if(mi>=0)last=new Date(+m[3],mi,+m[1]);}}
-    if(!last){const slNow_b=new Date(Date.now()+330*60000);last=slNow_b.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);}
+    if(!last){const slNow_b=new Date(Date.now()+330*60000);const todayB2_=new Date(slNow_b.getUTCFullYear(),slNow_b.getUTCMonth(),slNow_b.getUTCDate());last=!isSLW(todayB2_)?slWorkDay(0):(slNow_b.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));}
     let x=new Date(last.getFullYear(),last.getMonth(),last.getDate());
     const labels=[];
     for(let i=0;i<yBHead.length;i++){labels.unshift(fmtA(x));do{x.setDate(x.getDate()-1);}while(!isSLW(x));}
