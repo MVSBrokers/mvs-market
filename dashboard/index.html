@@ -494,13 +494,14 @@ canvas{max-width:100%!important}
           <tbody id="dyn-inflation"></tbody>
         </table>
       </div>
-      <div class="panel">
-        <div class="panel-title">Foreign Currency Reserves</div>
-        <table style="font-size:12px">
-          <thead><tr><th>Month</th><th>Reserve ($)</th></tr></thead>
-          <tbody id="dyn-reserves"></tbody>
-        </table>
-      </div>
+    <div class="panel">
+  <div class="panel-title">Foreign Currency Reserves</div>
+  <table style="font-size:12px">
+    <thead><tr><th>Month</th><th>Reserve ($)</th></tr></thead>
+    <tbody id="dyn-reserves"></tbody>
+  </table>
+  <div id="reservesStat" style="margin-top:10px"></div>
+</div>
     </div>
     <div class="grid-2x2">
       <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div><div class="mini-tbl" id="cbslTbl"></div></div>
@@ -1455,7 +1456,8 @@ function renderExtras(d){
   // Macro — inflation
   set('dyn-inflation',(d.inflation||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.metric)}</td><td>${fmt2(r.apr)}</td><td style="color:#c8a84b">${fmt2(r.may)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   // Macro — reserves (highlight last)
-  {const r=(d.reserves||[]).filter(x=>x.show!==false);set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
+ {const r=(d.reserves||[]).filter(x=>x.show!==false);set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
+ renderStatBar('reservesStat',r.map(x=>{const n=parseFloat(String(x.value).replace(/,/g,''));return isNaN(n)?null:n;}),r.map(x=>x.month),'$',2);}
   // Macro — tourism & remittances
   {const t=d.tourism||{};const yc=(parseFloat(String(t.yoy).replace('%',''))||0)<0?'#ff8a78':'#6dd4a0';set('dyn-tourism',`<tr><td>Earnings</td><td>${fmt2(t.apr)}</td><td>${fmt2(t.may)}</td><td style="color:${yc};font-weight:700">${fmt2(t.yoy)}</td></tr>`);}
 {const r=d.remittances||{};const yc=(parseFloat(String(r.yoy).replace('%',''))||0)<0?'#ff8a78':'#6dd4a0';set('dyn-remit',`<tr><td>Inflows</td><td>${fmt2(r.apr)}</td><td>${fmt2(r.may)}</td><td style="color:${yc};font-weight:700">${fmt2(r.yoy)}</td></tr>`);}
