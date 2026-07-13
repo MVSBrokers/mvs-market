@@ -1457,8 +1457,8 @@ function renderExtras(d){
   // Macro — reserves (highlight last)
   {const r=(d.reserves||[]).filter(x=>x.show!==false);set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
   // Macro — tourism & remittances
-  {const t=d.tourism||{};set('dyn-tourism',`<tr><td>Earnings</td><td>${fmt2(t.apr)}</td><td>${fmt2(t.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(t.yoy)}</td></tr>`);}
-  {const r=d.remittances||{};set('dyn-remit',`<tr><td>Inflows</td><td>${fmt2(r.apr)}</td><td>${fmt2(r.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(r.yoy)}</td></tr>`);}
+  {const t=d.tourism||{};const yc=(parseFloat(String(t.yoy).replace('%',''))||0)<0?'#ff8a78':'#6dd4a0';set('dyn-tourism',`<tr><td>Earnings</td><td>${fmt2(t.apr)}</td><td>${fmt2(t.may)}</td><td style="color:${yc};font-weight:700">${fmt2(t.yoy)}</td></tr>`);}
+{const r=d.remittances||{};const yc=(parseFloat(String(r.yoy).replace('%',''))||0)<0?'#ff8a78':'#6dd4a0';set('dyn-remit',`<tr><td>Inflows</td><td>${fmt2(r.apr)}</td><td>${fmt2(r.may)}</td><td style="color:${yc};font-weight:700">${fmt2(r.yoy)}</td></tr>`);}
   // Global — FOMC
   set('dyn-fomc',(d.fomc||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.date)}</td><td>${escHtml(r.range)}</td><td>${fmt2(r.repo)}</td><td>${fmt2(r.rrepo)}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   {const fk=(d.keyDates||[]).find(k=>/fomc/i.test(k.label));if(fk&&E('dyn-fomc-next')){const i=eventDayInfo(fk.date);E('dyn-fomc-next').textContent='Next FOMC Meeting: '+i.dstr+(i.daysTxt?'  ('+i.daysTxt+')':'');}}
