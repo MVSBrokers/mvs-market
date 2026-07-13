@@ -1771,52 +1771,42 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 26.25,
-   "wa": 336.4
+   "volume": 47.45,
+   "wa": 335.76
   },
   {
    "tenor": "Tom",
-   "volume": 2,
-   "wa": 336.13
+   "volume": 16,
+   "wa": 335.74
   },
   {
    "tenor": "Cash",
-   "volume": 15.45,
-   "wa": 336.51
+   "volume": 19.25,
+   "wa": 335.59
   },
   {
    "tenor": "Sub Total",
-   "volume": 43.7,
+   "volume": 82.7,
    "wa": null
   },
   {
-   "tenor": "1W",
-   "volume": 13.5,
-   "wa": 337.47
-  },
-  {
    "tenor": "2W",
-   "volume": 4,
-   "wa": 337.59
+   "volume": 5,
+   "wa": 336.5
   },
   {
    "tenor": "1M",
-   "volume": 3.5,
-   "wa": 338.12
-  },
-  {
-   "tenor": "6M",
-   "volume": 15,
-   "wa": 346.24
+   "volume": 11.15,
+   "wa": 337.47
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 36,
+   "volume": 16.15,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 79.7,
+   "volume": 98.85,
    "wa": null
   }
  ],
@@ -1945,7 +1935,8 @@
    "12 Jun",
    "19 Jun",
    "26 Jun",
-   "3 Jul"
+   "3 Jul",
+   "10 Jul"
   ],
   "values": [
    143617,
@@ -1961,7 +1952,8 @@
    121344,
    121346,
    135858,
-   136859
+   136859,
+   168895
   ]
  },
  "cbsl": {
@@ -2238,7 +2230,12 @@
   },
   {
    "month": "May",
-   "value": "6,652 Mn",
+   "value": "6,881 Mn",
+   "show": true
+  },
+  {
+   "month": "June",
+   "value": "6,450 Mn",
    "show": true
   }
  ],
@@ -5182,7 +5179,7 @@
   "Total Amount Accepted: Rs. 100.0 Billion",
   "Auction Date: 08 July 2026"
  ],
- "date": "2026-07-11",
+ "date": "2026-07-13",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
