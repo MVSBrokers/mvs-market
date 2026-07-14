@@ -497,7 +497,7 @@ canvas{max-width:100%!important}
       <div class="panel">
         <div class="panel-title">Foreign Currency Reserves</div>
         <table style="font-size:12px">
-          <thead><tr><th>Month</th><th>Reserve ($)</th></tr></thead>
+          <thead><tr><th>Month</th><th>Reserve (USD Mn)</th></tr></thead>
           <tbody id="dyn-reserves"></tbody>
         </table>
       </div>
@@ -1494,12 +1494,7 @@ function renderExtras(d){
      '<div class="lc-row" style="border:none;padding:1px 0"><span class="lc-k">ISIN</span><span class="lc-v">'+escHtml(x.isin||'—')+'</span></div>'+
      (isBond?'<div class="lc-row" style="border:none;padding:1px 0"><span class="lc-k">Series</span><span class="lc-v">'+escHtml(x.series||'—')+'</span></div>':'')+
      '<div class="lc-row" style="border:none;padding:1px 0"><span class="lc-k">Face Value</span><span class="lc-v">Rs. '+fmt2(x.face)+' Mn</span></div></div>';};
-   const matCardMulti=(title,list,isBond)=>{
-     if(!list.length)return '<div class="lc-h">'+title+'</div><div class="lc-none">None outstanding</div>';
-     const total=list.reduce((s,m)=>{const v=parseFloat(String(m.x.face||'').replace(/,/g,''));return s+(isNaN(v)?0:v);},0);
-     const totalRow=total>0?'<div style="padding:7px 0;border-top:2px solid #c8a84b;margin-top:2px"><div class="lc-row" style="border:none;padding:2px 0"><span class="lc-k" style="color:#c8a84b;font-weight:700">Total Face Value</span><span class="lc-v" style="color:#c8a84b;font-weight:800;font-size:13px">Rs. '+total.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' Mn</span></div></div>':'';
-     return '<div class="lc-h">'+title+'</div>'+list.map(m=>matEntry(m,isBond)).join('')+totalRow;
-   };
+   const matCardMulti=(title,list,isBond)=>list.length?('<div class="lc-h">'+title+'</div>'+list.map(m=>matEntry(m,isBond)).join('')):('<div class="lc-h">'+title+'</div><div class="lc-none">None outstanding</div>');
    {const e=document.getElementById('latest-tbill-mat');if(e)e.innerHTML=matCardMulti('Next T-Bill Maturities (3M · 6M · 12M)',nextMats(d.tbillOut,3),false);}
    {const e=document.getElementById('latest-tbond-mat');if(e)e.innerHTML=matCardMulti('Next T-Bond Maturity',nextMats(d.tbondOut,1),true);}
   }
