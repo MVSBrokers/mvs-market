@@ -5193,8 +5193,8 @@
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "https://www.treasury.gov.lk/api/file/91ad1df4-4a75-4a57-8a8f-03c4e8fbff60",
- "billAucLink": "",
- "bondAucLink": "https://www.treasury.gov.lk/api/file/ab68605d-fab8-40d6-b2aa-9b4823daca4d",
+ "billAucLink": "https://www.treasury.gov.lk/api/file/2f8f2e9d-3abf-42ec-85d4-f7c74d1d2e03",
+ "bondAucLink": "",
  "hidden": {
   "tbills": true
  },
