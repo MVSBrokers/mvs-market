@@ -3829,7 +3829,7 @@
   },
   {
    "label": "Next T-Bond Auction Day",
-   "date": "2026-07-30",
+   "date": "2026-07-13",
    "show": true
   },
   {
@@ -5237,7 +5237,7 @@
   ],
   "reserves": [
    "Month",
-   "Reserve ($)"
+   "Reserve (USD Mn)"
   ]
  }
 }
