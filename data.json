@@ -1765,47 +1765,47 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 9,
-   "wa": 336.22
+   "volume": 15.45,
+   "wa": 336.28
   },
   {
    "tenor": "Tom",
-   "volume": 7.5,
-   "wa": 336.15
+   "volume": 27,
+   "wa": 336.2
   },
   {
    "tenor": "Cash",
-   "volume": 20.25,
-   "wa": 336.13
+   "volume": 34,
+   "wa": 336.16
   },
   {
    "tenor": "Sub Total",
-   "volume": 36.75,
+   "volume": 76.45,
    "wa": null
   },
   {
-   "tenor": "S+1",
-   "volume": 4.25,
-   "wa": 336.34
-  },
-  {
    "tenor": "1W",
-   "volume": 2,
-   "wa": 336.7
+   "volume": 9,
+   "wa": 336.75
   },
   {
    "tenor": "1M",
-   "volume": 2,
-   "wa": 337.78
+   "volume": 1.5,
+   "wa": 338.07
+  },
+  {
+   "tenor": "2M",
+   "volume": 0.4,
+   "wa": 338.95
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 8.25,
+   "volume": 10.9,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 45,
+   "volume": 87.35,
    "wa": null
   }
  ],
@@ -5216,7 +5216,7 @@
   "Total Amount Accepted: Rs. 150.0 Billion",
   "Auction Date: 13th July 2026"
  ],
- "date": "2026-07-14",
+ "date": "2026-07-15",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
