@@ -1325,76 +1325,27 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-07-13",
+  "date": "2026-07-14",
   "rows": [
    {
     "isin": "LKB00527E019",
     "maturity": "2027-05-01",
-    "remYears": 0.8,
-    "amount": 75.463,
-    "show": true
-   },
-   {
-    "isin": "LKB00428B156",
-    "maturity": "2028-02-15",
-    "remYears": 1.59452054794521,
-    "amount": 83.793,
-    "show": true
-   },
-   {
-    "isin": "LKB00428J159",
-    "maturity": "2028-10-15",
-    "remYears": 2.26027397260274,
-    "amount": 2211,
-    "show": true
-   },
-   {
-    "isin": "LKB00529F152",
-    "maturity": "2029-06-15",
-    "remYears": 2.92602739726027,
-    "amount": 10.182,
-    "show": true
-   },
-   {
-    "isin": "LKB01530E152",
-    "maturity": "2030-05-15",
-    "remYears": 3.84109589041096,
-    "amount": 550,
+    "remYears": 0.797260273972603,
+    "amount": 1000,
     "show": true
    },
    {
     "isin": "LKB00530G018",
     "maturity": "2030-07-01",
-    "remYears": 3.96986301369863,
+    "remYears": 3.96712328767123,
     "amount": 100,
     "show": true
    },
    {
-    "isin": "LKB00530H016",
-    "maturity": "2030-08-01",
-    "remYears": 4.05479452054795,
-    "amount": 350,
-    "show": true
-   },
-   {
-    "isin": "LKB00730J158",
-    "maturity": "2030-10-15",
-    "remYears": 4.26027397260274,
-    "amount": 2160,
-    "show": true
-   },
-   {
-    "isin": "LKB02032J017",
-    "maturity": "2032-10-01",
-    "remYears": 6.22465753424658,
-    "amount": 250,
-    "show": true
-   },
-   {
-    "isin": "LKB02033K013",
-    "maturity": "2033-11-01",
-    "remYears": 7.30958904109589,
-    "amount": 300,
+    "isin": "LKB00934F154",
+    "maturity": "2034-06-15",
+    "remYears": 7.92602739726027,
+    "amount": 2000,
     "show": true
    },
    {
