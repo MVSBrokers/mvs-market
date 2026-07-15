@@ -17,25 +17,25 @@
   }
  ],
  "callMarket": {
-  "min": 8.95,
-  "max": 9.05,
-  "wa": 8.96,
-  "vol": 37.36
+  "min": 8.9,
+  "max": 9,
+  "wa": 8.95,
+  "vol": 52.72
  },
  "repoMarket": {
   "min": 8.95,
-  "max": 9.1,
+  "max": 9.15,
   "wa": 9,
-  "vol": 62.99
+  "vol": 102.75
  },
  "windows": {
   "sdf": {
-   "cur": 101.99,
-   "prev": 131.43
+   "cur": 87.19,
+   "prev": 101.99
   },
   "slf": {
    "cur": 0,
-   "prev": 0.08
+   "prev": 0
   }
  },
  "liquidity": {
@@ -168,7 +168,8 @@
    "9 Jul",
    "10 Jul",
    "13 Jul",
-   "14 Jul"
+   "14 Jul",
+   "15 Jul"
   ],
   "values": [
    128.14,
@@ -299,10 +300,11 @@
    139.01,
    116.72,
    152.35,
-   151.99
+   151.99,
+   147.19
   ],
-  "current": 151.99,
-  "previous": 152.35
+  "current": 147.19,
+  "previous": 151.99
  },
  "bonds": {
   "headers": [
@@ -1619,7 +1621,7 @@
    336.3,
    336.4
   ],
-  "close": "336.35/ 336.45"
+  "close": "336.30/ 336.40"
  },
  "fxSwaps": {
   "1w": {
@@ -1649,7 +1651,7 @@
  },
  "spot": {
   "open": "336.20/ 336.50",
-  "close": "336.35/ 336.45",
+  "close": "336.30/ 336.40",
   "low": "336.35",
   "high": "336.4"
  },
@@ -2014,7 +2016,8 @@
    "9 Jul",
    "10 Jul",
    "13 Jul",
-   "14 Jul"
+   "14 Jul",
+   "15 Jul"
   ],
   "values": [
    2508.92,
@@ -2115,6 +2118,7 @@
    2507.92,
    2507.92,
    2507.92,
+   2498.12,
    2498.12,
    2498.12,
    2498.12,
@@ -5137,23 +5141,21 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "336.35/ 336.45",
+  "usdlkr": "336.30/ 336.40",
   "liqDir": "decreased",
-  "liqDelta": 0.36
+  "liqDelta": 4.8
  },
  "marketNews": [
-  "Treasury Bond Auction Results",
+  "Treasury Bill Auction Results",
+  "------------------------------------------------------------",
+  "91-Day (LKA09126J169): 10.13%",
+  "182-Day (LKA18227A155): 10.27%",
+  "364-Day (LKA36427G164): 10.20%",
   "------------------------------------------------------------",
   "",
-  "15 Oct 2030 (LKB00730J158): 11.57%",
-  "15 Oct 2034 (LKB00934J156): 12.04%",
-  "01 Jul 2037 (LKB01237G019): 12.58%",
-  "",
-  "------------------------------------------------------------",
-  "",
-  "Total Amount Issued: Rs. 150.0 Billion",
-  "Total Amount Accepted: Rs. 150.0 Billion",
-  "Auction Date: 13th July 2026"
+  "Total Amount Issued: Rs. 120.0 Billion",
+  "Total Amount Accepted: Rs. 120.0 Billion",
+  "Auction Date: 15 July 2026"
  ],
  "date": "2026-07-15",
  "openingDate": "",
@@ -5161,7 +5163,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/91ad1df4-4a75-4a57-8a8f-03c4e8fbff60",
+ "newsLink": "https://www.treasury.gov.lk/api/file/b76ddda1-a014-458c-862e-569f317d637b",
  "billAucLink": "https://www.treasury.gov.lk/api/file/2f8f2e9d-3abf-42ec-85d4-f7c74d1d2e03",
  "bondAucLink": "",
  "hidden": {
