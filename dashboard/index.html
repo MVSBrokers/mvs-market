@@ -500,7 +500,6 @@ canvas{max-width:100%!important}
           <thead><tr><th>Month</th><th>Reserve (USD Mn)</th></tr></thead>
           <tbody id="dyn-reserves"></tbody>
         </table>
-        <div id="latest-reserves" class="latest-card" style="margin-top:10px">—</div>
       </div>
     </div>
     <div class="grid-2x2">
@@ -643,10 +642,15 @@ function slOpeningDay(){
   const slNow=new Date(Date.now()+330*60000);
   const slHour=slNow.getUTCHours();
   const slMin=slNow.getUTCMinutes();
-  const _odToday=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
-  if(!_isSLFXWork(_odToday))return slWorkDay(1);
-  const after830=(slHour>8)||(slHour===8&&slMin>=30);
-  if(after830){return slWorkDay(1);}
+
+  const after830 =
+    (slHour > 8) ||
+    (slHour === 8 && slMin >= 30);
+
+  if(after830){
+    return slWorkDay(1);
+  }
+
   return slWorkDay(2);
 }
 // Value Dates: from today's 4 PM SL time until the next working day's 4 PM, show the NEXT SL working day.
@@ -1269,7 +1273,7 @@ function render(d){
     let last;
     if(ovClose){const m=String(ovClose).match(/(\d{1,2})\D+([A-Za-z]+)\D+(\d{4})/);
       if(m){const mi=MON_B.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());if(mi>=0)last=new Date(+m[3],mi,+m[1]);}}
-    if(!last){const slNow_b=new Date(Date.now()+330*60000);const _bdToday=new Date(slNow_b.getUTCFullYear(),slNow_b.getUTCMonth(),slNow_b.getUTCDate());last=(_isSLFXWork(_bdToday)&&slNow_b.getUTCHours()>=16)?slWorkDay(0):slWorkDay(1);}
+    if(!last){const slNow_b=new Date(Date.now()+330*60000);last=slNow_b.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);}
     const labels=[];
     let x=new Date(last.getFullYear(),last.getMonth(),last.getDate());
     for(let i=0;i<bHeaders.length;i++){
@@ -1435,27 +1439,7 @@ function renderExtras(d){
   // Macro — inflation
   set('dyn-inflation',(d.inflation||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.metric)}</td><td>${fmt2(r.apr)}</td><td style="color:#c8a84b">${fmt2(r.may)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   // Macro — reserves (highlight last)
-  {const r=(d.reserves||[]).filter(x=>x.show!==false);set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
-   // latest-card box for reserves
-   const resBox=document.getElementById('latest-reserves');
-   if(resBox){
-     if(!r.length){resBox.innerHTML='<div class="lc-h">Latest Reserve</div><div class="lc-none">Not published yet</div>';}
-     else{
-       const prev=r.length>1?r[r.length-2]:null;
-       const last=r[r.length-1];
-       const cur=parseFloat(String(last.value||'').replace(/,/g,''));
-       const prv=prev?parseFloat(String(prev.value||'').replace(/,/g,'')):null;
-       const diff=prv!=null&&!isNaN(cur)&&!isNaN(prv)?+(cur-prv).toFixed(2):null;
-       const isUp=diff!=null&&diff>0,isDown=diff!=null&&diff<0;
-       const chgHtml=diff!=null?`<span style="color:${isUp?'#6dd4a0':isDown?'#ff8a78':'#7fa3c8'};font-size:10px;font-weight:700;margin-left:6px">${isUp?'▲':isDown?'▼':'▸'} ${Math.abs(diff).toFixed(2)}</span>`:'';
-       resBox.innerHTML=
-         '<div class="lc-h">Latest Reserve</div>'+
-         '<div class="lc-row"><span class="lc-k">Month</span><span class="lc-v">'+escHtml(last.month)+'</span></div>'+
-         '<div class="lc-row"><span class="lc-k">Reserve (USD Mn)</span><span class="lc-v" style="color:#c8a84b;font-weight:800;font-size:13px">'+fmt2(last.value)+chgHtml+'</span></div>'+
-         (prev?'<div class="lc-row"><span class="lc-k">Previous ('+escHtml(prev.month)+')</span><span class="lc-v" style="color:#7fa3c8">'+fmt2(prev.value)+'</span></div>':'');
-     }
-   }
-  }
+  {const r=(d.reserves||[]).filter(x=>x.show!==false);set('dyn-reserves',r.map((x,i)=>`<tr><td>${escHtml(x.month)}</td><td${i===r.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.value)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
   // Macro — tourism & remittances
   {const t=d.tourism||{};set('dyn-tourism',`<tr><td>Earnings</td><td>${fmt2(t.apr)}</td><td>${fmt2(t.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(t.yoy)}</td></tr>`);}
   {const r=d.remittances||{};set('dyn-remit',`<tr><td>Inflows</td><td>${fmt2(r.apr)}</td><td>${fmt2(r.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(r.yoy)}</td></tr>`);}
@@ -1542,8 +1526,7 @@ function renderExtras(d){
    if(ot){const od=ov(d.openingDate)||fmtOrd(slOpeningDay());ot.innerHTML="Opening Report — "+od;}
    // Closing date: before 4 PM SL → yesterday (T-1); after 4 PM SL → today (T)
    const slNow_cd=new Date(Date.now()+330*60000);
-   const _cdToday=new Date(slNow_cd.getUTCFullYear(),slNow_cd.getUTCMonth(),slNow_cd.getUTCDate());
-   const cdAuto=_isSLFXWork(_cdToday)&&slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);
+   const cdAuto=slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(cdAuto);
  ["mm-close","fx-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{
   const e=document.getElementById(id);
@@ -1694,7 +1677,7 @@ function buildCharts(d){
     let last;
     if(ovClose){const m=String(ovClose).match(/(\d{1,2})\D+([A-Za-z]+)\D+(\d{4})/);
       if(m){const mi=MON.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());if(mi>=0)last=new Date(+m[3],mi,+m[1]);}}
-    if(!last){const slNow_b=new Date(Date.now()+330*60000);const _bdToday2=new Date(slNow_b.getUTCFullYear(),slNow_b.getUTCMonth(),slNow_b.getUTCDate());last=(_isSLFXWork(_bdToday2)&&slNow_b.getUTCHours()>=16)?slWorkDay(0):slWorkDay(1);}
+    if(!last){const slNow_b=new Date(Date.now()+330*60000);last=slNow_b.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);}
     let x=new Date(last.getFullYear(),last.getMonth(),last.getDate());
     const labels=[];
     for(let i=0;i<yBHead.length;i++){labels.unshift(fmtA(x));do{x.setDate(x.getDate()-1);}while(!isSLW(x));}
