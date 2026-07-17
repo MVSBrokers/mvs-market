@@ -5207,7 +5207,7 @@
   "Total Amount Accepted: Rs. 120.0 Billion",
   "Auction Date: 15 July 2026"
  ],
- "date": "2026-07-16",
+ "date": "2026-07-17",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
@@ -5246,5 +5246,6 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- }
+ },
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/5281bf7e-ef55-4853-922b-f0788a254924"
 }
