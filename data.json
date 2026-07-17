@@ -26,7 +26,7 @@
    "show": true
   },
   {
-   "date": "Wed Jul 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "date": "Thu Jul 16 2026 23:59:28 GMT+0530 (India Standard Time)",
    "rate": "60",
    "show": true
   },
@@ -342,14 +342,14 @@
  },
  "repoAuction": [
   {
-   "date": "16 Jul",
+   "date": "17 Jul",
    "repoOffered": 60,
    "revRepoOffered": null,
-   "received": 54,
-   "accepted": 54,
-   "minRate": 8.63,
-   "maxRate": 8.66,
-   "waYield": 8.65,
+   "received": 59,
+   "accepted": 59,
+   "minRate": 8.65,
+   "maxRate": 8.72,
+   "waYield": 8.66,
    "show": true
   }
  ],
@@ -3878,7 +3878,7 @@
    101.09,
    100.94,
    100.54,
-   "100.83\t"
+   100.83
   ]
  },
  "gold": {
