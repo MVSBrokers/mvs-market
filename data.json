@@ -44,8 +44,6 @@
   "current": null,
   "previous": null
  },
- "repoAuction": [],
- "omoTerm": [],
  "bonds": {
   "headers": [
    "Day 1",
@@ -2981,7 +2979,7 @@
    85.74
   ]
  },
- "murban": {
+ "dxy": {
   "labels": [
    "2 Jan",
    "5 Jan",
@@ -3277,7 +3275,7 @@
    100.83
   ]
  },
- "dxy": {
+ "gold": {
   "labels": [
    "1 Jan",
    "2 Jan",
@@ -3575,18 +3573,6 @@
    4029.09,
    4030.87,
    3996.22
-  ]
- },
- "gold": {
-  "labels": [
-   "18th Mar 2026",
-   "29th Apr 2026",
-   "17th Jun 2026"
-  ],
-  "values": [
-   3.5,
-   3.5,
-   3.5
   ]
  },
  "fomc": [
