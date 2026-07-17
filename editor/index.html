@@ -203,7 +203,6 @@ const SECTIONS=[
  {id:'gold',title:'Gold (XAU/USD)',keys:['gold'],group:'Global Markets'},
  {id:'brent',title:'Brent Crude Oil',keys:['brent'],group:'Global Markets'},
  {id:'wti',title:'WTI Crude Oil',keys:['wti'],group:'Global Markets'},
- {id:'murban',title:'Murban Crude Oil',keys:['murban'],group:'Global Markets'},
  {id:'dxy',title:'US Dollar Index (DXY)',keys:['dxy'],group:'Global Markets'},
  {id:'fomc',title:'FOMC Decisions',keys:['fomc'],group:'Global Markets'},
  {id:'keydates',title:'Key Dates / Announcements (tick = show on live bar)',keys:['keyDates'],group:'Announcements'},
@@ -839,7 +838,7 @@ function analyzeFreshness(wb,XLSX,nowOverride){
   const mm=S(find('moneymorket')||find('moneymarket')||'');daily('Money Market & Liquidity','SL',latestDate(mm,12),'liquidity');
   const fx=S(find('fx')||'');daily('USD/LKR & FX Spot','SL',latestDate(fx,0),'usdlkr');
   const fi=S(find('fixedincome')||'');{let last=latestDate(mm,12)||latestDate(fi,10);daily('Daily Bond / Yield Rates','SL',last,'bonds');}
-  const gl=S(find('globalmarket')||'');daily('US 10Y Treasury','SL',latestDate(gl,0),'global10y');daily('Gold (XAU/USD)','SL',latestDate(gl,13),'gold');daily('Crude Oil (WTI / Brent / Murban)','SL',latestDate(gl,3),'brent');daily('US Dollar Index (DXY)','SL',latestDate(gl,10),'dxy');
+  const gl=S(find('globalmarket')||'');daily('US 10Y Treasury','SL',latestDate(gl,0),'global10y');daily('Gold (XAU/USD)','SL',latestDate(gl,10),'gold');daily('Crude Oil (WTI / Brent)','SL',latestDate(gl,3),'brent');daily('US Dollar Index (DXY)','SL',latestDate(gl,7),'dxy');
   const mc=S(find('macroeconomy')||'');weekly('Foreign Holdings of Govt Securities','SL',latestDate(mc,0),'foreign');
   // T-Bill Auction Details: weekly, updated Wednesday after 4 PM SL (auction results day)
   weeklyDay('T-Bill Auction Details','tbillauction',latestDate(fi,20),3,16);
@@ -1009,7 +1008,7 @@ function parseWorkbook(wb,XLSX){
   const gl=S(find('globalmarket')||'');
   if(gl.length){
     const ser=(dc,vc)=>{let L=[],V=[];for(let i=2;i<gl.length;i++)if(gl[i][dc]!=null&&gl[i][vc]!=null){L.push(lbl(gl[i][dc]));V.push(num(gl[i][vc]));}return{labels:L,values:V};};
-    o.global10y=ser(0,1);o.wti=ser(3,4);o.brent=ser(3,5);o.murban=ser(7,8);o.dxy=ser(10,11);o.gold=ser(13,14);
+    o.global10y=ser(0,1);o.wti=ser(3,4);o.brent=ser(3,5);o.dxy=ser(7,8);o.gold=ser(10,11);
     let fomc=[];for(let i=2;i<gl.length;i++)if(gl[i][13]!=null)fomc.push({date:String(gl[i][13]).trim(),range:String(gl[i][14]).trim(),repo:pct(gl[i][15]),rrepo:pct(gl[i][16]),show:true});o.fomc=fomc;
   }
   const an=S(find('announcement')||'');
