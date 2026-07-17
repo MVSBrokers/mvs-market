@@ -14,6 +14,36 @@
    "date": "26.05.2026",
    "rate": "8.75",
    "show": true
+  },
+  {
+   "date": "Date",
+   "rate": "Repo / Reverse Repo Auction",
+   "show": true
+  },
+  {
+   "date": "Column1",
+   "rate": "Repo",
+   "show": true
+  },
+  {
+   "date": "Thu Jul 16 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "rate": "60",
+   "show": true
+  },
+  {
+   "date": "Auction",
+   "rate": "Settlement",
+   "show": true
+  },
+  {
+   "date": "Date",
+   "rate": "Date2",
+   "show": true
+  },
+  {
+   "date": "Wed Jul 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "rate": "Wed Jul 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "show": true
   }
  ],
  "callMarket": {
@@ -39,13 +69,303 @@
   }
  },
  "liquidity": {
-  "labels": [],
-  "values": [],
-  "current": null,
-  "previous": null
+  "labels": [
+   "1 Jan",
+   "2 Jan",
+   "5 Jan",
+   "6 Jan",
+   "7 Jan",
+   "8 Jan",
+   "9 Jan",
+   "12 Jan",
+   "13 Jan",
+   "14 Jan",
+   "16 Jan",
+   "19 Jan",
+   "20 Jan",
+   "21 Jan",
+   "22 Jan",
+   "23 Jan",
+   "26 Jan",
+   "27 Jan",
+   "28 Jan",
+   "29 Jan",
+   "30 Jan",
+   "2 Feb",
+   "3 Feb",
+   "5 Feb",
+   "6 Feb",
+   "9 Feb",
+   "10 Feb",
+   "11 Feb",
+   "12 Feb",
+   "13 Feb",
+   "16 Feb",
+   "17 Feb",
+   "18 Feb",
+   "19 Feb",
+   "20 Feb",
+   "23 Feb",
+   "24 Feb",
+   "25 Feb",
+   "26 Feb",
+   "27 Feb",
+   "3 Mar",
+   "4 Mar",
+   "5 Mar",
+   "6 Mar",
+   "9 Mar",
+   "10 Mar",
+   "11 Mar",
+   "12 Mar",
+   "13 Mar",
+   "16 Mar",
+   "17 Mar",
+   "18 Mar",
+   "19 Mar",
+   "20 Mar",
+   "23 Mar",
+   "24 Mar",
+   "25 Mar",
+   "26 Mar",
+   "27 Mar",
+   "30 Mar",
+   "31 Mar",
+   "2 Apr",
+   "6 Apr",
+   "7 Apr",
+   "8 Apr",
+   "9 Apr",
+   "10 Apr",
+   "15 Apr",
+   "16 Apr",
+   "17 Apr",
+   "20 Apr",
+   "21 Apr",
+   "22 Apr",
+   "23 Apr",
+   "24 Apr",
+   "27 Apr",
+   "28 Apr",
+   "29 Apr",
+   "30 Apr",
+   "4 May",
+   "5 May",
+   "6 May",
+   "7 May",
+   "8 May",
+   "11 May",
+   "12 May",
+   "13 May",
+   "14 May",
+   "15 May",
+   "18 May",
+   "19 May",
+   "20 May",
+   "21 May",
+   "22 May",
+   "25 May",
+   "26 May",
+   "27 May",
+   "29 May",
+   "1 Jun",
+   "2 Jun",
+   "3 Jun",
+   "4 Jun",
+   "5 Jun",
+   "8 Jun",
+   "9 Jun",
+   "10 Jun",
+   "11 Jun",
+   "12 Jun",
+   "15 Jun",
+   "16 Jun",
+   "17 Jun",
+   "18 Jun",
+   "19 Jun",
+   "22 Jun",
+   "23 Jun",
+   "24 Jun",
+   "25 Jun",
+   "26 Jun",
+   "30 Jun",
+   "1 Jul",
+   "2 Jul",
+   "3 Jul",
+   "6 Jul",
+   "7 Jul",
+   "8 Jul",
+   "9 Jul",
+   "10 Jul",
+   "13 Jul",
+   "14 Jul",
+   "15 Jul",
+   "16 Jul",
+   "17 Jul"
+  ],
+  "values": [
+   128.14,
+   134.48,
+   135.8,
+   175.21,
+   158.71,
+   168.45,
+   171.03,
+   168.89,
+   151.97,
+   182.72,
+   160.19,
+   196.08,
+   200.77,
+   189.06,
+   157.54,
+   166.13,
+   169.74,
+   163.5,
+   211.53,
+   194.26,
+   233.13,
+   212.55,
+   266.13,
+   219.15,
+   275.19,
+   278.2,
+   282.22,
+   296.45,
+   296.71,
+   299.68,
+   270.99,
+   270.41,
+   282.43,
+   283.22,
+   280.75,
+   288.48,
+   297.94,
+   322.93,
+   341.02,
+   333.76,
+   332.49,
+   403.77,
+   336.51,
+   337.92,
+   334.72,
+   335.36,
+   394.53,
+   319.48,
+   316.78,
+   245.53,
+   258.2,
+   341.21,
+   283,
+   255.04,
+   240.27,
+   241.71,
+   298.34,
+   247.29,
+   243.31,
+   268.86,
+   277.95,
+   247.36,
+   231.84,
+   225.43,
+   237.26,
+   239.96,
+   114.6,
+   105.43,
+   107.38,
+   106.32,
+   112.44,
+   123.32,
+   151.01,
+   167.46,
+   199.17,
+   219.28,
+   231.9,
+   248.48,
+   218.7,
+   226.55,
+   246.3,
+   254.52,
+   249.98,
+   253.66,
+   262.96,
+   247.19,
+   255.68,
+   253.75,
+   156.8,
+   183.53,
+   181.68,
+   168.33,
+   158.93,
+   141.27,
+   136.98,
+   142.31,
+   126.7,
+   92.15,
+   102.46,
+   93.56,
+   101.71,
+   111.94,
+   105.04,
+   63.25,
+   59.18,
+   57.38,
+   66.62,
+   62.57,
+   39.36,
+   40.07,
+   43.19,
+   31.2,
+   31.25,
+   44.16,
+   64.26,
+   61.04,
+   65.36,
+   61.62,
+   82.56,
+   89.83,
+   81.2,
+   128.47,
+   132.29,
+   134.77,
+   125.89,
+   139.01,
+   116.72,
+   152.35,
+   151.99,
+   147.19,
+   143.41,
+   147.97
+  ],
+  "current": 147.97,
+  "previous": 143.41
  },
- "repoAuction": [],
- "omoTerm": [],
+ "repoAuction": [
+  {
+   "date": "17 Jul",
+   "repoOffered": 60,
+   "revRepoOffered": null,
+   "received": 59,
+   "accepted": 59,
+   "minRate": 8.65,
+   "maxRate": 8.72,
+   "waYield": 8.66,
+   "show": true
+  }
+ ],
+ "omoTerm": [
+  {
+   "auction": "16 Jul",
+   "settlement": "16 Jul",
+   "repoOffered": 10,
+   "revRepoOffered": 0,
+   "received": 10,
+   "accepted": 10,
+   "minRate": 8.75,
+   "maxRate": 8.75,
+   "show": true
+  }
+ ],
  "bonds": {
   "headers": [
    "Day 1",
@@ -1819,8 +2139,7 @@
    "13 Jul",
    "14 Jul",
    "15 Jul",
-   "16 Jul",
-   "17 Jul"
+   "16 Jul"
   ],
   "values": [
    2508.92,
@@ -1921,7 +2240,6 @@
    2507.92,
    2507.92,
    2507.92,
-   2498.12,
    2498.12,
    2498.12,
    2498.12,
@@ -2981,6 +3299,292 @@
    85.74
   ]
  },
+ "murban": {
+  "labels": [
+   "2 Jan",
+   "5 Jan",
+   "6 Jan",
+   "7 Jan",
+   "8 Jan",
+   "9 Jan",
+   "12 Jan",
+   "13 Jan",
+   "14 Jan",
+   "15 Jan",
+   "16 Jan",
+   "19 Jan",
+   "20 Jan",
+   "21 Jan",
+   "22 Jan",
+   "23 Jan",
+   "26 Jan",
+   "27 Jan",
+   "28 Jan",
+   "29 Jan",
+   "30 Jan",
+   "2 Feb",
+   "3 Feb",
+   "4 Feb",
+   "5 Feb",
+   "6 Feb",
+   "9 Feb",
+   "10 Feb",
+   "11 Feb",
+   "12 Feb",
+   "13 Feb",
+   "16 Feb",
+   "17 Feb",
+   "18 Feb",
+   "19 Feb",
+   "20 Feb",
+   "23 Feb",
+   "24 Feb",
+   "25 Feb",
+   "26 Feb",
+   "27 Feb",
+   "2 Mar",
+   "3 Mar",
+   "4 Mar",
+   "5 Mar",
+   "6 Mar",
+   "9 Mar",
+   "10 Mar",
+   "11 Mar",
+   "12 Mar",
+   "13 Mar",
+   "16 Mar",
+   "17 Mar",
+   "18 Mar",
+   "19 Mar",
+   "20 Mar",
+   "23 Mar",
+   "24 Mar",
+   "25 Mar",
+   "26 Mar",
+   "27 Mar",
+   "30 Mar",
+   "31 Mar",
+   "1 Apr",
+   "2 Apr",
+   "6 Apr",
+   "7 Apr",
+   "8 Apr",
+   "9 Apr",
+   "10 Apr",
+   "13 Apr",
+   "14 Apr",
+   "15 Apr",
+   "16 Apr",
+   "17 Apr",
+   "20 Apr",
+   "21 Apr",
+   "22 Apr",
+   "23 Apr",
+   "24 Apr",
+   "27 Apr",
+   "28 Apr",
+   "29 Apr",
+   "30 Apr",
+   "1 May",
+   "4 May",
+   "5 May",
+   "6 May",
+   "7 May",
+   "8 May",
+   "11 May",
+   "12 May",
+   "13 May",
+   "14 May",
+   "15 May",
+   "18 May",
+   "19 May",
+   "20 May",
+   "21 May",
+   "22 May",
+   "25 May",
+   "26 May",
+   "27 May",
+   "28 May",
+   "29 May",
+   "1 Jun",
+   "2 Jun",
+   "3 Jun",
+   "4 Jun",
+   "5 Jun",
+   "8 Jun",
+   "9 Jun",
+   "10 Jun",
+   "11 Jun",
+   "12 Jun",
+   "15 Jun",
+   "16 Jun",
+   "17 Jun",
+   "18 Jun",
+   "19 Jun",
+   "22 Jun",
+   "23 Jun",
+   "24 Jun",
+   "25 Jun",
+   "26 Jun",
+   "29 Jun",
+   "30 Jun",
+   "1 Jul",
+   "2 Jul",
+   "3 Jul",
+   "6 Jul",
+   "7 Jul",
+   "8 Jul",
+   "9 Jul",
+   "10 Jul",
+   "13 Jul",
+   "14 Jul",
+   "15 Jul",
+   "16 Jul",
+   "17 Jul"
+  ],
+  "values": [
+   61.19,
+   61.78,
+   60.62,
+   59.87,
+   62.32,
+   63.5,
+   63.88,
+   65.39,
+   66.96,
+   64.81,
+   65.1,
+   64.83,
+   65.85,
+   66.24,
+   64.73,
+   65.94,
+   65.25,
+   66.87,
+   67.8,
+   70.22,
+   69.91,
+   66.68,
+   68.28,
+   70.25,
+   68.38,
+   68.68,
+   69.39,
+   69.02,
+   69.6,
+   68.07,
+   68.32,
+   69.06,
+   67.93,
+   70.73,
+   72.08,
+   72.06,
+   71.55,
+   70.82,
+   71.06,
+   71.35,
+   74.24,
+   78.55,
+   79.98,
+   81.49,
+   94.51,
+   103.24,
+   110.17,
+   99.57,
+   100.69,
+   117.68,
+   114.36,
+   106.72,
+   110.93,
+   116.77,
+   124.07,
+   146.4,
+   135.17,
+   119.88,
+   99.84,
+   105.32,
+   109.58,
+   110.78,
+   106.81,
+   103.63,
+   114.84,
+   119.08,
+   119.26,
+   97.64,
+   99.62,
+   98.16,
+   103.33,
+   100.85,
+   100.85,
+   101.66,
+   91.7,
+   93.04,
+   96.29,
+   103.12,
+   105.95,
+   100.12,
+   101.99,
+   104.14,
+   107.27,
+   108.02,
+   103.76,
+   107.3,
+   105.97,
+   98.29,
+   96.66,
+   98.82,
+   103.6,
+   106,
+   104.15,
+   104.7,
+   108,
+   108.29,
+   107.35,
+   103.22,
+   102.15,
+   102.21,
+   89.69,
+   92.25,
+   87.92,
+   90.08,
+   90.05,
+   94.43,
+   96.09,
+   97.17,
+   93.5,
+   90.68,
+   91.9,
+   88.24,
+   89.99,
+   87.25,
+   83.02,
+   77.23,
+   71.81,
+   74.31,
+   73.93,
+   73.63,
+   70.79,
+   69.63,
+   67.54,
+   69.51,
+   67.26,
+   69.74,
+   69.01,
+   65.64,
+   65.22,
+   66.48,
+   66.68,
+   68.97,
+   73.57,
+   71.37,
+   70.97,
+   78.14,
+   81.93,
+   78.55,
+   77.73,
+   77.73
+  ]
+ },
  "dxy": {
   "labels": [
    "2 Jan",
@@ -3579,24 +4183,1032 @@
  },
  "fomc": [
   {
-   "date": "18th Mar 2026",
-   "range": "3.50% – 3.75%",
-   "repo": "3.75%",
-   "rrepo": "3.50%",
+   "date": "Wed Dec 31 2025 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4348.35",
+   "repo": "",
+   "rrepo": "18.0%",
    "show": true
   },
   {
-   "date": "29th Apr 2026",
-   "range": "3.50% – 3.75%",
-   "repo": "3.75%",
-   "rrepo": "3.50%",
+   "date": "Thu Jan 01 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4330.5",
+   "repo": "",
+   "rrepo": "29.0%",
    "show": true
   },
   {
-   "date": "17th Jun 2026",
-   "range": "3.50% – 3.75%",
-   "repo": "3.75%",
-   "rrepo": "3.50%",
+   "date": "Sun Jan 04 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4448.47",
+   "repo": "",
+   "rrepo": "17.0%",
+   "show": true
+  },
+  {
+   "date": "Mon Jan 05 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4497.34",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jan 06 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4453.04",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jan 07 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4476.73",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jan 08 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4510.45",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jan 11 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4594",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jan 12 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4588",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jan 13 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4620.83",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jan 14 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4614.91",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jan 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4595.1",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jan 18 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4671.02",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jan 19 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4763.49",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jan 20 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4836.67",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jan 21 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4936.75",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jan 22 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4982.91",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jan 25 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5015.34",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jan 26 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5189.62",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jan 27 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5400.25",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jan 28 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5395.88",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jan 29 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4865.35",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Feb 01 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4666.27",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Feb 02 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4939.33",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Feb 03 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4963.6",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Feb 04 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4770.95",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Feb 05 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4961.15",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Feb 08 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5065.55",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Feb 09 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5023.47",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Feb 10 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5078.96",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Feb 11 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4920.32",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Feb 12 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5043.11",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Feb 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4992.37",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Feb 16 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4877.7",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Feb 17 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4979.45",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Feb 18 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4999.35",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Feb 19 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5104.34",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Feb 22 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5231.55",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Feb 23 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5148.18",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Feb 24 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5171.16",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Feb 25 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5187.26",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Feb 26 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5277.9",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Mar 01 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5327.42",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Mar 02 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5087.47",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Mar 03 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5135.92",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Mar 04 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5077.39",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Mar 05 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5171.12",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Mar 08 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5139.56",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Mar 09 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5192.94",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Mar 10 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5177.07",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Mar 11 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5080.07",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Mar 12 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5019.25",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Mar 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5006.43",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Mar 16 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "5006",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Mar 17 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4818.81",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Mar 18 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4651.73",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Mar 19 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4491.15",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Mar 22 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4407.62",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Mar 23 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4474.44",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Mar 24 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4506.55",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Mar 25 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4380.03",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Mar 26 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4492.99",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Mar 29 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4511.25",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Mar 30 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4672.01",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Mar 31 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4758.76",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Apr 01 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4676.42",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Apr 02 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4676.42",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Apr 05 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4650.89",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Apr 06 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4706",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Apr 07 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4719.37",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Apr 08 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4766",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Apr 09 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4748.18",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Apr 12 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4741.69",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Apr 13 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4841.14",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Apr 14 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4791.14",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Apr 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4788.58",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Apr 16 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4830.43",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Apr 19 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4820.83",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Apr 20 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4712.85",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Apr 21 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4738.78",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Apr 22 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4693.88",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Apr 23 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4709.25",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Apr 26 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4682.1",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Apr 27 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4595.51",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Apr 28 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4544.12",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Apr 29 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4622.59",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Apr 30 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4614.95",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun May 03 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4523.9",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon May 04 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4557.23",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue May 05 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4690.25",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed May 06 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4686.81",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu May 07 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4714.89",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun May 10 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4735.27",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon May 11 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4715.27",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue May 12 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4688.63",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed May 13 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4651.97",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu May 14 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4540.07",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun May 17 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4567.61",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon May 18 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4482.46",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue May 19 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4545.16",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed May 20 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4545.18",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu May 21 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4509.38",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun May 24 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4571.16",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon May 25 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4507.51",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue May 26 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4458.21",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed May 27 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4494.93",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu May 28 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4539.27",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun May 31 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4485.15",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jun 01 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4488.09",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jun 02 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4434.42",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jun 03 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4475.43",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jun 04 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4329.33",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jun 07 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4329.85",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jun 08 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4264.15",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jun 09 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4075.08",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jun 10 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4215.12",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jun 11 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4219.32",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sat Jun 13 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4294.19",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jun 14 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4309.34",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jun 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4331.31",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jun 16 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4258.86",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jun 17 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4210.09",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jun 18 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4160.26",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sat Jun 20 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4140.43",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jun 21 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4187.71",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jun 22 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4128.05",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jun 23 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4058.24",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jun 24 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "3978.89",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jun 25 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4089.26",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sat Jun 27 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4062.71",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jun 28 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4015.02",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jun 29 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4005.95",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jun 30 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "3980.52",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jul 01 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4072.35",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jul 02 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4179.9",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sat Jul 04 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4183.21",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jul 05 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4157.43",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jul 06 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4098.5",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jul 07 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4054.1",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jul 08 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4105.58",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jul 09 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4100.8",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sat Jul 11 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4084.41",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Sun Jul 12 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4073.93",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Mon Jul 13 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4017.88",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Jul 14 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4029.09",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Wed Jul 15 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "4030.87",
+   "repo": "",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Thu Jul 16 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "3996.22",
+   "repo": "",
+   "rrepo": "",
    "show": true
   }
  ],
@@ -4967,8 +6579,8 @@
  ],
  "execSummary": {
   "usdlkr": "336.15/ 336.25",
-  "liqDir": "",
-  "liqDelta": ""
+  "liqDir": "increased",
+  "liqDelta": 4.56
  },
  "marketNews": [
   "Treasury Bill Auction Results",
