@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -254,21 +254,7 @@ canvas{max-width:100%!important}
 .cmp-diff-pill.flat{background:rgba(120,150,190,0.14);color:#7fa3c8}
 .news-more-btn{display:inline-block;font-size:12px;font-weight:700;color:#0a1628;background:#c8a84b;padding:8px 16px;border-radius:7px;text-decoration:none;transition:.15s}
 .news-more-btn:hover{background:#dcc069}
-/* notification */
-#notif-btn{background:transparent;border:1.5px solid #1a3050;border-radius:7px;cursor:pointer;font-size:16px;line-height:1;padding:5px 9px;color:#5a7a9a;flex-shrink:0}
-#notif-btn.notif-on{border-color:#6dd4a0;color:#6dd4a0;background:rgba(109,212,160,.09)}
-#notif-drop{position:fixed;top:60px;right:16px;z-index:9998;background:#0b1830;border:1.5px solid #1a3050;border-radius:12px;padding:14px 16px;min-width:230px;box-shadow:0 8px 32px rgba(0,0,0,.55);display:none}
-#notif-drop.open{display:block}
-#notif-drop .nd-title{font-size:12px;font-weight:700;color:#c8a84b;margin-bottom:8px;letter-spacing:.4px}
-#notif-drop .nd-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;font-size:11px;color:#9fb6d4}
-#notif-drop .nd-toggle{position:relative;display:inline-block;width:38px;height:20px;flex-shrink:0}
-#notif-drop .nd-toggle input{opacity:0;width:0;height:0}
-#notif-drop .nd-slider{position:absolute;inset:0;background:#1a3050;border-radius:20px;cursor:pointer}
-#notif-drop .nd-slider:before{content:"";position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:#5a7a9a;border-radius:50%}
-#notif-drop .nd-toggle input:checked+.nd-slider{background:#1f7a4d}
-#notif-drop .nd-toggle input:checked+.nd-slider:before{transform:translateX(18px);background:#6dd4a0}
-#notif-drop .nd-hint{font-size:9.5px;color:#5a7a9a;margin-top:8px;line-height:1.4}
-
+.event-strip::-webkit-scrollbar{height:5px}
 .event-strip::-webkit-scrollbar-thumb{background:#1a3050;border-radius:3px}
 .es-lead{flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#c8a84b;padding-right:4px;white-space:nowrap}
 .es-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:7px;background:rgba(13,30,56,0.7);border:1px solid #1a3050;border-radius:7px;padding:4px 10px;white-space:nowrap;cursor:pointer;transition:.15s}
@@ -292,18 +278,8 @@ canvas{max-width:100%!important}
     <div class="hdr-right">
       <div class="hdr-date" id="dateDisplay">—</div>
       <span class="hdr-live">LIVE</span>
-      <button id="notif-btn" onclick="toggleNotifDrop()" title="Notifications">🔕</button>
       <span id="last-updated" style="font-size:10px;color:#7fa3c8;margin-right:8px"></span>
     </div>
-  </div>
-  <!-- notification dropdown -->
-  <div id="notif-drop">
-    <div class="nd-title">🔔 Push Notifications</div>
-    <div class="nd-row">
-      <span>Notify when data updates</span>
-      <label class="nd-toggle"><input type="checkbox" id="notif-chk" onchange="onNotifChk(this)"><span class="nd-slider"></span></label>
-    </div>
-    <div class="nd-hint" id="notif-hint">Enable to receive a notification when market data is refreshed.</div>
   </div>
 
   <!-- LIVE MARKET NEWS RIBBON -->
@@ -351,8 +327,6 @@ canvas{max-width:100%!important}
     <div class="panel full-width" style="margin-top:14px">
       <div class="panel-title" id="bondtxn-title">Outright Treasury Bond Transaction Volumes (Rs.Mn)<span class="close-date" id="bondtxn-close"></span><span id="bondtxn-more" style="float:right"></span></div>
       <canvas id="bondtxnChart" style="height:280px;max-height:280px"></canvas>
-      <div id="bondtxn-detail" style="display:none;margin-top:10px;background:#0b1830;border:1px solid #1a3050;border-left:3px solid #c8a84b;border-radius:7px;padding:10px 14px"></div>
-      <div id="bondtxn-hint" style="font-size:9.5px;color:#3a5a7a;text-align:center;margin-top:6px;letter-spacing:.3px">↑ Hover a bar to see bond details</div>
     </div>
   </div>
 
@@ -377,20 +351,26 @@ canvas{max-width:100%!important}
         <thead><tr><th>Instrument</th><th>Latest</th><th>Previous</th></tr></thead>
         <tbody id="dyn-windows"></tbody>
       </table>
-      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Repo / Reverse Repo Auction</div>
+    </div>
+    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(360px,100%),1fr));gap:14px;margin-bottom:14px">
+    <div class="panel">
+      <div class="panel-title">Repo / Reverse Repo Auction</div>
       <div style="overflow-x:auto"><table style="font-size:11px">
         <thead><tr><th>Date</th><th>Repo<br>Offered</th><th>Rev.Repo<br>Offered</th><th>Received</th><th>Accepted</th><th>Min%</th><th>Max%</th><th>W.A.<br>Yield%</th></tr></thead>
         <tbody id="dyn-repoauc"></tbody>
       </table></div>
-      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">OMO &mdash; Term Repo / Reverse Repo Transactions</div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">OMO &mdash; Term Repo / Reverse Repo Transactions</div>
       <div style="overflow-x:auto"><table style="font-size:11px">
         <thead><tr><th>Auction</th><th>Settlement</th><th>Repo<br>Offered</th><th>Rev.Repo<br>Offered</th><th>Received</th><th>Accepted</th><th>Min%</th><th>Max%</th></tr></thead>
         <tbody id="dyn-omoterm"></tbody>
       </table></div>
     </div>
-    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
   </div>
-
 
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px;margin-bottom:14px" class="opr-srr-grid">
     <div class="panel">
@@ -614,11 +594,10 @@ canvas{max-width:100%!important}
       <div class="panel"><div class="panel-title">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="mini-tbl" id="dxyTbl"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
     </div>
 
-    <!-- Brent + WTI + Murban -->
-    <div class="grid-3col" style="grid-template-columns:repeat(3,1fr)">
+    <!-- Brent + WTI -->
+    <div class="grid-2x2">
       <div class="panel"><div class="panel-title">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
       <div class="panel"><div class="panel-title">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
-      <div class="panel"><div class="panel-title">Murban Crude Oil (USD / bbl)</div><canvas id="murbanChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="murbanStat"></div><div class="mini-tbl" id="murbanTbl"></div><div class="rpt-note" id="murbanNote">Awaiting data upload.</div></div>
     </div>
   </div>
 
@@ -1046,87 +1025,6 @@ function showUpdateToast(){
 
 let _lastDataHash=null;
 let _lastNewsHash=null;
-
-// ── NOTIFICATIONS ─────────────────────────────────────────
-let _notifOn=localStorage.getItem('mvs_notif')==='1';
-function _notifSupported(){return 'Notification' in window;}
-function _updateNotifUI(){
-  const btn=document.getElementById('notif-btn');
-  const chk=document.getElementById('notif-chk');
-  const hint=document.getElementById('notif-hint');
-  if(!_notifSupported()){if(btn)btn.style.display='none';return;}
-  const perm=Notification.permission;
-  const on=_notifOn&&perm==='granted';
-  if(btn){btn.textContent=on?'🔔':'🔕';btn.className=on?'notif-on':'';btn.title=on?'Notifications ON':'Enable notifications';}
-  if(chk)chk.checked=on;
-  if(hint)hint.textContent=perm==='denied'?'Notifications blocked — enable in browser settings.':on?'You will be notified when market data updates.':'Toggle on to receive push notifications.';
-}
-async function onNotifChk(chk){
-  if(!_notifSupported()||!chk.checked){_notifOn=false;localStorage.setItem('mvs_notif','0');_updateNotifUI();return;}
-  if(Notification.permission==='denied'){chk.checked=false;_updateNotifUI();return;}
-  const perm=await Notification.requestPermission();
-  _notifOn=perm==='granted';localStorage.setItem('mvs_notif',_notifOn?'1':'0');
-  _updateNotifUI();
-  if(_notifOn)try{new Notification('MVS Market Watch',{body:'Notifications enabled ✓',tag:'mvs-test',silent:true});}catch(e){}
-}
-function toggleNotifDrop(){
-  const d=document.getElementById('notif-drop');
-  if(d){d.classList.toggle('open');if(d.classList.contains('open'))_updateNotifUI();}
-}
-document.addEventListener('click',e=>{
-  const d=document.getElementById('notif-drop');
-  const b=document.getElementById('notif-btn');
-  if(d&&!d.contains(e.target)&&e.target!==b)d.classList.remove('open');
-});
-const _NOTIF_GROUPS=[
-  {id:'mm',    keys:['callMarket','repoMarket','liquidity','windows','opr'],   label:'Money Market rates updated',           page:'page-mm',   anchor:'mm-close'},
-  {id:'tbill', keys:['tbillCurve','tbillAuction','tbillRef'],                  label:'T-Bill rates updated',                 page:'page-fi',   anchor:'tbillChart'},
-  {id:'bonds', keys:['bonds','bondSecondary'],                                 label:'Treasury Bond rates updated',          page:'page-fi',   anchor:'tbond-close'},
-  {id:'bondvol',keys:['bondTransVol'],                                         label:'Bond Transaction Volumes updated',      page:'page-fi',   anchor:'bondtxnChart'},
-  {id:'fx',    keys:['usdlkr','fxSwaps','spot','crossRates','valueDates'],     label:'USD/LKR & FX rates updated',           page:'page-fx',   anchor:'fxChart'},
-  {id:'fxvol', keys:['fxSummary'],                                             label:'FX Market Volume updated',             page:'page-fx',   anchor:'fxChart'},
-  {id:'inflation',keys:['inflation'],                                          label:'Inflation data updated',               page:'page-macro',anchor:null},
-  {id:'news',  keys:['marketNews','execSummary'],                              label:'New market announcement',              page:'page-open', anchor:null},
-];
-let _lastGroupHashes={};
-_NOTIF_GROUPS.forEach(g=>{_lastGroupHashes[g.id]=null;});
-function _groupHash(data,keys){return JSON.stringify(keys.map(k=>data[k]??null));}
-function _checkAndNotify(newData){
-  _NOTIF_GROUPS.forEach(g=>{
-    const h=_groupHash(newData,g.keys),prev=_lastGroupHashes[g.id];
-    if(prev!==null&&prev!==h)_sendSectionNotif(g.label,g.page,g.anchor,g.id);
-    _lastGroupHashes[g.id]=h;
-  });
-}
-function _sendSectionNotif(label,page,anchor,gid){
-  _showDetailToast(label);
-  if(!_notifOn||!_notifSupported()||Notification.permission!=='granted')return;
-  const slNow=new Date(Date.now()+330*60000);
-  const hh=String(slNow.getUTCHours()).padStart(2,'0'),mm_=String(slNow.getUTCMinutes()).padStart(2,'0');
-  try{
-    const n=new Notification('MVS Market Watch',{body:label+'\n'+hh+':'+mm_+' SL  · Tap to view →',tag:'mvs-'+gid,renotify:true,silent:false});
-    n.onclick=()=>{window.focus();const btn=document.querySelector('.nav-btn[onclick*="'+page+'"]');if(btn)btn.click();if(anchor)setTimeout(()=>{const el=document.getElementById(anchor);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},150);n.close();};
-    setTimeout(()=>n.close(),14000);
-  }catch(e){}
-}
-let _detailToastTimer=null;
-function _showDetailToast(label){
-  const toast=document.getElementById('data-toast');
-  const timeEl=document.getElementById('toast-time');
-  const titleEl=toast&&toast.querySelector('.dt-title');
-  if(!toast)return;
-  const slNow=new Date(Date.now()+330*60000);
-  const hh=String(slNow.getUTCHours()).padStart(2,'0'),mm_=String(slNow.getUTCMinutes()).padStart(2,'0');
-  const MON_=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const dd=slNow.getUTCDate(),mo=MON_[slNow.getUTCMonth()];
-  if(titleEl)titleEl.textContent=label;
-  if(timeEl)timeEl.textContent=dd+' '+mo+' · '+hh+':'+mm_+' SL';
-  toast.classList.add('show');
-  clearTimeout(_detailToastTimer);
-  _detailToastTimer=setTimeout(()=>toast.classList.remove('show'),5000);
-}
-_updateNotifUI();
-
 async function loadData(silent=false){
   const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
   if(!silent){bar.style.display="block";errEl.style.display="none";}
@@ -1135,12 +1033,13 @@ async function loadData(silent=false){
     if(!res.ok)throw new Error("HTTP "+res.status);
     const txt=await res.text();
     bar.style.display="none";
+    // Only re-render (and rebuild charts) when the published data has actually changed.
+    // This stops the every-30s flicker — the dashboard refreshes only after you publish.
     if(txt===_lastDataHash)return;
     const isFirst=_lastDataHash===null;
     _lastDataHash=txt;
-    const parsed=JSON.parse(txt);
-    render(parsed);
-    if(!isFirst)_checkAndNotify(parsed);
+    render(JSON.parse(txt));
+    // if(!isFirst)showUpdateToast();   // toast disabled per request — no popup on data refresh
   }catch(e){
     bar.style.display="none";
     if(!silent){errEl.style.display="block";errEl.textContent="Could not load data — "+e.message;}
@@ -1942,8 +1841,7 @@ function buildCharts(d){
   [["gold","goldChart","goldStat","goldNote","#c8a84b","USD/oz",2],
    ["dxy","dxyChart","dxyStat","dxyNote","#4da3e8","DXY",2],
    ["brent","brentChart","brentStat","brentNote","#e08a3c","USD/bbl",2],
-   ["wti","wtiChart","wtiStat","wtiNote","#6dd4a0","USD/bbl",2],
-   ["murban","murbanChart","murbanStat","murbanNote","#a87ccc","USD/bbl",2]].forEach(([key,cv,statId,noteId,color,unit,dec])=>{
+   ["wti","wtiChart","wtiStat","wtiNote","#6dd4a0","USD/bbl",2]].forEach(([key,cv,statId,noteId,color,unit,dec])=>{
     const el=document.getElementById(cv);if(!el)return;
     destroyChart(key);
     const series=d[key]||{};
