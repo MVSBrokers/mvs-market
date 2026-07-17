@@ -178,7 +178,7 @@ const SECTIONS=[
  {id:'tbillcurve',title:'T-Bill Yield Curve (series)',keys:['tbillCurve'],group:'Fixed Income'},
  {id:'tbonds',title:'Treasury Bonds (daily rates)',keys:['bonds'],group:'Fixed Income'},
  {id:'secondary',title:'T-Bond Secondary Yields',keys:['bondSecondary'],group:'Fixed Income'},
- {id:'bondtransxn',title:'T-Bond Outright Transaction Volumes',keys:['bondTransVol'],group:'Fixed Income'},
+ {id:'bondtransxn',title:'T-Bond Outright Transaction Volumes',keys:['bondTransVol','bondTransVolLink'],group:'Fixed Income'},
  {id:'cbsl',title:'CBSL Holdings of Govt Securities',keys:['cbsl','cbslHoldings'],group:'Macro Economy'},
  {id:'foreign',title:'Foreign Holdings of Govt Securities',keys:['foreign'],group:'Macro Economy'},
  {id:'reserves',title:'Foreign Currency Reserves',keys:['reserves'],group:'Macro Economy'},
@@ -329,6 +329,12 @@ const oldBondAucLink =
     ? LOADED.bondAucLink
     : '';
 
+// Preserve manually entered "More details" link for Outright T-Bond Transaction Volumes (not derived from the Excel)
+const oldBondTransVolLink =
+  LOADED && typeof LOADED.bondTransVolLink === 'string'
+    ? LOADED.bondTransVolLink
+    : '';
+
 const oldHidden =
   LOADED && LOADED.hidden
     ? JSON.parse(JSON.stringify(LOADED.hidden))
@@ -352,6 +358,9 @@ LOADED.newsLink = oldNewsLink;
 // Restore the auction "More details" links after import
 LOADED.billAucLink = oldBillAucLink;
 LOADED.bondAucLink = oldBondAucLink;
+
+// Restore the Outright T-Bond Transaction Volumes "More details" link after import
+LOADED.bondTransVolLink = oldBondTransVolLink;
 
 // Restore hidden settings
 LOADED.hidden = oldHidden;
@@ -566,13 +575,16 @@ function renderSections(){
     } else if(sec.id==='bondauc'){
       body='<div class="ed-sub"><div class="ed-sub-t">"More details" link for Next T-Bond Auction (optional)</div><input id="bondauc-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'More details\' button under Next T-Bond Auction that opens this" value="'+escAttr(LOADED.bondAucLink||'')+'"></div>'
         + (LOADED.bondAuctions!=null?`<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div>${renderNode(LOADED.bondAuctions,'bondAuctions')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div><span class="muted">No data in this workbook.</span></div>');
+    } else if(sec.id==='bondtransxn'){
+      body='<div class="ed-sub"><div class="ed-sub-t">"More details" link for Outright T-Bond Transaction Volumes (optional)</div><input id="bondtransxn-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'More details\' button under Outright T-Bond Transaction Volumes that opens this" value="'+escAttr(LOADED.bondTransVolLink||'')+'"></div>'
+        + (LOADED.bondTransVol!=null?`<div class="ed-sub"><div class="ed-sub-t">bondTransVol</div>${renderNode(LOADED.bondTransVol,'bondTransVol')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondTransVol</div><span class="muted">No data in this workbook.</span></div>');
     } else {
       body=sec.keys.map(k=>{
         if(LOADED[k]==null)return `<div class="ed-sub"><div class="ed-sub-t">${k}</div><span class="muted">No data in this workbook.</span></div>`;
         return `<div class="ed-sub"><div class="ed-sub-t">${k}</div>${renderNode(LOADED[k],k)}</div>`;
       }).join('');
     }
-    const presentEff=sec.id==='results'?true:present;
+    const presentEff=(sec.id==='results'||sec.id==='bondtransxn')?true:present;
     return groupHdr+`<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
       <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
         <div><div class="st">${sec.title}${hid?' <span class="hid-tag">hidden on dashboard</span>':''}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
@@ -630,6 +642,8 @@ function applyEdits(){
   if(balk&&LOADED)LOADED.billAucLink=balk.value.trim();
   const bolk=document.getElementById('bondauc-link');
   if(bolk&&LOADED)LOADED.bondAucLink=bolk.value.trim();
+  const btvlk=document.getElementById('bondtransxn-link');
+  if(btvlk&&LOADED)LOADED.bondTransVolLink=btvlk.value.trim();
   saveLocal();
 }
 function recomputeMeta(p){
