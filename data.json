@@ -1721,62 +1721,62 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 3.75,
-   "wa": 336.4
+   "volume": 35.75,
+   "wa": 336.31
   },
   {
    "tenor": "Tom",
-   "volume": null,
-   "wa": null
+   "volume": 6.15,
+   "wa": 336.17
   },
   {
    "tenor": "Cash",
-   "volume": 14.5,
-   "wa": 336.28
+   "volume": 23,
+   "wa": 336.13
   },
   {
    "tenor": "Sub Total",
-   "volume": 18.25,
+   "volume": 64.9,
    "wa": null
   },
   {
-   "tenor": "S+3",
-   "volume": 4,
-   "wa": 336.57
+   "tenor": "S+1",
+   "volume": 2,
+   "wa": 336.44
   },
   {
    "tenor": "1W",
-   "volume": 9.5,
-   "wa": 336.76
+   "volume": 2,
+   "wa": 336.8
   },
   {
-   "tenor": "2W",
-   "volume": 1.07,
-   "wa": 337.25
+   "tenor": "3W",
+   "volume": 4,
+   "wa": 337.6
   },
   {
    "tenor": "1M",
-   "volume": 1.2,
-   "wa": 338.15
+   "volume": 3,
+   "wa": 337.95
   },
   {
    "tenor": "2M",
-   "volume": 1,
-   "wa": 339.98
+   "volume": 2,
+   "wa": 339.54
   },
   {
-   "tenor": "3M",
-   "volume": 2,
-   "wa": 341.53
+   "tenor": "4M",
+   "volume": 1,
+   "wa": 342.65
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 18.77,
+   "volume": 14,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 37.02,
+   "volume": 78.9,
    "wa": null
   }
  ],
@@ -5216,6 +5216,7 @@
  "newsLink": "https://www.treasury.gov.lk/api/file/b76ddda1-a014-458c-862e-569f317d637b",
  "billAucLink": "https://www.treasury.gov.lk/api/file/2f8f2e9d-3abf-42ec-85d4-f7c74d1d2e03",
  "bondAucLink": "",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/5281bf7e-ef55-4853-922b-f0788a254924",
  "hidden": {
   "tbills": true
  },
@@ -5246,6 +5247,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/5281bf7e-ef55-4853-922b-f0788a254924"
+ }
 }
