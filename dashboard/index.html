@@ -351,20 +351,26 @@ canvas{max-width:100%!important}
         <thead><tr><th>Instrument</th><th>Latest</th><th>Previous</th></tr></thead>
         <tbody id="dyn-windows"></tbody>
       </table>
-      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Repo / Reverse Repo Auction</div>
+    </div>
+    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(360px,100%),1fr));gap:14px;margin-bottom:14px">
+    <div class="panel">
+      <div class="panel-title">Repo / Reverse Repo Auction</div>
       <div style="overflow-x:auto"><table style="font-size:11px">
         <thead><tr><th>Date</th><th>Repo<br>Offered</th><th>Rev.Repo<br>Offered</th><th>Received</th><th>Accepted</th><th>Min%</th><th>Max%</th><th>W.A.<br>Yield%</th></tr></thead>
         <tbody id="dyn-repoauc"></tbody>
       </table></div>
-      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">OMO &mdash; Term Repo / Reverse Repo Transactions</div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">OMO &mdash; Term Repo / Reverse Repo Transactions</div>
       <div style="overflow-x:auto"><table style="font-size:11px">
         <thead><tr><th>Auction</th><th>Settlement</th><th>Repo<br>Offered</th><th>Rev.Repo<br>Offered</th><th>Received</th><th>Accepted</th><th>Min%</th><th>Max%</th></tr></thead>
         <tbody id="dyn-omoterm"></tbody>
       </table></div>
     </div>
-    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
   </div>
-
 
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px;margin-bottom:14px" class="opr-srr-grid">
     <div class="panel">
@@ -588,11 +594,10 @@ canvas{max-width:100%!important}
       <div class="panel"><div class="panel-title">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="mini-tbl" id="dxyTbl"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
     </div>
 
-    <!-- Brent + WTI + Murban -->
-    <div class="grid-3col" style="grid-template-columns:repeat(3,1fr)">
+    <!-- Brent + WTI -->
+    <div class="grid-2x2">
       <div class="panel"><div class="panel-title">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
       <div class="panel"><div class="panel-title">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
-      <div class="panel"><div class="panel-title">Murban Crude Oil (USD / bbl)</div><canvas id="murbanChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="murbanStat"></div><div class="mini-tbl" id="murbanTbl"></div><div class="rpt-note" id="murbanNote">Awaiting data upload.</div></div>
     </div>
   </div>
 
@@ -1836,8 +1841,7 @@ function buildCharts(d){
   [["gold","goldChart","goldStat","goldNote","#c8a84b","USD/oz",2],
    ["dxy","dxyChart","dxyStat","dxyNote","#4da3e8","DXY",2],
    ["brent","brentChart","brentStat","brentNote","#e08a3c","USD/bbl",2],
-   ["wti","wtiChart","wtiStat","wtiNote","#6dd4a0","USD/bbl",2],
-   ["murban","murbanChart","murbanStat","murbanNote","#a87ccc","USD/bbl",2]].forEach(([key,cv,statId,noteId,color,unit,dec])=>{
+   ["wti","wtiChart","wtiStat","wtiNote","#6dd4a0","USD/bbl",2]].forEach(([key,cv,statId,noteId,color,unit,dec])=>{
     const el=document.getElementById(cv);if(!el)return;
     destroyChart(key);
     const series=d[key]||{};
