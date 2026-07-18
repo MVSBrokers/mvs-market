@@ -1326,7 +1326,7 @@ function render(d){
     let last;
     if(ovClose){const m=String(ovClose).match(/(\d{1,2})\D+([A-Za-z]+)\D+(\d{4})/);
       if(m){const mi=MON_B.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());if(mi>=0)last=new Date(+m[3],mi,+m[1]);}}
-    if(!last){const slNow_b=new Date(Date.now()+330*60000);const _bdToday=new Date(slNow_b.getUTCFullYear(),slNow_b.getUTCMonth(),slNow_b.getUTCDate());last=(_isSLFXWork(_bdToday)&&slNow_b.getUTCHours()>=16)?slWorkDay(0):slWorkDay(1);}
+    if(!last){const slNow_b=new Date(Date.now()+330*60000);const _bdToday=new Date(slNow_b.getUTCFullYear(),slNow_b.getUTCMonth(),slNow_b.getUTCDate());last=!_isSLFXWork(_bdToday)?slWorkDay(0):(slNow_b.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));}
     const labels=[];
     let x=new Date(last.getFullYear(),last.getMonth(),last.getDate());
     for(let i=0;i<bHeaders.length;i++){
@@ -1635,7 +1635,7 @@ function renderExtras(d){
    // Closing date: before 4 PM SL → yesterday (T-1); after 4 PM SL → today (T)
    const slNow_cd=new Date(Date.now()+330*60000);
    const _cdToday=new Date(slNow_cd.getUTCFullYear(),slNow_cd.getUTCMonth(),slNow_cd.getUTCDate());
-   const cdAuto=_isSLFXWork(_cdToday)&&slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1);
+   const cdAuto=!_isSLFXWork(_cdToday)?slWorkDay(0):(slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(cdAuto);
  ["mm-close","fx-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{
   const e=document.getElementById(id);
@@ -1786,7 +1786,7 @@ function buildCharts(d){
     let last;
     if(ovClose){const m=String(ovClose).match(/(\d{1,2})\D+([A-Za-z]+)\D+(\d{4})/);
       if(m){const mi=MON.findIndex(x=>x.toLowerCase()===m[2].slice(0,3).toLowerCase());if(mi>=0)last=new Date(+m[3],mi,+m[1]);}}
-    if(!last){const slNow_b=new Date(Date.now()+330*60000);const _bdToday2=new Date(slNow_b.getUTCFullYear(),slNow_b.getUTCMonth(),slNow_b.getUTCDate());last=(_isSLFXWork(_bdToday2)&&slNow_b.getUTCHours()>=16)?slWorkDay(0):slWorkDay(1);}
+    if(!last){const slNow_b=new Date(Date.now()+330*60000);const _bdToday2=new Date(slNow_b.getUTCFullYear(),slNow_b.getUTCMonth(),slNow_b.getUTCDate());last=!_isSLFXWork(_bdToday2)?slWorkDay(0):(slNow_b.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));}
     let x=new Date(last.getFullYear(),last.getMonth(),last.getDate());
     const labels=[];
     for(let i=0;i<yBHead.length;i++){labels.unshift(fmtA(x));do{x.setDate(x.getDate()-1);}while(!isSLW(x));}
