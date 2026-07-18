@@ -206,6 +206,14 @@ canvas{max-width:100%!important}
 .event-card .ev-days.today{color:#ff8a78;background:rgba(255,138,120,.14)}
 .event-card .ev-days.passed{color:#7a93b4;background:rgba(122,147,180,.1)}
 .mini-tbl{margin-top:8px;max-height:128px;overflow-y:auto;border:1px solid #14283f;border-radius:6px}
+.repo-card{background:#0d1c30;border:1px solid #14283f;border-radius:8px;padding:12px;margin-top:10px}
+.repo-card:first-child{margin-top:0}
+.repo-card-date{font-size:12px;font-weight:700;color:#eaf2ff;margin-bottom:8px}
+.repo-stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px 10px}
+.repo-stat{display:flex;flex-direction:column;gap:2px}
+.repo-stat .rk{font-size:9.5px;color:#7fa3c8;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.repo-stat .rv{font-size:13px;font-weight:600;color:#dce8fb}
+.repo-empty{text-align:center;color:#5a7a9a;font-style:italic;padding:14px 0;font-size:12px}
 .mini-tbl table{width:100%;border-collapse:collapse;font-size:9.5px}
 .mini-tbl th{position:sticky;top:0;background:#0d1e38;color:#7fa3c8;font-weight:600;text-align:right;padding:3px 8px;letter-spacing:.3px;border-bottom:1px solid #1a3050}
 .mini-tbl th:first-child,.mini-tbl td:first-child{text-align:left}
@@ -353,6 +361,18 @@ canvas{max-width:100%!important}
       </table>
     </div>
     <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
+  </div>
+
+  <div style="font-size:13px;font-weight:800;color:#eaf2ff;letter-spacing:.5px;margin:4px 0 10px;padding-left:2px;border-left:3px solid #c8a84b;padding-left:10px">Money &amp; Repo Market <span style="font-weight:400;color:#7fa3c8;font-size:12px">— Repo Auctions</span></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(420px,100%),1fr));gap:14px;margin-bottom:14px" class="repo-auction-grid">
+    <div class="panel" data-sec="repoOvernight" style="border-top:3px solid #c8a84b">
+      <div class="panel-title">Repo / Reverse Repo Auction <span style="font-weight:400;color:#7fa3c8;font-size:12px">(Overnight)</span></div>
+      <div id="dyn-repoOvernight"></div>
+    </div>
+    <div class="panel" data-sec="repoOMO" style="border-top:3px solid #4da3e8">
+      <div class="panel-title">OMO - Term Repo <span style="font-weight:400;color:#7fa3c8;font-size:12px">/ Reverse Repo Transactions</span></div>
+      <div id="dyn-repoOMO"></div>
+    </div>
   </div>
 
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px;margin-bottom:14px" class="opr-srr-grid">
@@ -581,6 +601,11 @@ canvas{max-width:100%!important}
     <div class="grid-2x2">
       <div class="panel"><div class="panel-title">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
       <div class="panel"><div class="panel-title">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
+    </div>
+
+    <!-- Murban -->
+    <div class="grid-2x2">
+      <div class="panel"><div class="panel-title">Murban Crude Oil (USD / bbl)</div><canvas id="murbanChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="murbanStat"></div><div class="mini-tbl" id="murbanTbl"></div><div class="rpt-note" id="murbanNote">Awaiting data upload.</div></div>
     </div>
   </div>
 
@@ -1571,6 +1596,28 @@ function renderExtras(d){
   {const o=(d.opr||[]).filter(r=>r.show!==false);set('dyn-opr',o.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===o.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
   {const sr=(d.srr||[]).filter(r=>r.show!==false);set('dyn-srr',sr.map((x,i)=>`<tr><td>${escHtml(x.date)}</td><td${i===sr.length-1?' style="color:#c8a84b;font-weight:700"':''}>${fmt2(x.rate)}</td></tr>`).join('')||'<tr><td colspan="2" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');}
   {const w=d.windows||{};set('dyn-windows',`<tr><td>Standing Deposit (SDF)</td><td>${fmt2(w.sdf&&w.sdf.cur)}</td><td style="color:#7fa3c8">${fmt2(w.sdf&&w.sdf.prev)}</td></tr><tr><td>Standing Lending (SLF)</td><td>${fmt2(w.slf&&w.slf.cur)}</td><td style="color:#7fa3c8">${fmt2(w.slf&&w.slf.prev)}</td></tr>`);}
+  {const rows=(d.repoOvernight||[]).filter(r=>r.show!==false);
+   set('dyn-repoOvernight',rows.length?rows.map(r=>`<div class="repo-card"><div class="repo-card-date">${escHtml(r.date)}</div><div class="repo-stat-grid">
+      <div class="repo-stat"><span class="rk">Repo Offered</span><span class="rv">${fmt2(r.repoOffered)}</span></div>
+      <div class="repo-stat"><span class="rk">Reverse Repo Offered</span><span class="rv">${fmt2(r.reverseRepoOffered)}</span></div>
+      <div class="repo-stat"><span class="rk">Received</span><span class="rv">${fmt2(r.received)}</span></div>
+      <div class="repo-stat"><span class="rk">Accepted</span><span class="rv">${fmt2(r.accepted)}</span></div>
+      <div class="repo-stat"><span class="rk">Min Rate (%)</span><span class="rv">${fmt2(r.minRate)}</span></div>
+      <div class="repo-stat"><span class="rk">Max Rate (%)</span><span class="rv">${fmt2(r.maxRate)}</span></div>
+      <div class="repo-stat"><span class="rk">W.A. Yield (%)</span><span class="rv" style="color:#c8a84b">${fmt2(r.waYield)}</span></div>
+    </div></div>`).join(''):'<div class="repo-empty">Not published yet</div>');}
+  {const rows=(d.repoOMO||[]).filter(r=>r.show!==false);
+   set('dyn-repoOMO',rows.length?rows.map(r=>`<div class="repo-card"><div class="repo-card-date">${escHtml(r.auction)} <span style="color:#7fa3c8;font-weight:400">→ settles ${escHtml(r.settlement)}</span></div><div class="repo-stat-grid">
+      <div class="repo-stat"><span class="rk">Repo Offered</span><span class="rv">${fmt2(r.repoOffered)}</span></div>
+      <div class="repo-stat"><span class="rk">Reverse Offered</span><span class="rv">${fmt2(r.reverseOffered)}</span></div>
+      <div class="repo-stat"><span class="rk">Received</span><span class="rv">${fmt2(r.received)}</span></div>
+      <div class="repo-stat"><span class="rk">Accepted</span><span class="rv">${fmt2(r.accepted)}</span></div>
+      <div class="repo-stat"><span class="rk">Min Rate (%)</span><span class="rv">${fmt2(r.minRate)}</span></div>
+      <div class="repo-stat"><span class="rk">Max Rate (%)</span><span class="rv">${fmt2(r.maxRate)}</span></div>
+      <div class="repo-stat"><span class="rk">W.A. Yield (%)</span><span class="rv" style="color:#c8a84b">${fmt2(r.waYield)}</span></div>
+      <div class="repo-stat"><span class="rk">Maturity</span><span class="rv">${escHtml(r.maturity)}</span></div>
+      <div class="repo-stat"><span class="rk">Tenure (days)</span><span class="rv">${r.tenure!=null?r.tenure:'—'}</span></div>
+    </div></div>`).join(''):'<div class="repo-empty">Not published yet</div>');}
   // FI — secondary yields (table)
   set('dyn-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map((s,i)=>`<tr style="background:${i%2?'rgba(13,30,56,.4)':'transparent'}"><td style="padding:3px 10px;color:#d4e4f4;white-space:nowrap">${fmtMatDate(s.maturity)}</td><td style="padding:3px 10px;text-align:right;color:#6dd4a0;font-weight:600">${fmt2(s.bid)}</td><td style="padding:3px 10px;text-align:right;color:#4da3e8;font-weight:600">${fmt2(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>');
   // Announcement: auction schedules + outstanding (next auction highlighted)
@@ -1822,7 +1869,8 @@ function buildCharts(d){
   [["gold","goldChart","goldStat","goldNote","#c8a84b","USD/oz",2],
    ["dxy","dxyChart","dxyStat","dxyNote","#4da3e8","DXY",2],
    ["brent","brentChart","brentStat","brentNote","#e08a3c","USD/bbl",2],
-   ["wti","wtiChart","wtiStat","wtiNote","#6dd4a0","USD/bbl",2]].forEach(([key,cv,statId,noteId,color,unit,dec])=>{
+   ["wti","wtiChart","wtiStat","wtiNote","#6dd4a0","USD/bbl",2],
+   ["murban","murbanChart","murbanStat","murbanNote","#d46da0","USD/bbl",2]].forEach(([key,cv,statId,noteId,color,unit,dec])=>{
     const el=document.getElementById(cv);if(!el)return;
     destroyChart(key);
     const series=d[key]||{};
