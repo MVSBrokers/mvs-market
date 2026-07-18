@@ -5570,7 +5570,8 @@
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/5281bf7e-ef55-4853-922b-f0788a254924",
  "hidden": {
-  "tbills": true
+  "tbills": true,
+  "opr": true
  },
  "headers": {
   "bond": [
