@@ -758,10 +758,14 @@ function calcNOD(tenorRaw){
 
 function slValueDay(){
   const slNow=new Date(Date.now()+330*60000);
+  const todayVD=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
   const slHour=slNow.getUTCHours();
   const after4pm=slHour>=16;
-  if(!after4pm)return slWorkDay(0);
-  // After 4 PM: step forward from today's SL working day to the next SL working day
+  // Only hold at "today" if today itself is actually a working day and it's before 4 PM.
+  // On a non-working day (weekend/holiday), there's no "today" session to be before/after
+  // the cutoff of — the value date must always be the NEXT SL working day.
+  if(_isSLFXWork(todayVD)&&!after4pm)return slWorkDay(0);
+  // Otherwise (non-working day, OR a working day already past 4 PM): step forward to the next SL working day
   let base=slWorkDay(0);
   let nxt=new Date(base.getFullYear(),base.getMonth(),base.getDate()+1);
   const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04",
