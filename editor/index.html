@@ -245,6 +245,40 @@ async function getPublished(cfg){
 // ── SL/US date engine (mirrors the dashboard) — pre-fills auto dates so they show & can be corrected ──
 const _MON3_ED=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const _MONF_ED=["January","February","March","April","May","June","July","August","September","October","November","December"];
+// Tries to recognize a date embedded in a URL/filename (e.g. .../trade-summary-17-07-2026.pdf,
+// .../2026-07-17-report.xlsx, .../TradeSummary_17072026.pdf) and formats it as "17th July 2026".
+// Returns null if no plausible date is found — many real-world links (e.g. treasury.gov.lk's
+// UUID-based file URLs) simply don't contain one, so this is a best-effort auto-fill only.
+function extractDateFromUrl(url){
+  const mk=(y,mo,da)=>{
+    y=+y;mo=+mo;da=+da;
+    if(mo<1||mo>12||da<1||da>31)return null;
+    if(y<100)y+=2000;
+    if(y<2000||y>2100)return null;
+    const dt=new Date(y,mo-1,da);
+    if(dt.getFullYear()!==y||dt.getMonth()!==mo-1||dt.getDate()!==da)return null;
+    return fmtOrdPlain(dt);
+  };
+  let m;
+  // YYYY-MM-DD / YYYY.MM.DD / YYYY_MM_DD (unambiguous, check first)
+  if((m=url.match(/(\d{4})[-_.](\d{2})[-_.](\d{2})/))){const r=mk(m[1],m[2],m[3]);if(r)return r;}
+  // DD-MM-YYYY / DD.MM.YYYY / DD_MM_YYYY (Sri Lanka convention)
+  if((m=url.match(/(\d{2})[-_.](\d{2})[-_.](\d{4})/))){const r=mk(m[3],m[2],m[1]);if(r)return r;}
+  // DDMMYYYY run together in a filename
+  if((m=url.match(/(?:^|[^\d])(\d{2})(\d{2})(\d{4})(?:[^\d]|$)/))){const r=mk(m[3],m[2],m[1]);if(r)return r;}
+  return null;
+}
+// Called when the Trade Summary link changes — auto-fills the date field from the URL if a
+// date can be recognized AND the date field is still empty. Never overwrites a date the user
+// has already typed in manually.
+function autoFillBondtxnDate(){
+  const lk=document.getElementById('bondtxn-link');
+  const dt=document.getElementById('bondtxn-link-date');
+  if(!lk||!dt)return;
+  if(dt.value&&dt.value.trim())return; // don't clobber a manual entry
+  const found=extractDateFromUrl(lk.value.trim());
+  if(found)dt.value=found;
+}
 function slWorkDay(back){
   const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04","2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13","2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29","2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08","2026-11-24","2026-12-23","2026-12-25","2027-02-04"]);
   const isSLWork=d=>{if(d.getDay()===0||d.getDay()===6)return false;const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");return !SL_HOL.has(iso);};
@@ -335,6 +369,10 @@ const oldBondTransVolLink =
   LOADED && typeof LOADED.bondTransVolLink === 'string'
     ? LOADED.bondTransVolLink
     : '';
+const oldBondTransVolLinkDate =
+  LOADED && typeof LOADED.bondTransVolLinkDate === 'string'
+    ? LOADED.bondTransVolLinkDate
+    : '';
 
 const oldHidden =
   LOADED && LOADED.hidden
@@ -360,6 +398,7 @@ LOADED.newsLink = oldNewsLink;
 LOADED.billAucLink = oldBillAucLink;
 LOADED.bondAucLink = oldBondAucLink;
 LOADED.bondTransVolLink = oldBondTransVolLink;
+LOADED.bondTransVolLinkDate = oldBondTransVolLinkDate;
 
 // Restore hidden settings
 LOADED.hidden = oldHidden;
@@ -575,7 +614,8 @@ function renderSections(){
       body='<div class="ed-sub"><div class="ed-sub-t">"More details" link for Next T-Bond Auction (optional)</div><input id="bondauc-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'More details\' button under Next T-Bond Auction that opens this" value="'+escAttr(LOADED.bondAucLink||'')+'"></div>'
         + (LOADED.bondAuctions!=null?`<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div>${renderNode(LOADED.bondAuctions,'bondAuctions')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div><span class="muted">No data in this workbook.</span></div>');
     } else if(sec.id==='bondtransxn'){
-      body='<div class="ed-sub"><div class="ed-sub-t">"More details" link (optional)</div><input id="bondtxn-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'More details\' button next to the chart title that opens this" value="'+escAttr(LOADED.bondTransVolLink||'')+'"></div>'
+      body='<div class="ed-sub"><div class="ed-sub-t">"Trade Summary" link (optional)</div><input id="bondtxn-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'Trade Summary\' button next to the chart title that opens this" value="'+escAttr(LOADED.bondTransVolLink||'')+'" onchange="autoFillBondtxnDate()" onblur="autoFillBondtxnDate()"></div>'
+        + '<div class="ed-sub"><div class="ed-sub-t">"Trade Summary" date (shown on the button — auto-filled from the link when possible, or set/override it manually here; it does NOT have to match the panel\'s own live "Closing:" date)</div><input id="bondtxn-link-date" class="ed" style="width:100%" placeholder="e.g. 17th July 2026" value="'+escAttr(LOADED.bondTransVolLinkDate||'')+'"></div>'
         + (LOADED.bondTransVol!=null?`<div class="ed-sub"><div class="ed-sub-t">bondTransVol</div>${renderNode(LOADED.bondTransVol,'bondTransVol')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondTransVol</div><span class="muted">No data in this workbook.</span></div>');
     } else {
       body=sec.keys.map(k=>{
@@ -643,6 +683,8 @@ function applyEdits(){
   if(bolk&&LOADED)LOADED.bondAucLink=bolk.value.trim();
   const btlk=document.getElementById('bondtxn-link');
   if(btlk&&LOADED)LOADED.bondTransVolLink=btlk.value.trim();
+  const btlkd=document.getElementById('bondtxn-link-date');
+  if(btlkd&&LOADED)LOADED.bondTransVolLinkDate=btlkd.value.trim();
   saveLocal();
 }
 function recomputeMeta(p){
