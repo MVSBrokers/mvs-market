@@ -5568,7 +5568,7 @@
  "newsLink": "https://www.treasury.gov.lk/api/file/b76ddda1-a014-458c-862e-569f317d637b",
  "billAucLink": "https://www.treasury.gov.lk/api/file/2f8f2e9d-3abf-42ec-85d4-f7c74d1d2e03",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/5281bf7e-ef55-4853-922b-f0788a254924",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/520d89c7-371d-4be2-9916-db4c9d770800",
  "hidden": {
   "tbills": true
  },
@@ -5600,5 +5600,5 @@
    "Reserve (USD Mn)"
   ]
  },
- "bondTransVolLinkDate": ""
+ "bondTransVolLinkDate": "17th July 2026"
 }
