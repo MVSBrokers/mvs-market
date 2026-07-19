@@ -133,8 +133,7 @@ canvas{max-width:100%!important}
 .cs-chg.down{color:#ff8a78;background:rgba(255,138,120,0.12)}
 .cs-chg.flat{color:#7fa3c8;background:rgba(77,163,232,0.10)}
 @media(max-width:1024px){.grid-2x2,.full-grid{grid-template-columns:1fr}}
-@media(max-width:600px){.opr-srr-grid{grid-template-columns:1fr!important}
-  .report-hdr{flex-direction:row;flex-wrap:nowrap;align-items:center;padding:8px 10px;gap:8px}
+@media(max-width:600px){.report-hdr{flex-direction:row;flex-wrap:nowrap;align-items:center;padding:8px 10px;gap:8px}
   .hdr-left{flex-direction:row;gap:8px;align-items:center}
   .logo{width:36px;height:36px;flex-shrink:0}
   .logo-img{height:36px}
@@ -359,39 +358,34 @@ canvas{max-width:100%!important}
         <thead><tr><th>Instrument</th><th>Latest</th><th>Previous</th></tr></thead>
         <tbody id="dyn-windows"></tbody>
       </table>
+      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Repo Auctions</div>
+      <div data-sec="repoOvernight" style="margin-bottom:10px">
+        <div style="font-size:10px;font-weight:700;color:#dce8fb;margin-bottom:4px">Repo / Reverse Repo Auction <span style="font-weight:400;color:#7fa3c8">(Overnight)</span></div>
+        <div id="dyn-repoOvernight"></div>
+      </div>
+      <div data-sec="repoOMO">
+        <div style="font-size:10px;font-weight:700;color:#dce8fb;margin-bottom:4px">OMO - Term Repo <span style="font-weight:400;color:#7fa3c8">/ Reverse Repo Transactions</span></div>
+        <div id="dyn-repoOMO"></div>
+      </div>
     </div>
     <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
   </div>
 
-  <div style="font-size:13px;font-weight:800;color:#eaf2ff;letter-spacing:.5px;margin:4px 0 10px;padding-left:2px;border-left:3px solid #c8a84b;padding-left:10px">Money &amp; Repo Market <span style="font-weight:400;color:#7fa3c8;font-size:12px">— Repo Auctions</span></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(420px,100%),1fr));gap:14px;margin-bottom:14px" class="repo-auction-grid">
-    <div class="panel" data-sec="repoOvernight" style="border-top:3px solid #c8a84b">
-      <div class="panel-title">Repo / Reverse Repo Auction <span style="font-weight:400;color:#7fa3c8;font-size:12px">(Overnight)</span></div>
-      <div id="dyn-repoOvernight"></div>
-    </div>
-    <div class="panel" data-sec="repoOMO" style="border-top:3px solid #4da3e8">
-      <div class="panel-title">OMO - Term Repo <span style="font-weight:400;color:#7fa3c8;font-size:12px">/ Reverse Repo Transactions</span></div>
-      <div id="dyn-repoOMO"></div>
-    </div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:14px;margin-bottom:14px" class="opr-srr-grid">
+  <div class="grid-2x2">
     <div class="panel">
       <div class="panel-title" data-sec="opr">Policy Rate (OPR) History</div>
       <div style="overflow-x:auto"><table style="font-size:12px">
         <thead><tr><th>Effective Date</th><th>OPR (%)</th></tr></thead>
         <tbody id="dyn-opr"></tbody>
       </table></div>
-    </div>
-    <div class="panel">
-      <div class="panel-title" data-sec="srr">Statutory Reserve Requirement (SRR)</div>
-      <div style="overflow-x:auto"><table style="font-size:12px">
+      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px" data-sec="srr">Statutory Reserve Requirement (SRR)</div>
+      <div style="overflow-x:auto" data-sec="srr"><table style="font-size:12px">
         <thead><tr><th>Effective Date</th><th>SRR (%)</th></tr></thead>
         <tbody id="dyn-srr"></tbody>
       </table></div>
     </div>
+    <div class="panel" style="opacity:0;pointer-events:none"></div>
   </div>
-
 
   </div>
 
@@ -447,7 +441,8 @@ canvas{max-width:100%!important}
   </div>
 
 
-  <div class="panel" style="width:fit-content;min-width:300px">
+  <div class="full-grid">
+  <div class="panel">
     <div class="panel-title" data-sec="secondary">T-Bill Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
     <div style="max-height:320px;overflow-y:auto">
       <table style="font-size:10px;border-collapse:collapse;white-space:nowrap">
@@ -463,6 +458,7 @@ canvas{max-width:100%!important}
         </tbody>
       </table>
     </div>
+  </div>
   </div>
 
   </div>
@@ -487,17 +483,11 @@ canvas{max-width:100%!important}
           <tr><td>1 Year</td><td id="sw1ys">—</td><td id="sw1yb">—</td></tr>
         </tbody>
       </table>
-    </div>
-  </div>
-
-  <div class="grid-2x2" style="margin-top:0">
-    <div class="panel">
-      <div class="panel-title">Market Overview (Spot)<span class="close-date" id="fxov-close"></span></div>
+      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Market Overview (Spot)<span class="close-date" id="fxov-close" style="text-transform:none;font-weight:400"></span></div>
       <table style="font-size:12px">
         <tbody id="dyn-spot"></tbody>
       </table>
     </div>
-    <div class="panel" style="opacity:0;pointer-events:none"></div>
   </div>
 
   <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">Cross-Currency Rates</div></div>
@@ -650,6 +640,29 @@ let charts={}, pollTimer=null;
 // Sri Lanka calendar "today" at midnight — used anywhere the code needs to compare against
 // "today" (countdowns, header date, event strips). Never use `new Date()` directly for this;
 // the viewer's device clock/timezone can disagree with Sri Lanka time.
+// Tries to recognize a date embedded in a URL/filename (e.g. .../trade-summary-17-07-2026.pdf,
+// .../2026-07-17-report.xlsx, .../TradeSummary_17072026.pdf) and formats it as "17 Jul 2026".
+// Returns null if no plausible date is found. Checked in order from least to most ambiguous.
+function extractDateFromUrl(url){
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const mk=(y,mo,da)=>{
+    y=+y;mo=+mo;da=+da;
+    if(mo<1||mo>12||da<1||da>31)return null;
+    if(y<100)y+=2000;
+    if(y<2000||y>2100)return null;
+    const dt=new Date(y,mo-1,da);
+    if(dt.getFullYear()!==y||dt.getMonth()!==mo-1||dt.getDate()!==da)return null;
+    return da+" "+MON[mo-1]+" "+y;
+  };
+  let m;
+  // YYYY-MM-DD / YYYY.MM.DD / YYYY_MM_DD (unambiguous, check first)
+  if((m=url.match(/(\d{4})[-_.](\d{2})[-_.](\d{2})/))){const r=mk(m[1],m[2],m[3]);if(r)return r;}
+  // DD-MM-YYYY / DD.MM.YYYY / DD_MM_YYYY (Sri Lanka convention)
+  if((m=url.match(/(\d{2})[-_.](\d{2})[-_.](\d{4})/))){const r=mk(m[3],m[2],m[1]);if(r)return r;}
+  // DDMMYYYY run together in a filename
+  if((m=url.match(/(?:^|[^\d])(\d{2})(\d{2})(\d{4})(?:[^\d]|$)/))){const r=mk(m[3],m[2],m[1]);if(r)return r;}
+  return null;
+}
 function slToday(){
   const slNow=new Date(Date.now()+330*60000);
   return new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
@@ -1234,16 +1247,28 @@ let _bondtxnChart=null;
 function renderBondTxnVol(d){
   const bv=d.bondTransVol||{};
   const rows=Array.isArray(bv.rows)?bv.rows.filter(r=>r&&r.show!==false):[];
-  const closeEl=document.getElementById('bondtxn-close');
   const moreEl=document.getElementById('bondtxn-more');
-  if(moreEl){const lk=d&&d.bondTransVolLink||'';const lkT=String(lk).trim();moreEl.innerHTML=(lkT&&/^https?:\/\//i.test(lkT))?'<a href="'+escHtml(lkT)+'" target="_blank" rel="noopener noreferrer" class="news-more-btn" style="padding:4px 12px;font-size:10px">More details \u2192</a>':'';}
+  if(moreEl){
+    const lk=d&&d.bondTransVolLink||'';const lkT=String(lk).trim();
+    if(lkT&&/^https?:\/\//i.test(lkT)){
+      // Use the same live-updating closing date formula as the panel's own "Closing:"
+      // badge (bondtxn-close, set by the shared closing-date loop later in render) —
+      // computed directly here rather than read from the DOM, since this function runs
+      // before that loop. The two stay in sync automatically this way, not by guessing
+      // a date out of the URL text.
+      const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
+      const slNow_bt=new Date(Date.now()+330*60000);
+      const _btToday=new Date(slNow_bt.getUTCFullYear(),slNow_bt.getUTCMonth(),slNow_bt.getUTCDate());
+      const cdAutoBt=!_isSLFXWork(_btToday)?slWorkDay(0):(slNow_bt.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));
+      const badgeTxt=(ov(d.closingDate)||fmtOrd(cdAutoBt)).replace(/<[^>]+>/g,'');
+      const label='Trade Summary'+(badgeTxt?' — '+badgeTxt:'')+' \u2192';
+      moreEl.innerHTML='<a href="'+escHtml(lkT)+'" target="_blank" rel="noopener noreferrer" class="news-more-btn" style="padding:4px 12px;font-size:10px">'+escHtml(label)+'</a>';
+    }else{
+      moreEl.innerHTML='';
+    }
+  }
   const ctx=document.getElementById('bondtxnChart');
   const fmtN=v=>{if(v==null||v==='')return'—';const n=parseFloat(String(v).replace(/,/g,''));return isNaN(n)?String(v):n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});};
-  // Persist date across renders — only update when a real date is available, restore from localStorage otherwise
-  const _storedBtDate=localStorage.getItem('mvs_btxn_date')||'';
-  const _bvDate=bv.date||(d&&d.closingDate&&String(d.closingDate).trim())||_storedBtDate||null;
-  if(bv.date)localStorage.setItem('mvs_btxn_date',bv.date);
-  if(closeEl&&_bvDate)closeEl.innerHTML=fmtDayFirstOrd(_bvDate);
   if(!rows.length){
     if(_bondtxnChart){try{_bondtxnChart.destroy();}catch(e){}_bondtxnChart=null;}return;
   }
@@ -1688,7 +1713,7 @@ function renderExtras(d){
    const _cdToday=new Date(slNow_cd.getUTCFullYear(),slNow_cd.getUTCMonth(),slNow_cd.getUTCDate());
    const cdAuto=!_isSLFXWork(_cdToday)?slWorkDay(0):(slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(cdAuto);
- ["mm-close","fx-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{
+ ["mm-close","fx-close","tbond-close","secondary-close","fxov-close","cross-close","bondtxn-close"].forEach(id=>{
   const e=document.getElementById(id);
   if(!e)return;
  if(id==="mm-close"){
