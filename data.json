@@ -14,31 +14,6 @@
    "date": "26.05.2026",
    "rate": "8.75",
    "show": true
-  },
-  {
-   "date": "Date",
-   "rate": "Repo / Reverse Repo Auction",
-   "show": true
-  },
-  {
-   "date": "Column1",
-   "rate": "Repo",
-   "show": true
-  },
-  {
-   "date": "Thu Jul 16 2026 23:59:28 GMT+0530 (India Standard Time)",
-   "rate": "60",
-   "show": true
-  },
-  {
-   "date": "Auction",
-   "rate": "Settlement",
-   "show": true
-  },
-  {
-   "date": "Date",
-   "rate": "Date2",
-   "show": true
   }
  ],
  "callMarket": {
