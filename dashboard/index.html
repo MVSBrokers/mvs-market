@@ -360,11 +360,11 @@ canvas{max-width:100%!important}
       </table>
       <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Repo Auctions</div>
       <div data-sec="repoOvernight" style="margin-bottom:10px">
-        <div style="font-size:10px;font-weight:700;color:#dce8fb;margin-bottom:4px">Repo / Reverse Repo Auction <span style="font-weight:400;color:#7fa3c8">(Overnight)</span></div>
+        <div style="font-size:10px;font-weight:700;color:#dce8fb;margin-bottom:4px">Repo / Reverse Repo Auction (Overnight)</div>
         <div id="dyn-repoOvernight"></div>
       </div>
       <div data-sec="repoOMO">
-        <div style="font-size:10px;font-weight:700;color:#dce8fb;margin-bottom:4px">OMO - Term Repo <span style="font-weight:400;color:#7fa3c8">/ Reverse Repo Transactions</span></div>
+        <div style="font-size:10px;font-weight:700;color:#dce8fb;margin-bottom:4px">OMO - Term Repo / Reverse Repo Transactions</div>
         <div id="dyn-repoOMO"></div>
       </div>
     </div>
@@ -1247,21 +1247,23 @@ let _bondtxnChart=null;
 function renderBondTxnVol(d){
   const bv=d.bondTransVol||{};
   const rows=Array.isArray(bv.rows)?bv.rows.filter(r=>r&&r.show!==false):[];
+  const closeEl=document.getElementById('bondtxn-close');
   const moreEl=document.getElementById('bondtxn-more');
+  // This panel's own "Closing:" date is manual — it comes straight from bondTransVol.date,
+  // which is editable in the editor (either read from the Excel or typed in directly). It does
+  // NOT auto-update from the live SL closing-date engine like the other panels' badges do.
+  if(closeEl){
+    const manualPanelDt=bv.date&&String(bv.date).trim();
+    closeEl.innerHTML=manualPanelDt?fmtDayFirstOrd(manualPanelDt):'';
+  }
   if(moreEl){
     const lk=d&&d.bondTransVolLink||'';const lkT=String(lk).trim();
     if(lkT&&/^https?:\/\//i.test(lkT)){
-      // Use the same live-updating closing date formula as the panel's own "Closing:"
-      // badge (bondtxn-close, set by the shared closing-date loop later in render) —
-      // computed directly here rather than read from the DOM, since this function runs
-      // before that loop. The two stay in sync automatically this way, not by guessing
-      // a date out of the URL text.
-      const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
-      const slNow_bt=new Date(Date.now()+330*60000);
-      const _btToday=new Date(slNow_bt.getUTCFullYear(),slNow_bt.getUTCMonth(),slNow_bt.getUTCDate());
-      const cdAutoBt=!_isSLFXWork(_btToday)?slWorkDay(0):(slNow_bt.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));
-      const badgeTxt=(ov(d.closingDate)||fmtOrd(cdAutoBt)).replace(/<[^>]+>/g,'');
-      const label='Trade Summary'+(badgeTxt?' — '+badgeTxt:'')+' \u2192';
+      // The Trade Summary button's date is set manually in the editor (bondTransVolLinkDate),
+      // independent of the panel's own live "Closing:" badge — the linked document may be
+      // dated differently from today's live-computed closing date.
+      const manualDt=d&&d.bondTransVolLinkDate&&String(d.bondTransVolLinkDate).trim();
+      const label='Trade Summary'+(manualDt?' — '+manualDt:'')+' \u2192';
       moreEl.innerHTML='<a href="'+escHtml(lkT)+'" target="_blank" rel="noopener noreferrer" class="news-more-btn" style="padding:4px 12px;font-size:10px">'+escHtml(label)+'</a>';
     }else{
       moreEl.innerHTML='';
@@ -1713,7 +1715,7 @@ function renderExtras(d){
    const _cdToday=new Date(slNow_cd.getUTCFullYear(),slNow_cd.getUTCMonth(),slNow_cd.getUTCDate());
    const cdAuto=!_isSLFXWork(_cdToday)?slWorkDay(0):(slNow_cd.getUTCHours()>=16?slWorkDay(0):slWorkDay(1));
    const cdEl=ov(d.closingDate)?escHtml(ov(d.closingDate)):fmtOrd(cdAuto);
- ["mm-close","fx-close","tbond-close","secondary-close","fxov-close","cross-close","bondtxn-close"].forEach(id=>{
+ ["mm-close","fx-close","tbond-close","secondary-close","fxov-close","cross-close"].forEach(id=>{
   const e=document.getElementById(id);
   if(!e)return;
  if(id==="mm-close"){
