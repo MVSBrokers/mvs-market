@@ -1632,7 +1632,7 @@ function renderExtras(d){
       <div class="repo-stat"><span class="rk">Min Rate (%)</span><span class="rv">${fmt2(r.minRate)}</span></div>
       <div class="repo-stat"><span class="rk">Max Rate (%)</span><span class="rv">${fmt2(r.maxRate)}</span></div>
       <div class="repo-stat"><span class="rk">W.A. Yield (%)</span><span class="rv" style="color:#c8a84b">${fmt2(r.waYield)}</span></div>
-    </div></div>`).join(''):'<div class="repo-empty">Not published yet</div>');}
+    </div></div>`).join(''):'<div class="repo-empty">📭 No auction today</div>');}
   {const rows=(d.repoOMO||[]).filter(r=>r.show!==false);
    set('dyn-repoOMO',rows.length?rows.map(r=>`<div class="repo-card"><div class="repo-card-date">${escHtml(r.auction)} <span style="color:#7fa3c8;font-weight:400">→ settles ${escHtml(r.settlement)}</span></div><div class="repo-stat-grid">
       <div class="repo-stat"><span class="rk">Repo Offered</span><span class="rv">${fmt2(r.repoOffered)}</span></div>
@@ -1644,7 +1644,7 @@ function renderExtras(d){
       <div class="repo-stat"><span class="rk">W.A. Yield (%)</span><span class="rv" style="color:#c8a84b">${fmt2(r.waYield)}</span></div>
       <div class="repo-stat"><span class="rk">Maturity</span><span class="rv">${escHtml(r.maturity)}</span></div>
       <div class="repo-stat"><span class="rk">Tenure (days)</span><span class="rv">${r.tenure!=null?r.tenure:'—'}</span></div>
-    </div></div>`).join(''):'<div class="repo-empty">Not published yet</div>');}
+    </div></div>`).join(''):'<div class="repo-empty">📭 No auction today</div>');}
   // FI — secondary yields (table)
   set('dyn-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map((s,i)=>`<tr style="background:${i%2?'rgba(13,30,56,.4)':'transparent'}"><td style="padding:3px 10px;color:#d4e4f4;white-space:nowrap">${fmtMatDate(s.maturity)}</td><td style="padding:3px 10px;text-align:right;color:#6dd4a0;font-weight:600">${fmt2(s.bid)}</td><td style="padding:3px 10px;text-align:right;color:#4da3e8;font-weight:600">${fmt2(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>');
   // Announcement: auction schedules + outstanding (next auction highlighted)
