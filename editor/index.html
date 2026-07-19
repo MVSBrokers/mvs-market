@@ -268,16 +268,61 @@ function extractDateFromUrl(url){
   if((m=url.match(/(?:^|[^\d])(\d{2})(\d{2})(\d{4})(?:[^\d]|$)/))){const r=mk(m[3],m[2],m[1]);if(r)return r;}
   return null;
 }
-// Called when the Trade Summary link changes — auto-fills the date field from the URL if a
-// date can be recognized AND the date field is still empty. Never overwrites a date the user
-// has already typed in manually.
-function autoFillBondtxnDate(){
+// Scans arbitrary fetched text/content for a date and formats it as "16th July 2026".
+// Tries the DD.MM.YYYY pattern first since that's what treasury.gov.lk's own documents use
+// (e.g. "Trade Summary* 16.07.2026"), then falls back to the same patterns as extractDateFromUrl.
+function extractDateFromText(text){
+  const mk=(y,mo,da)=>{
+    y=+y;mo=+mo;da=+da;
+    if(mo<1||mo>12||da<1||da>31)return null;
+    if(y<100)y+=2000;
+    if(y<2000||y>2100)return null;
+    const dt=new Date(y,mo-1,da);
+    if(dt.getFullYear()!==y||dt.getMonth()!==mo-1||dt.getDate()!==da)return null;
+    return fmtOrdPlain(dt);
+  };
+  let m;
+  if((m=text.match(/Trade\s*Summary\D{0,10}(\d{2})\.(\d{2})\.(\d{4})/i))){const r=mk(m[3],m[2],m[1]);if(r)return r;}
+  if((m=text.match(/(\d{2})\.(\d{2})\.(\d{4})/))){const r=mk(m[3],m[2],m[1]);if(r)return r;}
+  if((m=text.match(/(\d{4})-(\d{2})-(\d{2})/))){const r=mk(m[1],m[2],m[3]);if(r)return r;}
+  if((m=text.match(/(\d{2})-(\d{2})-(\d{4})/))){const r=mk(m[3],m[2],m[1]);if(r)return r;}
+  return null;
+}
+// Called when the Trade Summary link changes. Never overwrites a date the user has already
+// typed in manually. Tries, in order:
+//   1. A date pattern in the URL/filename itself (instant, always works if present)
+//   2. Fetching the actual linked document and scanning its content for a date (best-effort —
+//      many servers, especially government file APIs, block cross-origin fetches via CORS, in
+//      which case this step silently fails and the field is simply left for manual entry)
+async function autoFillBondtxnDate(){
   const lk=document.getElementById('bondtxn-link');
   const dt=document.getElementById('bondtxn-link-date');
+  const stEl=document.getElementById('bondtxn-link-date-status');
   if(!lk||!dt)return;
+  const url=lk.value.trim();
+  if(!url||!/^https?:\/\//i.test(url))return;
   if(dt.value&&dt.value.trim())return; // don't clobber a manual entry
-  const found=extractDateFromUrl(lk.value.trim());
-  if(found)dt.value=found;
+
+  const fromUrl=extractDateFromUrl(url);
+  if(fromUrl){dt.value=fromUrl;return;}
+
+  if(stEl)stEl.textContent='Trying to read the date from the linked document…';
+  try{
+    const res=await fetch(url,{mode:'cors'});
+    if(!res.ok)throw new Error('fetch not ok');
+    const text=await res.text();
+    if(dt.value&&dt.value.trim())return; // user may have typed one in while we were waiting
+    const found=extractDateFromText(text);
+    if(found){
+      dt.value=found;
+      if(stEl)stEl.textContent='Date auto-detected from the document.';
+    }else{
+      if(stEl)stEl.textContent="Couldn't find a date in the document — please enter it manually.";
+    }
+  }catch(e){
+    // Almost always a CORS block on the target server — expected for most government/API links.
+    if(stEl)stEl.textContent="Couldn't fetch the document to auto-detect its date (likely blocked by the source site) — please enter it manually.";
+  }
 }
 function slWorkDay(back){
   const SL_HOL=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04","2026-02-15","2026-03-02","2026-03-21","2026-04-01","2026-04-03","2026-04-13","2026-04-14","2026-05-01","2026-05-02","2026-05-28","2026-05-30","2026-06-29","2026-07-29","2026-08-26","2026-08-27","2026-09-26","2026-10-25","2026-11-08","2026-11-24","2026-12-23","2026-12-25","2027-02-04"]);
@@ -615,7 +660,7 @@ function renderSections(){
         + (LOADED.bondAuctions!=null?`<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div>${renderNode(LOADED.bondAuctions,'bondAuctions')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div><span class="muted">No data in this workbook.</span></div>');
     } else if(sec.id==='bondtransxn'){
       body='<div class="ed-sub"><div class="ed-sub-t">"Trade Summary" link (optional)</div><input id="bondtxn-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'Trade Summary\' button next to the chart title that opens this" value="'+escAttr(LOADED.bondTransVolLink||'')+'" onchange="autoFillBondtxnDate()" onblur="autoFillBondtxnDate()"></div>'
-        + '<div class="ed-sub"><div class="ed-sub-t">"Trade Summary" date (shown on the button — auto-filled from the link when possible, or set/override it manually here; it does NOT have to match the panel\'s own live "Closing:" date)</div><input id="bondtxn-link-date" class="ed" style="width:100%" placeholder="e.g. 17th July 2026" value="'+escAttr(LOADED.bondTransVolLinkDate||'')+'"></div>'
+        + '<div class="ed-sub"><div class="ed-sub-t">"Trade Summary" date (shown on the button — auto-detected from the link when possible, or set/override it manually here; it does NOT have to match the panel\'s own live "Closing:" date)</div><input id="bondtxn-link-date" class="ed" style="width:100%" placeholder="e.g. 17th July 2026" value="'+escAttr(LOADED.bondTransVolLinkDate||'')+'"><div id="bondtxn-link-date-status" style="font-size:11px;color:#7fa3c8;margin-top:4px"></div></div>'
         + (LOADED.bondTransVol!=null?`<div class="ed-sub"><div class="ed-sub-t">bondTransVol</div>${renderNode(LOADED.bondTransVol,'bondTransVol')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondTransVol</div><span class="muted">No data in this workbook.</span></div>');
     } else {
       body=sec.keys.map(k=>{
