@@ -14,6 +14,31 @@
    "date": "26.05.2026",
    "rate": "8.75",
    "show": true
+  },
+  {
+   "date": "Date",
+   "rate": "Repo / Reverse Repo Auction",
+   "show": true
+  },
+  {
+   "date": "Column1",
+   "rate": "Repo",
+   "show": true
+  },
+  {
+   "date": "Thu Jul 16 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "rate": "60",
+   "show": true
+  },
+  {
+   "date": "Auction",
+   "rate": "Settlement",
+   "show": true
+  },
+  {
+   "date": "Date",
+   "rate": "Date2",
+   "show": true
   }
  ],
  "callMarket": {
@@ -323,22 +348,7 @@
    "show": true
   }
  ],
- "repoOMO": [
-  {
-   "auction": "16 Jul 2026",
-   "settlement": "16 Jul 2026",
-   "repoOffered": 10,
-   "reverseOffered": 0,
-   "received": 10,
-   "accepted": 10,
-   "minRate": 8.75,
-   "maxRate": 8.75,
-   "waYield": 8.75,
-   "maturity": "22 Jul 2026",
-   "tenure": 6,
-   "show": true
-  }
- ],
+ "repoOMO": [],
  "bonds": {
   "headers": [
    "Day 1",
@@ -5569,6 +5579,7 @@
  "billAucLink": "https://www.treasury.gov.lk/api/file/2f8f2e9d-3abf-42ec-85d4-f7c74d1d2e03",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/520d89c7-371d-4be2-9916-db4c9d770800",
+ "bondTransVolLinkDate": "17th July 2026",
  "hidden": {
   "tbills": true
  },
@@ -5599,6 +5610,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "bondTransVolLinkDate": "17th July 2026"
+ }
 }
