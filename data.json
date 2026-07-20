@@ -1945,7 +1945,8 @@
    "19 Jun",
    "26 Jun",
    "3 Jul",
-   "10 Jul"
+   "10 Jul",
+   "17 Jul"
   ],
   "values": [
    143617,
@@ -1962,7 +1963,8 @@
    121346,
    135858,
    136859,
-   168895
+   168895,
+   176561
   ]
  },
  "cbsl": {
@@ -5544,7 +5546,7 @@
   "Total Amount Accepted: Rs. 120.0 Billion",
   "Auction Date: 15 July 2026"
  ],
- "date": "2026-07-19",
+ "date": "2026-07-20",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
