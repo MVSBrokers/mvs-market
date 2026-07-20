@@ -17,25 +17,25 @@
   }
  ],
  "callMarket": {
-  "min": 8.95,
+  "min": 8.3,
   "max": 9,
-  "wa": 8.95,
-  "vol": 34.5
+  "wa": 8.96,
+  "vol": 66.51
  },
  "repoMarket": {
   "min": 8.95,
   "max": 9.15,
   "wa": 9,
-  "vol": 129.78
+  "vol": 110.78
  },
  "windows": {
   "sdf": {
-   "cur": 90.2,
-   "prev": 86.65
+   "cur": 103.38,
+   "prev": 90.2
   },
   "slf": {
-   "cur": 1.23,
-   "prev": 7.24
+   "cur": 15.25,
+   "prev": 1.23
   }
  },
  "liquidity": {
@@ -171,7 +171,8 @@
    "14 Jul",
    "15 Jul",
    "16 Jul",
-   "17 Jul"
+   "17 Jul",
+   "20 Jul"
   ],
   "values": [
    128.14,
@@ -305,21 +306,22 @@
    151.99,
    147.19,
    143.41,
-   147.97
+   147.97,
+   148.13
   ],
-  "current": 147.97,
-  "previous": 143.41
+  "current": 148.13,
+  "previous": 147.97
  },
  "repoOvernight": [
   {
-   "date": "17 Jul 2026",
+   "date": "20 Jul 2026",
    "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 59,
-   "accepted": 59,
-   "minRate": 8.65,
-   "maxRate": 8.72,
-   "waYield": 8.66,
+   "received": 62,
+   "accepted": 60,
+   "minRate": 8.7,
+   "maxRate": 8.75,
+   "waYield": 8.75,
    "show": true
   }
  ],
@@ -2089,7 +2091,8 @@
    "13 Jul",
    "14 Jul",
    "15 Jul",
-   "16 Jul"
+   "16 Jul",
+   "20 Jul"
   ],
   "values": [
    2508.92,
@@ -2190,6 +2193,7 @@
    2507.92,
    2507.92,
    2507.92,
+   2498.12,
    2498.12,
    2498.12,
    2498.12,
@@ -5534,7 +5538,7 @@
  "execSummary": {
   "usdlkr": "336.25/ 336.30",
   "liqDir": "increased",
-  "liqDelta": 4.56
+  "liqDelta": 0.16
  },
  "marketNews": [
   "Treasury Bill Auction Results",
