@@ -5565,7 +5565,8 @@
  "bondTransVolLinkDate": "17th July 2026",
  "hidden": {
   "tbills": true,
-  "opr": true
+  "opr": true,
+  "fxsummary": true
  },
  "headers": {
   "bond": [
