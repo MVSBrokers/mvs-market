@@ -1764,53 +1764,7 @@
    "show": true
   }
  ],
- "fxSummary": [
-  {
-   "tenor": "Spot",
-   "volume": 16.75,
-   "wa": 336.23
-  },
-  {
-   "tenor": "Tom",
-   "volume": 15.5,
-   "wa": 336.22
-  },
-  {
-   "tenor": "Cash",
-   "volume": 35,
-   "wa": 336.05
-  },
-  {
-   "tenor": "Sub Total",
-   "volume": 67.25,
-   "wa": null
-  },
-  {
-   "tenor": "1W",
-   "volume": 3.5,
-   "wa": 336.6
-  },
-  {
-   "tenor": "1M",
-   "volume": 4,
-   "wa": 337.91
-  },
-  {
-   "tenor": "2M",
-   "volume": 0.1,
-   "wa": 339.3
-  },
-  {
-   "tenor": "Sub Total (Forwards)",
-   "volume": 7.6,
-   "wa": null
-  },
-  {
-   "tenor": "GRAND TOTAL VOLUME",
-   "volume": 74.85,
-   "wa": null
-  }
- ],
+ "fxSummary": [],
  "valueDates": [
   {
    "tenor": "Cash",
