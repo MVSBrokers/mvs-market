@@ -18,24 +18,24 @@
  ],
  "callMarket": {
   "min": 8.95,
-  "max": 9,
-  "wa": 8.97,
-  "vol": 56.18
+  "max": 9.05,
+  "wa": 8.99,
+  "vol": 49.06
  },
  "repoMarket": {
-  "min": 8.95,
-  "max": 9.15,
-  "wa": 9,
-  "vol": 122.68
+  "min": 8.98,
+  "max": 9.12,
+  "wa": 9.02,
+  "vol": 126.95
  },
  "windows": {
   "sdf": {
-   "cur": 97.5,
-   "prev": 103.38
+   "cur": 113.47,
+   "prev": 97.5
   },
   "slf": {
-   "cur": 15.14,
-   "prev": 15.25
+   "cur": 8.27,
+   "prev": 15.14
   }
  },
  "liquidity": {
@@ -173,7 +173,8 @@
    "16 Jul",
    "17 Jul",
    "20 Jul",
-   "21 Jul"
+   "21 Jul",
+   "22 Jul"
   ],
   "values": [
    128.14,
@@ -309,25 +310,41 @@
    143.41,
    147.97,
    148.13,
-   142.36
+   142.36,
+   175.2
   ],
-  "current": 142.36,
-  "previous": 148.13
+  "current": 175.2,
+  "previous": 142.36
  },
  "repoOvernight": [
   {
-   "date": "21 Jul 2026",
+   "date": "22 Jul 2026",
    "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 60,
-   "accepted": 60,
-   "minRate": 8.72,
+   "received": 50,
+   "accepted": 50,
+   "minRate": 8.75,
    "maxRate": 8.75,
-   "waYield": 8.73,
+   "waYield": 8.75,
    "show": true
   }
  ],
- "repoOMO": [],
+ "repoOMO": [
+  {
+   "auction": "22 Jul 2026",
+   "settlement": "22 Jul 2026",
+   "repoOffered": 30,
+   "reverseOffered": 0,
+   "received": 20,
+   "accepted": 20,
+   "minRate": 8.75,
+   "maxRate": 8.75,
+   "waYield": 8.75,
+   "maturity": "28 Jul 2026",
+   "tenure": 6,
+   "show": true
+  }
+ ],
  "bonds": {
   "headers": [
    "Day 1",
@@ -4232,7 +4249,7 @@
   },
   {
    "label": "Next T-Bill Auction Day",
-   "date": "2026-07-22",
+   "date": "2026-07-28",
    "show": true
   },
   {
@@ -5591,8 +5608,8 @@
  ],
  "execSummary": {
   "usdlkr": "336.25/ 336.35",
-  "liqDir": "decreased",
-  "liqDelta": 5.77
+  "liqDir": "increased",
+  "liqDelta": 32.84
  },
  "marketNews": [
   "Treasury Bill Auction Results",
