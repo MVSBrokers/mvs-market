@@ -5559,10 +5559,15 @@
   "liqDelta": 5.77
  },
  "marketNews": [
-  "Monetary Policy Unchanged",
-  "--------------------------------",
-  "Sri Lanka's Central Bank leaves OPR unchanged at 8.75%,",
-  "citing inflationary pressures and global economic uncertainty."
+  "Treasury Bill Auction Results",
+  "------------------------------------------------------------",
+  "91-Day (LKA09126J235): 9.95%",
+  "182-Day (LKA18227A221): 10.24%",
+  "364-Day (LKA36427G230): 10.20%",
+  "------------------------------------------------------------",
+  "Total Amount Issued: Rs. 140.0 Billion",
+  "Total Amount Accepted: Rs. 140.0 Billion",
+  "Auction Date: 22 July 2026"
  ],
  "date": "2026-07-22",
  "openingDate": "",
@@ -5570,7 +5575,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.cbsl.gov.lk/sites/default/files/cbslweb_documents/press/pr/press_20260722_Monetary_Policy_Review_No_4_2026_e_jKlAA7.pdf",
+ "newsLink": "https://www.treasury.gov.lk/api/file/4f4148b4-553b-4592-a46b-383b25bad90c",
  "billAucLink": "https://www.treasury.gov.lk/api/file/142d8208-fd1f-4bcb-a37f-db2a9b256436",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/eef4c5b9-9ae3-4081-9c7b-f6867817717c",
