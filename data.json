@@ -5554,16 +5554,10 @@
   "liqDelta": 5.77
  },
  "marketNews": [
-  "Treasury Bill Auction Results",
-  "------------------------------------------------------------",
-  "91-Day (LKA09126J169): 10.13%",
-  "182-Day (LKA18227A155): 10.27%",
-  "364-Day (LKA36427G164): 10.20%",
-  "------------------------------------------------------------",
-  "",
-  "Total Amount Issued: Rs. 120.0 Billion",
-  "Total Amount Accepted: Rs. 120.0 Billion",
-  "Auction Date: 15 July 2026"
+  "Monetary Policy Unchanged",
+  "--------------------------------",
+  "Sri Lanka's Central Bank leaves OPR unchanged at 8.75%,",
+  "citing inflationary pressures and global economic uncertainty."
  ],
  "date": "2026-07-22",
  "openingDate": "",
@@ -5571,7 +5565,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/b76ddda1-a014-458c-862e-569f317d637b",
+ "newsLink": "https://www.cbsl.gov.lk/sites/default/files/cbslweb_documents/press/pr/press_20260722_Monetary_Policy_Review_No_4_2026_e_jKlAA7.pdf",
  "billAucLink": "https://www.treasury.gov.lk/api/file/142d8208-fd1f-4bcb-a37f-db2a9b256436",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/02e3375e-b07a-4149-b937-2fc543957c0d",
