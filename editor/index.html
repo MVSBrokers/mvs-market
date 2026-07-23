@@ -105,8 +105,8 @@ code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-siz
   <h2>1 · Connect GitHub (one-time)</h2>
   <div class="cfg-grid">
     <div class="fg" style="grid-column:1/-1"><label>GitHub Personal Access Token (fine-grained)</label><input id="gh-token" type="password" placeholder="github_pat_..." oninput="autoSaveCfg()"></div>
-    <div class="fg"><label>GitHub Username / Org</label><input id="gh-owner" placeholder="datafill456" oninput="autoSaveCfg()"></div>
-    <div class="fg"><label>Repository Name</label><input id="gh-repo" placeholder="mvs-dashboard" oninput="autoSaveCfg()"></div>
+    <div class="fg"><label>GitHub Username / Org</label><input id="gh-owner" placeholder="MVSBrokers" oninput="autoSaveCfg()"></div>
+    <div class="fg"><label>Repository Name</label><input id="gh-repo" placeholder="mvs-market" oninput="autoSaveCfg()"></div>
     <div class="fg"><label>Branch</label><input id="gh-branch" value="main"></div>
     <div class="fg"><label>Path to data.json</label><input id="gh-path" value="data.json"></div>
   </div>
@@ -207,9 +207,22 @@ const SECTIONS=[
 ];
 const META_KEYS=['execSummary','date','marketNews'];
 const NO_HIDE=new Set(['dates','headers','billauc','bondauc','tbillout','tbondout']); // sections with no standalone panel on the dashboard
+// Which editor sections get a notification mute toggle, and what dashboard notification label each
+// one controls. Only Latest Results and the cutoff-time (date-bound) sections get this button —
+// Money & Repo Market, SRR, and Macro Economy always notify immediately with no mute option.
+const NOTIF_TOGGLE_SECTIONS={
+  results:'Latest Results',
+  fxsummary:'Volume of Foreign Exchange Market',
+  bondtransxn:'Outright Treasury Bond Transaction Volumes (Rs.Mn)',
+  opr:'Policy Rate (OPR) History',
+  tbillcurve:'Treasury Bill',
+  tbonds:'Treasury Bond Yield (%)',
+  usdlkr:'USD/LKR Foreign Exchange',
+  repoOvernight:'Money & Repo Market — Repo Auctions'
+};
 
 // ── CONFIG / GITHUB ──────────────────────────────────────
-function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'datafill456',repo:localStorage.getItem('mvs_gh_repo')||'mvs-dashboard',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
+function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'MVSBrokers',repo:localStorage.getItem('mvs_gh_repo')||'mvs-market',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
 function autoSaveCfg(){const t=document.getElementById('gh-token'),o=document.getElementById('gh-owner'),r=document.getElementById('gh-repo');if(t&&t.value)localStorage.setItem('mvs_gh_token',t.value.trim());if(o&&o.value)localStorage.setItem('mvs_gh_owner',o.value.trim());if(r&&r.value)localStorage.setItem('mvs_gh_repo',r.value.trim());}
 async function saveGithubConfig(){
   const token=val('gh-token'),owner=val('gh-owner'),repo=val('gh-repo'),branch=val('gh-branch')||'main',path=val('gh-path')||'data.json';
@@ -581,6 +594,9 @@ function renderSections(){
     const pts=sec.keys.reduce((n,k)=>n+countPoints(k),0);
     const hid=!!(LOADED.hidden&&LOADED.hidden[sec.id]);
     const canHide=!NO_HIDE.has(sec.id);
+    const notifKey=NOTIF_TOGGLE_SECTIONS[sec.id];
+    const canMute=!!notifKey;
+    const muted=canMute&&!!(LOADED.mutedNotif&&LOADED.mutedNotif[notifKey]);
     let body;
     if(sec.id==='results'){
       const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:(LOADED.marketNews?[String(LOADED.marketNews)]:[]);
@@ -672,7 +688,7 @@ function renderSections(){
     return groupHdr+`<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
       <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
         <div><div class="st">${sec.title}${hid?' <span class="hid-tag">hidden on dashboard</span>':''}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
-        <div class="right">${canHide?`<button class="vis-btn ${hid?'off':'on'}" onclick="event.stopPropagation();toggleHide('${sec.id}')" title="${hid?'Hidden on the dashboard — click to show it':'Showing on the dashboard — click to hide it'}">${hid?'🚫 Hidden':'👁 Shown'}</button>`:''}<span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
+        <div class="right">${canMute?`<button class="vis-btn ${muted?'off':'on'}" onclick="event.stopPropagation();toggleMute('${sec.id}')" title="${muted?'Notification muted — click to turn it back on':'Notification on — click to mute it'}">${muted?'🔕 Muted':'🔔 Notify'}</button>`:''}${canHide?`<button class="vis-btn ${hid?'off':'on'}" onclick="event.stopPropagation();toggleHide('${sec.id}')" title="${hid?'Hidden on the dashboard — click to show it':'Showing on the dashboard — click to hide it'}">${hid?'🚫 Hidden':'👁 Shown'}</button>`:''}<span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
       </div>
       <div class="sec-body">
         ${presentEff?body:'<span class="muted">This section has no data in the imported workbook.</span>'}
@@ -813,6 +829,39 @@ async function publishHidden(){
       const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
       if(conflict&&a<5){await new Promise(r=>setTimeout(r,800*a));continue;}
       showToast('Visibility update failed', 'err', e.message);return;
+    }
+  }
+}
+
+// Mutes/unmutes the dashboard notification for one section (Latest Results or a cutoff-time
+// section). Keyed by the dashboard's own notification label (NOTIF_TOGGLE_SECTIONS), not the
+// editor's section id, since some notifications span more than one editor section.
+function toggleMute(id){
+  if(!LOADED){showToast('No data loaded', 'err', 'Import your Excel workbook before publishing.');return;}
+  const notifKey=NOTIF_TOGGLE_SECTIONS[id];
+  if(!notifKey)return;
+  applyEdits();
+  if(!LOADED.mutedNotif||typeof LOADED.mutedNotif!=='object')LOADED.mutedNotif={};
+  if(LOADED.mutedNotif[notifKey])delete LOADED.mutedNotif[notifKey];else LOADED.mutedNotif[notifKey]=true;
+  try{localStorage.setItem('mvs_editor_muted',JSON.stringify(LOADED.mutedNotif));}catch(e){}
+  saveLocal();renderSections();
+  publishMutedNotif();
+}
+async function publishMutedNotif(){
+  const cfg=loadConfig();
+  if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Saved locally only', 'err', 'Complete GitHub setup to push to the dashboard.');return;}
+  for(let a=1;a<=5;a++){
+    try{
+      const {json,sha}=await getPublished(cfg);
+      let published=(json&&typeof json==='object')?json:{};
+      published.mutedNotif=(LOADED&&LOADED.mutedNotif)||{};
+      await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,JSON.stringify(published,null,1),sha||null);
+      PUBLISHED=published;markPublishStates();
+      showToast('Notification setting updated', 'ok', 'Applied on the dashboard.');return;
+    }catch(e){
+      const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
+      if(conflict&&a<5){await new Promise(r=>setTimeout(r,800*a));continue;}
+      showToast('Notification update failed', 'err', e.message);return;
     }
   }
 }
