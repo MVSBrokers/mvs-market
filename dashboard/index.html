@@ -37,6 +37,20 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 .hdr-info h1{font-size:16px;font-weight:700;color:#fff}
 .hdr-info p{font-size:11px;color:#7fa3c8}
 .hdr-right{text-align:right}
+#msg-clear-all{position:fixed;top:14px;right:14px;z-index:501;background:#152a45;color:#8fc8f0;border:1px solid #2a4a70;border-radius:6px;padding:4px 10px;font-size:10px;font-weight:600;cursor:pointer}
+#msg-clear-all:hover{background:#1a3050;color:#fff}
+#msg-stack{position:fixed;top:14px;right:14px;z-index:500;display:flex;flex-direction:column;gap:8px;max-width:min(300px,88vw);pointer-events:none;margin-top:26px}
+@media (max-width:520px){#msg-clear-all{top:8px;right:8px}#msg-stack{margin-top:24px}}
+.msg-card{display:flex;align-items:flex-start;gap:8px;background:#0d2a3f;border:1.5px solid #3a7bb8;border-radius:8px;padding:8px 10px 8px 12px;box-shadow:0 6px 20px rgba(0,0,0,.5);pointer-events:auto;animation:msgIn .2s ease}
+.msg-card.msg-today{border-color:#c8a84b;background:#2a2210}
+@keyframes msgIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.msg-card-body{display:flex;flex-direction:column;gap:1px;min-width:0}
+.msg-card-title{font-size:11px;color:#8fc8f0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg-card.msg-today .msg-card-title{color:#e0c060}
+.msg-card-time{font-size:9.5px;color:#5f88ab;font-weight:500}
+.msg-card-close{background:none;border:none;color:#8fc8f0;cursor:pointer;font-size:13px;line-height:1;padding:2px 4px;flex-shrink:0;opacity:.75;margin-left:auto}
+.msg-card-close:hover{opacity:1}
+@media (max-width:520px){#msg-stack{top:8px;right:8px}.msg-card{padding:7px 8px 7px 10px}.msg-card-title{font-size:10px}.msg-card-time{font-size:9px}}
 .hdr-date{font-size:14px;color:#c8a84b;font-weight:700;margin-bottom:4px}
 .hdr-live{display:inline-block;background:#1a3a1a;border:1px solid #2a5a2a;color:#6dd4a0;border-radius:12px;padding:2px 10px;font-size:10px;font-weight:700;margin-right:8px}
 .sign-out{background:transparent;color:#7fa3c8;border:1px solid #1a3050;border-radius:5px;padding:5px 10px;font-size:11px;cursor:pointer}
@@ -277,6 +291,9 @@ canvas{max-width:100%!important}
 <body>
 
 <div id="dashboard">
+<button id="msg-clear-all" onclick="clearAllMsgs()" style="display:none">Clear all</button>
+<div id="msg-stack"></div>
+
   <div class="report-hdr">
     <div class="hdr-left">
       <div class="logo" style="background:none;padding:0;overflow:hidden;"><img src="data:image/jpeg;base64,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" class="logo-img"></div>
@@ -315,7 +332,7 @@ canvas{max-width:100%!important}
   <div class="page" id="page-open" style="display:block">
         <div class="grid-2x2">
       <div class="panel">
-        <div class="panel-title" id="op-fxsum-title">Volume of Foreign Exchange Market</div>
+        <div class="panel-title" id="op-fxsum-title" data-sec="fxsummary">Volume of Foreign Exchange Market</div>
         <canvas id="opFxSumChart" style="max-height:190px"></canvas>
         <table style="font-size:11px;margin-top:10px">
           <thead><tr><th>Tenor</th><th>Volume (USD Mn)</th><th>W/A Rate</th></tr></thead>
@@ -323,7 +340,7 @@ canvas{max-width:100%!important}
         </table>
       </div>
       <div class="panel">
-        <div class="panel-title" id="vd-title">Value Dates</div>
+        <div class="panel-title" id="vd-title" data-sec="valuedates">Value Dates</div>
         <div style="max-height:430px;overflow-y:auto"><table style="font-size:11px">
           <thead><tr><th>Tenor</th><th>Value Date</th><th>NOD</th></tr></thead>
           <tbody id="dyn-op-vd"></tbody>
@@ -332,7 +349,7 @@ canvas{max-width:100%!important}
     </div>
 
     <div class="panel full-width" style="margin-top:14px">
-      <div class="panel-title" id="bondtxn-title">Outright Treasury Bond Transaction Volumes (Rs.Mn)<span class="close-date" id="bondtxn-close"></span><span id="bondtxn-more" style="float:right"></span></div>
+      <div class="panel-title" id="bondtxn-title" data-sec="bondtransxn">Outright Treasury Bond Transaction Volumes (Rs.Mn)<span class="close-date" id="bondtxn-close"></span><span id="bondtxn-more" style="float:right"></span></div>
       <canvas id="bondtxnChart" style="height:280px;max-height:280px"></canvas>
     </div>
   </div>
@@ -344,6 +361,7 @@ canvas{max-width:100%!important}
   <div class="grid-2x2">
     <div class="panel">
       <div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
+      <div data-sec-self="mmrates">
       <table>
         <thead><tr><th></th><th>Call</th><th>Repo</th></tr></thead>
         <tbody>
@@ -353,22 +371,25 @@ canvas{max-width:100%!important}
           <tr><td>Gross Volume(Rs.Bn)</td><td id="cmvol">—</td><td id="rmvol">—</td></tr>
         </tbody>
       </table>
+      </div>
+      <div data-sec-self="windows">
       <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Standing Facilities (Rs.Bn)</div>
       <table style="font-size:12px">
         <thead><tr><th>Instrument</th><th>Latest</th><th>Previous</th></tr></thead>
         <tbody id="dyn-windows"></tbody>
       </table>
+      </div>
       <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Repo Auctions</div>
-      <div data-sec="repoOvernight" style="margin-bottom:10px">
+      <div data-sec-self="repoOvernight" style="margin-bottom:10px">
         <div style="font-size:10px;font-weight:700;color:#dce8fb;margin-bottom:4px">Repo / Reverse Repo Auction (Overnight)</div>
         <div id="dyn-repoOvernight"></div>
       </div>
-      <div data-sec="repoOMO">
+      <div data-sec-self="repoOMO">
         <div style="font-size:10px;font-weight:700;color:#dce8fb;margin-bottom:4px">OMO - Term Repo / Reverse Repo Transactions</div>
         <div id="dyn-repoOMO"></div>
       </div>
     </div>
-    <div class="panel"><div class="panel-title pt-row"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
+    <div class="panel"><div class="panel-title pt-row" data-sec="liquidity"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
   </div>
 
   <div class="grid-2x2">
@@ -394,7 +415,7 @@ canvas{max-width:100%!important}
   <!-- GOVT SECURITIES SECTION -->
   <div class="full-grid">
     <div class="panel">
-      <div class="panel-title pt-row"><span>Treasury Bill</span><span class="mini-gran" id="tbill-gran-btns">
+      <div class="panel-title pt-row" data-sec="tbillcurve"><span>Treasury Bill</span><span class="mini-gran" id="tbill-gran-btns">
         <button class="mg-btn" id="tbill-btn-3m" onclick="selectTbillTenure('3m',this)" style="color:#4da3e8;border-color:#4da3e8">3M</button>
         <button class="mg-btn" id="tbill-btn-6m" onclick="selectTbillTenure('6m',this)" style="color:#c8a84b;border-color:#c8a84b">6M</button>
         <button class="mg-btn" id="tbill-btn-12m" onclick="selectTbillTenure('12m',this)" style="color:#6dd4a0;border-color:#6dd4a0">12M</button>
@@ -428,7 +449,7 @@ canvas{max-width:100%!important}
       </div>
     </div>
     <div class="panel">
-      <div class="panel-title">Treasury Bond Yield(%)<span class="close-date" id="tbond-close"></span></div>
+      <div class="panel-title" data-sec="tbonds">Treasury Bond Yield(%)<span class="close-date" id="tbond-close"></span></div>
       <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
       <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span> → <span style="color:#ff8a78">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
@@ -469,9 +490,9 @@ canvas{max-width:100%!important}
   <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">USD/LKR Foreign Exchange</div></div>
 
   <div class="grid-2x2">
-    <div class="panel"><div class="panel-title pt-row"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
+    <div class="panel"><div class="panel-title pt-row" data-sec="usdlkr"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
     <div class="panel">
-      <div class="panel-title">Swaps (per day)<span class="close-date" id="fx-close"></span></div>
+      <div class="panel-title" data-sec="fxswaps">Swaps (per day)<span class="close-date" id="fx-close"></span></div>
       <table>
         <thead><tr><th>Tenor</th><th>Sell/Buy</th><th>Buy/Sell</th></tr></thead>
         <tbody>
@@ -494,7 +515,7 @@ canvas{max-width:100%!important}
 
   <div class="grid-2x2">
     <div class="panel">
-      <div class="panel-title">Cross-Currency Rates<span class="close-date" id="cross-close"></span></div>
+      <div class="panel-title" data-sec="cross">Cross-Currency Rates<span class="close-date" id="cross-close"></span></div>
       <table style="font-size:11px">
         <thead><tr><th>Currency</th><th>Buying</th><th>Selling</th></tr></thead>
         <tbody id="dyn-cross"></tbody>
@@ -509,7 +530,7 @@ canvas{max-width:100%!important}
   <div class="page" id="page-macro">
         <div class="grid-2x2">
       <div class="panel">
-        <div class="panel-title">Inflation (CCPI vs NCPI)</div>
+        <div class="panel-title" data-sec="inflation">Inflation (CCPI vs NCPI)</div>
         <canvas id="inflChart" style="max-height:185px;margin-bottom:10px"></canvas>
         <table style="font-size:11px">
           <thead><tr><th>Index / Metric</th><th>Previous</th><th>Latest</th></tr></thead>
@@ -517,7 +538,7 @@ canvas{max-width:100%!important}
         </table>
       </div>
       <div class="panel">
-        <div class="panel-title">Foreign Currency Reserves</div>
+        <div class="panel-title" data-sec="reserves">Foreign Currency Reserves</div>
         <table style="font-size:12px">
           <thead><tr><th>Month</th><th>Reserve (USD Mn)</th></tr></thead>
           <tbody id="dyn-reserves"></tbody>
@@ -526,29 +547,29 @@ canvas{max-width:100%!important}
       </div>
     </div>
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title pt-row"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div><div class="mini-tbl" id="cbslTbl"></div></div>
-      <div class="panel"><div class="panel-title pt-row"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fhStat"></div><div class="mini-tbl" id="fhTbl"></div></div>
+      <div class="panel"><div class="panel-title pt-row" data-sec="cbsl"><span>CBSL Holdings of Government Securities (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('cbsl',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('cbsl',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('cbsl','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="cbslChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="cbslStat"></div><div class="mini-tbl" id="cbslTbl"></div></div>
+      <div class="panel"><div class="panel-title pt-row" data-sec="foreign"><span>Foreign Holdings of Government Securities (Rs.Mn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fh',4,this)" title="Last 4 data points">M</button><button class="mg-btn active" onclick="setChartGran('fh','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fhChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fhStat"></div><div class="mini-tbl" id="fhTbl"></div></div>
     </div>
     <div class="grid-3col">
       <div class="panel">
-        <div class="panel-title">Quarterly Real GDP Growth</div>
+        <div class="panel-title" data-sec="gdp">Quarterly Real GDP Growth</div>
         <canvas id="gdpChart" style="max-height:170px;margin-bottom:8px"></canvas>
         <div class="mini-tbl" id="gdpTbl"></div>
       </div>
       <div class="panel">
-        <div class="panel-title">Balance of Payment (USD bn)</div>
+        <div class="panel-title" data-sec="bop">Balance of Payment (USD bn)</div>
         <canvas id="bopChart" style="max-height:170px;margin-bottom:8px"></canvas>
         <div class="mini-tbl" id="bopTbl"></div>
       </div>
       <div class="panel">
-        <div class="panel-title">Debt to GDP (%)</div>
+        <div class="panel-title" data-sec="debtgdp">Debt to GDP (%)</div>
         <canvas id="debtChart" style="max-height:170px;margin-bottom:8px"></canvas>
         <div class="mini-tbl" id="debtTbl"></div>
       </div>
     </div>
 
     <div class="panel full-width">
-      <div class="panel-title">Tourism &amp; Remittances</div>
+      <div class="panel-title" data-sec="tourism">Tourism &amp; Remittances</div>
       <div class="grid-2x2" style="margin-top:4px">
         <table style="font-size:11px">
           <thead><tr><th>Tourism (USD)</th><th>Apr 2026</th><th>May 2026</th><th>Y-o-Y</th></tr></thead>
@@ -568,11 +589,11 @@ canvas{max-width:100%!important}
     <!-- US bond rate + Fed rate -->
     <div class="grid-2x2">
       <div class="panel">
-        <div class="panel-title pt-row"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('g10',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('g10','all',this)" title="Full year (all data)">Y</button></span></div>
+        <div class="panel-title pt-row" data-sec="global10y"><span>US Treasury 10-Year Yield (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('g10',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('g10',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('g10','all',this)" title="Full year (all data)">Y</button></span></div>
         <canvas id="g10Chart" style="max-height:210px"></canvas><div class="chart-stat-bar" id="g10Stat"></div><div class="mini-tbl" id="g10Tbl"></div>
       </div>
       <div class="panel">
-        <div class="panel-title">US Fed Rate — FOMC Decisions</div>
+        <div class="panel-title" data-sec="fomc">US Fed Rate — FOMC Decisions</div>
         <table style="font-size:11px">
           <thead><tr><th>Date</th><th>Range</th><th>O/N REPO</th><th>O/N R/REPO</th></tr></thead>
           <tbody id="dyn-fomc"></tbody>
@@ -583,34 +604,29 @@ canvas{max-width:100%!important}
 
     <!-- Gold + DXY -->
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title">Gold Price (USD / oz)</div><canvas id="goldChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="goldStat"></div><div class="mini-tbl" id="goldTbl"></div><div class="rpt-note" id="goldNote">Awaiting data upload.</div></div>
-      <div class="panel"><div class="panel-title">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="mini-tbl" id="dxyTbl"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="gold">Gold Price (USD / oz)</div><canvas id="goldChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="goldStat"></div><div class="mini-tbl" id="goldTbl"></div><div class="rpt-note" id="goldNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="dxy">US Dollar Index (DXY)</div><canvas id="dxyChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="dxyStat"></div><div class="mini-tbl" id="dxyTbl"></div><div class="rpt-note" id="dxyNote">Awaiting data upload.</div></div>
     </div>
 
     <!-- Brent + WTI -->
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
-      <div class="panel"><div class="panel-title">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="brent">Brent Crude Oil (USD / bbl)</div><canvas id="brentChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="brentStat"></div><div class="mini-tbl" id="brentTbl"></div><div class="rpt-note" id="brentNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="wti">WTI Crude Oil (USD / bbl)</div><canvas id="wtiChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="wtiStat"></div><div class="mini-tbl" id="wtiTbl"></div><div class="rpt-note" id="wtiNote">Awaiting data upload.</div></div>
     </div>
 
     <!-- Murban -->
     <div class="grid-2x2">
-      <div class="panel"><div class="panel-title">Murban Crude Oil (USD / bbl)</div><canvas id="murbanChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="murbanStat"></div><div class="mini-tbl" id="murbanTbl"></div><div class="rpt-note" id="murbanNote">Awaiting data upload.</div></div>
+      <div class="panel"><div class="panel-title" data-sec="murban">Murban Crude Oil (USD / bbl)</div><canvas id="murbanChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="murbanStat"></div><div class="mini-tbl" id="murbanTbl"></div><div class="rpt-note" id="murbanNote">Awaiting data upload.</div></div>
     </div>
   </div>
 
   <!-- PAGE: LATEST MARKET ANNOUNCEMENTS -->
   <div class="page" id="page-news">
     <div class="panel full-width" style="border:1px solid #c8a84b;background:linear-gradient(135deg,#0d1e38,#152a45)">
-      <div class="panel-title" style="font-size:13px;letter-spacing:1.5px;color:#c8a84b;border-bottom:2px solid #c8a84b;padding-bottom:10px;margin-bottom:12px">📋 Latest Results</div>
+      <div class="panel-title" data-sec="results" style="font-size:13px;letter-spacing:1.5px;color:#c8a84b;border-bottom:2px solid #c8a84b;padding-bottom:10px;margin-bottom:12px">📋 Latest Results</div>
       <div id="news-list" class="news-list"></div>
       <div id="news-more" style="margin-top:12px"></div>
     </div>
-    <div class="panel full-width" style="margin-top:14px">
-      <div class="panel-title">Upcoming Key Dates &amp; Announcements</div>
-    </div>
-    <div id="events-grid" class="events-grid" style="margin-top:10px"></div>
-
     <div class="panel full-width" id="panel-auction-sched" style="margin-top:14px">
       <div class="panel-title">Latest Auction Details</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
@@ -626,6 +642,11 @@ canvas{max-width:100%!important}
         <div id="latest-tbond-mat" class="latest-card">—</div>
       </div>
     </div>
+
+    <div class="panel full-width" style="margin-top:14px">
+      <div class="panel-title" data-sec="keydates">Upcoming Key Dates &amp; Announcements</div>
+    </div>
+    <div id="events-grid" class="events-grid" style="margin-top:10px"></div>
   </div>
 
     <div class="footer">MVS Money Brokers Limited — Confidential. For authorised recipients only.</div>
@@ -633,7 +654,7 @@ canvas{max-width:100%!important}
 
 
 <script>
-const DATA_URL="https://raw.githubusercontent.com/kavindyamaheshi303-beep/mvs-market/main/data.json";
+const DATA_URL="https://raw.githubusercontent.com/MVSBrokers/mvs-market/main/data.json";
 const POLL_INTERVAL = 20000;
 let charts={}, pollTimer=null;
 // Sri Lanka bank working day (Mon–Fri). back=0 -> today's working day, 1 -> previous working day…
@@ -1048,9 +1069,241 @@ function showUpdateToast(){
   _toastTimer=setTimeout(()=>{toast.classList.remove('show');},4000);
 }
 
+// ── In-page update messages (top-right, small cards, auto-expire after 1 hour, dismissible) ──
+const MSG_STACK_KEY='mvs_msg_stack';
+const MSG_LAST_FULL_KEY='mvs_last_data_full';
+
+// Which published sections should show an update message when they change.
+// Label -> list of top-level data.json keys that belong to that section (matches this app's actual schema).
+const MSG_SECTION_MAP={
+  'Volume of Foreign Exchange Market':['fxSummary'],
+  'Outright Treasury Bond Transaction Volumes (Rs.Mn)':['bondTransVol'],
+  'Money & Repo Market':['callMarket','repoMarket','windows','liquidity'],
+  'Money & Repo Market — Repo Auctions':['repoOvernight','repoOMO'],
+  'Policy Rate (OPR) History':['opr'],
+  'Statutory Reserve Requirement (SRR)':['srr'],
+  'Treasury Bill':['tbillAuction','tbillCurve'],
+  'Treasury Bond Yield (%)':['bonds','bondSecondary','tbondOut'],
+  'USD/LKR Foreign Exchange':['usdlkr','spot','crossRates','fxSwaps'],
+  'Macro Economy':['reserves','inflation','tourism','remittances','gdpGrowth','bop','debtGdp','cbsl','cbslHoldings','foreign','global10y','wti','brent','dxy','gold','fomc'],
+  'Latest Results':['marketNews']
+};
+
+// Sections whose data is tied to a specific business date with a daily cutoff (auction results,
+// end-of-day rates, etc). For these: only show a message if the change is detected within ±15
+// minutes of that section's own cutoff, and show which date the data belongs to. Everything else
+// notifies immediately, no date shown. Cutoff hours match what's documented/used elsewhere in
+// this app: 8:30 AM (FX volume/swaps date), 4:00 PM (general closing date), 5:00 PM (money market
+// closing, same rule as slEffCutoffMs). Each date extractor pulls the "as of" date straight from
+// the published data — not guessed.
+// Turns whatever raw date format the underlying data happens to use ("17 Jul", "26.05.2026",
+// "2026-07-16", etc.) into a consistent "21st July" style for messages. Returns null (no date
+// shown) rather than guessing, if the text can't be confidently parsed — e.g. if the source data
+// itself is corrupted, this deliberately hides the date instead of showing garbled text.
+function toOrdinalDate(raw){
+  if(!raw)return null;
+  const str=String(raw).trim();
+  const MON=["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+  const MONFULL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  let day=null,monIdx=null;
+  let m=str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); // ISO: 2026-07-16
+  if(m){day=+m[3];monIdx=+m[2]-1;}
+  if(day==null){m=str.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/);if(m){day=+m[1];monIdx=+m[2]-1;}} // 26.05.2026
+  if(day==null){m=str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(m){day=+m[2];monIdx=+m[1]-1;}} // 7/17/2026 (US style, editor's own format)
+  if(day==null){m=str.match(/^(\d{1,2})\s+([A-Za-z]{3,})/);if(m){const mi=MON.indexOf(m[2].slice(0,3).toLowerCase());if(mi>=0){day=+m[1];monIdx=mi;}}} // "17 Jul"
+  if(day==null||monIdx==null||monIdx<0||monIdx>11||day<1||day>31)return null;
+  const suffix=(day%10===1&&day!==11)?'st':(day%10===2&&day!==12)?'nd':(day%10===3&&day!==13)?'rd':'th';
+  return day+suffix+' '+MONFULL[monIdx];
+}
+const MSG_CUTOFF_SECTIONS={
+  'Money & Repo Market — Repo Auctions':{
+    hour:17,
+    date:d=>{
+      const ro=d.repoOvernight,om=d.repoOMO;
+      if(Array.isArray(ro)&&ro.length&&ro[ro.length-1].date)return String(ro[ro.length-1].date);
+      if(Array.isArray(om)&&om.length&&om[om.length-1].auction)return String(om[om.length-1].auction);
+      return null;
+    }
+  },
+  'Treasury Bill':{
+    hour:16,
+    date:d=>{
+      const ta=d.tbillAuction,tc=d.tbillCurve;
+      if(Array.isArray(ta)&&ta.length&&ta[ta.length-1].date)return String(ta[ta.length-1].date);
+      if(Array.isArray(tc)&&tc.length&&tc[tc.length-1].date)return String(tc[tc.length-1].date);
+      return null;
+    }
+  },
+  'Treasury Bond Yield (%)':{hour:16,date:()=>null},
+  'USD/LKR Foreign Exchange':{
+    hour:16,
+    date:d=>{
+      const labels=d.usdlkr&&d.usdlkr.labels;
+      if(Array.isArray(labels)&&labels.length)return String(labels[labels.length-1]);
+      return null;
+    }
+  },
+  'Policy Rate (OPR) History':{
+    hour:16,
+    date:d=>{
+      const opr=d.opr;
+      if(Array.isArray(opr)&&opr.length&&opr[opr.length-1].date)return String(opr[opr.length-1].date);
+      return null;
+    }
+  },
+  'Outright Treasury Bond Transaction Volumes (Rs.Mn)':{
+    hour:16,
+    date:d=>d.bondTransVol&&d.bondTransVol.date?String(d.bondTransVol.date):null
+  },
+  'Volume of Foreign Exchange Market':{
+    hour:8.5,
+    date:d=>d.fxVolDate||d.date||null // falls back to the report's overall date if no dedicated field is set
+  }
+};
+// Is the current SL time at or after the section's own cutoff hour (fractional, e.g. 8.5 = 8:30 AM)?
+// No upper bound — once a section's cutoff has passed for the day, a change to it can notify any
+// time later that same day (e.g. opening the app at 7 PM still shows a 4 PM update). Nothing
+// before cutoff counts, even if the data already changed. All cards get wiped at midnight SL
+// anyway (see checkDailyReset), so there's no need for an end-of-window cutoff here.
+function isPastCutoffToday(hour){
+  const slNow=new Date(Date.now()+330*60000);
+  const slMinutesNow=slNow.getUTCHours()*60+slNow.getUTCMinutes();
+  const cutoffMinutes=hour*60;
+  return slMinutesNow>=cutoffMinutes;
+}
+
+// Wipes every message card at midnight SL time — they're only relevant for "today". Checked on
+// every app open and every poll, so it fires whether the tab was open through midnight or opened
+// fresh the next day.
+const MSG_LAST_DAY_KEY='mvs_msg_last_day';
+function slDateKey(){
+  const slNow=new Date(Date.now()+330*60000);
+  return slNow.getUTCFullYear()+'-'+String(slNow.getUTCMonth()+1).padStart(2,'0')+'-'+String(slNow.getUTCDate()).padStart(2,'0');
+}
+function checkDailyReset(){
+  const today=slDateKey();
+  let lastDay=null;
+  try{lastDay=localStorage.getItem(MSG_LAST_DAY_KEY);}catch(e){}
+  if(lastDay!==null&&lastDay!==today)clearAllMsgs();
+  try{localStorage.setItem(MSG_LAST_DAY_KEY,today);}catch(e){}
+}
+
+// Most sections just do a straight JSON diff on their tracked keys. A few need a smarter
+// comparison because the raw field bundles metadata (like its own internal date) alongside the
+// actual data — for those, only changes to the real data should count, not a date-only republish.
+const MSG_SECTION_COMPARATORS={
+  'Outright Treasury Bond Transaction Volumes (Rs.Mn)':(oldObj,newObj)=>{
+    const oldRows=(oldObj.bondTransVol&&oldObj.bondTransVol.rows)||null;
+    const newRows=(newObj.bondTransVol&&newObj.bondTransVol.rows)||null;
+    return JSON.stringify(oldRows)!==JSON.stringify(newRows);
+  }
+};
+
+function computeChangedSections(oldObj,newObj){
+  const changed=[];
+  if(!oldObj||!newObj)return changed;
+  for(const label in MSG_SECTION_MAP){
+    const customCompare=MSG_SECTION_COMPARATORS[label];
+    let isDiff;
+    if(customCompare){
+      isDiff=customCompare(oldObj,newObj);
+    }else{
+      const keys=MSG_SECTION_MAP[label];
+      isDiff=keys.some(k=>JSON.stringify(oldObj[k])!==JSON.stringify(newObj[k]));
+    }
+    if(isDiff)changed.push(label);
+  }
+  return changed;
+}
+
+function fmtMsgTime(ms){
+  const slNow=new Date(ms+330*60000);
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const dd=slNow.getUTCDate(),mo=MON[slNow.getUTCMonth()];
+  const hh=String(slNow.getUTCHours()).padStart(2,'0'),mm=String(slNow.getUTCMinutes()).padStart(2,'0');
+  return dd+' '+mo+', '+hh+':'+mm+' SL';
+}
+
+function readMsgStack(){
+  try{return JSON.parse(localStorage.getItem(MSG_STACK_KEY)||'[]');}catch(e){return [];}
+}
+function writeMsgStack(arr){
+  try{localStorage.setItem(MSG_STACK_KEY,JSON.stringify(arr));}catch(e){}
+}
+
+function pushMsg(section,dateStr){
+  const label=dateStr?(section+' — '+dateStr):section;
+  const stack=readMsgStack();
+  // If this section already has an active (undismissed) card, replace it in place instead of
+  // adding a second one — otherwise an old, un-cleared card would just pile up alongside newer
+  // updates for the same section over time.
+  const existingIdx=stack.findIndex(m=>m.section===section);
+  const id=(existingIdx>=0)?stack[existingIdx].id:('m'+Date.now()+'_'+Math.random().toString(36).slice(2,8));
+  const entry={id,section,label,atMs:Date.now()};
+  if(existingIdx>=0){
+    stack[existingIdx]=entry;
+    removeMsgFromDOM(id); // drop the old card's DOM node; renderMsgCard below adds the fresh one
+  }else{
+    stack.push(entry);
+  }
+  writeMsgStack(stack);
+  renderMsgCard(entry);
+}
+
+function renderMsgCard(entry){
+  const root=document.getElementById('msg-stack');
+  if(!root)return;
+  const card=document.createElement('div');
+  card.className='msg-card';
+  card.id='msgcard-'+entry.id;
+  card.innerHTML='<div class="msg-card-body"><span class="msg-card-title"></span><span class="msg-card-time"></span></div><button class="msg-card-close" title="Dismiss" aria-label="Dismiss">✕</button>';
+  card.querySelector('.msg-card-title').textContent=entry.label;
+  card.querySelector('.msg-card-time').textContent=fmtMsgTime(entry.atMs);
+  card.querySelector('.msg-card-close').onclick=()=>dismissMsg(entry.id);
+  root.appendChild(card);
+  updateClearAllVisibility();
+}
+
+function removeMsgFromDOM(id){
+  const el=document.getElementById('msgcard-'+id);
+  if(el&&el.parentNode)el.parentNode.removeChild(el);
+  updateClearAllVisibility();
+}
+
+function dismissMsg(id){
+  removeMsgFromDOM(id);
+  const stack=readMsgStack().filter(m=>m.id!==id);
+  writeMsgStack(stack);
+}
+
+function updateClearAllVisibility(){
+  const btn=document.getElementById('msg-clear-all');
+  const root=document.getElementById('msg-stack');
+  if(!btn||!root)return;
+  btn.style.display=root.children.length>0?'block':'none';
+}
+
+// Removes every currently-shown message card at once, and clears them from storage so they
+// don't come back on the next reload.
+function clearAllMsgs(){
+  const root=document.getElementById('msg-stack');
+  if(root)root.innerHTML='';
+  writeMsgStack([]);
+  updateClearAllVisibility();
+}
+
+// Called on every app open: render every message still in storage — these no longer expire on
+// their own, they stay until the person dismisses them (✕) or clears them all.
+function initMsgStack(){
+  const stack=readMsgStack();
+  stack.forEach(renderMsgCard);
+  updateClearAllVisibility();
+}
+
 let _lastDataHash=null;
 let _lastNewsHash=null;
 async function loadData(silent=false){
+  checkDailyReset();
   const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
   if(!silent){bar.style.display="block";errEl.style.display="none";}
   try{
@@ -1061,10 +1314,34 @@ async function loadData(silent=false){
     // Only re-render (and rebuild charts) when the published data has actually changed.
     // This stops the every-30s flicker — the dashboard refreshes only after you publish.
     if(txt===_lastDataHash)return;
-    const isFirst=_lastDataHash===null;
     _lastDataHash=txt;
-    render(JSON.parse(txt));
-    // if(!isFirst)showUpdateToast();   // toast disabled per request — no popup on data refresh
+    const newObj=JSON.parse(txt);
+    render(newObj);
+    // Backgrounded tabs can get fully discarded by the browser to save memory/battery — when the
+    // user returns, this reloads the page from scratch and would otherwise make a real missed
+    // update look like "first load". Persisting the full previous data to localStorage lets a
+    // fresh reload tell those two cases apart, and also lets us diff section-by-section.
+    let storedFull=null;
+    try{storedFull=localStorage.getItem(MSG_LAST_FULL_KEY);}catch(e){}
+    const isGenuinelyNewDevice=storedFull===null;
+    if(!isGenuinelyNewDevice&&storedFull!==txt){
+      try{
+        const oldObj=JSON.parse(storedFull);
+        const changed=computeChangedSections(oldObj,newObj);
+        changed.forEach(label=>{
+          if(newObj.mutedNotif&&newObj.mutedNotif[label])return; // muted from the editor — skip entirely
+          const cutoffSec=MSG_CUTOFF_SECTIONS[label];
+          if(cutoffSec){
+            if(!isPastCutoffToday(cutoffSec.hour))return; // date-bound section — only notify from cutoff onward, same day; a change from a previous day never resurfaces once midnight has cleared it
+            const dateStr=toOrdinalDate(cutoffSec.date(newObj));
+            pushMsg(label,dateStr);
+          }else{
+            pushMsg(label); // no cutoff concept for this section — notify immediately, no date
+          }
+        });
+      }catch(e){}
+    }
+    try{localStorage.setItem(MSG_LAST_FULL_KEY,txt);}catch(e){}
   }catch(e){
     bar.style.display="none";
     if(!silent){errEl.style.display="block";errEl.textContent="Could not load data — "+e.message;}
@@ -1923,6 +2200,7 @@ function buildCharts(d){
 }
 
 // no login required — load immediately
+initMsgStack();
 loadData();
 startPolling();
 // When the tab/app comes back into view (phone unlocked, tab refocused, browser un-minimized after
