@@ -1812,47 +1812,42 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 51.85,
-   "wa": 336.3526
+   "volume": 32.85,
+   "wa": 336.42
   },
   {
    "tenor": "Tom",
-   "volume": 14,
-   "wa": 336.61
+   "volume": 3,
+   "wa": 336.3
   },
   {
    "tenor": "Cash",
-   "volume": 23,
-   "wa": 336.43
+   "volume": 46,
+   "wa": 336.34
   },
   {
    "tenor": "Sub Total",
-   "volume": 88.85,
+   "volume": 81.85,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 20,
-   "wa": 336.94
+   "volume": 2,
+   "wa": 336.9
   },
   {
-   "tenor": "1M",
-   "volume": 17,
-   "wa": 338.05
-  },
-  {
-   "tenor": "3M",
-   "volume": 18.1,
-   "wa": 341.32
+   "tenor": "2W",
+   "volume": 20.5,
+   "wa": 337.23
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 55.1,
+   "volume": 22.5,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 143.95,
+   "volume": 104.35,
    "wa": null
   }
  ],
@@ -2275,7 +2270,7 @@
    2498.12,
    2498.12,
    2498.12,
-   "2498.12"
+   2498.12
   ]
  },
  "cbslHoldings": 2498.12,
@@ -5624,7 +5619,7 @@
   "Total Amount Accepted: Rs. 140.0 Billion",
   "Auction Date: 22 July 2026"
  ],
- "date": "2026-07-22",
+ "date": "2026-07-23",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
