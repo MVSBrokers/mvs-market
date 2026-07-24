@@ -1005,7 +1005,7 @@ function parseWorkbook(wb,XLSX){
   const o={};
   const mm=S(find('moneymorket')||find('moneymarket')||'');
   if(mm.length){
-    o.opr=[];for(let i=2;i<mm.length;i++)if(mm[i][0]&&mm[i][1]!=null)o.opr.push({date:String(mm[i][0]).trim(),rate:String(mm[i][1]).trim(),show:true});
+    o.opr=[];for(let i=2;i<mm.length;i++){const raw=mm[i][0];if(typeof raw!=='string'||!/^\d{1,2}\.\d{1,2}\.\d{4}$/.test(raw.trim()))break;if(mm[i][1]==null)continue;o.opr.push({date:raw.trim(),rate:String(mm[i][1]).trim(),show:true});}
     o.callMarket={min:num(mm[2][4]),max:num(mm[3][4]),wa:num(mm[4][4]),vol:num(mm[5][4])};
     o.repoMarket={min:num(mm[2][5]),max:num(mm[3][5]),wa:num(mm[4][5]),vol:num(mm[5][5])};
     {let _sdf=null,_slf=null;for(let i=0;i<mm.length;i++){const _l=String((mm[i]&&mm[i][3])||'').toLowerCase();if((/sdf|standing deposit/.test(_l))&&!_sdf)_sdf=mm[i];if((/slf|standing lending/.test(_l))&&!_slf)_slf=mm[i];}
