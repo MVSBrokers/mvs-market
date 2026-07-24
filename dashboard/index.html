@@ -1085,7 +1085,15 @@ const MSG_SECTION_MAP={
   'Treasury Bill':['tbillAuction','tbillCurve'],
   'Treasury Bond Yield (%)':['bonds','bondSecondary','tbondOut'],
   'USD/LKR Foreign Exchange':['usdlkr','spot','crossRates','fxSwaps'],
-  'Macro Economy':['reserves','inflation','tourism','remittances','gdpGrowth','bop','debtGdp','cbsl','cbslHoldings','foreign','global10y','wti','brent','dxy','gold','fomc'],
+  'Foreign Currency Reserves':['reserves'],
+  'Inflation (CCPI vs NCPI)':['inflation'],
+  'Tourism & Remittances':['tourism','remittances'],
+  'Quarterly Real GDP Growth':['gdpGrowth'],
+  'Balance of Payment (USD bn)':['bop'],
+  'Debt to GDP (%)':['debtGdp'],
+  'CBSL Holdings of Government Securities':['cbsl','cbslHoldings'],
+  'Foreign Holdings of Government Securities':['foreign'],
+  'US Fed Rate — FOMC Decisions':['fomc'],
   'Latest Results':['marketNews']
 };
 
@@ -1116,6 +1124,10 @@ function toOrdinalDate(raw){
   return day+suffix+' '+MONFULL[monIdx];
 }
 const MSG_CUTOFF_SECTIONS={
+  'Money & Repo Market':{
+    hour:17,
+    date:d=>d.mmDate||d.date||null // falls back to the report's overall date if no dedicated field is set
+  },
   'Money & Repo Market — Repo Auctions':{
     hour:17,
     date:d=>{
@@ -1140,14 +1152,6 @@ const MSG_CUTOFF_SECTIONS={
     date:d=>{
       const labels=d.usdlkr&&d.usdlkr.labels;
       if(Array.isArray(labels)&&labels.length)return String(labels[labels.length-1]);
-      return null;
-    }
-  },
-  'Policy Rate (OPR) History':{
-    hour:16,
-    date:d=>{
-      const opr=d.opr;
-      if(Array.isArray(opr)&&opr.length&&opr[opr.length-1].date)return String(opr[opr.length-1].date);
       return null;
     }
   },
@@ -1302,6 +1306,26 @@ function initMsgStack(){
 
 let _lastDataHash=null;
 let _lastNewsHash=null;
+// Holds back cutoff-bound sections from actually appearing on the dashboard until their cutoff
+// time has passed today — even though data.json may already have the new value if it was
+// published early. Everything else (non-cutoff sections, and any other fields like hidden/
+// mutedNotif/report-date metadata) always reflects the real current data immediately.
+const DISPLAY_SNAPSHOT_KEY='mvs_display_snapshot';
+function buildDisplayObject(newObj){
+  let stored=null;
+  try{const raw=localStorage.getItem(DISPLAY_SNAPSHOT_KEY);if(raw)stored=JSON.parse(raw);}catch(e){}
+  const display=JSON.parse(JSON.stringify(newObj)); // start from the real, current data
+  if(stored){
+    for(const label in MSG_CUTOFF_SECTIONS){
+      if(isPastCutoffToday(MSG_CUTOFF_SECTIONS[label].hour))continue; // cutoff already passed — show the real data
+      const keys=MSG_SECTION_MAP[label]||[];
+      keys.forEach(k=>{display[k]=stored[k];}); // not yet due — keep showing whatever was last actually displayed
+    }
+  }
+  try{localStorage.setItem(DISPLAY_SNAPSHOT_KEY,JSON.stringify(display));}catch(e){}
+  return display;
+}
+
 async function loadData(silent=false){
   checkDailyReset();
   const bar=document.getElementById("loading-bar"),errEl=document.getElementById("load-err");
@@ -1316,7 +1340,8 @@ async function loadData(silent=false){
     if(txt===_lastDataHash)return;
     _lastDataHash=txt;
     const newObj=JSON.parse(txt);
-    render(newObj);
+    const displayObj=buildDisplayObject(newObj);
+    render(displayObj);
     // Backgrounded tabs can get fully discarded by the browser to save memory/battery — when the
     // user returns, this reloads the page from scratch and would otherwise make a real missed
     // update look like "first load". Persisting the full previous data to localStorage lets a
