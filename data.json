@@ -19,23 +19,23 @@
  "callMarket": {
   "min": 8.95,
   "max": 9.05,
-  "wa": 9.01,
-  "vol": 65.15
+  "wa": 9,
+  "vol": 37.05
  },
  "repoMarket": {
-  "min": 9,
-  "max": 9.1,
+  "min": 8.95,
+  "max": 9.12,
   "wa": 9.02,
-  "vol": 111.41
+  "vol": 108.64
  },
  "windows": {
   "sdf": {
-   "cur": 129.04,
-   "prev": 113.47
+   "cur": 95.07,
+   "prev": 129.04
   },
   "slf": {
    "cur": 0,
-   "prev": 8.27
+   "prev": 0
   }
  },
  "liquidity": {
@@ -175,7 +175,8 @@
    "20 Jul",
    "21 Jul",
    "22 Jul",
-   "23 Jul"
+   "23 Jul",
+   "24 Jul"
   ],
   "values": [
    128.14,
@@ -313,21 +314,22 @@
    148.13,
    142.36,
    175.2,
-   136.54
+   136.54,
+   143.07
   ],
-  "current": 136.54,
-  "previous": 175.2
+  "current": 143.07,
+  "previous": 136.54
  },
  "repoOvernight": [
   {
-   "date": "23 Jul 2026",
-   "repoOffered": 60,
+   "date": "24 Jul 2026",
+   "repoOffered": 50,
    "reverseRepoOffered": null,
-   "received": 8,
-   "accepted": 8,
-   "minRate": 8.73,
+   "received": 48,
+   "accepted": 48,
+   "minRate": 8.75,
    "maxRate": 8.75,
-   "waYield": 8.74,
+   "waYield": 8.75,
    "show": true
   }
  ],
@@ -789,24 +791,6 @@
   }
  ],
  "bondSecondary": [
-  {
-   "maturity": "7/24/2026 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.7,
-   "show": true
-  },
-  {
-   "maturity": "7/24/2026 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.7,
-   "show": true
-  },
-  {
-   "maturity": "7/24/2026 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.7,
-   "show": true
-  },
   {
    "maturity": "7/31/2026 12:00:00 AM",
    "bid": 9.5,
@@ -2110,7 +2094,8 @@
    "20 Jul",
    "21 Jul",
    "22 Jul",
-   "23 Jul"
+   "23 Jul",
+   "24 Jul"
   ],
   "values": [
    2508.92,
@@ -2211,6 +2196,7 @@
    2507.92,
    2507.92,
    2507.92,
+   2498.12,
    2498.12,
    2498.12,
    2498.12,
@@ -5606,8 +5592,8 @@
  ],
  "execSummary": {
   "usdlkr": "336.18/ 336.25",
-  "liqDir": "decreased",
-  "liqDelta": 38.66
+  "liqDir": "increased",
+  "liqDelta": 6.53
  },
  "marketNews": [
   "Treasury Bill Auction Results",
