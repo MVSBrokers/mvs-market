@@ -1155,10 +1155,6 @@ const MSG_CUTOFF_SECTIONS={
       return null;
     }
   },
-  'Outright Treasury Bond Transaction Volumes (Rs.Mn)':{
-    hour:16,
-    date:d=>d.bondTransVol&&d.bondTransVol.date?String(d.bondTransVol.date):null
-  },
   'Volume of Foreign Exchange Market':{
     hour:8.5,
     date:d=>d.fxVolDate||d.date||null // falls back to the report's overall date if no dedicated field is set
