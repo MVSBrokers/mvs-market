@@ -209,12 +209,12 @@ const META_KEYS=['execSummary','date','marketNews'];
 const NO_HIDE=new Set(['dates','headers','billauc','bondauc','tbillout','tbondout']); // sections with no standalone panel on the dashboard
 // Which editor sections get a notification mute toggle, and what dashboard notification label each
 // one controls. Only Latest Results and the cutoff-time (date-bound) sections get this button —
-// Money & Repo Market, SRR, and Macro Economy always notify immediately with no mute option.
+// SRR and the individual Macro Economy items always notify immediately with no mute option.
 const NOTIF_TOGGLE_SECTIONS={
   results:'Latest Results',
   fxsummary:'Volume of Foreign Exchange Market',
   bondtransxn:'Outright Treasury Bond Transaction Volumes (Rs.Mn)',
-  opr:'Policy Rate (OPR) History',
+  mmrates:'Money & Repo Market',
   tbillcurve:'Treasury Bill',
   tbonds:'Treasury Bond Yield (%)',
   usdlkr:'USD/LKR Foreign Exchange',
