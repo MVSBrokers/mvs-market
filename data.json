@@ -5662,5 +5662,8 @@
    "Month",
    "Reserve ($)"
   ]
+ },
+ "mutedNotif": {
+  "Latest Results": true
  }
 }
