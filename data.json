@@ -19,23 +19,23 @@
  "callMarket": {
   "min": 8.95,
   "max": 9.05,
-  "wa": 9,
-  "vol": 37.05
+  "wa": 9.01,
+  "vol": 65.15
  },
  "repoMarket": {
-  "min": 8.95,
-  "max": 9.12,
+  "min": 9,
+  "max": 9.1,
   "wa": 9.02,
-  "vol": 108.64
+  "vol": 111.41
  },
  "windows": {
   "sdf": {
-   "cur": 95.07,
-   "prev": 129.04
+   "cur": 129.04,
+   "prev": 113.47
   },
   "slf": {
    "cur": 0,
-   "prev": 0
+   "prev": 8.27
   }
  },
  "liquidity": {
@@ -175,8 +175,7 @@
    "20 Jul",
    "21 Jul",
    "22 Jul",
-   "23 Jul",
-   "24 Jul"
+   "23 Jul"
   ],
   "values": [
    128.14,
@@ -314,22 +313,21 @@
    148.13,
    142.36,
    175.2,
-   136.54,
-   143.07
+   136.54
   ],
-  "current": 143.07,
-  "previous": 136.54
+  "current": 136.54,
+  "previous": 175.2
  },
  "repoOvernight": [
   {
-   "date": "24 Jul 2026",
-   "repoOffered": 50,
+   "date": "23 Jul 2026",
+   "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 48,
-   "accepted": 48,
-   "minRate": 8.75,
+   "received": 8,
+   "accepted": 8,
+   "minRate": 8.73,
    "maxRate": 8.75,
-   "waYield": 8.75,
+   "waYield": 8.74,
    "show": true
   }
  ],
@@ -791,6 +789,24 @@
   }
  ],
  "bondSecondary": [
+  {
+   "maturity": "7/24/2026 12:00:00 AM",
+   "bid": 9.5,
+   "ask": 9.7,
+   "show": true
+  },
+  {
+   "maturity": "7/24/2026 12:00:00 AM",
+   "bid": 9.5,
+   "ask": 9.7,
+   "show": true
+  },
+  {
+   "maturity": "7/24/2026 12:00:00 AM",
+   "bid": 9.5,
+   "ask": 9.7,
+   "show": true
+  },
   {
    "maturity": "7/31/2026 12:00:00 AM",
    "bid": 9.5,
@@ -1345,7 +1361,7 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-07-23",
+  "date": "23th July 2026",
   "rows": [
    {
     "isin": "LKB00527E019",
@@ -2094,8 +2110,7 @@
    "20 Jul",
    "21 Jul",
    "22 Jul",
-   "23 Jul",
-   "24 Jul"
+   "23 Jul"
   ],
   "values": [
    2508.92,
@@ -2232,7 +2247,6 @@
    2498.12,
    2498.12,
    2498.12,
-   2498.12,
    2498.12
   ]
  },
@@ -2275,13 +2289,13 @@
   {
    "metric": "NCPI Year-on-Year (YoY %)",
    "apr": "5.40%",
-   "may": "1.60%",
+   "may": "6.50%",
    "show": true
   },
   {
    "metric": "NCPI Month-on-Month (MoM %)",
    "apr": "1.20%",
-   "may": "6.50%",
+   "may": "1.60%",
    "show": true
   }
  ],
@@ -5592,31 +5606,30 @@
  ],
  "execSummary": {
   "usdlkr": "336.18/ 336.25",
-  "liqDir": "increased",
-  "liqDelta": 6.53
+  "liqDir": "decreased",
+  "liqDelta": 38.66
  },
  "marketNews": [
   "Treasury Bill Auction Results",
-  "------------------------------------------------------------",
-  "91-Day (LKA09126J235): 9.95%",
-  "182-Day (LKA18227A221): 10.24%",
-  "364-Day (LKA36427G230): 10.20%",
-  "------------------------------------------------------------",
-  "Total Amount Issued: Rs. 140.0 Billion",
-  "Total Amount Accepted: Rs. 140.0 Billion",
-  "Auction Date: 22 July 2026"
+  "-----------------------------------------------------",
+  "91-Day Treasury Bill (LKA09126J029): 10.23%",
+  "182-Day Treasury Bill (LKA18227A015): 10.30%",
+  "364-Day Treasury Bill (LKA36427G024): 10.20%",
+  "-----------------------------------------------------",
+  "Total Amount Accepted: Rs. 100.0 Billion",
+  "Auction Date: 01 July 2026"
  ],
- "date": "2026-07-24",
+ "date": "2026-07-25",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/4f4148b4-553b-4592-a46b-383b25bad90c",
- "billAucLink": "https://www.treasury.gov.lk/api/file/142d8208-fd1f-4bcb-a37f-db2a9b256436",
+ "newsLink": "",
+ "billAucLink": "",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/ab73dc22-f4d4-4bcb-9eba-f0bc32474d14",
- "bondTransVolLinkDate": "23th July 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/3683d0da-6188-4df0-8bd7-6264733ee1a1",
+ "bondTransVolLinkDate": "24th July 2026",
  "hidden": {
   "secondary": true
  },
@@ -5633,19 +5646,19 @@
   ],
   "tourism": [
    "Tourism (USD)",
-   "May-2026",
-   "Jun-2026",
-   "M-o-M Change (Jun)"
+   "Apr 2026",
+   "May 2026",
+   "Y-o-Y"
   ],
   "remit": [
    "Remittances (USD)",
-   "May-2026",
-   "Jun-2026",
-   "M-o-M Change (Jun)"
+   "Apr 2025",
+   "May 2026",
+   "Y-o-Y"
   ],
   "reserves": [
    "Month",
-   "Reserve (USD Mn)"
+   "Reserve ($)"
   ]
  }
 }
