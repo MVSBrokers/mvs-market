@@ -5614,12 +5614,12 @@
  "marketNews": [
   "Treasury Bill Auction Results",
   "-----------------------------------------------------",
-  "91-Day Treasury Bill (LKA09126J029): 10.23%",
-  "182-Day Treasury Bill (LKA18227A015): 10.30%",
+  "91-Day Treasury Bill (LKA09126J029): 9.95%",
+  "182-Day Treasury Bill (LKA18227A015): 10.24%",
   "364-Day Treasury Bill (LKA36427G024): 10.20%",
   "-----------------------------------------------------",
-  "Total Amount Accepted: Rs. 100.0 Billion",
-  "Auction Date: 01 July 2026"
+  "Total Amount Accepted: Rs.140 Billion",
+  "Auction Date: 22 July 2026"
  ],
  "date": "2026-07-25",
  "openingDate": "",
@@ -5627,7 +5627,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "",
+ "newsLink": "https://www.treasury.gov.lk/api/file/4f4148b4-553b-4592-a46b-383b25bad90c",
  "billAucLink": "",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/3683d0da-6188-4df0-8bd7-6264733ee1a1",
