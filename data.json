@@ -5618,7 +5618,7 @@
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/ab73dc22-f4d4-4bcb-9eba-f0bc32474d14",
  "bondTransVolLinkDate": "23th July 2026",
  "hidden": {
-  "tbills": true
+  "secondary": true
  },
  "headers": {
   "bond": [
