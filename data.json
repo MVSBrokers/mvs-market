@@ -1737,9 +1737,9 @@
  },
  "spot": {
   "open": "336.15/ 336.30",
-  "close": "336.18/ 336.25",
+  "close": "336.20/ 336.30",
   "low": "336.2",
-  "high": "336.2"
+  "high": "336.3"
  },
  "crossRates": [
   {
@@ -5609,7 +5609,7 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "336.18/ 336.25",
+  "usdlkr": "336.20/ 336.30",
   "liqDir": "decreased",
   "liqDelta": 38.66
  },
@@ -5623,7 +5623,7 @@
   "Total Amount Accepted: Rs.140 Billion",
   "Auction Date: 22 July 2026"
  ],
- "date": "2026-07-25",
+ "date": "2026-07-26",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
