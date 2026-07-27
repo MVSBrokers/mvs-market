@@ -1126,7 +1126,10 @@ function toOrdinalDate(raw){
 const MSG_CUTOFF_SECTIONS={
   'Money & Repo Market':{
     hour:17,
-    date:d=>d.mmDate||d.date||null // falls back to the report's overall date if no dedicated field is set
+    date:d=>{
+      const dt=slWorkDay(0); // today's SL working day — this is closing data, gated by the 5PM cutoff, so "today" is correct
+      return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+    }
   },
   'Money & Repo Market — Repo Auctions':{
     hour:17,
@@ -1146,7 +1149,13 @@ const MSG_CUTOFF_SECTIONS={
       return null;
     }
   },
-  'Treasury Bond Yield (%)':{hour:16,date:()=>null},
+  'Treasury Bond Yield (%)':{
+    hour:16,
+    date:d=>{
+      const dt=slWorkDay(0); // today's SL working day — closing data, gated by the 4PM cutoff
+      return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+    }
+  },
   'USD/LKR Foreign Exchange':{
     hour:16,
     date:d=>{
@@ -1157,7 +1166,10 @@ const MSG_CUTOFF_SECTIONS={
   },
   'Volume of Foreign Exchange Market':{
     hour:8.5,
-    date:d=>d.fxVolDate||d.date||null // falls back to the report's overall date if no dedicated field is set
+    date:d=>{
+      const dt=slOpeningDay(); // same T-2/T-1 working-day rule already used for the Opening Report date
+      return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+    }
   }
 };
 // Is the current SL time at or after the section's own cutoff hour (fractional, e.g. 8.5 = 8:30 AM)?
