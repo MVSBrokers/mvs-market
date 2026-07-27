@@ -19,23 +19,23 @@
  "callMarket": {
   "min": 8.95,
   "max": 9.05,
-  "wa": 9.01,
-  "vol": 65.15
+  "wa": 9,
+  "vol": 37.05
  },
  "repoMarket": {
-  "min": 9,
-  "max": 9.1,
+  "min": 8.95,
+  "max": 9.12,
   "wa": 9.02,
-  "vol": 111.41
+  "vol": 108.64
  },
  "windows": {
   "sdf": {
-   "cur": 129.04,
-   "prev": 113.47
+   "cur": 95.07,
+   "prev": 129.04
   },
   "slf": {
    "cur": 0,
-   "prev": 8.27
+   "prev": 0
   }
  },
  "liquidity": {
@@ -175,7 +175,8 @@
    "20 Jul",
    "21 Jul",
    "22 Jul",
-   "23 Jul"
+   "23 Jul",
+   "24 Jul"
   ],
   "values": [
    128.14,
@@ -313,21 +314,22 @@
    148.13,
    142.36,
    175.2,
-   136.54
+   136.54,
+   143.07
   ],
-  "current": 136.54,
-  "previous": 175.2
+  "current": 143.07,
+  "previous": 136.54
  },
  "repoOvernight": [
   {
-   "date": "23 Jul 2026",
-   "repoOffered": 60,
+   "date": "24 Jul 2026",
+   "repoOffered": 50,
    "reverseRepoOffered": null,
-   "received": 8,
-   "accepted": 8,
-   "minRate": 8.73,
+   "received": 48,
+   "accepted": 48,
+   "minRate": 8.75,
    "maxRate": 8.75,
-   "waYield": 8.74,
+   "waYield": 8.75,
    "show": true
   }
  ],
@@ -789,24 +791,6 @@
   }
  ],
  "bondSecondary": [
-  {
-   "maturity": "7/24/2026 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.7,
-   "show": true
-  },
-  {
-   "maturity": "7/24/2026 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.7,
-   "show": true
-  },
-  {
-   "maturity": "7/24/2026 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.7,
-   "show": true
-  },
   {
    "maturity": "7/31/2026 12:00:00 AM",
    "bid": 9.5,
@@ -1361,7 +1345,7 @@
   }
  ],
  "bondTransVol": {
-  "date": "23th July 2026",
+  "date": "2026-07-23",
   "rows": [
    {
     "isin": "LKB00527E019",
@@ -1707,7 +1691,7 @@
    336.3,
    336.2
   ],
-  "close": "336.18/ 336.25"
+  "close": "336.20/ 336.30"
  },
  "fxSwaps": {
   "1w": {
@@ -1782,47 +1766,57 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 46.25,
-   "wa": 336.26
+   "volume": 7.5,
+   "wa": 336.25
   },
   {
    "tenor": "Tom",
-   "volume": 13.5,
-   "wa": 336.18
+   "volume": 8.5,
+   "wa": 336.21
   },
   {
    "tenor": "Cash",
-   "volume": 41.35,
-   "wa": 336.14
+   "volume": 16.7,
+   "wa": 336.07
   },
   {
    "tenor": "Sub Total",
-   "volume": 101.1,
+   "volume": 32.7,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 13.25,
-   "wa": 336.59
+   "volume": 4,
+   "wa": 336.65
+  },
+  {
+   "tenor": "2W",
+   "volume": 8.5,
+   "wa": 336.94
+  },
+  {
+   "tenor": "3W",
+   "volume": 0.55,
+   "wa": 337.6
   },
   {
    "tenor": "1M",
-   "volume": 15,
-   "wa": 338.1
+   "volume": 1.55,
+   "wa": 337.96
   },
   {
    "tenor": "2M",
-   "volume": 7,
-   "wa": 339.56
+   "volume": 0.75,
+   "wa": 339.55
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 35.25,
+   "volume": 15.35,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 136.35,
+   "volume": 48.05,
    "wa": null
   }
  ],
@@ -1953,8 +1947,7 @@
    "26 Jun",
    "3 Jul",
    "10 Jul",
-   "17 Jul",
-   "24 Jul"
+   "17 Jul"
   ],
   "values": [
    143617,
@@ -1972,8 +1965,7 @@
    135858,
    136859,
    168895,
-   176561,
-   "182386"
+   176561
   ]
  },
  "cbsl": {
@@ -2251,7 +2243,7 @@
    2498.12,
    2498.12,
    2498.12,
-   "2498.12"
+   2498.12
   ]
  },
  "cbslHoldings": 2498.12,
@@ -5610,32 +5602,33 @@
  ],
  "execSummary": {
   "usdlkr": "336.20/ 336.30",
-  "liqDir": "decreased",
-  "liqDelta": 38.66
+  "liqDir": "increased",
+  "liqDelta": 6.53
  },
  "marketNews": [
   "Treasury Bill Auction Results",
-  "-----------------------------------------------------",
-  "91-Day Treasury Bill (LKA09126J029): 9.95%",
-  "182-Day Treasury Bill (LKA18227A015): 10.24%",
-  "364-Day Treasury Bill (LKA36427G024): 10.20%",
-  "-----------------------------------------------------",
-  "Total Amount Accepted: Rs.140 Billion",
+  "------------------------------------------------------------",
+  "91-Day (LKA09126J235): 9.95%",
+  "182-Day (LKA18227A221): 10.24%",
+  "364-Day (LKA36427G230): 10.20%",
+  "------------------------------------------------------------",
+  "Total Amount Issued: Rs. 140.0 Billion",
+  "Total Amount Accepted: Rs. 140.0 Billion",
   "Auction Date: 22 July 2026"
  ],
- "date": "2026-07-26",
+ "date": "2026-07-27",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "https://www.treasury.gov.lk/api/file/4f4148b4-553b-4592-a46b-383b25bad90c",
- "billAucLink": "",
+ "billAucLink": "https://www.treasury.gov.lk/api/file/142d8208-fd1f-4bcb-a37f-db2a9b256436",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/3683d0da-6188-4df0-8bd7-6264733ee1a1",
- "bondTransVolLinkDate": "24th July 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/ab73dc22-f4d4-4bcb-9eba-f0bc32474d14",
+ "bondTransVolLinkDate": "23th July 2026",
  "hidden": {
-  "secondary": true
+  "tbills": true
  },
  "headers": {
   "bond": [
@@ -5650,19 +5643,19 @@
   ],
   "tourism": [
    "Tourism (USD)",
-   "Apr 2026",
-   "May 2026",
-   "Y-o-Y"
+   "May-2026",
+   "Jun-2026",
+   "M-o-M Change (Jun)"
   ],
   "remit": [
    "Remittances (USD)",
-   "Apr 2025",
-   "May 2026",
-   "Y-o-Y"
+   "May-2026",
+   "Jun-2026",
+   "M-o-M Change (Jun)"
   ],
   "reserves": [
    "Month",
-   "Reserve ($)"
+   "Reserve (USD Mn)"
   ]
  },
  "mutedNotif": {
