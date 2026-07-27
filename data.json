@@ -5665,5 +5665,7 @@
    "Reserve ($)"
   ]
  },
- "mutedNotif": {}
+ "mutedNotif": {
+  "Latest Results": true
+ }
 }
