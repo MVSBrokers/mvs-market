@@ -324,14 +324,14 @@
  },
  "repoOvernight": [
   {
-   "date": "24 Jul 2026",
-   "repoOffered": 50,
+   "date": "27 Jul 2026",
+   "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 48,
-   "accepted": 48,
-   "minRate": 8.75,
+   "received": 62,
+   "accepted": 60,
+   "minRate": 8.73,
    "maxRate": 8.75,
-   "waYield": 8.75,
+   "waYield": 8.73,
    "show": true
   }
  ],
