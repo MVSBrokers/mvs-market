@@ -5665,8 +5665,5 @@
    "Reserve ($)"
   ]
  },
- "mutedNotif": {
-  "Latest Results": true,
-  "USD/LKR Foreign Exchange": true
- }
+ "mutedNotif": {}
 }
