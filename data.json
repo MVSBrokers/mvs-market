@@ -20,18 +20,18 @@
   "min": 8.95,
   "max": 9.05,
   "wa": 9,
-  "vol": 37.05
+  "vol": 26.15
  },
  "repoMarket": {
-  "min": 8.95,
+  "min": 9,
   "max": 9.12,
-  "wa": 9.02,
-  "vol": 108.64
+  "wa": 9.03,
+  "vol": 97.45
  },
  "windows": {
   "sdf": {
-   "cur": 95.07,
-   "prev": 129.04
+   "cur": 93.8,
+   "prev": 95.07
   },
   "slf": {
    "cur": 0,
@@ -176,7 +176,8 @@
    "21 Jul",
    "22 Jul",
    "23 Jul",
-   "24 Jul"
+   "24 Jul",
+   "27 Jul"
   ],
   "values": [
    128.14,
@@ -315,10 +316,11 @@
    142.36,
    175.2,
    136.54,
-   143.07
+   143.07,
+   153.8
   ],
-  "current": 143.07,
-  "previous": 136.54
+  "current": 153.8,
+  "previous": 143.07
  },
  "repoOvernight": [
   {
@@ -2172,7 +2174,8 @@
    "21 Jul",
    "22 Jul",
    "23 Jul",
-   "24 Jul"
+   "24 Jul",
+   "27 Jul"
   ],
   "values": [
    2508.92,
@@ -2273,6 +2276,7 @@
    2507.92,
    2507.92,
    2507.92,
+   2498.12,
    2498.12,
    2498.12,
    2498.12,
@@ -5690,7 +5694,7 @@
  "execSummary": {
   "usdlkr": "336.20/ 336.30",
   "liqDir": "increased",
-  "liqDelta": 6.53
+  "liqDelta": 10.73
  },
  "marketNews": [
   "Treasury Bill Auction Results",
@@ -5744,8 +5748,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "mutedNotif": {
-  "CBSL Holdings of Government Securities": true
  }
 }
