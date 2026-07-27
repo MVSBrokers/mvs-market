@@ -1947,7 +1947,8 @@
    "26 Jun",
    "3 Jul",
    "10 Jul",
-   "17 Jul"
+   "17 Jul",
+   "24 Jul"
   ],
   "values": [
    143617,
@@ -1965,7 +1966,8 @@
    135858,
    136859,
    168895,
-   176561
+   176561,
+   182386
   ]
  },
  "cbsl": {
@@ -5657,9 +5659,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "mutedNotif": {
-  "Latest Results": true,
-  "CBSL Holdings of Government Securities": true
  }
 }
