@@ -1833,57 +1833,72 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 7.5,
+   "volume": 31.25,
    "wa": 336.25
   },
   {
    "tenor": "Tom",
-   "volume": 8.5,
-   "wa": 336.21
+   "volume": 3.75,
+   "wa": 336.16
   },
   {
    "tenor": "Cash",
-   "volume": 16.7,
-   "wa": 336.07
+   "volume": 37.5,
+   "wa": 336.1
   },
   {
    "tenor": "Sub Total",
-   "volume": 32.7,
+   "volume": 72.5,
    "wa": null
   },
   {
+   "tenor": "S+1",
+   "volume": 20,
+   "wa": 336.31
+  },
+  {
    "tenor": "1W",
-   "volume": 4,
+   "volume": 1,
    "wa": 336.65
   },
   {
    "tenor": "2W",
-   "volume": 8.5,
-   "wa": 336.94
+   "volume": 1.5,
+   "wa": 339.82
   },
   {
    "tenor": "3W",
-   "volume": 0.55,
-   "wa": 337.6
+   "volume": null,
+   "wa": null
   },
   {
    "tenor": "1M",
-   "volume": 1.55,
-   "wa": 337.96
+   "volume": 1,
+   "wa": 337.82
   },
   {
    "tenor": "2M",
-   "volume": 0.75,
-   "wa": 339.55
+   "volume": 5,
+   "wa": 339.48
+  },
+  {
+   "tenor": "3M",
+   "volume": 1.25,
+   "wa": 340.85
+  },
+  {
+   "tenor": "5M",
+   "volume": 0.5,
+   "wa": 343.85
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 15.35,
+   "volume": 30.25,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 48.05,
+   "volume": 102.75,
    "wa": null
   }
  ],
@@ -5707,7 +5722,7 @@
   "Total Amount Accepted: Rs. 140.0 Billion",
   "Auction Date: 22 July 2026"
  ],
- "date": "2026-07-27",
+ "date": "2026-07-28",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
