@@ -1094,7 +1094,8 @@ const MSG_SECTION_MAP={
   'CBSL Holdings of Government Securities':['cbsl','cbslHoldings'],
   'Foreign Holdings of Government Securities':['foreign'],
   'US Fed Rate — FOMC Decisions':['fomc'],
-  'Latest Results':['marketNews']
+  'Latest Results':['marketNews'],
+  'Value Dates':['valueDates']
 };
 
 // Sections whose data is tied to a specific business date with a daily cutoff (auction results,
@@ -1124,6 +1125,18 @@ function toOrdinalDate(raw){
   return day+suffix+' '+MONFULL[monIdx];
 }
 const MSG_CUTOFF_SECTIONS={
+  'Value Dates':{
+    hour:16,
+    date:d=>{
+      // Next SL working day after today (skips weekends and FX holidays) — computed forward,
+      // since the notification only ever fires after the 4PM cutoff anyway.
+      const slNow=new Date(Date.now()+330*60000);
+      const today=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
+      const nxt=new Date(today.getTime());
+      do{nxt.setDate(nxt.getDate()+1);}while(!_isSLFXWork(nxt));
+      return nxt.getFullYear()+'-'+String(nxt.getMonth()+1).padStart(2,'0')+'-'+String(nxt.getDate()).padStart(2,'0');
+    }
+  },
   'Money & Repo Market':{
     hour:17,
     date:d=>{
