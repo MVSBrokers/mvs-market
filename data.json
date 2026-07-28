@@ -17,21 +17,21 @@
   }
  ],
  "callMarket": {
-  "min": 8.95,
+  "min": 8.98,
   "max": 9.05,
-  "wa": 9,
-  "vol": 26.15
+  "wa": 9.01,
+  "vol": 33.15
  },
  "repoMarket": {
-  "min": 9,
+  "min": 9.02,
   "max": 9.12,
-  "wa": 9.03,
-  "vol": 97.45
+  "wa": 9.04,
+  "vol": 75.43
  },
  "windows": {
   "sdf": {
-   "cur": 93.8,
-   "prev": 95.07
+   "cur": 105.96,
+   "prev": 93.8
   },
   "slf": {
    "cur": 0,
@@ -177,7 +177,8 @@
    "22 Jul",
    "23 Jul",
    "24 Jul",
-   "27 Jul"
+   "27 Jul",
+   "28 Jul"
   ],
   "values": [
    128.14,
@@ -317,25 +318,41 @@
    175.2,
    136.54,
    143.07,
-   153.8
+   153.8,
+   185.96
   ],
-  "current": 153.8,
-  "previous": 143.07
+  "current": 185.96,
+  "previous": 153.8
  },
  "repoOvernight": [
   {
-   "date": "27 Jul 2026",
+   "date": "28 Jul 2026",
    "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 62,
+   "received": 78,
    "accepted": 60,
-   "minRate": 8.73,
+   "minRate": 8.7,
    "maxRate": 8.75,
-   "waYield": 8.73,
+   "waYield": 8.72,
    "show": true
   }
  ],
- "repoOMO": [],
+ "repoOMO": [
+  {
+   "auction": "28 Jul 2026",
+   "settlement": "28 Jul 2026",
+   "repoOffered": 20,
+   "reverseOffered": 0,
+   "received": 20,
+   "accepted": 20,
+   "minRate": 8.75,
+   "maxRate": 8.75,
+   "waYield": 8.75,
+   "maturity": "31 Jul 2026",
+   "tenure": 3,
+   "show": true
+  }
+ ],
  "bonds": {
   "headers": [
    "Day 1",
@@ -2151,7 +2168,8 @@
    "22 Jul",
    "23 Jul",
    "24 Jul",
-   "27 Jul"
+   "27 Jul",
+   "28 Jul"
   ],
   "values": [
    2508.92,
@@ -2252,6 +2270,7 @@
    2507.92,
    2507.92,
    2507.92,
+   2498.12,
    2498.12,
    2498.12,
    2498.12,
@@ -5684,7 +5703,7 @@
  "execSummary": {
   "usdlkr": "336.10/ 336.20",
   "liqDir": "increased",
-  "liqDelta": 10.73
+  "liqDelta": 32.16
  },
  "marketNews": [
   "Treasury Bill Auction Results",
