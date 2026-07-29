@@ -5728,10 +5728,7 @@
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/79c45697-f9bb-4aa3-bb19-ae06fa8bb399",
  "bondTransVolLinkDate": "27th July 2026",
  "hidden": {
-  "tbills": true,
-  "repoOvernight": true,
-  "repoOMO": true,
-  "windows": true
+  "tbills": true
  },
  "headers": {
   "bond": [
