@@ -5730,9 +5730,7 @@
  "hidden": {
   "tbills": true,
   "repoOMO": true,
-  "repoOvernight": true,
-  "mmrates": true,
-  "windows": true
+  "repoOvernight": true
  },
  "headers": {
   "bond": [
