@@ -1811,72 +1811,67 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 31.25,
-   "wa": 336.25
+   "volume": 47.75,
+   "wa": 336.18
   },
   {
    "tenor": "Tom",
-   "volume": 3.75,
-   "wa": 336.16
+   "volume": 0.5,
+   "wa": 336.12
   },
   {
    "tenor": "Cash",
-   "volume": 37.5,
-   "wa": 336.1
+   "volume": 29.25,
+   "wa": 336.04
   },
   {
    "tenor": "Sub Total",
-   "volume": 72.5,
+   "volume": 77.5,
    "wa": null
   },
   {
    "tenor": "S+1",
-   "volume": 20,
-   "wa": 336.31
-  },
-  {
-   "tenor": "1W",
-   "volume": 1,
-   "wa": 336.65
-  },
-  {
-   "tenor": "2W",
-   "volume": 1.5,
-   "wa": 339.82
-  },
-  {
-   "tenor": "3W",
    "volume": null,
    "wa": null
   },
   {
+   "tenor": "1W",
+   "volume": null,
+   "wa": null
+  },
+  {
+   "tenor": "2W",
+   "volume": 3.5,
+   "wa": 336.64
+  },
+  {
+   "tenor": "3W",
+   "volume": 2.13,
+   "wa": 337.52
+  },
+  {
    "tenor": "1M",
-   "volume": 1,
-   "wa": 337.82
+   "volume": 5.71,
+   "wa": 337.77
   },
   {
    "tenor": "2M",
-   "volume": 5,
-   "wa": 339.48
+   "volume": 13.7,
+   "wa": 339.36
   },
   {
-   "tenor": "3M",
-   "volume": 1.25,
-   "wa": 340.85
-  },
-  {
-   "tenor": "5M",
-   "volume": 0.5,
-   "wa": 343.85
+   "tenor": "6M",
+   "volume": 10,
+   "wa": 345.46
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 30.25,
+   "volume": 35.04,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 102.75,
+   "volume": 112.54,
    "wa": null
   }
  ],
@@ -5732,8 +5727,8 @@
  "newsLink": "https://www.treasury.gov.lk/api/file/547865f6-0ba1-4038-a470-dceead9181fb",
  "billAucLink": "https://www.treasury.gov.lk/api/file/142d8208-fd1f-4bcb-a37f-db2a9b256436",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/58b93dbd-a69e-455b-9ccb-058c421b71f4",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/79c45697-f9bb-4aa3-bb19-ae06fa8bb399",
- "bondTransVolLinkDate": "27th July 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/fa9a1ccf-5a67-4d2a-9687-3ecd73c094f2",
+ "bondTransVolLinkDate": "28th July 2026",
  "hidden": {
   "tbills": true
  },
@@ -5764,10 +5759,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "mutedNotif": {
-  "Money & Repo Market — Repo Auctions": true,
-  "Policy Rate (OPR) History": true,
-  "Money & Repo Market": true
  }
 }
