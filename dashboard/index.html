@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>MVS Market Watch</title>
 <meta name="theme-color" content="#060f1e">
 <meta name="mobile-web-app-capable" content="yes">
@@ -1073,6 +1076,29 @@ function showUpdateToast(){
 const MSG_STACK_KEY='mvs_msg_stack';
 const MSG_LAST_FULL_KEY='mvs_last_data_full';
 
+// ── One-time cleanup for the cutoff hold-back fix ──
+// Before this fix, different browsers could freeze different (sometimes premature) snapshots
+// into localStorage depending on exactly when each person first loaded the app that day. Just
+// shipping the corrected logic doesn't undo that — a browser that already has a bad snapshot
+// saved would keep reusing it. Bumping this version once forces every browser to discard its
+// old hold-back state on its next load and rebuild it fresh under the corrected rules, so
+// everyone converges on the same data instead of staying stuck on whatever they'd already
+// frozen. Safe to run every time: if the version already matches, this does nothing.
+// Note: only the DISPLAY snapshot is cleared here — MSG_LAST_FULL_KEY holds the real, true
+// last-fetched data (never corrupted by the old bug) and doubles as the fallback source below,
+// so wiping it too would just remove the one thing that can rescue a section from being blank.
+const HOLDBACK_FIX_VERSION='3';
+const HOLDBACK_FIX_VERSION_KEY='mvs_holdback_fix_version';
+(function migrateHoldbackState(){
+  try{
+    if(localStorage.getItem(HOLDBACK_FIX_VERSION_KEY)!==HOLDBACK_FIX_VERSION){
+      localStorage.removeItem('mvs_display_snapshot');
+      localStorage.removeItem('mvs_display_holdback_day');
+      localStorage.setItem(HOLDBACK_FIX_VERSION_KEY,HOLDBACK_FIX_VERSION);
+    }
+  }catch(e){}
+})();
+
 // Which published sections should show an update message when they change.
 // Label -> list of top-level data.json keys that belong to that section (matches this app's actual schema).
 const MSG_SECTION_MAP={
@@ -1345,16 +1371,13 @@ const DISPLAY_HOLDBACK_DAY_KEY='mvs_display_holdback_day';
 function buildDisplayObject(newObj){
   let stored=null;
   try{const raw=localStorage.getItem(DISPLAY_SNAPSHOT_KEY);if(raw)stored=JSON.parse(raw);}catch(e){}
-  // FIX: a browser that has never rendered a display snapshot before (its very first ever
-  // visit) used to fall straight through with the real, current data — even pre-cutoff. That
-  // meant a brand-new visitor could see today's not-yet-official numbers while everyone else
-  // was still correctly held back on yesterday's, i.e. different people saw different things
-  // for the exact same cutoff-gated section. Falling back to the last raw fetch on record
-  // (MSG_LAST_FULL_KEY, kept for the change-notification diff) closes that gap for anyone who
-  // has ever loaded the app before.
-  if(!stored){
-    try{const rawFull=localStorage.getItem(MSG_LAST_FULL_KEY);if(rawFull)stored=JSON.parse(rawFull);}catch(e){}
-  }
+  // Secondary source: the last raw fetch on record (kept for the change-notification diff,
+  // always the real data, never held back). Checked per-field, on every load — not just when
+  // `stored` is entirely missing — so a field that's blank in `stored` (e.g. from a brand-new
+  // browser's very first pre-cutoff load) gets replaced with a real value the moment one is
+  // available, instead of staying blank forever just because *some* snapshot object now exists.
+  let lastFull=null;
+  try{const rawFull=localStorage.getItem(MSG_LAST_FULL_KEY);if(rawFull)lastFull=JSON.parse(rawFull);}catch(e){}
   let holdbackDay=null;
   try{holdbackDay=localStorage.getItem(DISPLAY_HOLDBACK_DAY_KEY);}catch(e){}
   const today=slDateKey();
@@ -1365,16 +1388,11 @@ function buildDisplayObject(newObj){
     const pastCutoff=isPastCutoffToday(MSG_CUTOFF_SECTIONS[label].hour);
     if(pastCutoff||crossedIntoNewDay)continue; // cutoff passed, or the hold is stale from a previous day — show the real data, same for everyone
     const keys=MSG_SECTION_MAP[label]||[];
-    if(stored){
-      keys.forEach(k=>{display[k]=stored[k];}); // not yet due — keep showing whatever was last actually on record
-    }else{
-      // Truly nothing on record for this browser at all (its very first-ever load, before
-      // this section's first cutoff has passed today) — never leak today's not-yet-official
-      // value. Blank it instead of guessing; this is the only case where the section shows
-      // "—" pre-cutoff rather than yesterday's real number, and it only happens once per
-      // browser, ever.
-      keys.forEach(k=>{display[k]=null;});
-    }
+    keys.forEach(k=>{
+      if(stored&&stored[k]!=null)display[k]=stored[k]; // a real value already on record — keep showing it
+      else if(lastFull&&lastFull[k]!=null)display[k]=lastFull[k]; // recover a real value from the last raw fetch instead
+      else display[k]=null; // truly nothing real available anywhere yet — blank rather than leak today's value early
+    });
     anyHeldBack=true;
   }
   try{localStorage.setItem(DISPLAY_SNAPSHOT_KEY,JSON.stringify(display));}catch(e){}
