@@ -5716,7 +5716,7 @@
   "Total Amount Accepted: Rs. 140.0 Billion",
   "Auction Date: 28 July 2026"
  ],
- "date": "2026-07-29",
+ "date": "2026-07-30",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
@@ -5728,12 +5728,7 @@
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/79c45697-f9bb-4aa3-bb19-ae06fa8bb399",
  "bondTransVolLinkDate": "27th July 2026",
  "hidden": {
-  "tbills": true,
-  "mmrates": true,
-  "windows": true,
-  "repoOvernight": true,
-  "repoOMO": true,
-  "liquidity": true
+  "tbills": true
  },
  "headers": {
   "bond": [
@@ -5763,5 +5758,9 @@
    "Reserve (USD Mn)"
   ]
  },
- "mutedNotif": {}
+ "mutedNotif": {
+  "Money & Repo Market": true,
+  "Policy Rate (OPR) History": true,
+  "Money & Repo Market — Repo Auctions": true
+ }
 }
