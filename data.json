@@ -5721,15 +5721,16 @@
   "liqDelta": 10.96
  },
  "marketNews": [
-  "Treasury Bill Auction Results",
+  "Treasury Bond Auction Results",
   "------------------------------------------------------------",
-  "91-Day (LKA09126J235): 9.86%",
-  "182-Day (LKA18227A221): 10.21%",
-  "364-Day (LKA36427G230): 10.20%",
+  "01 Feb 2031 (LKB00531B017): 11.90%",
+  "15 Oct 2034 (LKB00934J156): 12.42%",
+  "15 Aug 2036 (LKB01136H151): 12.91%",
+  "01 Jul 2037 (LKB01237G019): 13.01%",
   "------------------------------------------------------------",
-  "Total Amount Issued: Rs. 140.0 Billion",
-  "Total Amount Accepted: Rs. 140.0 Billion",
-  "Auction Date: 28 July 2026"
+  "Total Amount Issued: Rs. 250.0 Billion",
+  "Total Amount Accepted: Rs. 250.0 Billion",
+  "Auction Date: 30 July 2026"
  ],
  "date": "2026-07-30",
  "openingDate": "",
@@ -5737,7 +5738,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/547865f6-0ba1-4038-a470-dceead9181fb",
+ "newsLink": "https://www.treasury.gov.lk/api/file/9cad4c2b-b031-4333-8b84-e90bee951141",
  "billAucLink": "https://www.treasury.gov.lk/api/file/142d8208-fd1f-4bcb-a37f-db2a9b256436",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/58b93dbd-a69e-455b-9ccb-058c421b71f4",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/fa9a1ccf-5a67-4d2a-9687-3ecd73c094f2",
