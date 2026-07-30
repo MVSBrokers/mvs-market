@@ -1332,32 +1332,29 @@ let _lastNewsHash=null;
 // published early. Everything else (non-cutoff sections, and any other fields like hidden/
 // mutedNotif/report-date metadata) always reflects the real current data immediately.
 //
-// Important: a hold started on one day must not persist into a later WORKING day just because
+// Important: a hold started on one day must not persist into a later calendar day just because
 // that day also hasn't hit its own cutoff yet — e.g. publish at 2 PM Monday (before the 5 PM
 // cutoff), then don't reopen the dashboard until 10 AM Tuesday: the data is clearly from a
-// previous working day already and must show immediately, not wait for 5 PM Tuesday too.
-// Weekends/holidays don't count as a "new day" for this — publishing Friday before cutoff and
-// checking again on Saturday or Sunday still holds back until Monday, since nothing changes
-// over a non-working day. Uses the same SL working-day calendar as the rest of the dashboard.
+// previous day already and must show immediately, not wait for 5 PM Tuesday too. This uses the
+// raw calendar date, not a working-day rollback — rolling a holiday back to the previous working
+// day for this comparison caused data to get stuck (a holiday right after the publish day looked
+// like "still the same session" and never released). Revealing a day early on a weekend/holiday
+// is harmless since the data still correctly shows its own real date, not today's.
 const DISPLAY_SNAPSHOT_KEY='mvs_display_snapshot';
 const DISPLAY_HOLDBACK_DAY_KEY='mvs_display_holdback_day';
-function slWorkDayKey(){
-  const dt=slWorkDay(0); // most recent SL working day at or before today
-  return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
-}
 function buildDisplayObject(newObj){
   let stored=null;
   try{const raw=localStorage.getItem(DISPLAY_SNAPSHOT_KEY);if(raw)stored=JSON.parse(raw);}catch(e){}
   let holdbackDay=null;
   try{holdbackDay=localStorage.getItem(DISPLAY_HOLDBACK_DAY_KEY);}catch(e){}
-  const today=slWorkDayKey();
+  const today=slDateKey();
   const crossedIntoNewDay=(holdbackDay!==null&&holdbackDay!==today);
   const display=JSON.parse(JSON.stringify(newObj)); // start from the real, current data
   let anyHeldBack=false;
   if(stored){
     for(const label in MSG_CUTOFF_SECTIONS){
       const pastCutoff=isPastCutoffToday(MSG_CUTOFF_SECTIONS[label].hour);
-      if(pastCutoff||crossedIntoNewDay)continue; // cutoff passed, or the hold is stale from a previous working day — show the real data
+      if(pastCutoff||crossedIntoNewDay)continue; // cutoff passed, or the hold is stale from a previous day — show the real data
       const keys=MSG_SECTION_MAP[label]||[];
       keys.forEach(k=>{display[k]=stored[k];}); // not yet due — keep showing whatever was last actually displayed
       anyHeldBack=true;
