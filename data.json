@@ -4365,7 +4365,7 @@
   },
   {
    "label": "Next FOMC Meeting Day",
-   "date": "2026-07-28",
+   "date": "2026-09-15",
    "show": true
   }
  ],
@@ -5766,6 +5766,8 @@
   ]
  },
  "mutedNotif": {
-  "Money & Repo Market — Repo Auctions": true
+  "Money & Repo Market — Repo Auctions": true,
+  "Policy Rate (OPR) History": true,
+  "Money & Repo Market": true
  }
 }
