@@ -1345,20 +1345,37 @@ const DISPLAY_HOLDBACK_DAY_KEY='mvs_display_holdback_day';
 function buildDisplayObject(newObj){
   let stored=null;
   try{const raw=localStorage.getItem(DISPLAY_SNAPSHOT_KEY);if(raw)stored=JSON.parse(raw);}catch(e){}
+  // FIX: a browser that has never rendered a display snapshot before (its very first ever
+  // visit) used to fall straight through with the real, current data — even pre-cutoff. That
+  // meant a brand-new visitor could see today's not-yet-official numbers while everyone else
+  // was still correctly held back on yesterday's, i.e. different people saw different things
+  // for the exact same cutoff-gated section. Falling back to the last raw fetch on record
+  // (MSG_LAST_FULL_KEY, kept for the change-notification diff) closes that gap for anyone who
+  // has ever loaded the app before.
+  if(!stored){
+    try{const rawFull=localStorage.getItem(MSG_LAST_FULL_KEY);if(rawFull)stored=JSON.parse(rawFull);}catch(e){}
+  }
   let holdbackDay=null;
   try{holdbackDay=localStorage.getItem(DISPLAY_HOLDBACK_DAY_KEY);}catch(e){}
   const today=slDateKey();
   const crossedIntoNewDay=(holdbackDay!==null&&holdbackDay!==today);
   const display=JSON.parse(JSON.stringify(newObj)); // start from the real, current data
   let anyHeldBack=false;
-  if(stored){
-    for(const label in MSG_CUTOFF_SECTIONS){
-      const pastCutoff=isPastCutoffToday(MSG_CUTOFF_SECTIONS[label].hour);
-      if(pastCutoff||crossedIntoNewDay)continue; // cutoff passed, or the hold is stale from a previous day — show the real data
-      const keys=MSG_SECTION_MAP[label]||[];
-      keys.forEach(k=>{display[k]=stored[k];}); // not yet due — keep showing whatever was last actually displayed
-      anyHeldBack=true;
+  for(const label in MSG_CUTOFF_SECTIONS){
+    const pastCutoff=isPastCutoffToday(MSG_CUTOFF_SECTIONS[label].hour);
+    if(pastCutoff||crossedIntoNewDay)continue; // cutoff passed, or the hold is stale from a previous day — show the real data, same for everyone
+    const keys=MSG_SECTION_MAP[label]||[];
+    if(stored){
+      keys.forEach(k=>{display[k]=stored[k];}); // not yet due — keep showing whatever was last actually on record
+    }else{
+      // Truly nothing on record for this browser at all (its very first-ever load, before
+      // this section's first cutoff has passed today) — never leak today's not-yet-official
+      // value. Blank it instead of guessing; this is the only case where the section shows
+      // "—" pre-cutoff rather than yesterday's real number, and it only happens once per
+      // browser, ever.
+      keys.forEach(k=>{display[k]=null;});
     }
+    anyHeldBack=true;
   }
   try{localStorage.setItem(DISPLAY_SNAPSHOT_KEY,JSON.stringify(display));}catch(e){}
   try{
