@@ -1725,7 +1725,7 @@
    336.15,
    336.05
   ],
-  "close": "336.00/ 336.10"
+  "close": "336.02/ 336.10"
  },
  "fxSwaps": {
   "1w": {
@@ -1800,67 +1800,57 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 47.75,
-   "wa": 336.18
+   "volume": 45.5,
+   "wa": 336.05
   },
   {
    "tenor": "Tom",
-   "volume": 0.5,
-   "wa": 336.12
+   "volume": 5.5,
+   "wa": 335.9
   },
   {
    "tenor": "Cash",
-   "volume": 29.25,
-   "wa": 336.04
+   "volume": 27.35,
+   "wa": 335.85
   },
   {
    "tenor": "Sub Total",
-   "volume": 77.5,
-   "wa": null
-  },
-  {
-   "tenor": "S+1",
-   "volume": null,
+   "volume": 78.35,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": null,
-   "wa": null
+   "volume": 5,
+   "wa": 336.37
   },
   {
    "tenor": "2W",
-   "volume": 3.5,
-   "wa": 336.64
-  },
-  {
-   "tenor": "3W",
-   "volume": 2.13,
-   "wa": 337.52
+   "volume": 11,
+   "wa": 336.59
   },
   {
    "tenor": "1M",
-   "volume": 5.71,
-   "wa": 337.77
+   "volume": 14,
+   "wa": 337.58
   },
   {
    "tenor": "2M",
-   "volume": 13.7,
-   "wa": 339.36
+   "volume": 3,
+   "wa": 339.2
   },
   {
    "tenor": "6M",
-   "volume": 10,
-   "wa": 345.46
+   "volume": 11,
+   "wa": 345.56
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 35.04,
+   "volume": 44,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 112.54,
+   "volume": 122.35,
    "wa": null
   }
  ],
@@ -5732,7 +5722,7 @@
   "Total Amount Accepted: Rs. 250.0 Billion",
   "Auction Date: 30 July 2026"
  ],
- "date": "2026-07-30",
+ "date": "2026-07-31",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
