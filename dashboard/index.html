@@ -1218,6 +1218,13 @@ const MSG_CUTOFF_SECTIONS={
 // anyway (see checkDailyReset), so there's no need for an end-of-window cutoff here.
 function isPastCutoffToday(hour){
   const slNow=new Date(Date.now()+330*60000);
+  const todayD=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
+  // On a non-working day (weekend/holiday) there's no live session with its own cutoff to wait
+  // for — whatever data is on record is already finalized from the last real working day (e.g.
+  // Friday's close, published Saturday). Holding it back until some arbitrary clock time on a
+  // day with no trading just needlessly keeps showing the day before that instead. So a
+  // non-working day is always treated as "past cutoff" — never held back.
+  if(!_isSLFXWork(todayD))return true;
   const slMinutesNow=slNow.getUTCHours()*60+slNow.getUTCMinutes();
   const cutoffMinutes=hour*60;
   return slMinutesNow>=cutoffMinutes;
