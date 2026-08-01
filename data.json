@@ -4428,7 +4428,7 @@
    "auction": "2026-08-05",
    "settle": "2026-08-07",
    "tenor": "91 Days, 182 Days and 364 Days",
-   "amount": "TBD",
+   "amount": "140",
    "show": true
   },
   {
@@ -5750,7 +5750,7 @@
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "https://www.treasury.gov.lk/api/file/9cad4c2b-b031-4333-8b84-e90bee951141",
- "billAucLink": "https://www.treasury.gov.lk/api/file/142d8208-fd1f-4bcb-a37f-db2a9b256436",
+ "billAucLink": "https://www.treasury.gov.lk/api/file/95dc5c84-75c4-41cd-aefd-70e00bf36481",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/58b93dbd-a69e-455b-9ccb-058c421b71f4",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/78666bf4-38a0-4b67-9e46-41ad85f9d15b",
  "bondTransVolLinkDate": "30th July 2026",
