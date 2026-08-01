@@ -19,19 +19,19 @@
  "callMarket": {
   "min": 8.95,
   "max": 9.05,
-  "wa": 9,
-  "vol": 24.85
+  "wa": 9.01,
+  "vol": 39.22
  },
  "repoMarket": {
-  "min": 9.01,
-  "max": 9.12,
-  "wa": 9.04,
-  "vol": 90
+  "min": 9,
+  "max": 9.07,
+  "wa": 9.03,
+  "vol": 65.9
  },
  "windows": {
   "sdf": {
-   "cur": 115,
-   "prev": 105.96
+   "cur": 103.34,
+   "prev": 115
   },
   "slf": {
    "cur": 0,
@@ -179,7 +179,8 @@
    "24 Jul",
    "27 Jul",
    "28 Jul",
-   "30 Jul"
+   "30 Jul",
+   "31 Jul"
   ],
   "values": [
    128.14,
@@ -321,21 +322,22 @@
    143.07,
    153.8,
    185.96,
-   175
+   175,
+   183.34
   ],
-  "current": 175,
-  "previous": 185.96
+  "current": 183.34,
+  "previous": 175
  },
  "repoOvernight": [
   {
-   "date": "30 Jul 2026",
+   "date": "31 Jul 2026",
    "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 76,
+   "received": 62,
    "accepted": 60,
-   "minRate": 8.68,
-   "maxRate": 8.68,
-   "waYield": 8.68,
+   "minRate": 8.65,
+   "maxRate": 8.75,
+   "waYield": 8.67,
    "show": true
   }
  ],
@@ -1728,7 +1730,7 @@
    336.25,
    336.15,
    336.05,
-   335.75
+   335.8
   ],
   "close": "336.70/ 336.80"
  },
@@ -2149,7 +2151,8 @@
    "24 Jul",
    "27 Jul",
    "28 Jul",
-   "30 Jul"
+   "30 Jul",
+   "31 Jul"
   ],
   "values": [
    2508.92,
@@ -2250,6 +2253,7 @@
    2507.92,
    2507.92,
    2507.92,
+   2498.12,
    2498.12,
    2498.12,
    2498.12,
@@ -5724,8 +5728,8 @@
  ],
  "execSummary": {
   "usdlkr": "336.70/ 336.80",
-  "liqDir": "decreased",
-  "liqDelta": 10.96
+  "liqDir": "increased",
+  "liqDelta": 8.34
  },
  "marketNews": [
   "Treasury Bond Auction Results",
@@ -5739,7 +5743,7 @@
   "Total Amount Accepted: Rs. 250.0 Billion",
   "Auction Date: 30 July 2026"
  ],
- "date": "2026-07-31",
+ "date": "2026-08-01",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
