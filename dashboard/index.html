@@ -45,6 +45,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#060f1e;color:#d4e4f4;mi
 #msg-stack{position:fixed;top:14px;right:14px;z-index:500;display:flex;flex-direction:column;gap:8px;max-width:min(300px,88vw);pointer-events:none;margin-top:26px}
 @media (max-width:520px){#msg-clear-all{top:8px;right:8px}#msg-stack{margin-top:24px}}
 .msg-card{display:flex;align-items:flex-start;gap:8px;background:#0d2a3f;border:1.5px solid #3a7bb8;border-radius:8px;padding:8px 10px 8px 12px;box-shadow:0 6px 20px rgba(0,0,0,.5);pointer-events:auto;animation:msgIn .2s ease}
+.msg-card-body:hover .msg-card-title{color:#c8e4ff;text-decoration:underline}
 .msg-card.msg-today{border-color:#c8a84b;background:#2a2210}
 @keyframes msgIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .msg-card-body{display:flex;flex-direction:column;gap:1px;min-width:0}
@@ -362,7 +363,7 @@ canvas{max-width:100%!important}
   <!-- MONEY MARKET HEADER -->
   
   <div class="grid-2x2">
-    <div class="panel">
+    <div class="panel" id="mm-panel">
       <div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
       <div data-sec-self="mmrates">
       <table>
@@ -490,7 +491,7 @@ canvas{max-width:100%!important}
   <!-- PAGE: FX -->
   <div class="page" id="page-fx">
 
-  <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">USD/LKR Foreign Exchange</div></div>
+  <div class="panel full-width" id="fx-usdlkr-banner" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">USD/LKR Foreign Exchange</div></div>
 
   <div class="grid-2x2">
     <div class="panel"><div class="panel-title pt-row" data-sec="usdlkr"><span>USD/LKR Movement</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('fx',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('fx',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('fx','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="fxChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="fxStat"></div></div>
@@ -1314,10 +1315,13 @@ function renderMsgCard(entry){
   const card=document.createElement('div');
   card.className='msg-card';
   card.id='msgcard-'+entry.id;
+  card.style.cursor=SECTION_NAV[entry.section]?'pointer':'default';
+  card.title=SECTION_NAV[entry.section]?'View '+entry.section:'';
   card.innerHTML='<div class="msg-card-body"><span class="msg-card-title"></span><span class="msg-card-time"></span></div><button class="msg-card-close" title="Dismiss" aria-label="Dismiss">✕</button>';
   card.querySelector('.msg-card-title').textContent=entry.label;
   card.querySelector('.msg-card-time').textContent=fmtMsgTime(entry.atMs);
-  card.querySelector('.msg-card-close').onclick=()=>dismissMsg(entry.id);
+  card.querySelector('.msg-card-close').onclick=(ev)=>{ev.stopPropagation();dismissMsg(entry.id);};
+  card.querySelector('.msg-card-body').onclick=()=>{goToSection(entry.section);dismissMsg(entry.id);};
   root.appendChild(card);
   updateClearAllVisibility();
 }
@@ -1530,6 +1534,50 @@ function goToEvent(pageId,scrollId){
   let btn=null;document.querySelectorAll('.nav-btn').forEach(b=>{if((b.getAttribute('onclick')||'').indexOf("'"+pageId+"'")>-1)btn=b;});
   showPage(pageId,btn);
   if(scrollId)setTimeout(()=>{const el=document.getElementById(scrollId);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});el.style.transition='box-shadow .3s';el.style.boxShadow='0 0 0 2px #c8a84b';setTimeout(()=>{el.style.boxShadow='';},1400);}},70);
+}
+// Same as goToEvent, but locates the target with a CSS selector instead of a plain id — used for
+// panels that are only tagged via data-sec/data-sec-self rather than a unique id.
+function goToSelector(pageId,selector){
+  let btn=null;document.querySelectorAll('.nav-btn').forEach(b=>{if((b.getAttribute('onclick')||'').indexOf("'"+pageId+"'")>-1)btn=b;});
+  showPage(pageId,btn);
+  if(!selector)return;
+  setTimeout(()=>{
+    const hit=document.querySelector(selector);
+    if(!hit)return;
+    const el=hit.closest('.panel')||hit; // highlight the whole panel card, not just the inner tagged element
+    el.scrollIntoView({behavior:'smooth',block:'start'});
+    el.style.transition='box-shadow .3s';el.style.boxShadow='0 0 0 2px #c8a84b';
+    setTimeout(()=>{el.style.boxShadow='';},1400);
+  },70);
+}
+// Maps each notification's section label to where it lives on the dashboard, so clicking a
+// notification card jumps straight to the related panel instead of just sitting there inert.
+const SECTION_NAV={
+  'Volume of Foreign Exchange Market':{page:'page-open',sel:'#op-fxsum-title'},
+  'Outright Treasury Bond Transaction Volumes (Rs.Mn)':{page:'page-open',sel:'#bondtxn-title'},
+  'Money & Repo Market':{page:'page-mm',sel:'#mm-panel'},
+  'Money & Repo Market — Repo Auctions':{page:'page-mm',sel:'[data-sec-self="repoOvernight"]'},
+  'Policy Rate (OPR) History':{page:'page-mm',sel:'[data-sec="opr"]'},
+  'Statutory Reserve Requirement (SRR)':{page:'page-mm',sel:'[data-sec="srr"]'},
+  'Treasury Bill':{page:'page-fi',sel:'[data-sec="tbillcurve"]'},
+  'Treasury Bond Yield (%)':{page:'page-fi',sel:'[data-sec="tbonds"]'},
+  'USD/LKR Foreign Exchange':{page:'page-fx',sel:'#fx-usdlkr-banner'},
+  'Foreign Currency Reserves':{page:'page-macro',sel:'[data-sec="reserves"]'},
+  'Inflation (CCPI vs NCPI)':{page:'page-macro',sel:'[data-sec="inflation"]'},
+  'Tourism & Remittances':{page:'page-macro',sel:'[data-sec="tourism"]'},
+  'Quarterly Real GDP Growth':{page:'page-macro',sel:'[data-sec="gdp"]'},
+  'Balance of Payment (USD bn)':{page:'page-macro',sel:'[data-sec="bop"]'},
+  'Debt to GDP (%)':{page:'page-macro',sel:'[data-sec="debtgdp"]'},
+  'CBSL Holdings of Government Securities':{page:'page-macro',sel:'[data-sec="cbsl"]'},
+  'Foreign Holdings of Government Securities':{page:'page-macro',sel:'[data-sec="foreign"]'},
+  'US Fed Rate — FOMC Decisions':{page:'page-global',sel:'[data-sec="fomc"]'},
+  'Latest Results':{page:'page-news',sel:'[data-sec="results"]'},
+  'Value Dates':{page:'page-open',sel:'#vd-title'}
+};
+function goToSection(label){
+  const nav=SECTION_NAV[label];
+  if(!nav)return;
+  goToSelector(nav.page,nav.sel);
 }
 // ── Sticky "coming up" strip: anything (auction / event / maturity) due within 5 days, frozen at the top ──
 function renderEventStrip(d){
