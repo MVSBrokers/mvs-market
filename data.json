@@ -1732,7 +1732,7 @@
    336.05,
    335.8
   ],
-  "close": "336.70/ 336.80"
+  "close": "335.70/ 335.80"
  },
  "fxSwaps": {
   "1w": {
@@ -1762,7 +1762,7 @@
  },
  "spot": {
   "open": "335.90/ 336.10",
-  "close": "336.70/ 336.80",
+  "close": "335.70/ 335.80",
   "low": "335.75",
   "high": "336.8"
  },
@@ -5729,7 +5729,7 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "336.70/ 336.80",
+  "usdlkr": "335.70/ 335.80",
   "liqDir": "increased",
   "liqDelta": 8.34
  },
@@ -5745,7 +5745,7 @@
   "Total Amount Accepted: Rs. 250.0 Billion",
   "Auction Date: 30 July 2026"
  ],
- "date": "2026-08-01",
+ "date": "2026-08-03",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
