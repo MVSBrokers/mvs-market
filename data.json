@@ -5786,5 +5786,8 @@
    "Month",
    "Reserve (USD Mn)"
   ]
+ },
+ "mutedNotif": {
+  "USD/LKR Foreign Exchange": true
  }
 }
