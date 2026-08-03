@@ -5789,5 +5789,8 @@
  },
  "mutedNotif": {
   "USD/LKR Foreign Exchange": true
+ },
+ "cutoffOverride": {
+  "USD/LKR Foreign Exchange": true
  }
 }
