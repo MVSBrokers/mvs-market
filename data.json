@@ -19,19 +19,19 @@
  "callMarket": {
   "min": 8.95,
   "max": 9.05,
-  "wa": 9.01,
-  "vol": 39.22
+  "wa": 9,
+  "vol": 38.67
  },
  "repoMarket": {
-  "min": 9,
-  "max": 9.07,
-  "wa": 9.03,
-  "vol": 65.9
+  "min": 8.98,
+  "max": 9.12,
+  "wa": 9.04,
+  "vol": 86.18
  },
  "windows": {
   "sdf": {
-   "cur": 103.34,
-   "prev": 115
+   "cur": 99.31,
+   "prev": 103.34
   },
   "slf": {
    "cur": 0,
@@ -180,7 +180,8 @@
    "27 Jul",
    "28 Jul",
    "30 Jul",
-   "31 Jul"
+   "31 Jul",
+   "3 Aug"
   ],
   "values": [
    128.14,
@@ -323,21 +324,22 @@
    153.8,
    185.96,
    175,
-   183.34
+   183.34,
+   159.31
   ],
-  "current": 183.34,
-  "previous": 175
+  "current": 159.31,
+  "previous": 183.34
  },
  "repoOvernight": [
   {
-   "date": "31 Jul 2026",
+   "date": "3 Aug 2026",
    "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 62,
+   "received": 61,
    "accepted": 60,
    "minRate": 8.65,
    "maxRate": 8.75,
-   "waYield": 8.67,
+   "waYield": 8.69,
    "show": true
   }
  ],
@@ -2149,7 +2151,8 @@
    "27 Jul",
    "28 Jul",
    "30 Jul",
-   "31 Jul"
+   "31 Jul",
+   "3 Aug"
   ],
   "values": [
    2508.92,
@@ -2291,10 +2294,11 @@
    2498.12,
    2498.12,
    2498.12,
-   2498.12
+   2498.12,
+   2492.62
   ]
  },
- "cbslHoldings": 2498.12,
+ "cbslHoldings": 2492.62,
  "reserves": [
   {
    "month": "March",
@@ -5739,8 +5743,8 @@
  ],
  "execSummary": {
   "usdlkr": "335.75/ 335.80",
-  "liqDir": "increased",
-  "liqDelta": 8.34
+  "liqDir": "decreased",
+  "liqDelta": 24.03
  },
  "marketNews": [
   "Treasury Bond Auction Results",
