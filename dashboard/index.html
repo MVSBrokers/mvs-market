@@ -1395,9 +1395,14 @@ function buildDisplayObject(newObj){
   const crossedIntoNewDay=(holdbackDay!==null&&holdbackDay!==today);
   const display=JSON.parse(JSON.stringify(newObj)); // start from the real, current data
   let anyHeldBack=false;
+  // Manual escape hatch for correcting a mistake: if the editor publishes with
+  // newObj.cutoffOverride[label]===true, that section's hold-back is skipped entirely — same
+  // real data shown to every user immediately, regardless of the clock. This lives in data.json
+  // itself (not localStorage), so it's identical for everyone, not just whoever set it.
+  const override=newObj.cutoffOverride||{};
   for(const label in MSG_CUTOFF_SECTIONS){
     const pastCutoff=isPastCutoffToday(MSG_CUTOFF_SECTIONS[label].hour);
-    if(pastCutoff||crossedIntoNewDay)continue; // cutoff passed, or the hold is stale from a previous day — show the real data, same for everyone
+    if(pastCutoff||crossedIntoNewDay||override[label]===true)continue; // cutoff passed, hold is stale from a previous day, or manually force-released — show the real data, same for everyone
     const keys=MSG_SECTION_MAP[label]||[];
     keys.forEach(k=>{
       if(stored&&stored[k]!=null)display[k]=stored[k]; // a real value already on record — keep showing it
