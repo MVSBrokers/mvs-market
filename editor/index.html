@@ -232,6 +232,20 @@ const NOTIF_TOGGLE_SECTIONS={
   fomc:'US Fed Rate — FOMC Decisions',
   valuedates:'Value Dates'
 };
+// Which editor sections have an actual daily cutoff on the dashboard (the rest notify
+// immediately with no hold-back at all, so they get no cutoff badge/button). Keyed by the same
+// dashboard notification label used in mutedNotif/cutoffOverride, with the cutoff hour (SL time,
+// 24h) and a human-readable label for the badge. Must match MSG_CUTOFF_SECTIONS in the dashboard
+// app exactly, or the badge here would lie about when the section actually releases.
+const CUTOFF_SECTIONS={
+  fxsummary:{label:'Volume of Foreign Exchange Market',hour:8.5,hourLabel:'8:30 AM'},
+  mmrates:{label:'Money & Repo Market',hour:17,hourLabel:'5:00 PM'},
+  repoOvernight:{label:'Money & Repo Market — Repo Auctions',hour:17,hourLabel:'5:00 PM'},
+  tbillcurve:{label:'Treasury Bill',hour:16,hourLabel:'4:00 PM'},
+  tbonds:{label:'Treasury Bond Yield (%)',hour:16,hourLabel:'4:00 PM'},
+  usdlkr:{label:'USD/LKR Foreign Exchange',hour:16,hourLabel:'4:00 PM'},
+  valuedates:{label:'Value Dates',hour:16,hourLabel:'4:00 PM'}
+};
 
 // ── CONFIG / GITHUB ──────────────────────────────────────
 function loadConfig(){return{token:localStorage.getItem('mvs_gh_token')||'',owner:localStorage.getItem('mvs_gh_owner')||'MVSBrokers',repo:localStorage.getItem('mvs_gh_repo')||'mvs-market',branch:localStorage.getItem('mvs_gh_branch')||'main',path:localStorage.getItem('mvs_gh_path')||'data.json'};}
@@ -609,6 +623,9 @@ function renderSections(){
     const notifKey=NOTIF_TOGGLE_SECTIONS[sec.id];
     const canMute=!!notifKey;
     const muted=canMute&&!!(LOADED.mutedNotif&&LOADED.mutedNotif[notifKey]);
+    const cutoffInfo=CUTOFF_SECTIONS[sec.id];
+    const canCutoff=!!cutoffInfo;
+    const cutoffOn=canCutoff&&!!(LOADED.cutoffOverride&&LOADED.cutoffOverride[cutoffInfo.label]);
     let body;
     if(sec.id==='results'){
       const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:(LOADED.marketNews?[String(LOADED.marketNews)]:[]);
@@ -700,7 +717,7 @@ function renderSections(){
     return groupHdr+`<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
       <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
         <div><div class="st">${sec.title}${hid?' <span class="hid-tag">hidden on dashboard</span>':''}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
-        <div class="right">${canMute?`<button class="vis-btn ${muted?'off':'on'}" onclick="event.stopPropagation();toggleMute('${sec.id}')" title="${muted?'Notification muted — click to turn it back on':'Notification on — click to mute it'}">${muted?'🔕 Muted':'🔔 Notify'}</button>`:''}${canHide?`<button class="vis-btn ${hid?'off':'on'}" onclick="event.stopPropagation();toggleHide('${sec.id}')" title="${hid?'Hidden on the dashboard — click to show it':'Showing on the dashboard — click to hide it'}">${hid?'🚫 Hidden':'👁 Shown'}</button>`:''}<span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
+        <div class="right">${canCutoff?`<button class="vis-btn ${cutoffOn?'off':'on'}" onclick="event.stopPropagation();toggleCutoff('${sec.id}')" title="${cutoffOn?'Cutoff bypassed — new data shows immediately, any time of day. Click to restore the normal '+cutoffInfo.hourLabel+' cutoff.':'Normal cutoff: holds new data back until '+cutoffInfo.hourLabel+' SL time. Click to bypass and publish immediately — use this for correcting a mistake.'}">${cutoffOn?'🔓 Cutoff OFF':'⏱ '+cutoffInfo.hourLabel}</button>`:''}${canMute?`<button class="vis-btn ${muted?'off':'on'}" onclick="event.stopPropagation();toggleMute('${sec.id}')" title="${muted?'Notification muted — click to turn it back on':'Notification on — click to mute it'}">${muted?'🔕 Muted':'🔔 Notify'}</button>`:''}${canHide?`<button class="vis-btn ${hid?'off':'on'}" onclick="event.stopPropagation();toggleHide('${sec.id}')" title="${hid?'Hidden on the dashboard — click to show it':'Showing on the dashboard — click to hide it'}">${hid?'🚫 Hidden':'👁 Shown'}</button>`:''}<span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
       </div>
       <div class="sec-body">
         ${presentEff?body:'<span class="muted">This section has no data in the imported workbook.</span>'}
@@ -874,6 +891,40 @@ async function publishMutedNotif(){
       const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
       if(conflict&&a<5){await new Promise(r=>setTimeout(r,800*a));continue;}
       showToast('Notification update failed', 'err', e.message);return;
+    }
+  }
+}
+
+// Bypasses (or restores) a section's normal cutoff time. Turning it ON makes the dashboard show
+// that section's real, current data immediately for every user, any time of day — use this to
+// push out a correction without waiting for the next cutoff. Remember to turn it back OFF once
+// the correction is live, otherwise that section will keep skipping its cutoff every day after.
+function toggleCutoff(id){
+  if(!LOADED){showToast('No data loaded', 'err', 'Import your Excel workbook before publishing.');return;}
+  const info=CUTOFF_SECTIONS[id];
+  if(!info)return;
+  applyEdits();
+  if(!LOADED.cutoffOverride||typeof LOADED.cutoffOverride!=='object')LOADED.cutoffOverride={};
+  if(LOADED.cutoffOverride[info.label])delete LOADED.cutoffOverride[info.label];else LOADED.cutoffOverride[info.label]=true;
+  try{localStorage.setItem('mvs_editor_cutoff',JSON.stringify(LOADED.cutoffOverride));}catch(e){}
+  saveLocal();renderSections();
+  publishCutoffOverride();
+}
+async function publishCutoffOverride(){
+  const cfg=loadConfig();
+  if(!cfg.token||!cfg.owner||!cfg.repo){showToast('Saved locally only', 'err', 'Complete GitHub setup to push to the dashboard.');return;}
+  for(let a=1;a<=5;a++){
+    try{
+      const {json,sha}=await getPublished(cfg);
+      let published=(json&&typeof json==='object')?json:{};
+      published.cutoffOverride=(LOADED&&LOADED.cutoffOverride)||{};
+      await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,JSON.stringify(published,null,1),sha||null);
+      PUBLISHED=published;markPublishStates();
+      showToast('Cutoff setting updated', 'ok', 'Applied on the dashboard — every user sees this immediately.');return;
+    }catch(e){
+      const conflict=e.message&&(e.message.includes('does not match')||e.message.includes('409')||e.message.includes('sha'));
+      if(conflict&&a<5){await new Promise(r=>setTimeout(r,800*a));continue;}
+      showToast('Cutoff update failed', 'err', e.message);return;
     }
   }
 }
