@@ -906,8 +906,14 @@ async function publishMutedNotif(){
 // that section's real, current data immediately for every user, any time of day — use this to
 // push out a correction without waiting for the next cutoff. Remember to turn it back OFF once
 // the correction is live, otherwise that section will keep skipping its cutoff every day after.
+// Only one cutoff publish is allowed in flight at a time. Without this, clicking two different
+// cutoff buttons close together (easy to do — usdlkr/spot/fxswaps/cross all share one flag) fires
+// two overlapping GitHub writes that keep invalidating each other's sha and can exhaust every
+// retry with a "does not match <sha>" conflict instead of ever landing.
+let _cutoffPublishBusy=false;
 function toggleCutoff(id,ev){
   if(!LOADED){showToast('No data loaded', 'err', 'Import your Excel workbook before publishing.');return;}
+  if(_cutoffPublishBusy){showToast('Please wait', 'err', 'Another cutoff update is still publishing — try again in a second.');return;}
   const info=CUTOFF_SECTIONS[id];
   if(!info)return;
   applyEdits();
@@ -920,7 +926,8 @@ function toggleCutoff(id,ev){
   // flashing a toast and re-rendering the button back to a static state instantly.
   const btn=ev&&ev.currentTarget;
   if(btn){btn.disabled=true;btn.textContent='⏳ Publishing…';}
-  publishCutoffOverride(btn);
+  _cutoffPublishBusy=true;
+  publishCutoffOverride(btn).finally(()=>{_cutoffPublishBusy=false;});
 }
 async function publishCutoffOverride(btn){
   const cfg=loadConfig();
