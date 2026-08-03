@@ -5788,8 +5788,7 @@
   ]
  },
  "cutoffOverride": {
-  "Volume of Foreign Exchange Market": true,
-  "USD/LKR Foreign Exchange": true
+  "Volume of Foreign Exchange Market": true
  },
  "mutedNotif": {
   "Volume of Foreign Exchange Market": true
