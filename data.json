@@ -1807,57 +1807,57 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 45.5,
-   "wa": 336.05
+   "volume": 41,
+   "wa": 335.78
   },
   {
    "tenor": "Tom",
-   "volume": 5.5,
-   "wa": 335.9
+   "volume": 9,
+   "wa": 335.66
   },
   {
    "tenor": "Cash",
-   "volume": 27.35,
-   "wa": 335.85
+   "volume": 27.85,
+   "wa": 335.52
   },
   {
    "tenor": "Sub Total",
-   "volume": 78.35,
+   "volume": 77.85,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 5,
-   "wa": 336.37
+   "volume": 11.5,
+   "wa": 336.0817
   },
   {
    "tenor": "2W",
-   "volume": 11,
-   "wa": 336.59
+   "volume": null,
+   "wa": null
   },
   {
    "tenor": "1M",
-   "volume": 14,
-   "wa": 337.58
+   "volume": 32.5,
+   "wa": 337.31
   },
   {
    "tenor": "2M",
-   "volume": 3,
-   "wa": 339.2
+   "volume": null,
+   "wa": null
   },
   {
    "tenor": "6M",
-   "volume": 11,
-   "wa": 345.56
+   "volume": 4,
+   "wa": 345.31
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 44,
+   "volume": 48,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 122.35,
+   "volume": 125.85,
    "wa": null
   }
  ],
@@ -5786,11 +5786,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "mutedNotif": {
-  "USD/LKR Foreign Exchange": true
- },
- "cutoffOverride": {
-  "USD/LKR Foreign Exchange": true
  }
 }
