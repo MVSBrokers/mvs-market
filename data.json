@@ -5788,7 +5788,5 @@
   ]
  },
  "cutoffOverride": {},
- "mutedNotif": {
-  "Volume of Foreign Exchange Market": true
- }
+ "mutedNotif": {}
 }
