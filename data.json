@@ -17,21 +17,21 @@
   }
  ],
  "callMarket": {
-  "min": 8.95,
-  "max": 9.05,
+  "min": 8.3,
+  "max": 9.02,
   "wa": 9,
-  "vol": 38.67
+  "vol": 30.31
  },
  "repoMarket": {
   "min": 8.98,
   "max": 9.12,
   "wa": 9.04,
-  "vol": 86.18
+  "vol": 61.02
  },
  "windows": {
   "sdf": {
-   "cur": 99.31,
-   "prev": 103.34
+   "cur": 159.19,
+   "prev": 99.31
   },
   "slf": {
    "cur": 0,
@@ -181,7 +181,8 @@
    "28 Jul",
    "30 Jul",
    "31 Jul",
-   "3 Aug"
+   "3 Aug",
+   "4 Aug"
   ],
   "values": [
    128.14,
@@ -325,21 +326,22 @@
    185.96,
    175,
    183.34,
-   159.31
+   159.31,
+   184.74
   ],
-  "current": 159.31,
-  "previous": 183.34
+  "current": 184.74,
+  "previous": 159.31
  },
  "repoOvernight": [
   {
-   "date": "3 Aug 2026",
+   "date": "4 Aug 2026",
    "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 61,
-   "accepted": 60,
-   "minRate": 8.65,
+   "received": 26,
+   "accepted": 26,
+   "minRate": 8.69,
    "maxRate": 8.75,
-   "waYield": 8.69,
+   "waYield": 8.73,
    "show": true
   }
  ],
@@ -2168,7 +2170,8 @@
    "28 Jul",
    "30 Jul",
    "31 Jul",
-   "3 Aug"
+   "3 Aug",
+   "4 Aug"
   ],
   "values": [
    2508.92,
@@ -2311,6 +2314,7 @@
    2498.12,
    2498.12,
    2498.12,
+   2492.62,
    2492.62
   ]
  },
@@ -4405,17 +4409,17 @@
  "keyDates": [
   {
    "label": "Next Squaring Off Day",
-   "date": "2026-08-04",
+   "date": "2026-08-18",
    "show": true
   },
   {
    "label": "Next T-Bill Auction Day",
-   "date": "2026-07-28",
+   "date": "2026-08-05",
    "show": true
   },
   {
    "label": "Next T-Bond Auction Day",
-   "date": "2026-07-30",
+   "date": "2026-08-25",
    "show": true
   },
   {
@@ -5769,8 +5773,8 @@
  ],
  "execSummary": {
   "usdlkr": "335.70/ 335.78",
-  "liqDir": "decreased",
-  "liqDelta": 24.03
+  "liqDir": "increased",
+  "liqDelta": 25.43
  },
  "marketNews": [
   "Treasury Bond Auction Results",
@@ -5825,8 +5829,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "mutedNotif": {
-  "Value Dates": true
  }
 }
