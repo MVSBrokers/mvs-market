@@ -176,6 +176,7 @@ const SECTIONS=[
  {id:'fxsummary',title:'FX Market Summary',keys:['fxSummary'],group:'Foreign Exchange'},
  {id:'valuedates',title:'Value Dates',keys:['valueDates'],group:'Foreign Exchange'},
  {id:'cross',title:'Cross-Currency Rates',keys:['crossRates'],group:'Foreign Exchange'},
+ {id:'fxIntervention',title:'CBSL FX Market Intervention (Purchase/Sales/Reserve)',keys:['fxIntervention','fxInterventionLastReserve'],group:'Foreign Exchange'},
  {id:'tbillauction',title:'T-Bill Auction Details',keys:['tbillAuction'],group:'Fixed Income'},
  {id:'tbillcurve',title:'T-Bill Yield Curve (series)',keys:['tbillCurve'],group:'Fixed Income'},
  {id:'tbonds',title:'Treasury Bonds (daily rates)',keys:['bonds'],group:'Fixed Income'},
@@ -230,7 +231,8 @@ const NOTIF_TOGGLE_SECTIONS={
   cbsl:'CBSL Holdings of Government Securities',
   foreign:'Foreign Holdings of Government Securities',
   fomc:'US Fed Rate — FOMC Decisions',
-  valuedates:'Value Dates'
+  valuedates:'Value Dates',
+  fxIntervention:'CBSL FX Market Intervention'
 };
 // Which editor sections have an actual daily cutoff on the dashboard (the rest notify
 // immediately with no hold-back at all, so they get no cutoff badge/button). Keyed by the same
@@ -1175,6 +1177,32 @@ function parseWorkbook(wb,XLSX){
     let cross=[];for(let i=2;i<fx.length;i++)if(fx[i][11]!=null)cross.push({pair:String(fx[i][11]).trim(),buy:num(fx[i][12]),sell:num(fx[i][13]),show:true});
     o.usdlkr={labels:L,values:V,close:spot.close||(V.length?V[V.length-1]:null)};
     o.fxSwaps=sw;o.spot=spot;o.crossRates=cross;
+    // CBSL FX Market Intervention — repeats once per year in cols P-T (15-19): a "MONTH" header
+    // row with the year label directly above it, then 12 monthly rows, then a "TOTAL" row.
+    let fxi=[];
+    for(let i=1;i<fx.length;i++){
+      const hdr=fx[i]||[];
+      if(hdr[16]==null||!/^purchase/i.test(String(hdr[16]).trim()))continue;
+      const yearRaw=fx[i-1]?fx[i-1][15]:null;
+      const year=yearRaw!=null?parseInt(String(yearRaw).trim(),10):null;
+      if(!year)continue;
+      const months=[];let totalPurchase=null,totalSales=null,netForYear=null;
+      for(let j=i+1;j<fx.length;j++){
+        const r=fx[j]||[];
+        const label=r[15]!=null?String(r[15]).trim():null;
+        if(!label)break; // blank row ends this year's block
+        if(/^total$/i.test(label)){totalPurchase=num(r[16]);totalSales=num(r[17]);netForYear=num(r[18]);break;}
+        const reserveRaw=r[19];
+        const reserve=(reserveRaw==null||String(reserveRaw).trim()==='-')?null:num(reserveRaw);
+        months.push({month:label,purchase:num(r[16]),sales:num(r[17]),netYtd:num(r[18]),reserve});
+      }
+      fxi.push({year,months,totalPurchase,totalSales,netForYear});
+    }
+    fxi.sort((a,b)=>a.year-b.year);
+    o.fxIntervention=fxi;
+    let lastReserve=null;
+    fxi.forEach(y=>y.months.forEach(m=>{if(m.reserve!=null)lastReserve=m.reserve;}));
+    o.fxInterventionLastReserve=lastReserve;
   }
   // FX Market Summary + Value Dates now live in the Opening Report sheet (cols 0-2 and 4-6)
   const orp=S(find('opening')||'');
