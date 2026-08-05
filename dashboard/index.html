@@ -524,6 +524,17 @@ canvas{max-width:100%!important}
     </div>
   </div>
 
+  <div class="grid-2x2">
+    <div class="panel" id="fxi-panel">
+      <div class="panel-title" data-sec="fxIntervention">CBSL FX Market Intervention<span class="close-date" id="fxi-reserve"></span></div>
+      <table style="font-size:11px">
+        <thead><tr><th>Year</th><th>Purchase (mn)</th><th>Sales (mn)</th><th>Net for Year</th><th></th></tr></thead>
+        <tbody id="dyn-fxi"></tbody>
+      </table>
+    </div>
+    <div class="panel" style="opacity:0;pointer-events:none"></div>
+  </div>
+
   <div class="panel full-width" style="background:linear-gradient(90deg,#0d1e38,#152a45);border:1px solid #c8a84b;padding:10px 16px;margin-bottom:14px"><div class="panel-title" style="font-size:13px;letter-spacing:1.5px;border:none;margin:0;padding:0">Cross-Currency Rates</div></div>
 
   <div class="grid-2x2">
@@ -534,13 +545,7 @@ canvas{max-width:100%!important}
         <tbody id="dyn-cross"></tbody>
       </table>
     </div>
-    <div class="panel" id="fxi-panel">
-      <div class="panel-title" data-sec="fxIntervention">CBSL FX Market Intervention<span class="close-date" id="fxi-reserve"></span></div>
-      <table style="font-size:11px">
-        <thead><tr><th>Year</th><th>Purchase (mn)</th><th>Sales (mn)</th><th>Net for Year</th><th></th></tr></thead>
-        <tbody id="dyn-fxi"></tbody>
-      </table>
-    </div>
+    <div class="panel" style="opacity:0;pointer-events:none"></div>
   </div>
 
   </div>
