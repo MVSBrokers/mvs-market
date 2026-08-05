@@ -2193,92 +2193,92 @@
    "months": [
     {
      "month": "JANUARY",
-     "purchase": 209.8,
-     "sales": 9.5,
-     "netYtd": 200.3,
-     "reserve": 6824
+     "purchase": 47.3,
+     "sales": 35,
+     "netYtd": 12.299999999999997,
+     "reserve": 6065
     },
     {
      "month": "FEBRUARY",
-     "purchase": 461,
-     "sales": 0,
-     "netYtd": 661.3,
-     "reserve": 7284
+     "purchase": 78.3,
+     "sales": 8,
+     "netYtd": 82.6,
+     "reserve": 6095
     },
     {
      "month": "MARCH",
-     "purchase": 120.3,
-     "sales": 71.5,
-     "netYtd": 710.0999999999999,
-     "reserve": 7026
+     "purchase": 401.9,
+     "sales": 0,
+     "netYtd": 484.5,
+     "reserve": 6517
     },
     {
      "month": "APRIL",
-     "purchase": 83,
-     "sales": 95.9,
-     "netYtd": 697.1999999999999,
-     "reserve": 6759
+     "purchase": 169.8,
+     "sales": 9,
+     "netYtd": 645.3,
+     "reserve": 6327
     },
     {
      "month": "MAY",
-     "purchase": 12,
-     "sales": 223.3,
-     "netYtd": 485.8999999999999,
-     "reserve": 6873
+     "purchase": 260.8,
+     "sales": 4,
+     "netYtd": 902.0999999999999,
+     "reserve": 6284
     },
     {
      "month": "JUNE",
-     "purchase": 96.3,
-     "sales": 25.8,
-     "netYtd": 556.3999999999999,
-     "reserve": 6450
+     "purchase": 119.5,
+     "sales": 7.3,
+     "netYtd": 1014.3,
+     "reserve": 6080
     },
     {
      "month": "JULY",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 81.8,
+     "sales": 0,
+     "netYtd": 1096.1,
+     "reserve": 6144
     },
     {
      "month": "AUGUST",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 142.5,
+     "sales": 0,
+     "netYtd": 1238.6,
+     "reserve": 6166
     },
     {
      "month": "SEPTEMBER",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 177.3,
+     "sales": 0,
+     "netYtd": 1415.8999999999999,
+     "reserve": 6244
     },
     {
      "month": "OCTOBER",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 55,
+     "sales": 9.5,
+     "netYtd": 1461.3999999999999,
+     "reserve": 6100
     },
     {
      "month": "NOVEMBER",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 90.8,
+     "sales": 16.5,
+     "netYtd": 1535.6999999999998,
+     "reserve": 6035
     },
     {
      "month": "DECEMBER",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 250.8,
+     "sales": 28.3,
+     "netYtd": 1758.1999999999998,
+     "reserve": 6825
     }
    ],
-   "totalPurchase": 982.3999999999999,
-   "totalSales": 426.00000000000006,
-   "netForYear": 556.3999999999999
+   "totalPurchase": 1875.7999999999997,
+   "totalSales": 117.6,
+   "netForYear": 1758.1999999999998
   },
   {
    "year": 2026,
@@ -2327,44 +2327,44 @@
     },
     {
      "month": "JULY",
-     "purchase": 0,
-     "sales": 0,
-     "netYtd": 556.3999999999999,
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
      "reserve": null
     },
     {
      "month": "AUGUST",
-     "purchase": 0,
-     "sales": 0,
-     "netYtd": 556.3999999999999,
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
      "reserve": null
     },
     {
      "month": "SEPTEMBER",
-     "purchase": 0,
-     "sales": 0,
-     "netYtd": 556.3999999999999,
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
      "reserve": null
     },
     {
      "month": "OCTOBER",
-     "purchase": 0,
-     "sales": 0,
-     "netYtd": 556.3999999999999,
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
      "reserve": null
     },
     {
      "month": "NOVEMBER",
-     "purchase": 0,
-     "sales": 0,
-     "netYtd": 556.3999999999999,
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
      "reserve": null
     },
     {
      "month": "DECEMBER",
-     "purchase": 0,
-     "sales": 0,
-     "netYtd": 556.3999999999999,
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
      "reserve": null
     }
    ],
