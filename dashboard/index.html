@@ -1147,12 +1147,13 @@ const MSG_SECTION_MAP={
 };
 
 // Sections whose data is tied to a specific business date with a daily cutoff (auction results,
-// end-of-day rates, etc). For these: only show a message if the change is detected within ±15
-// minutes of that section's own cutoff, and show which date the data belongs to. Everything else
-// notifies immediately, no date shown. Cutoff hours match what's documented/used elsewhere in
-// this app: 8:30 AM (FX volume/swaps date), 4:00 PM (general closing date), 5:00 PM (money market
-// closing, same rule as slEffCutoffMs). Each date extractor pulls the "as of" date straight from
-// the published data — not guessed.
+// end-of-day rates, etc). For these: only show a message once the change has actually been
+// released (i.e. that section's own cutoff has passed today — see isPastCutoffToday), and show
+// which date the data belongs to. There's no time-window cap — a change can notify any time
+// later that same day. Everything else notifies immediately, no date shown. Cutoff hours match
+// what's documented/used elsewhere in this app: 8:30 AM (FX volume/swaps date), 4:00 PM (general
+// closing date), 5:00 PM (money market closing, same rule as slEffCutoffMs). Each date extractor
+// pulls the "as of" date straight from the published data — not guessed.
 // Turns whatever raw date format the underlying data happens to use ("17 Jul", "26.05.2026",
 // "2026-07-16", etc.) into a consistent "21st July" style for messages. Returns null (no date
 // shown) rather than guessing, if the text can't be confidently parsed — e.g. if the source data
@@ -1423,12 +1424,17 @@ function buildDisplayObject(newObj){
   // available, instead of staying blank forever just because *some* snapshot object now exists.
   let lastFull=null;
   try{const rawFull=localStorage.getItem(MSG_LAST_FULL_KEY);if(rawFull)lastFull=JSON.parse(rawFull);}catch(e){}
-  let holdbackDay=null;
-  try{holdbackDay=localStorage.getItem(DISPLAY_HOLDBACK_DAY_KEY);}catch(e){}
+  // Per-SECTION holdback day, not one shared flag. A section stays marked as "was held back as
+  // of day X" only while it's actually still pre-cutoff — an 8:30AM section that already
+  // released hours ago must not be dragged along by a 5PM section that's still mid-hold, or a
+  // stale flag from yesterday's session would bypass its cutoff before today's 8:30AM ever
+  // arrives, silently capturing the value early and leaving nothing to notice at the real
+  // boundary (no notification fires because nothing looks "new" by the time it should).
+  let holdbackDays=null;
+  try{const raw=localStorage.getItem(DISPLAY_HOLDBACK_DAY_KEY);if(raw){const parsed=JSON.parse(raw);holdbackDays=(parsed&&typeof parsed==='object')?parsed:{__legacy__:parsed};}}catch(e){}
   const today=slDateKey();
-  const crossedIntoNewDay=(holdbackDay!==null&&holdbackDay!==today);
   const display=JSON.parse(JSON.stringify(newObj)); // start from the real, current data
-  let anyHeldBack=false;
+  const newHoldbackDays={};
   // Manual escape hatch for correcting a mistake: if the editor publishes with
   // newObj.cutoffOverride[label]===true, that section's hold-back is skipped entirely — same
   // real data shown to every user immediately, regardless of the clock. This lives in data.json
@@ -1436,20 +1442,19 @@ function buildDisplayObject(newObj){
   const override=newObj.cutoffOverride||{};
   for(const label in MSG_CUTOFF_SECTIONS){
     const pastCutoff=isPastCutoffToday(MSG_CUTOFF_SECTIONS[label].hour);
-    if(pastCutoff||crossedIntoNewDay||override[label]===true)continue; // cutoff passed, hold is stale from a previous day, or manually force-released — show the real data, same for everyone
+    const priorHold=holdbackDays?(holdbackDays[label]!==undefined?holdbackDays[label]:holdbackDays.__legacy__):null;
+    const crossedIntoNewDay=(priorHold!=null&&priorHold!==today);
+    if(pastCutoff||crossedIntoNewDay||override[label]===true)continue; // cutoff passed, this section's own hold is stale from a previous day, or manually force-released — show the real data, same for everyone
     const keys=MSG_SECTION_MAP[label]||[];
     keys.forEach(k=>{
       if(stored&&stored[k]!=null)display[k]=stored[k]; // a real value already on record — keep showing it
       else if(lastFull&&lastFull[k]!=null)display[k]=lastFull[k]; // recover a real value from the last raw fetch instead
       else display[k]=null; // truly nothing real available anywhere yet — blank rather than leak today's value early
     });
-    anyHeldBack=true;
+    newHoldbackDays[label]=today;
   }
   try{localStorage.setItem(DISPLAY_SNAPSHOT_KEY,JSON.stringify(display));}catch(e){}
-  try{
-    if(anyHeldBack){if(holdbackDay===null||crossedIntoNewDay)localStorage.setItem(DISPLAY_HOLDBACK_DAY_KEY,today);}
-    else localStorage.removeItem(DISPLAY_HOLDBACK_DAY_KEY);
-  }catch(e){}
+  try{localStorage.setItem(DISPLAY_HOLDBACK_DAY_KEY,JSON.stringify(newHoldbackDays));}catch(e){}
   return display;
 }
 
