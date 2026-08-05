@@ -1393,63 +1393,63 @@
    },
    {
     "isin": "LKB00530G018",
-    "maturity": "1930-07-01",
+    "maturity": "2030-07-01",
     "remYears": 3.912328767,
     "amount": 1000,
     "show": true
    },
    {
     "isin": "LKB00530H016",
-    "maturity": "1930-08-01",
+    "maturity": "2030-08-01",
     "remYears": 3.997260274,
     "amount": 2400,
     "show": true
    },
    {
     "isin": "LKB00730J158",
-    "maturity": "1930-10-15",
+    "maturity": "2030-10-15",
     "remYears": 4.202739726,
     "amount": 100,
     "show": true
    },
    {
     "isin": "LKB00531B017",
-    "maturity": "1931-02-01",
+    "maturity": "2031-02-01",
     "remYears": 4.501369863,
     "amount": 44943.71203,
     "show": true
    },
    {
     "isin": "LKB01031L016",
-    "maturity": "1931-12-01",
+    "maturity": "2031-12-01",
     "remYears": 5.331506849,
     "amount": 1000,
     "show": true
    },
    {
     "isin": "LKB00934F154",
-    "maturity": "1934-06-15",
+    "maturity": "2034-06-15",
     "remYears": 7.871232877,
     "amount": 100,
     "show": true
    },
    {
     "isin": "LKB00934J156",
-    "maturity": "1934-10-15",
+    "maturity": "2034-10-15",
     "remYears": 8.205479452,
     "amount": 48899.50369,
     "show": true
    },
    {
     "isin": "LKB01136H151",
-    "maturity": "1936-08-15",
+    "maturity": "2036-08-15",
     "remYears": 10.04109589,
     "amount": 15143.62665,
     "show": true
    },
    {
     "isin": "LKB01237G019",
-    "maturity": "1937-07-01",
+    "maturity": "2037-07-01",
     "remYears": 10.91780822,
     "amount": 13354.64546,
     "show": true
@@ -1819,6 +1819,561 @@
    "show": true
   }
  ],
+ "fxIntervention": [
+  {
+   "year": 2021,
+   "months": [
+    {
+     "month": "JANUARY",
+     "purchase": 0,
+     "sales": 72.25,
+     "netYtd": -72.25,
+     "reserve": 4841.9
+    },
+    {
+     "month": "FEBRUARY",
+     "purchase": 23.42,
+     "sales": 0,
+     "netYtd": -48.83,
+     "reserve": 4555.7
+    },
+    {
+     "month": "MARCH",
+     "purchase": 75.31,
+     "sales": 0,
+     "netYtd": 26.480000000000004,
+     "reserve": 4055.2
+    },
+    {
+     "month": "APRIL",
+     "purchase": 62.81,
+     "sales": 0,
+     "netYtd": 89.29,
+     "reserve": 4476.5
+    },
+    {
+     "month": "MAY",
+     "purchase": 13.57,
+     "sales": 10,
+     "netYtd": 92.86000000000001,
+     "reserve": 4018.1
+    },
+    {
+     "month": "JUNE",
+     "purchase": 33.71,
+     "sales": 0,
+     "netYtd": 126.57000000000002,
+     "reserve": 4060
+    },
+    {
+     "month": "JULY",
+     "purchase": 37.65,
+     "sales": 0,
+     "netYtd": 164.22000000000003,
+     "reserve": 2805.9
+    },
+    {
+     "month": "AUGUST",
+     "purchase": 49.38,
+     "sales": 225.5,
+     "netYtd": -11.899999999999977,
+     "reserve": 3550.7
+    },
+    {
+     "month": "SEPTEMBER",
+     "purchase": 35.99,
+     "sales": 34.81,
+     "netYtd": -10.719999999999978,
+     "reserve": 2704.2
+    },
+    {
+     "month": "OCTOBER",
+     "purchase": 41.05,
+     "sales": 113.37,
+     "netYtd": -83.03999999999999,
+     "reserve": 2267.5
+    },
+    {
+     "month": "NOVEMBER",
+     "purchase": 61.71,
+     "sales": 372.35,
+     "netYtd": -393.68000000000006,
+     "reserve": 1588.4
+    },
+    {
+     "month": "DECEMBER",
+     "purchase": 71.16,
+     "sales": 424.71,
+     "netYtd": -747.23,
+     "reserve": 3137.6
+    }
+   ],
+   "totalPurchase": 505.76,
+   "totalSales": 1252.99,
+   "netForYear": -747.23
+  },
+  {
+   "year": 2022,
+   "months": [
+    {
+     "month": "JANUARY",
+     "purchase": 176.81,
+     "sales": 407.76,
+     "netYtd": -230.95,
+     "reserve": 2360.6
+    },
+    {
+     "month": "FEBRUARY",
+     "purchase": 162.34,
+     "sales": 185.34,
+     "netYtd": -253.95,
+     "reserve": 2313.8
+    },
+    {
+     "month": "MARCH",
+     "purchase": 196.75,
+     "sales": 207.62,
+     "netYtd": -264.82,
+     "reserve": 1938.7
+    },
+    {
+     "month": "APRIL",
+     "purchase": 140.95,
+     "sales": 244.9,
+     "netYtd": -368.77,
+     "reserve": 1827
+    },
+    {
+     "month": "MAY",
+     "purchase": 76.6,
+     "sales": 155.1,
+     "netYtd": -447.27,
+     "reserve": 1920
+    },
+    {
+     "month": "JUNE",
+     "purchase": 68,
+     "sales": 222.73,
+     "netYtd": -602,
+     "reserve": 1859
+    },
+    {
+     "month": "JULY",
+     "purchase": 117.65,
+     "sales": 276.58,
+     "netYtd": -760.93,
+     "reserve": 1815
+    },
+    {
+     "month": "AUGUST",
+     "purchase": 215.61,
+     "sales": 200.59,
+     "netYtd": -745.91,
+     "reserve": 1716
+    },
+    {
+     "month": "SEPTEMBER",
+     "purchase": 239.15,
+     "sales": 171.97,
+     "netYtd": -678.73,
+     "reserve": 1777
+    },
+    {
+     "month": "OCTOBER",
+     "purchase": 251.28,
+     "sales": 259.67,
+     "netYtd": -687.12,
+     "reserve": 1704
+    },
+    {
+     "month": "NOVEMBER",
+     "purchase": 219.09,
+     "sales": 212.69,
+     "netYtd": -680.72,
+     "reserve": 1804
+    },
+    {
+     "month": "DECEMBER",
+     "purchase": 274.42,
+     "sales": 170.64,
+     "netYtd": -576.94,
+     "reserve": 1896
+    }
+   ],
+   "totalPurchase": 2138.65,
+   "totalSales": 2715.5899999999997,
+   "netForYear": -576.9399999999996
+  },
+  {
+   "year": 2023,
+   "months": [
+    {
+     "month": "JANUARY",
+     "purchase": 348.79,
+     "sales": 137.64,
+     "netYtd": 211.15000000000003,
+     "reserve": 2121
+    },
+    {
+     "month": "FEBRUARY",
+     "purchase": 287,
+     "sales": 33.44,
+     "netYtd": 464.71000000000004,
+     "reserve": 2219
+    },
+    {
+     "month": "MARCH",
+     "purchase": 453.06,
+     "sales": 55.09,
+     "netYtd": 862.6800000000001,
+     "reserve": 2691
+    },
+    {
+     "month": "APRIL",
+     "purchase": 147.75,
+     "sales": 0,
+     "netYtd": 1010.4300000000001,
+     "reserve": 2755
+    },
+    {
+     "month": "MAY",
+     "purchase": 662.5,
+     "sales": 0,
+     "netYtd": 1672.93,
+     "reserve": 3491
+    },
+    {
+     "month": "JUNE",
+     "purchase": 77.5,
+     "sales": 91,
+     "netYtd": 1659.43,
+     "reserve": 3468
+    },
+    {
+     "month": "JULY",
+     "purchase": 29,
+     "sales": 41.5,
+     "netYtd": 1646.93,
+     "reserve": 3765
+    },
+    {
+     "month": "AUGUST",
+     "purchase": 296.5,
+     "sales": 467,
+     "netYtd": 1476.43,
+     "reserve": 3598
+    },
+    {
+     "month": "SEPTEMBER",
+     "purchase": 83,
+     "sales": 0,
+     "netYtd": 1559.43,
+     "reserve": 3540
+    },
+    {
+     "month": "OCTOBER",
+     "purchase": 108,
+     "sales": 0,
+     "netYtd": 1667.43,
+     "reserve": 3569
+    },
+    {
+     "month": "NOVEMBER",
+     "purchase": 117,
+     "sales": 0,
+     "netYtd": 1784.43,
+     "reserve": 3584
+    },
+    {
+     "month": "DECEMBER",
+     "purchase": 113,
+     "sales": 0,
+     "netYtd": 1897.43,
+     "reserve": 4392
+    }
+   ],
+   "totalPurchase": 2723.1,
+   "totalSales": 825.67,
+   "netForYear": 1897.4299999999998
+  },
+  {
+   "year": 2024,
+   "months": [
+    {
+     "month": "JANUARY",
+     "purchase": 245.3,
+     "sales": 0,
+     "netYtd": 245.3,
+     "reserve": 4496
+    },
+    {
+     "month": "FEBRUARY",
+     "purchase": 248.5,
+     "sales": 9,
+     "netYtd": 484.8,
+     "reserve": 4517
+    },
+    {
+     "month": "MARCH",
+     "purchase": 715.1,
+     "sales": 0,
+     "netYtd": 1199.9,
+     "reserve": 4951
+    },
+    {
+     "month": "APRIL",
+     "purchase": 469.5,
+     "sales": 50,
+     "netYtd": 1619.4,
+     "reserve": 5471
+    },
+    {
+     "month": "MAY",
+     "purchase": 224.5,
+     "sales": 32,
+     "netYtd": 1811.9,
+     "reserve": 5421
+    },
+    {
+     "month": "JUNE",
+     "purchase": 0,
+     "sales": 57,
+     "netYtd": 1754.9,
+     "reserve": 5642
+    },
+    {
+     "month": "JULY",
+     "purchase": 121,
+     "sales": 0,
+     "netYtd": 1875.9,
+     "reserve": 5652
+    },
+    {
+     "month": "AUGUST",
+     "purchase": 148.5,
+     "sales": 0,
+     "netYtd": 2024.4,
+     "reserve": 5954
+    },
+    {
+     "month": "SEPTEMBER",
+     "purchase": 108.5,
+     "sales": 12.5,
+     "netYtd": 2120.4,
+     "reserve": 5992
+    },
+    {
+     "month": "OCTOBER",
+     "purchase": 189.5,
+     "sales": 0,
+     "netYtd": 2309.9,
+     "reserve": 6472
+    },
+    {
+     "month": "NOVEMBER",
+     "purchase": 327,
+     "sales": 0,
+     "netYtd": 2636.9,
+     "reserve": 6462
+    },
+    {
+     "month": "DECEMBER",
+     "purchase": 231.3,
+     "sales": 22.5,
+     "netYtd": 2845.7000000000003,
+     "reserve": 6122
+    }
+   ],
+   "totalPurchase": 3028.7000000000003,
+   "totalSales": 183,
+   "netForYear": 2845.7000000000003
+  },
+  {
+   "year": 2025,
+   "months": [
+    {
+     "month": "JANUARY",
+     "purchase": 209.8,
+     "sales": 9.5,
+     "netYtd": 200.3,
+     "reserve": 6824
+    },
+    {
+     "month": "FEBRUARY",
+     "purchase": 461,
+     "sales": 0,
+     "netYtd": 661.3,
+     "reserve": 7284
+    },
+    {
+     "month": "MARCH",
+     "purchase": 120.3,
+     "sales": 71.5,
+     "netYtd": 710.0999999999999,
+     "reserve": 7026
+    },
+    {
+     "month": "APRIL",
+     "purchase": 83,
+     "sales": 95.9,
+     "netYtd": 697.1999999999999,
+     "reserve": 6759
+    },
+    {
+     "month": "MAY",
+     "purchase": 12,
+     "sales": 223.3,
+     "netYtd": 485.8999999999999,
+     "reserve": 6873
+    },
+    {
+     "month": "JUNE",
+     "purchase": 96.3,
+     "sales": 25.8,
+     "netYtd": 556.3999999999999,
+     "reserve": 6450
+    },
+    {
+     "month": "JULY",
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
+     "reserve": null
+    },
+    {
+     "month": "AUGUST",
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
+     "reserve": null
+    },
+    {
+     "month": "SEPTEMBER",
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
+     "reserve": null
+    },
+    {
+     "month": "OCTOBER",
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
+     "reserve": null
+    },
+    {
+     "month": "NOVEMBER",
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
+     "reserve": null
+    },
+    {
+     "month": "DECEMBER",
+     "purchase": null,
+     "sales": null,
+     "netYtd": null,
+     "reserve": null
+    }
+   ],
+   "totalPurchase": 982.3999999999999,
+   "totalSales": 426.00000000000006,
+   "netForYear": 556.3999999999999
+  },
+  {
+   "year": 2026,
+   "months": [
+    {
+     "month": "JANUARY",
+     "purchase": 209.8,
+     "sales": 9.5,
+     "netYtd": 200.3,
+     "reserve": 6824
+    },
+    {
+     "month": "FEBRUARY",
+     "purchase": 461,
+     "sales": 0,
+     "netYtd": 661.3,
+     "reserve": 7284
+    },
+    {
+     "month": "MARCH",
+     "purchase": 120.3,
+     "sales": 71.5,
+     "netYtd": 710.0999999999999,
+     "reserve": 7026
+    },
+    {
+     "month": "APRIL",
+     "purchase": 83,
+     "sales": 95.9,
+     "netYtd": 697.1999999999999,
+     "reserve": 6759
+    },
+    {
+     "month": "MAY",
+     "purchase": 12,
+     "sales": 223.3,
+     "netYtd": 485.8999999999999,
+     "reserve": 6873
+    },
+    {
+     "month": "JUNE",
+     "purchase": 96.3,
+     "sales": 25.8,
+     "netYtd": 556.3999999999999,
+     "reserve": 6450
+    },
+    {
+     "month": "JULY",
+     "purchase": 0,
+     "sales": 0,
+     "netYtd": 556.3999999999999,
+     "reserve": null
+    },
+    {
+     "month": "AUGUST",
+     "purchase": 0,
+     "sales": 0,
+     "netYtd": 556.3999999999999,
+     "reserve": null
+    },
+    {
+     "month": "SEPTEMBER",
+     "purchase": 0,
+     "sales": 0,
+     "netYtd": 556.3999999999999,
+     "reserve": null
+    },
+    {
+     "month": "OCTOBER",
+     "purchase": 0,
+     "sales": 0,
+     "netYtd": 556.3999999999999,
+     "reserve": null
+    },
+    {
+     "month": "NOVEMBER",
+     "purchase": 0,
+     "sales": 0,
+     "netYtd": 556.3999999999999,
+     "reserve": null
+    },
+    {
+     "month": "DECEMBER",
+     "purchase": 0,
+     "sales": 0,
+     "netYtd": 556.3999999999999,
+     "reserve": null
+    }
+   ],
+   "totalPurchase": 982.3999999999999,
+   "totalSales": 426.00000000000006,
+   "netForYear": 556.3999999999999
+  }
+ ],
+ "fxInterventionLastReserve": 6450,
  "fxSummary": [
   {
    "tenor": "Spot",
