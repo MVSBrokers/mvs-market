@@ -1495,26 +1495,6 @@ async function loadData(silent=false){
             if(!isPastCutoffToday(cutoffSec.hour))return; // date-bound section — only notify from cutoff onward, same day; a change from a previous day never resurfaces once midnight has cleared it
             const dateStr=toOrdinalDate(cutoffSec.date(newObj));
             pushMsg(label,dateStr);
-          }else if(label==='CBSL FX Market Intervention'){
-            // No single cutoff date here — instead show which year(s) and month(s) actually
-            // changed, so the notification says something meaningful ("2026 (June, July)")
-            // rather than just the bare section name.
-            const oldFxi=Array.isArray(oldObj.fxIntervention)?oldObj.fxIntervention:[];
-            const newFxi=Array.isArray(newObj.fxIntervention)?newObj.fxIntervention:[];
-            const parts=[];
-            newFxi.forEach(y=>{
-              const old=oldFxi.find(o=>o.year===y.year);
-              if(!old){parts.push(String(y.year));return;} // whole year is new — no point listing every month
-              if(JSON.stringify(old)===JSON.stringify(y))return; // this year unchanged
-              const oldMonths=Array.isArray(old.months)?old.months:[];
-              const newMonths=Array.isArray(y.months)?y.months:[];
-              const changedMonths=newMonths.filter(m=>{
-                const om=oldMonths.find(o=>o.month===m.month);
-                return !om||JSON.stringify(om)!==JSON.stringify(m);
-              }).map(m=>m.month[0]+m.month.slice(1).toLowerCase()); // JANUARY -> January
-              parts.push(changedMonths.length?(y.year+' ('+changedMonths.join(', ')+')'):String(y.year));
-            });
-            pushMsg(label,parts.length?parts.join(', '):null);
           }else{
             pushMsg(label); // no cutoff concept for this section — notify immediately, no date
           }
