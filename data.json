@@ -6434,5 +6434,8 @@
    "Month",
    "Reserve (USD Mn)"
   ]
+ },
+ "mutedNotif": {
+  "Treasury Bill": true
  }
 }
