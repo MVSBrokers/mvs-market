@@ -1822,57 +1822,52 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 16.5,
-   "wa": 335.72
+   "volume": 47.75,
+   "wa": 335.73
   },
   {
    "tenor": "Tom",
-   "volume": 8,
-   "wa": 335.61
+   "volume": null,
+   "wa": null
   },
   {
    "tenor": "Cash",
-   "volume": 46.5,
-   "wa": 335.63
+   "volume": 17.5,
+   "wa": 335.59
   },
   {
    "tenor": "Sub Total",
-   "volume": 71,
+   "volume": 65.25,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 19,
-   "wa": 336.09
+   "volume": 4,
+   "wa": 336.07
   },
   {
    "tenor": "2W",
-   "volume": 8,
-   "wa": 336.42
+   "volume": 2,
+   "wa": 336.29
   },
   {
    "tenor": "3W",
-   "volume": 5,
-   "wa": 336.93
+   "volume": 2,
+   "wa": 336.98
   },
   {
-   "tenor": "3M",
-   "volume": 10,
-   "wa": 340.61
-  },
-  {
-   "tenor": "6M",
-   "volume": 10,
-   "wa": 345.34
+   "tenor": "1M",
+   "volume": 4,
+   "wa": 337.38
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 58.5,
+   "volume": 12,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 129.5,
+   "volume": 77.25,
    "wa": null
   }
  ],
@@ -5414,6 +5409,13 @@
    "show": true
   },
   {
+   "maturity": "2031-02-01",
+   "isin": "LKK00531B017",
+   "series": "11.60%2031A",
+   "face": null,
+   "show": true
+  },
+  {
    "maturity": "2031-03-15",
    "isin": "LKB01231C151",
    "series": "11.25%2031A",
@@ -5788,7 +5790,7 @@
   "Total Amount Accepted: Rs. 250.0 Billion",
   "Auction Date: 30 July 2026"
  ],
- "date": "2026-08-04",
+ "date": "2026-08-05",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
