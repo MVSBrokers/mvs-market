@@ -1364,6 +1364,19 @@ function initMsgStack(){
 
 let _lastDataHash=null;
 let _lastNewsHash=null;
+let _lastCutoffStates=null;
+// Every distinct cutoff hour in use, checked each poll so we can tell when one has just been
+// crossed — even if data.json itself hasn't changed since before that cutoff. Without this, a
+// section published once at 9am and never touched again would simply never get re-evaluated by
+// the 20s poll once its 4/5pm cutoff passes (the "skip if nothing changed" optimization below
+// would keep short-circuiting forever), so it would neither visually release nor notify until
+// someone happened to hard-reload the page.
+function currentCutoffStates(){
+  const hours=[...new Set(Object.values(MSG_CUTOFF_SECTIONS).map(s=>s.hour))];
+  const out={};
+  hours.forEach(h=>{out[h]=isPastCutoffToday(h);});
+  return out;
+}
 // Holds back cutoff-bound sections from actually appearing on the dashboard until their cutoff
 // time has passed today — even though data.json may already have the new value if it was
 // published early. Everything else (non-cutoff sections, and any other fields like hidden/
@@ -1428,9 +1441,14 @@ async function loadData(silent=false){
     if(!res.ok)throw new Error("HTTP "+res.status);
     const txt=await res.text();
     bar.style.display="none";
-    // Only re-render (and rebuild charts) when the published data has actually changed.
-    // This stops the every-30s flicker — the dashboard refreshes only after you publish.
-    if(txt===_lastDataHash)return;
+    // Only re-render (and rebuild charts) when the published data has actually changed, OR a
+    // cutoff boundary was just crossed (see currentCutoffStates above) — that second case is
+    // what makes an already-fetched-but-held-back section actually release and notify on time,
+    // even if data.json itself hasn't been touched since before its cutoff.
+    const cutoffStatesNow=currentCutoffStates();
+    const cutoffBoundaryCrossed=_lastCutoffStates!==null&&Object.keys(cutoffStatesNow).some(h=>cutoffStatesNow[h]!==_lastCutoffStates[h]);
+    _lastCutoffStates=cutoffStatesNow;
+    if(txt===_lastDataHash&&!cutoffBoundaryCrossed)return;
     _lastDataHash=txt;
     const newObj=JSON.parse(txt);
     const displayObj=buildDisplayObject(newObj);
@@ -1439,10 +1457,18 @@ async function loadData(silent=false){
     // user returns, this reloads the page from scratch and would otherwise make a real missed
     // update look like "first load". Persisting the full previous data to localStorage lets a
     // fresh reload tell those two cases apart, and also lets us diff section-by-section.
+    //
+    // Crucially, the baseline saved below is the RELEASE-AWARE displayObj, not the raw fetch. If
+    // it were the raw fetch, a section published early (but still held back pre-cutoff) would get
+    // captured into the baseline the moment it was first fetched — so by the time cutoff actually
+    // passed and the value finally became visible, it would no longer look "new" against that
+    // baseline, and the notification would silently never fire. Using displayObj means the
+    // baseline only advances once a value is actually shown, so the notification fires exactly
+    // when the value does.
     let storedFull=null;
     try{storedFull=localStorage.getItem(MSG_LAST_FULL_KEY);}catch(e){}
     const isGenuinelyNewDevice=storedFull===null;
-    if(!isGenuinelyNewDevice&&storedFull!==txt){
+    if(!isGenuinelyNewDevice){
       try{
         const oldObj=JSON.parse(storedFull);
         const changed=computeChangedSections(oldObj,newObj);
@@ -1459,7 +1485,7 @@ async function loadData(silent=false){
         });
       }catch(e){}
     }
-    try{localStorage.setItem(MSG_LAST_FULL_KEY,txt);}catch(e){}
+    try{localStorage.setItem(MSG_LAST_FULL_KEY,JSON.stringify(displayObj));}catch(e){}
   }catch(e){
     bar.style.display="none";
     if(!silent){errEl.style.display="block";errEl.textContent="Could not load data — "+e.message;}
