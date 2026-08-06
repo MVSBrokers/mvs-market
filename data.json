@@ -6439,7 +6439,8 @@
   "usdlkr": true,
   "fxswaps": true,
   "spot": true,
-  "fxsummary": true
+  "fxsummary": true,
+  "liquidity": true
  },
  "headers": {
   "bond": [
