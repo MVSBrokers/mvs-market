@@ -1431,7 +1431,13 @@ function buildDisplayObject(newObj){
   // arrives, silently capturing the value early and leaving nothing to notice at the real
   // boundary (no notification fires because nothing looks "new" by the time it should).
   let holdbackDays=null;
-  try{const raw=localStorage.getItem(DISPLAY_HOLDBACK_DAY_KEY);if(raw){const parsed=JSON.parse(raw);holdbackDays=(parsed&&typeof parsed==='object')?parsed:{__legacy__:parsed};}}catch(e){}
+  try{
+    const raw=localStorage.getItem(DISPLAY_HOLDBACK_DAY_KEY);
+    if(raw){
+      if(raw.trim().startsWith('{')){holdbackDays=JSON.parse(raw);} // new per-section format
+      else{holdbackDays={__legacy__:raw};} // old format was a bare date string, not JSON — don't feed it to JSON.parse
+    }
+  }catch(e){}
   const today=slDateKey();
   const display=JSON.parse(JSON.stringify(newObj)); // start from the real, current data
   const newHoldbackDays={};
@@ -1449,7 +1455,13 @@ function buildDisplayObject(newObj){
     keys.forEach(k=>{
       if(stored&&stored[k]!=null)display[k]=stored[k]; // a real value already on record — keep showing it
       else if(lastFull&&lastFull[k]!=null)display[k]=lastFull[k]; // recover a real value from the last raw fetch instead
-      else display[k]=null; // truly nothing real available anywhere yet — blank rather than leak today's value early
+      // else: truly nothing on record for this browser at all (its very first-ever visit,
+      // before this section's cutoff has passed today) — leave display[k] as newObj[k] (already
+      // the case, since display started as a clone of newObj) rather than blanking it. A blank
+      // "Not published yet" looked broken to every new visitor hitting the dashboard before
+      // cutoff, which in practice was far more common and more visible than the rare case this
+      // was protecting against — so a first-time visitor now sees the real current data too,
+      // same as everyone else, instead of nothing at all.
     });
     newHoldbackDays[label]=today;
   }
