@@ -463,7 +463,7 @@
     ]
    },
    {
-    "bond": "15.10.2034",
+    "bond": "15.06.2034",
     "eoy": "",
     "eom": "",
     "values": [
@@ -476,7 +476,7 @@
     ]
    },
    {
-    "bond": "15.06.2034",
+    "bond": "15.10.2034",
     "eoy": "",
     "eom": "12.2/12.4",
     "values": [
@@ -6434,10 +6434,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "mutedNotif": {
-  "Treasury Bond Yield (%)": true,
-  "Treasury Bill": true,
-  "Inflation (CCPI vs NCPI)": true
  }
 }
