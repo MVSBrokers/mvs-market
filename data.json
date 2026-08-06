@@ -8953,5 +8953,8 @@
     ]
    }
   }
+ },
+ "mutedNotif": {
+  "Inflation (CCPI vs NCPI)": true
  }
 }
