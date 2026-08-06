@@ -6469,8 +6469,5 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "cutoffOverride": {
-  "Treasury Bond Yield (%)": true
  }
 }
