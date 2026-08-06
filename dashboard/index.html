@@ -1205,9 +1205,15 @@ const MSG_CUTOFF_SECTIONS={
   'Treasury Bill':{
     hour:16,
     date:d=>{
+      // tbillCurve is {labels:[...],m3:[...],m6:[...],m12:[...]} — NOT an array — so its date is
+      // the last entry of its `labels` array, not tc[tc.length-1].date (which would silently never
+      // match since tc itself isn't an array). The curve is what updates daily; tbillAuction only
+      // gets a new entry on actual auction days, so prefer the curve's date first, falling back to
+      // the auction date only if no curve data exists at all — otherwise a day with only a curve
+      // update (no new auction) would keep showing a stale, older auction date in the notification.
       const ta=d.tbillAuction,tc=d.tbillCurve;
+      if(tc&&Array.isArray(tc.labels)&&tc.labels.length)return String(tc.labels[tc.labels.length-1]);
       if(Array.isArray(ta)&&ta.length&&ta[ta.length-1].date)return String(ta[ta.length-1].date);
-      if(Array.isArray(tc)&&tc.length&&tc[tc.length-1].date)return String(tc[tc.length-1].date);
       return null;
     }
   },
@@ -1412,61 +1418,31 @@ function currentCutoffStates(){
 // day for this comparison caused data to get stuck (a holiday right after the publish day looked
 // like "still the same session" and never released). Revealing a day early on a weekend/holiday
 // is harmless since the data still correctly shows its own real date, not today's.
-const DISPLAY_SNAPSHOT_KEY='mvs_display_snapshot';
-const DISPLAY_HOLDBACK_DAY_KEY='mvs_display_holdback_day';
+// The frozen "old" value shown pre-cutoff comes from newObj.cutoffSnapshot[label] — written into
+// data.json itself by the editor at publish time, tagged with the SL calendar day it was captured
+// on. Because this snapshot lives in data.json (not localStorage), every device reads the exact
+// same frozen value. (An earlier version of this function froze values in each browser's own
+// localStorage instead — that meant different devices could each freeze a different "old" value
+// depending on when they personally first loaded the page, or a first-ever visitor could see the
+// live unreleased value early. Reading a single server-provided snapshot fixes both.)
 function buildDisplayObject(newObj){
-  let stored=null;
-  try{const raw=localStorage.getItem(DISPLAY_SNAPSHOT_KEY);if(raw)stored=JSON.parse(raw);}catch(e){}
-  // Secondary source: the last raw fetch on record (kept for the change-notification diff,
-  // always the real data, never held back). Checked per-field, on every load — not just when
-  // `stored` is entirely missing — so a field that's blank in `stored` (e.g. from a brand-new
-  // browser's very first pre-cutoff load) gets replaced with a real value the moment one is
-  // available, instead of staying blank forever just because *some* snapshot object now exists.
-  let lastFull=null;
-  try{const rawFull=localStorage.getItem(MSG_LAST_FULL_KEY);if(rawFull)lastFull=JSON.parse(rawFull);}catch(e){}
-  // Per-SECTION holdback day, not one shared flag. A section stays marked as "was held back as
-  // of day X" only while it's actually still pre-cutoff — an 8:30AM section that already
-  // released hours ago must not be dragged along by a 5PM section that's still mid-hold, or a
-  // stale flag from yesterday's session would bypass its cutoff before today's 8:30AM ever
-  // arrives, silently capturing the value early and leaving nothing to notice at the real
-  // boundary (no notification fires because nothing looks "new" by the time it should).
-  let holdbackDays=null;
-  try{
-    const raw=localStorage.getItem(DISPLAY_HOLDBACK_DAY_KEY);
-    if(raw){
-      if(raw.trim().startsWith('{')){holdbackDays=JSON.parse(raw);} // new per-section format
-      else{holdbackDays={__legacy__:raw};} // old format was a bare date string, not JSON — don't feed it to JSON.parse
-    }
-  }catch(e){}
   const today=slDateKey();
   const display=JSON.parse(JSON.stringify(newObj)); // start from the real, current data
-  const newHoldbackDays={};
   // Manual escape hatch for correcting a mistake: if the editor publishes with
   // newObj.cutoffOverride[label]===true, that section's hold-back is skipped entirely — same
-  // real data shown to every user immediately, regardless of the clock. This lives in data.json
-  // itself (not localStorage), so it's identical for everyone, not just whoever set it.
+  // real data shown to every user immediately, regardless of the clock.
   const override=newObj.cutoffOverride||{};
+  const snapshots=newObj.cutoffSnapshot||{};
   for(const label in MSG_CUTOFF_SECTIONS){
     const pastCutoff=isPastCutoffToday(MSG_CUTOFF_SECTIONS[label].hour);
-    const priorHold=holdbackDays?(holdbackDays[label]!==undefined?holdbackDays[label]:holdbackDays.__legacy__):null;
-    const crossedIntoNewDay=(priorHold!=null&&priorHold!==today);
-    if(pastCutoff||crossedIntoNewDay||override[label]===true)continue; // cutoff passed, this section's own hold is stale from a previous day, or manually force-released — show the real data, same for everyone
+    if(pastCutoff||override[label]===true)continue; // cutoff passed, or manually force-released — show the real data, same for everyone
+    const snap=snapshots[label];
+    if(!snap||snap.day!==today)continue; // nothing was edited pre-cutoff today for this section — the current data is already the correct thing to show, same for everyone
     const keys=MSG_SECTION_MAP[label]||[];
     keys.forEach(k=>{
-      if(stored&&stored[k]!=null)display[k]=stored[k]; // a real value already on record — keep showing it
-      else if(lastFull&&lastFull[k]!=null)display[k]=lastFull[k]; // recover a real value from the last raw fetch instead
-      // else: truly nothing on record for this browser at all (its very first-ever visit,
-      // before this section's cutoff has passed today) — leave display[k] as newObj[k] (already
-      // the case, since display started as a clone of newObj) rather than blanking it. A blank
-      // "Not published yet" looked broken to every new visitor hitting the dashboard before
-      // cutoff, which in practice was far more common and more visible than the rare case this
-      // was protecting against — so a first-time visitor now sees the real current data too,
-      // same as everyone else, instead of nothing at all.
+      if(snap.values&&snap.values[k]!==undefined)display[k]=snap.values[k]; // show the value frozen at the start of today's pre-cutoff edit window
     });
-    newHoldbackDays[label]=today;
   }
-  try{localStorage.setItem(DISPLAY_SNAPSHOT_KEY,JSON.stringify(display));}catch(e){}
-  try{localStorage.setItem(DISPLAY_HOLDBACK_DAY_KEY,JSON.stringify(newHoldbackDays));}catch(e){}
   return display;
 }
 
