@@ -6437,7 +6437,9 @@
   "windows": true,
   "repoOvernight": true,
   "usdlkr": true,
-  "fxswaps": true
+  "fxswaps": true,
+  "spot": true,
+  "fxsummary": true
  },
  "headers": {
   "bond": [
