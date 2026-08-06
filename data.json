@@ -2412,52 +2412,72 @@
  "fxSummary": [
   {
    "tenor": "Spot",
-   "volume": 47.75,
-   "wa": 335.73
-  },
-  {
-   "tenor": "Tom",
-   "volume": null,
-   "wa": null
-  },
-  {
-   "tenor": "Cash",
-   "volume": 17.5,
+   "volume": 37.5,
    "wa": 335.59
   },
   {
+   "tenor": "Tom",
+   "volume": 4.5,
+   "wa": 335.52
+  },
+  {
+   "tenor": "Cash",
+   "volume": 20.75,
+   "wa": 335.48
+  },
+  {
    "tenor": "Sub Total",
-   "volume": 65.25,
+   "volume": 62.75,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 4,
-   "wa": 336.07
+   "volume": 12,
+   "wa": 335.91
   },
   {
    "tenor": "2W",
-   "volume": 2,
-   "wa": 336.29
+   "volume": 1.21,
+   "wa": 336.04
   },
   {
    "tenor": "3W",
-   "volume": 2,
-   "wa": 336.98
+   "volume": 0.21,
+   "wa": 336.5
   },
   {
    "tenor": "1M",
+   "volume": 7,
+   "wa": 337.08
+  },
+  {
+   "tenor": "2M",
+   "volume": 2.34,
+   "wa": 337.94
+  },
+  {
+   "tenor": "3M",
+   "volume": 4.75,
+   "wa": 34027
+  },
+  {
+   "tenor": "4M",
+   "volume": 10,
+   "wa": 341.47
+  },
+  {
+   "tenor": "5M",
    "volume": 4,
-   "wa": 337.38
+   "wa": 343.15
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 12,
+   "volume": 41.51,
    "wa": null
   },
   {
    "tenor": "GRAND TOTAL VOLUME",
-   "volume": 77.25,
+   "volume": 104.26,
    "wa": null
   }
  ],
@@ -2938,7 +2958,7 @@
   {
    "metric": "CCPI Month-on-Month (MoM %)",
    "apr": "2.10%",
-   "may": "0.2%",
+   "may": "0.20%",
    "show": true
   },
   {
