@@ -6436,6 +6436,7 @@
   ]
  },
  "mutedNotif": {
-  "Treasury Bill": true
+  "Treasury Bill": true,
+  "Inflation (CCPI vs NCPI)": true
  }
 }
