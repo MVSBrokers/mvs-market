@@ -2938,7 +2938,7 @@
   {
    "metric": "CCPI Month-on-Month (MoM %)",
    "apr": "2.10%",
-   "may": "0.2%",
+   "may": "20.0%",
    "show": true
   },
   {
@@ -6437,6 +6437,7 @@
  },
  "mutedNotif": {
   "Treasury Bond Yield (%)": true,
-  "Treasury Bill": true
+  "Treasury Bill": true,
+  "Inflation (CCPI vs NCPI)": true
  }
 }
