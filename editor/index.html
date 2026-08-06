@@ -389,6 +389,49 @@ const SL_FX_HOL_SET=new Set(["2026-01-03","2026-01-15","2026-02-01","2026-02-04"
 function _isoD(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 function _isUSWork(d){if(d.getDay()===0||d.getDay()===6)return false;return !US_FED_HOL_SET.has(_isoD(d));}
 function _isSLFXWork(d){if(d.getDay()===0||d.getDay()===6)return false;return !SL_FX_HOL_SET.has(_isoD(d));}
+// ── Cutoff snapshot helpers (mirror the dashboard's slDateKey/isPastCutoffToday exactly, so both
+// apps agree on what "today" and "past cutoff" mean) ──
+function slDateKey(){const slNow=new Date(Date.now()+330*60000);return slNow.getUTCFullYear()+'-'+String(slNow.getUTCMonth()+1).padStart(2,'0')+'-'+String(slNow.getUTCDate()).padStart(2,'0');}
+function isPastCutoffToday(hour){
+  const slNow=new Date(Date.now()+330*60000);
+  const todayD=new Date(slNow.getUTCFullYear(),slNow.getUTCMonth(),slNow.getUTCDate());
+  if(!_isSLFXWork(todayD))return true;
+  const slMinutesNow=slNow.getUTCHours()*60+slNow.getUTCMinutes();
+  return slMinutesNow>=hour*60;
+}
+// Which data.json keys belong to each cutoff-gated dashboard section (must match MSG_SECTION_MAP
+// in the dashboard for these 7 labels exactly, or the frozen snapshot would miss/include the
+// wrong fields).
+const CUTOFF_LABEL_KEYS={
+  'Value Dates':['valueDates'],
+  'Money & Repo Market':['callMarket','repoMarket','windows','liquidity'],
+  'Money & Repo Market — Repo Auctions':['repoOvernight','repoOMO'],
+  'Treasury Bill':['tbillAuction','tbillCurve'],
+  'Treasury Bond Yield (%)':['bonds','bondSecondary','tbondOut'],
+  'USD/LKR Foreign Exchange':['usdlkr','spot','crossRates','fxSwaps'],
+  'Volume of Foreign Exchange Market':['fxSummary']
+};
+// At publish time, for every cutoff section that's still pre-cutoff today, freeze the OLD
+// (currently-live) value into published.cutoffSnapshot[label] — but only the FIRST time today,
+// so a second edit before cutoff doesn't overwrite the frozen value with an already-new one.
+// This snapshot lives in data.json itself, so every device reads the identical frozen value —
+// unlike freezing in each browser's own localStorage, which could disagree between devices.
+function applyCutoffSnapshots(oldPublished,published){
+  const today=slDateKey();
+  if(!published.cutoffSnapshot||typeof published.cutoffSnapshot!=='object')published.cutoffSnapshot={};
+  const labelsSeen=new Set(Object.values(CUTOFF_SECTIONS).map(c=>c.label));
+  labelsSeen.forEach(label=>{
+    const info=Object.values(CUTOFF_SECTIONS).find(c=>c.label===label);
+    if(!info)return;
+    if(isPastCutoffToday(info.hour))return; // already past cutoff today — no need to freeze anything
+    const existing=published.cutoffSnapshot[label];
+    if(existing&&existing.day===today)return; // already froze a value earlier today — don't clobber it
+    const keys=CUTOFF_LABEL_KEYS[label]||[];
+    const values={};
+    keys.forEach(k=>{ if(oldPublished&&oldPublished[k]!=null)values[k]=oldPublished[k]; });
+    published.cutoffSnapshot[label]={day:today,values};
+  });
+}
 function _isBothWork(d){return _isUSWork(d)&&_isSLFXWork(d);}
 function _addWorkDays(d,n,checker){let x=new Date(d);let c=0;const dir=n>=0?1:-1;n=Math.abs(n);while(c<n){x.setDate(x.getDate()+dir);if(checker(x))c++;}return x;}
 function _addMonthsMF(spot,months){const tgt=new Date(spot.getFullYear(),spot.getMonth()+months,spot.getDate());let x=new Date(tgt);if(_isBothWork(x))return x;let fwd=new Date(x);while(!_isBothWork(fwd))fwd.setDate(fwd.getDate()+1);if(fwd.getMonth()===tgt.getMonth())return fwd;let bwd=new Date(x);while(!_isBothWork(bwd))bwd.setDate(bwd.getDate()-1);return bwd;}
@@ -826,8 +869,10 @@ async function publishKeys(keys,secId){
   for(let a=1;a<=5;a++){
     try{
       const {json,sha}=await getPublished(cfg);
-      let published=isAll?JSON.parse(JSON.stringify(LOADED)):(json&&typeof json==='object'?json:{});
+      const oldPublished=(json&&typeof json==='object')?json:{};
+      let published=isAll?JSON.parse(JSON.stringify(LOADED)):JSON.parse(JSON.stringify(oldPublished));
       if(!isAll){keys.forEach(k=>{if(LOADED[k]!=null)published[k]=LOADED[k];});}
+      applyCutoffSnapshots(oldPublished,published);
       recomputeMeta(published);
       await ghPut(cfg.owner,cfg.repo,cfg.branch,cfg.path,cfg.token,JSON.stringify(published,null,1),sha||null);
       PUBLISHED=published;markPublishStates();
