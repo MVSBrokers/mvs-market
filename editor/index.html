@@ -1135,6 +1135,12 @@ function parseWorkbook(wb,XLSX){
   const lbl=d=>{const dt=xlDate(d);if(dt)return dt.getDate()+" "+MON[dt.getMonth()];return d==null?"":String(d).trim();};
   const num=v=>{if(v==null||v==="")return null;const n=parseFloat(String(v).replace(/,/g,'').replace('%',''));return isNaN(n)?null:n;};
   const pct=v=>{if(v==null||v==="")return"";let n=parseFloat(String(v).replace('%',''));if(isNaN(n))return String(v);if(Math.abs(n)<=1.0001)n=n*100;return n.toFixed(2).replace(/\.00$/,'.0')+"%";};
+  // Inflation (CCPI/NCPI) MoM figures are typed directly as the percentage itself (e.g. "0.2" for
+  // 0.2%), unlike other fields here which may come from Excel's native fraction-percent format
+  // (e.g. 0.052 meaning 5.2%). Since real MoM inflation is routinely under 1%, sharing pct()'s
+  // "anything ≤1 must be a fraction, multiply by 100" heuristic would wrongly turn a genuine 0.2%
+  // into 20% — this formatter takes the typed number at face value instead.
+  const pctLiteral=v=>{if(v==null||v==="")return"";let n=parseFloat(String(v).replace('%',''));if(isNaN(n))return String(v);return n.toFixed(2).replace(/\.00$/,'.0')+"%";};
   const toISO=s=>{s=String(s).trim();const m=s.match(/^(\d{1,2})(?:-\d{1,2})?[.\-/](\d{1,2})[.\-/](\d{4})/);return m?(m[3]+"-"+String(m[2]).padStart(2,'0')+"-"+String(m[1]).padStart(2,'0')):s;};
   const o={};
   const mm=S(find('moneymorket')||find('moneymarket')||'');
@@ -1270,7 +1276,7 @@ function parseWorkbook(wb,XLSX){
     let cL=[],cV=[];for(let i=2;i<mc.length;i++)if(mc[i][3]!=null&&mc[i][4]!=null){cL.push(lbl(mc[i][3]));cV.push(num(mc[i][4]));}
     o.cbsl={labels:cL,values:cV};o.cbslHoldings=cV.length?cV[cV.length-1]:null;
     let res=[];for(let i=2;i<mc.length;i++)if(mc[i][6]!=null)res.push({month:String(mc[i][6]).trim(),value:String(mc[i][7]).trim(),show:true});o.reserves=res;
-    let inf=[];for(let i=2;i<mc.length;i++)if(mc[i][9]!=null)inf.push({metric:String(mc[i][9]).trim(),apr:pct(mc[i][10]),may:pct(mc[i][11]),show:true});o.inflation=inf;
+    let inf=[];for(let i=2;i<mc.length;i++)if(mc[i][9]!=null)inf.push({metric:String(mc[i][9]).trim(),apr:pctLiteral(mc[i][10]),may:pctLiteral(mc[i][11]),show:true});o.inflation=inf;
     let srr=[];for(let i=2;i<mc.length;i++)if(mc[i][13]!=null)srr.push({date:String(mc[i][13]).trim(),rate:pct(mc[i][14]),show:true});o.srr=srr;
     if(mc[2])o.tourism={apr:mc[2][17]==null?'':String(mc[2][17]).trim(),may:mc[2][18]==null?'':String(mc[2][18]).trim(),yoy:pct(mc[2][19])};
     if(mc[6])o.remittances={apr:mc[6][17]==null?'':String(mc[6][17]).trim(),may:mc[6][18]==null?'':String(mc[6][18]).trim(),yoy:pct(mc[6][19])};
