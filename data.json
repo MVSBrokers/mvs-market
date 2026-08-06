@@ -6434,5 +6434,8 @@
    "Month",
    "Reserve (USD Mn)"
   ]
+ },
+ "mutedNotif": {
+  "Inflation (CCPI vs NCPI)": true
  }
 }
