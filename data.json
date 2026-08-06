@@ -6436,7 +6436,7 @@
   ]
  },
  "mutedNotif": {
-  "Treasury Bill": true,
-  "Inflation (CCPI vs NCPI)": true
+  "Treasury Bond Yield (%)": true,
+  "Treasury Bill": true
  }
 }
