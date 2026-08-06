@@ -6445,5 +6445,8 @@
    "Reserve (USD Mn)"
   ]
  },
- "cutoffSnapshot": {}
+ "cutoffSnapshot": {},
+ "mutedNotif": {
+  "Inflation (CCPI vs NCPI)": true
+ }
 }
