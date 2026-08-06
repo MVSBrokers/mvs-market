@@ -6455,7 +6455,7 @@
    "Reserve (USD Mn)"
   ]
  },
- "mutedNotif": {
-  "Inflation (CCPI vs NCPI)": true
+ "cutoffOverride": {
+  "Treasury Bond Yield (%)": true
  }
 }
