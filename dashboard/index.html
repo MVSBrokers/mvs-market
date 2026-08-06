@@ -1125,6 +1125,7 @@ const HOLDBACK_FIX_VERSION_KEY='mvs_holdback_fix_version';
 const MSG_SECTION_MAP={
   'Volume of Foreign Exchange Market':['fxSummary'],
   'Outright Treasury Bond Transaction Volumes (Rs.Mn)':['bondTransVol'],
+  'Trade Summary':['bondTransVolLink','bondTransVolLinkDate'],
   'Money & Repo Market':['callMarket','repoMarket','windows','liquidity'],
   'Money & Repo Market — Repo Auctions':['repoOvernight','repoOMO'],
   'Policy Rate (OPR) History':['opr'],
@@ -1238,6 +1239,20 @@ const MSG_CUTOFF_SECTIONS={
       const dt=slOpeningDay(); // same T-2/T-1 working-day rule already used for the Opening Report date
       return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
     }
+  }
+};
+// Non-cutoff sections that still have a genuine "related data date" worth showing in their
+// notification card, even though they aren't held back by any cutoff clock. Without an entry
+// here, a section's notification just shows the raw publish timestamp (when the editor happened
+// to hit publish) instead of the date the underlying data actually refers to.
+const MSG_DATE_SECTIONS={
+  'Outright Treasury Bond Transaction Volumes (Rs.Mn)':d=>{
+    // The panel's own "Closing:" badge date — d.bondTransVol.date — is what's actually visible
+    // next to this section's title (e.g. "5th August 2026"). Deliberately NOT bondTransVolLinkDate,
+    // which is a separate, independent field that only labels the "Trade Summary" button and can
+    // hold a different date entirely.
+    const dt=d&&d.bondTransVol&&d.bondTransVol.date&&String(d.bondTransVol.date).trim();
+    return dt||null;
   }
 };
 // Is the current SL time at or after the section's own cutoff hour (fractional, e.g. 8.5 = 8:30 AM)?
@@ -1494,7 +1509,9 @@ async function loadData(silent=false){
             const dateStr=toOrdinalDate(cutoffSec.date(newObj));
             pushMsg(label,dateStr);
           }else{
-            pushMsg(label); // no cutoff concept for this section — notify immediately, no date
+            const dateFn=MSG_DATE_SECTIONS[label];
+            const dateStr=dateFn?toOrdinalDate(dateFn(newObj)):null;
+            pushMsg(label,dateStr); // shows the related data date when available; falls back to just the section name otherwise
           }
         });
       }catch(e){}
