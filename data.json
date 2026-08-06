@@ -6436,7 +6436,8 @@
   "mmrates": true,
   "windows": true,
   "repoOvernight": true,
-  "usdlkr": true
+  "usdlkr": true,
+  "fxswaps": true
  },
  "headers": {
   "bond": [
