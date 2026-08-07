@@ -976,6 +976,31 @@ function bondDisplay(v){
 // Where a maturity date has more than one outstanding series, the largest (benchmark) series is used.
 const BOND_COUPONS={"15.07.2026":1.0,"15.08.2026":11.5,"15.12.2026":11.25,"20.12.2026":5.0,"15.01.2027":11.4,"15.03.2027":[12.0,[9.0]],"01.05.2027":18.0,"15.06.2027":11.75,"15.07.2027":1.0,"21.07.2027":11.0,"15.08.2027":7.8,"15.09.2027":20.0,"15.10.2027":10.3,"15.12.2027":11.25,"15.01.2028":18.0,"15.02.2028":10.75,"15.03.2028":10.75,"15.04.2028":[12.0,[9.0]],"01.05.2028":9.0,"01.07.2028":9.0,"15.07.2028":1.0,"01.09.2028":11.5,"15.10.2028":11.0,"15.12.2028":11.5,"01.01.2029":13.0,"15.03.2029":[12.4,[7.5,5.0]],"01.05.2029":13.0,"15.05.2029":[12.0,[9.0]],"15.06.2029":11.75,"15.07.2029":1.0,"15.09.2029":11.0,"15.10.2029":10.35,"15.12.2029":11.0,"01.03.2030":9.5,"15.04.2030":[12.4,[7.5,5.0]],"15.05.2030":11.0,"15.06.2030":[12.0,[9.0]],"01.07.2030":9.75,"15.07.2030":1.0,"01.08.2030":10.0,"15.10.2030":11.0,"15.01.2031":[12.0,[9.0]],"15.03.2031":11.25,"15.05.2031":[12.4,[7.5,5.0]],"15.07.2031":1.0,"01.12.2031":12.0,"01.01.2032":8.0,"15.02.2032":[12.0,[9.0]],"15.06.2032":[12.4,[7.5,5.0]],"01.07.2032":18.0,"15.07.2032":1.0,"01.10.2032":9.0,"15.12.2032":11.5,"15.01.2033":[12.4,[7.5,5.0]],"15.03.2033":[12.0,[9.0]],"01.06.2033":9.0,"01.07.2033":13.25,"15.07.2033":1.0,"01.11.2033":9.0,"01.01.2034":13.25,"15.02.2034":[12.4,[7.5,5.0]],"15.04.2034":[12.0,[9.0]],"15.06.2034":10.75,"15.07.2034":1.0,"15.09.2034":10.25,"15.03.2035":[12.4,[7.5,5.0]],"15.05.2035":[12.0,[9.0]],"15.06.2035":10.7,"15.03.2036":0.5,"15.04.2036":[12.4,[7.5,5.0]],"15.06.2036":[12.0,[9.0]],"15.08.2036":10.85,"15.01.2037":[12.0,[9.0]],"15.05.2037":[12.4,[7.5,5.0]],"01.07.2037":10.75,"15.09.2037":0.5,"15.02.2038":[12.0,[9.0]],"15.06.2038":[12.4,[7.5,5.0]],"15.09.2038":0.5,"15.08.2039":10.5,"15.09.2039":0.5,"15.09.2040":0.5,"01.01.2041":12.0,"15.09.2041":0.5,"15.09.2042":0.5,"01.06.2043":9.0,"15.09.2043":0.5,"01.01.2044":13.5,"01.06.2044":13.5,"01.03.2045":12.5};
 
+// Live outstanding-bond coupon lookup, built fresh from data.json's tbondOut on every render
+// (see buildOutstandingCoupons() below). Keyed by "DD.MM.YYYY", same shape as BOND_COUPONS:
+// either a single annual coupon % (number), or [currentCoupon%, [futureStepCoupons...]].
+// This is checked BEFORE the static BOND_COUPONS snapshot, since it reflects the actual
+// outstanding series (correct even for bonds issued/updated after the 30 Jun 2026 snapshot).
+let OUTSTANDING_COUPONS={};
+// Parses d.tbondOut (maturity "YYYY-MM-DD" + series like "11.60%2031A" or
+// "12.00%09.00%2027A" for step-down restructured bonds) into the OUTSTANDING_COUPONS map.
+// Call this once per data load, before building/refreshing the bond table.
+function buildOutstandingCoupons(tbondOut){
+  const map={};
+  (tbondOut||[]).forEach(t=>{
+    if(!t||!t.maturity)return;
+    const mp=String(t.maturity).trim().split("-");           // YYYY-MM-DD
+    if(mp.length!==3)return;
+    const yr=mp[0],mon=mp[1],day=mp[2];
+    if(!yr||!mon||!day)return;
+    const matStr=day+"."+mon+"."+yr;                          // -> DD.MM.YYYY
+    const nums=(String(t.series||"").match(/(\d+(?:\.\d+)?)%/g)||[]).map(x=>parseFloat(x));
+    if(!nums.length||nums.some(isNaN))return;
+    map[matStr]=nums.length===1?nums[0]:[nums[0],nums.slice(1)];
+  });
+  OUTSTANDING_COUPONS=map;
+}
+
 // Modified/Macaulay Duration approximation for a bond table row.
 // matStr: "DD.MM.YYYY" maturity label; ytmPct: latest published yield (%) for that bond.
 // Assumes semi-annual coupon compounding (standard for LKR Treasury Bonds).
@@ -989,8 +1014,12 @@ function bondDuration(matStr,ytmPct){
   const now=new Date();
   const years=(matDate-now)/(365.25*86400000);
   if(!(years>0))return null;
-  const info=BOND_COUPONS[matStr];
-  const approx=(info==null);                       // no published coupon match → assume par bond
+  // Prefer the live outstanding-bond coupon (from data.json's tbondOut, current as of today)
+  // over the static 30-Jun-2026 BOND_COUPONS snapshot; fall back to the snapshot, then to
+  // treating it as an approximate par bond (coupon == yield) if neither has a match.
+  const info=(OUTSTANDING_COUPONS[matStr]!=null)?OUTSTANDING_COUPONS[matStr]:BOND_COUPONS[matStr];
+  const fromOutstanding=(OUTSTANDING_COUPONS[matStr]!=null);
+  const approx=(info==null);                       // no coupon match at all → assume par bond
   const couponUsed=Array.isArray(info)?info[0]:(info!=null?info:ytmPct);
   const isStep=Array.isArray(info);
   const n=years*2;                                  // semi-annual periods (fractional allowed)
@@ -1003,7 +1032,7 @@ function bondDuration(matStr,ytmPct){
     Dp=(1+y)/y-((1+y)+n*(c-y))/(c*(pw-1)+y);
   }
   const mac=Dp/2, mod=mac/(1+y);
-  return {mod:mod,mac:mac,couponUsed:couponUsed,isStep:isStep,approx:approx,years:years};
+  return {mod:mod,mac:mac,couponUsed:couponUsed,isStep:isStep,approx:approx,years:years,fromOutstanding:fromOutstanding};
 }
 
 function heatColor(v,min,max){
@@ -1922,6 +1951,7 @@ function render(d){
   const rawMatrix=bRows.map(r=>dateIdx.map(i=>bondDisplay((r.values||[])[i])));
   // Duration column: computed once for all rows so the colour scale reflects the full table
   // (short maturities = green/cooler, long maturities = red/hotter — i.e. more price-sensitive).
+  buildOutstandingCoupons(d.tbondOut);      // refresh live coupon lookup from this data load before computing durations
   const durMatrix=bRows.map((r,ri)=>{
     const mids=midMatrix[ri]||[];
     let latestYtm=null;for(let k=mids.length-1;k>=0;k--){if(mids[k]!=null){latestYtm=mids[k];break;}}
@@ -1948,7 +1978,7 @@ function render(d){
      if(durInfo){
        tdD.textContent=durInfo.mod.toFixed(2)+(durInfo.approx?"*":"");
        tdD.style.color=heatTextColor(durInfo.mod,durMin,durMax);tdD.style.fontSize="9px";tdD.style.textAlign="center";tdD.style.fontWeight="700";
-       tdD.title="Modified Duration \u2248 "+durInfo.mod.toFixed(2)+" yrs (Macaulay "+durInfo.mac.toFixed(2)+" yrs)\nCoupon used: "+durInfo.couponUsed.toFixed(2)+"%"+(durInfo.isStep?" (current step; coupon steps down later in life)":"")+(durInfo.approx?"\nNo published coupon on record \u2014 assumed par (coupon = yield)":"")+"\nYield used: "+(latestYtm!=null?latestYtm.toFixed(2):"\u2014")+"%\nTime to maturity: "+durInfo.years.toFixed(2)+" yrs\nAssumes semi-annual coupon compounding.";
+       tdD.title="Modified Duration \u2248 "+durInfo.mod.toFixed(2)+" yrs (Macaulay "+durInfo.mac.toFixed(2)+" yrs)\nCoupon used: "+durInfo.couponUsed.toFixed(2)+"%"+(durInfo.fromOutstanding?" (live outstanding series)":"")+(durInfo.isStep?" (current step; coupon steps down later in life)":"")+(durInfo.approx?"\nNo published coupon on record \u2014 assumed par (coupon = yield)":"")+"\nYield used: "+(latestYtm!=null?latestYtm.toFixed(2):"\u2014")+"%\nTime to maturity: "+durInfo.years.toFixed(2)+" yrs\nAssumes semi-annual coupon compounding.";
      }else{
        tdD.textContent="\u2014";tdD.style.color="#3a5575";tdD.style.textAlign="center";
      }
@@ -2036,7 +2066,7 @@ function render(d){
        if(durInfo){
          tdD.textContent=durInfo.mod.toFixed(2)+(durInfo.approx?"*":"");
          tdD.style.color=heatTextColor(durInfo.mod,durMin,durMax);tdD.style.fontSize="9px";tdD.style.textAlign="center";tdD.style.fontWeight="700";
-         tdD.title="Modified Duration \u2248 "+durInfo.mod.toFixed(2)+" yrs (Macaulay "+durInfo.mac.toFixed(2)+" yrs)\nCoupon used: "+durInfo.couponUsed.toFixed(2)+"%"+(durInfo.isStep?" (current step; coupon steps down later in life)":"")+(durInfo.approx?"\nNo published coupon on record \u2014 assumed par (coupon = yield)":"")+"\nYield used: "+(latestYtm!=null?latestYtm.toFixed(2):"\u2014")+"%\nTime to maturity: "+durInfo.years.toFixed(2)+" yrs\nAssumes semi-annual coupon compounding.";
+         tdD.title="Modified Duration \u2248 "+durInfo.mod.toFixed(2)+" yrs (Macaulay "+durInfo.mac.toFixed(2)+" yrs)\nCoupon used: "+durInfo.couponUsed.toFixed(2)+"%"+(durInfo.fromOutstanding?" (live outstanding series)":"")+(durInfo.isStep?" (current step; coupon steps down later in life)":"")+(durInfo.approx?"\nNo published coupon on record \u2014 assumed par (coupon = yield)":"")+"\nYield used: "+(latestYtm!=null?latestYtm.toFixed(2):"\u2014")+"%\nTime to maturity: "+durInfo.years.toFixed(2)+" yrs\nAssumes semi-annual coupon compounding.";
        }else{
          tdD.textContent="\u2014";tdD.style.color="#3a5575";tdD.style.textAlign="center";
        }
