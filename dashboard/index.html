@@ -1813,9 +1813,14 @@ function renderBondTxnVol(d){
       indexAxis:'y',
       responsive:true,
       maintainAspectRatio:false,
+      // Trigger the tooltip anywhere along the row (not only when the cursor is exactly on the
+      // thin bar itself) — with maxBarThickness capping the bar well below the row height, the
+      // old default (intersect:true) left a dead zone above/below each bar where hover did nothing.
+      interaction:{mode:'nearest',axis:'y',intersect:false},
+      hover:{mode:'nearest',axis:'y',intersect:false},
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:v=>' Rs. '+fmtN(v.raw)+' Mn'}}
+        tooltip:{mode:'nearest',axis:'y',intersect:false,callbacks:{label:v=>' Rs. '+fmtN(v.raw)+' Mn'}}
       },
       scales:{
         x:{ticks:{color:'#7fa3c8',font:{size:8.5},callback:v=>v>=1000?Math.round(v/1000)+'K':v},grid:{color:'rgba(77,163,232,.08)'},border:{color:'transparent'}},
