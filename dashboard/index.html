@@ -248,13 +248,17 @@ canvas{max-width:100%!important}
 .bond-freeze th:nth-child(-n+3){background:#091525!important;z-index:3}
 @media(max-width:480px){
   .bond-freeze{font-size:8px!important}
-  .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){min-width:74px;max-width:74px;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.15}
-  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:74px;min-width:44px;max-width:44px}
-  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:118px;min-width:44px;max-width:44px}
+  .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1){min-width:70px;max-width:70px;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.15}
+  .bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2){left:70px;min-width:38px;max-width:38px}
+  /* "Last Month" can hold a bid/ask pair like "12.20/12.50" (up to ~11 chars) — the old 44px
+     max-width with ellipsis silently cut this off (e.g. showed "9.95/..."). Widened it and
+     switched to wrapping instead of an ellipsis, so a value is never silently truncated even
+     if it's occasionally longer than expected — worst case it wraps onto a second line. */
+  .bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){left:108px;min-width:64px;max-width:64px;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.15}
   .bond-freeze th:nth-child(2),.bond-freeze th:nth-child(3){white-space:normal;overflow:visible;text-overflow:clip;line-height:1.1;padding-top:3px;padding-bottom:3px}
 }
 .event-strip.show{display:flex}
-.latest-card{border:1px solid #1a3050;border-radius:9px;padding:12px 14px;background:rgba(13,30,56,0.5)}
+.latest-card{border:1px solid #1a3050;border-radius:9px;padding:12px 14px;background:rgba(13,30,56,0.5);display:flex;flex-direction:column}
 .lc-h{font-size:10px;font-weight:700;color:#c8a84b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
 .lc-row{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid #14243d}
 .lc-row:last-child{border-bottom:none}
@@ -277,6 +281,17 @@ canvas{max-width:100%!important}
 .cmp-diff-pill.down{background:rgba(255,90,90,0.14);color:#ff6a6a}
 .cmp-diff-pill.up{background:rgba(90,220,150,0.14);color:#5adc96}
 .cmp-diff-pill.flat{background:rgba(120,150,190,0.14);color:#7fa3c8}
+@media(max-width:480px){
+  /* The Previous/Latest/Difference card splits into 3 equal columns — on a narrow phone each
+     gets under ~120px, too tight for e.g. "▲ 141.00 (+2.19%)" at the full desktop font size.
+     The outer .cmp-card clips overflow, so it was silently cutting the text off mid-string.
+     Shrink the fonts and let the pill wrap onto two lines if it still doesn't fit, rather than
+     ever cutting text off. */
+  .cmp-col{padding:10px 6px}
+  .cmp-value{font-size:14px}
+  .cmp-label{font-size:8.5px}
+  .cmp-diff-pill{font-size:10.5px;padding:4px 6px;white-space:normal;text-align:center}
+}
 .news-more-btn{display:inline-block;font-size:12px;font-weight:700;color:#0a1628;background:#c8a84b;padding:8px 16px;border-radius:7px;text-decoration:none;transition:.15s}
 .news-more-btn:hover{background:#dcc069}
 .event-strip::-webkit-scrollbar{height:5px}
@@ -463,7 +478,7 @@ canvas{max-width:100%!important}
     </div>
     <div class="panel">
       <div class="panel-title" data-sec="tbonds">Treasury Bond Yield(%)<span class="close-date" id="tbond-close"></span></div>
-      <canvas id="yieldChart" style="max-height:160px;margin-bottom:10px"></canvas>
+      <canvas id="yieldChart" style="max-height:280px;margin-bottom:10px"></canvas>
       <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span> → <span style="color:#ff8a78">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
       <div style="overflow-x:auto;max-width:100%">
         <table class="bond-freeze" style="font-size:9px">
@@ -2187,8 +2202,10 @@ function renderExtras(d){
    }
   }
   // Macro — tourism & remittances
-  {const t=d.tourism||{};set('dyn-tourism',`<tr><td>Earnings</td><td>${fmt2(t.apr)}</td><td>${fmt2(t.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(t.yoy)}</td></tr>`);}
-  {const r=d.remittances||{};set('dyn-remit',`<tr><td>Inflows</td><td>${fmt2(r.apr)}</td><td>${fmt2(r.may)}</td><td style="color:#6dd4a0;font-weight:700">${fmt2(r.yoy)}</td></tr>`);}
+  // M-o-M change color must reflect direction, not always green — "-2.95%" is a decline.
+  const chgClr=v=>(v!=null&&String(v).trim().startsWith('-'))?'#ff8a78':'#6dd4a0';
+  {const t=d.tourism||{};set('dyn-tourism',`<tr><td>Earnings</td><td>${fmt2(t.apr)}</td><td>${fmt2(t.may)}</td><td style="color:${chgClr(t.yoy)};font-weight:700">${fmt2(t.yoy)}</td></tr>`);}
+  {const r=d.remittances||{};set('dyn-remit',`<tr><td>Inflows</td><td>${fmt2(r.apr)}</td><td>${fmt2(r.may)}</td><td style="color:${chgClr(r.yoy)};font-weight:700">${fmt2(r.yoy)}</td></tr>`);}
   // Global — FOMC
   set('dyn-fomc',(d.fomc||[]).filter(r=>r.show!==false).map(r=>`<tr><td>${escHtml(r.date)}</td><td>${escHtml(r.range)}</td><td>${fmt2(r.repo)}</td><td>${fmt2(r.rrepo)}</td></tr>`).join('')||'<tr><td colspan="4" style="text-align:center;color:#5a7a9a;font-style:italic;padding:10px">Not published yet</td></tr>');
   {const fk=(d.keyDates||[]).find(k=>/fomc/i.test(k.label));if(fk&&E('dyn-fomc-next')){const i=eventDayInfo(fk.date);E('dyn-fomc-next').textContent='Next FOMC Meeting: '+i.dstr+(i.daysTxt?'  ('+i.daysTxt+')':'');}}
@@ -2267,7 +2284,11 @@ function renderExtras(d){
    const matCardMulti=(title,list,isBond)=>{
      if(!list.length)return '<div class="lc-h">'+title+'</div><div class="lc-none">None outstanding</div>';
      const total=list.reduce((s,m)=>{const v=parseFloat(String(m.x.face||'').replace(/,/g,''));return s+(isNaN(v)?0:v);},0);
-     const totalRow=total>0?'<div style="padding:7px 0;border-top:2px solid #c8a84b;margin-top:2px"><div class="lc-row" style="border:none;padding:2px 0"><span class="lc-k" style="color:#c8a84b;font-weight:700">Total Face Value</span><span class="lc-v" style="color:#c8a84b;font-weight:800;font-size:13px">Rs. '+total.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' Mn</span></div></div>':'';
+     // margin-top:auto pushes this to the bottom of the card — otherwise, when this box has
+     // fewer maturity entries than its sibling (grid stretches both to equal height), the total
+     // ends up floating mid-box with a big empty gap below it instead of lining up with the
+     // sibling box's total.
+     const totalRow=total>0?'<div style="padding:7px 0;border-top:2px solid #c8a84b;margin-top:auto"><div class="lc-row" style="border:none;padding:2px 0"><span class="lc-k" style="color:#c8a84b;font-weight:700">Total Face Value</span><span class="lc-v" style="color:#c8a84b;font-weight:800;font-size:13px">Rs. '+total.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' Mn</span></div></div>':'';
      return '<div class="lc-h">'+title+'</div>'+list.map(m=>matEntry(m,isBond)).join('')+totalRow;
    };
    {const e=document.getElementById('latest-tbill-mat');if(e)e.innerHTML=matCardMulti('Next T-Bill Maturities (3M · 6M · 12M)',nextMats(d.tbillOut,3),false);}
@@ -2473,7 +2494,7 @@ function buildCharts(d){
   const yDS=[];
   if(yCol>=0)yDS.push({label:"Previous ("+(autoLabels[yCol]||yBHead[yCol])+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
   yDS.push({label:"Latest ("+(tCol>=0?(autoLabels[tCol]||yBHead[tCol]):"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
-  charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels,datasets:yDS},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:true,labels:{color:tc,font:{size:10},boxWidth:18,usePointStyle:false,padding:12}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
+  charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels,datasets:yDS},options:{responsive:true,maintainAspectRatio:true,aspectRatio:1.7,plugins:{legend:{display:true,labels:{color:tc,font:{size:10},boxWidth:18,usePointStyle:false,padding:12}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
 
   // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
   destroyChart("g10");
