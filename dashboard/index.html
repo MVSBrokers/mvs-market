@@ -2380,10 +2380,23 @@ function buildCharts(d){
   }
   // Tourism & Remittances — table only, no chart
   // New macro tables — each a simple bar chart + recent table (no granularity buttons)
+  // Sorts "YYYY" or "YYYY - QN" period labels into a chronological (ascending) numeric key.
+  // Used so the bar chart and its table always read oldest→newest, left-to-right / top-to-bottom,
+  // regardless of the order rows happen to be entered/saved in the editor (e.g. gdpGrowth is
+  // currently saved newest-first, which without this produced a chart running backwards and a
+  // Delta column comparing each quarter to the FOLLOWING one instead of the preceding one).
+  const periodSortKey=p=>{
+    const s=String(p==null?"":p).trim();
+    const qm=s.match(/^(\d{4})\s*-\s*Q(\d)$/i);
+    if(qm)return parseInt(qm[1])*10+parseInt(qm[2]);
+    const ym=s.match(/^(\d{4})$/);
+    if(ym)return parseInt(ym[1])*10;
+    return 0;
+  };
   const barChart=(key,rows,labelKey,valKey,color,unit,dec)=>{rows=(rows||[]).filter(r=>r.show!==false);
     destroyChart(key);
     const cv=document.getElementById(key+"Chart");if(!cv)return;
-    const r=(rows||[]).filter(x=>x&&x[valKey]!=null);
+    const r=(rows||[]).filter(x=>x&&x[valKey]!=null).slice().sort((a,b)=>periodSortKey(a[labelKey])-periodSortKey(b[labelKey]));
     if(!r.length){const t=document.getElementById(key+"Tbl");if(t)t.innerHTML='<div class="np">Not published yet</div>';return;}
     charts[key]=new Chart(cv,{type:"bar",data:{labels:r.map(x=>x[labelKey]),datasets:[{label:unit,data:r.map(x=>x[valKey]),backgroundColor:r.map(x=>x[valKey]<0?"#e0443a":color),borderRadius:4,maxBarThickness:30}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:9}},grid:{color:gc}}}}});
     recentTable(key+"Tbl",r.map(x=>x[labelKey]),r.map(x=>x[valKey]),unit,dec,r.length);
