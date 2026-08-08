@@ -100,6 +100,19 @@ code{background:#081424;padding:1px 6px;border-radius:4px;color:#c8a84b;font-siz
 <h1>MVS Market Data — Editor</h1>
 <div class="sub">Import <code>MarketData.xlsx</code>, review &amp; edit each section, then publish sections individually or all at once.</div>
 
+<!-- 0 CUTOFF MASTER — one button that bypasses/restores every cutoff-gated section's normal
+     release time at once (Volume of FX Market, Money & Repo Market, Repo Auctions, Treasury
+     Bill, Treasury Bond Yield, USD/LKR FX group, Value Dates). Previously each of those sections
+     had its own toggle button scattered through the list below, which was confusing (some of
+     them silently shared one flag). This single header button now controls all of them. -->
+<div class="card" id="cutoff-master-box">
+  <h2>Cutoff Override — all sections</h2>
+  <div class="row" style="align-items:center;gap:12px">
+    <button id="cutoff-master-btn" class="vis-btn on" onclick="toggleAllCutoffs(event)">⏱ Bypass All Cutoffs</button>
+    <span class="hint">Normally each cutoff-gated section holds back new data until its own release time (8:30 AM / 4:00 PM / 5:00 PM SL). Click this to publish today's real data immediately, everywhere, for every one of those sections at once — use it to push out a correction without waiting. Click again to restore normal cutoffs.</span>
+  </div>
+</div>
+
 <!-- 1 GITHUB -->
 <div class="card" id="setup-box">
   <h2>1 · Connect GitHub (one-time)</h2>
@@ -224,7 +237,7 @@ const NOTIF_TOGGLE_SECTIONS={
   usdlkr:'USD/LKR Foreign Exchange',
   reserves:'Foreign Currency Reserves',
   inflation:'Inflation (CCPI vs NCPI)',
-  tourism:'Tourism & Remittances',
+  tourism:['Tourism','Remittances'],
   gdp:'Quarterly Real GDP Growth',
   bop:'Balance of Payment (USD bn)',
   debtgdp:'Debt to GDP (%)',
@@ -252,7 +265,8 @@ const CUTOFF_SECTIONS={
   spot:{label:'USD/LKR Foreign Exchange',hour:16,hourLabel:'4:00 PM'},
   fxswaps:{label:'USD/LKR Foreign Exchange',hour:16,hourLabel:'4:00 PM'},
   cross:{label:'USD/LKR Foreign Exchange',hour:16,hourLabel:'4:00 PM'},
-  valuedates:{label:'Value Dates',hour:16,hourLabel:'4:00 PM'}
+  valuedates:{label:'Value Dates',hour:16,hourLabel:'4:00 PM'},
+  cbsl:{label:'CBSL Holdings of Government Securities',hour:16,hourLabel:'4:00 PM'}
 };
 
 // ── CONFIG / GITHUB ──────────────────────────────────────
@@ -657,6 +671,7 @@ function countPoints(secKey){
 }
 function renderSections(){
   if(!LOADED){return;}
+  renderCutoffMaster();
   // remember which sections are open + scroll position so add/delete-row doesn't collapse the table
   const openIds=[...document.querySelectorAll('#sections .sec.open')].map(el=>el.id);
   const sy=window.scrollY;
@@ -673,11 +688,14 @@ function renderSections(){
     const canHide=!NO_HIDE.has(sec.id);
     const notifKey=NOTIF_TOGGLE_SECTIONS[sec.id];
     const canMute=!!notifKey;
-    const muted=canMute&&!!(LOADED.mutedNotif&&LOADED.mutedNotif[notifKey]);
-    const cutoffInfo=CUTOFF_SECTIONS[sec.id];
-    const canCutoff=!!cutoffInfo;
-    const cutoffOn=canCutoff&&!!(LOADED.cutoffOverride&&LOADED.cutoffOverride[cutoffInfo.label]);
-    const cutoffShared=canCutoff&&['usdlkr','spot','fxswaps','cross'].includes(sec.id)?' (shared with USD/LKR Rate, FX Swaps & Cross-Currency Rates)':'';
+    // notifKey is usually one dashboard label, but can be an array when one editor section
+    // covers data the dashboard tracks as multiple separate notifications (e.g. "tourism" here
+    // covers both the "Tourism" and "Remittances" labels) — shown as muted only once every label
+    // in the group is actually muted, mirroring the "bypass all" logic of the cutoff master button.
+    const notifKeys=canMute?(Array.isArray(notifKey)?notifKey:[notifKey]):[];
+    const muted=canMute&&notifKeys.length>0&&notifKeys.every(k=>!!(LOADED.mutedNotif&&LOADED.mutedNotif[k]));
+    // Individual per-section cutoff buttons have been replaced by the single "Cutoff Override —
+    // all sections" button at the top of the page (see cutoff-master-box).
     let body;
     if(sec.id==='results'){
       const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:(LOADED.marketNews?[String(LOADED.marketNews)]:[]);
@@ -769,7 +787,7 @@ function renderSections(){
     return groupHdr+`<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
       <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
         <div><div class="st">${sec.title}${hid?' <span class="hid-tag">hidden on dashboard</span>':''}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
-        <div class="right">${canCutoff?`<button class="vis-btn ${cutoffOn?'off':'on'}" onclick="event.stopPropagation();toggleCutoff('${sec.id}',event)" title="${cutoffOn?'Cutoff bypassed — new data shows immediately, any time of day. Click to restore the normal '+cutoffInfo.hourLabel+' cutoff.'+cutoffShared:'Normal cutoff: holds new data back until '+cutoffInfo.hourLabel+' SL time. Click to bypass and publish immediately — use this for correcting a mistake.'+cutoffShared}">${cutoffOn?'🔓 Cutoff OFF':'⏱ '+cutoffInfo.hourLabel}</button>`:''}${canMute?`<button class="vis-btn ${muted?'off':'on'}" onclick="event.stopPropagation();toggleMute('${sec.id}')" title="${muted?'Notification muted — click to turn it back on':'Notification on — click to mute it'}">${muted?'🔕 Muted':'🔔 Notify'}</button>`:''}${canHide?`<button class="vis-btn ${hid?'off':'on'}" onclick="event.stopPropagation();toggleHide('${sec.id}')" title="${hid?'Hidden on the dashboard — click to show it':'Showing on the dashboard — click to hide it'}">${hid?'🚫 Hidden':'👁 Shown'}</button>`:''}<span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
+        <div class="right">${canMute?`<button class="vis-btn ${muted?'off':'on'}" onclick="event.stopPropagation();toggleMute('${sec.id}')" title="${muted?'Notification muted — click to turn it back on':'Notification on — click to mute it'}">${muted?'🔕 Muted':'🔔 Notify'}</button>`:''}${canHide?`<button class="vis-btn ${hid?'off':'on'}" onclick="event.stopPropagation();toggleHide('${sec.id}')" title="${hid?'Hidden on the dashboard — click to show it':'Showing on the dashboard — click to hide it'}">${hid?'🚫 Hidden':'👁 Shown'}</button>`:''}<span class="sec-pub-state draft" id="pst-${sec.id}">DRAFT</span><span style="color:#5a7a9a;font-size:11px">▾</span></div>
       </div>
       <div class="sec-body">
         ${presentEff?body:'<span class="muted">This section has no data in the imported workbook.</span>'}
@@ -923,9 +941,13 @@ function toggleMute(id){
   if(!LOADED){showToast('No data loaded', 'err', 'Import your Excel workbook before publishing.');return;}
   const notifKey=NOTIF_TOGGLE_SECTIONS[id];
   if(!notifKey)return;
+  const notifKeys=Array.isArray(notifKey)?notifKey:[notifKey];
   applyEdits();
   if(!LOADED.mutedNotif||typeof LOADED.mutedNotif!=='object')LOADED.mutedNotif={};
-  if(LOADED.mutedNotif[notifKey])delete LOADED.mutedNotif[notifKey];else LOADED.mutedNotif[notifKey]=true;
+  // Currently "muted" only when every label in the group is muted (see renderSections) — so a
+  // partial state resolves to fully-muted first; a second click then unmutes the whole group.
+  const allMuted=notifKeys.every(k=>!!LOADED.mutedNotif[k]);
+  notifKeys.forEach(k=>{if(allMuted)delete LOADED.mutedNotif[k];else LOADED.mutedNotif[k]=true;});
   try{localStorage.setItem('mvs_editor_muted',JSON.stringify(LOADED.mutedNotif));}catch(e){}
   saveLocal();renderSections();
   publishMutedNotif();
@@ -975,6 +997,40 @@ function toggleCutoff(id,ev){
   if(btn){btn.disabled=true;btn.textContent='⏳ Publishing…';}
   _cutoffPublishBusy=true;
   publishCutoffOverride(btn).finally(()=>{_cutoffPublishBusy=false;});
+}
+// Single master control for every cutoff-gated section at once (replaces the old per-section
+// buttons). Distinct dashboard labels can be driven by more than one editor id (e.g. usdlkr/
+// spot/fxswaps/cross all share one "USD/LKR Foreign Exchange" flag) — dedupe to the label list.
+function allCutoffLabels(){return [...new Set(Object.values(CUTOFF_SECTIONS).map(c=>c.label))];}
+function isAllCutoffOn(){
+  if(!LOADED||!LOADED.cutoffOverride)return false;
+  const labels=allCutoffLabels();
+  return labels.length>0&&labels.every(l=>!!LOADED.cutoffOverride[l]);
+}
+function renderCutoffMaster(){
+  const btn=document.getElementById('cutoff-master-btn');
+  if(!btn)return;
+  const on=isAllCutoffOn();
+  btn.className='vis-btn '+(on?'off':'on');
+  btn.textContent=on?'🔓 All Cutoffs Bypassed — click to restore':'⏱ Bypass All Cutoffs';
+  btn.title=on
+    ?'Every cutoff-gated section is showing its real, current data immediately, bypassing its normal release time. Click to restore normal cutoffs everywhere.'
+    :'Each section normally releases on its own schedule (8:30 AM / 4:00 PM / 5:00 PM SL). Click to bypass ALL of them at once and publish today\'s real data immediately, everywhere — use this to push out a correction without waiting.';
+}
+function toggleAllCutoffs(ev){
+  if(!LOADED){showToast('No data loaded', 'err', 'Import your Excel workbook before publishing.');return;}
+  if(_cutoffPublishBusy){showToast('Please wait', 'err', 'Another cutoff update is still publishing — try again in a second.');return;}
+  applyEdits();
+  if(!LOADED.cutoffOverride||typeof LOADED.cutoffOverride!=='object')LOADED.cutoffOverride={};
+  const labels=allCutoffLabels();
+  const turnOn=!isAllCutoffOn(); // partial state resolves to fully-on first; a second click then turns everything off
+  labels.forEach(l=>{if(turnOn)LOADED.cutoffOverride[l]=true;else delete LOADED.cutoffOverride[l];});
+  try{localStorage.setItem('mvs_editor_cutoff',JSON.stringify(LOADED.cutoffOverride));}catch(e){}
+  saveLocal();
+  const btn=ev&&ev.currentTarget;
+  if(btn){btn.disabled=true;btn.textContent='⏳ Publishing…';}
+  _cutoffPublishBusy=true;
+  publishCutoffOverride(btn).finally(()=>{_cutoffPublishBusy=false;renderCutoffMaster();});
 }
 async function publishCutoffOverride(btn){
   const cfg=loadConfig();
