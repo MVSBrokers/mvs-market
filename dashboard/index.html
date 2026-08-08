@@ -1154,7 +1154,7 @@ const HOLDBACK_FIX_VERSION_KEY='mvs_holdback_fix_version';
 const MSG_SECTION_MAP={
   'Volume of Foreign Exchange Market':['fxSummary'],
   'Outright Treasury Bond Transaction Volumes (Rs.Mn)':['bondTransVol'],
-  'Trade Summary':['bondTransVolLink','bondTransVolLinkDate'],
+  'Government Securities Secondary Market Trade Summary':['bondTransVolLink','bondTransVolLinkDate'],
   'Money & Repo Market':['callMarket','repoMarket','windows','liquidity'],
   'Money & Repo Market — Repo Auctions':['repoOvernight','repoOMO'],
   'Policy Rate (OPR) History':['opr'],
@@ -1165,7 +1165,8 @@ const MSG_SECTION_MAP={
   'CBSL FX Market Intervention':['fxIntervention','fxInterventionLastReserve'],
   'Foreign Currency Reserves':['reserves'],
   'Inflation (CCPI vs NCPI)':['inflation'],
-  'Tourism & Remittances':['tourism','remittances'],
+  'Tourism':['tourism'],
+  'Remittances':['remittances'],
   'Quarterly Real GDP Growth':['gdpGrowth'],
   'Balance of Payment (USD bn)':['bop'],
   'Debt to GDP (%)':['debtGdp'],
@@ -1251,6 +1252,13 @@ const MSG_CUTOFF_SECTIONS={
     hour:16,
     date:d=>{
       const dt=slWorkDay(0); // today's SL working day — closing data, gated by the 4PM cutoff
+      return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+    }
+  },
+  'CBSL Holdings of Government Securities':{
+    hour:16,
+    date:d=>{
+      const dt=slWorkDay(0); // today's SL working day — closing data, gated by the 4PM cutoff, same rule as Treasury Bond Yield
       return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
     }
   },
@@ -1656,7 +1664,8 @@ const SECTION_NAV={
   'CBSL FX Market Intervention':{page:'page-fx',sel:'#fxi-panel'},
   'Foreign Currency Reserves':{page:'page-macro',sel:'[data-sec="reserves"]'},
   'Inflation (CCPI vs NCPI)':{page:'page-macro',sel:'[data-sec="inflation"]'},
-  'Tourism & Remittances':{page:'page-macro',sel:'[data-sec="tourism"]'},
+  'Tourism':{page:'page-macro',sel:'[data-sec="tourism"]'},
+  'Remittances':{page:'page-macro',sel:'[data-sec="tourism"]'},
   'Quarterly Real GDP Growth':{page:'page-macro',sel:'[data-sec="gdp"]'},
   'Balance of Payment (USD bn)':{page:'page-macro',sel:'[data-sec="bop"]'},
   'Debt to GDP (%)':{page:'page-macro',sel:'[data-sec="debtgdp"]'},
@@ -1767,6 +1776,18 @@ function renderTbillAuction(data,targetId){
   });
 }
 
+
+// Money Market closing-date label — shared by the "mm-close" panel badge and the repo-auction
+// empty states, so both always agree. Same logic as the badge: manual mmDate override in the
+// editor, else auto based on the 5PM SL cutoff on the last SL working day.
+function getMoneyMarketCloseLabel(d){
+  const ov=v=>(v!=null&&String(v).trim()!=="")?String(v).trim():null;
+  if(ov(d.mmDate))return escHtml(ov(d.mmDate));
+  const slNow_cd=new Date(Date.now()+330*60000);
+  const today=new Date(slNow_cd.getUTCFullYear(),slNow_cd.getUTCMonth(),slNow_cd.getUTCDate());
+  const mmDate=!_isSLFXWork(today)?slWorkDay(0):(slNow_cd.getUTCHours()>=17?slWorkDay(0):slWorkDay(1));
+  return fmtOrd(mmDate);
+}
 
 // ── Outright Treasury Bond Transaction Volumes (Opening Report only) ──
 let _bondtxnChart=null;
@@ -2195,7 +2216,7 @@ function renderExtras(d){
       <div class="repo-stat"><span class="rk">Min Rate (%)</span><span class="rv">${fmt2(r.minRate)}</span></div>
       <div class="repo-stat"><span class="rk">Max Rate (%)</span><span class="rv">${fmt2(r.maxRate)}</span></div>
       <div class="repo-stat"><span class="rk">W.A. Yield (%)</span><span class="rv" style="color:#c8a84b">${fmt2(r.waYield)}</span></div>
-    </div></div>`).join(''):'<div class="repo-empty">📭 No auction today</div>');}
+    </div></div>`).join(''):'<div class="repo-empty">No auction — '+getMoneyMarketCloseLabel(d)+'</div>');}
   {const rows=(d.repoOMO||[]).filter(r=>r.show!==false);
    set('dyn-repoOMO',rows.length?rows.map(r=>`<div class="repo-card"><div class="repo-card-date">${escHtml(r.auction)} <span style="color:#7fa3c8;font-weight:400">→ settles ${escHtml(r.settlement)}</span></div><div class="repo-stat-grid">
       <div class="repo-stat"><span class="rk">Repo Offered</span><span class="rv">${fmt2(r.repoOffered)}</span></div>
@@ -2207,7 +2228,7 @@ function renderExtras(d){
       <div class="repo-stat"><span class="rk">W.A. Yield (%)</span><span class="rv" style="color:#c8a84b">${fmt2(r.waYield)}</span></div>
       <div class="repo-stat"><span class="rk">Maturity</span><span class="rv">${escHtml(r.maturity)}</span></div>
       <div class="repo-stat"><span class="rk">Tenure (days)</span><span class="rv">${r.tenure!=null?r.tenure:'—'}</span></div>
-    </div></div>`).join(''):'<div class="repo-empty">📭 No auction today</div>');}
+    </div></div>`).join(''):'<div class="repo-empty">No auction — '+getMoneyMarketCloseLabel(d)+'</div>');}
   // FI — secondary yields (table)
   set('dyn-secondary',(d.bondSecondary||[]).filter(s=>s.show!==false).map((s,i)=>`<tr style="background:${i%2?'rgba(13,30,56,.4)':'transparent'}"><td style="padding:3px 10px;color:#d4e4f4;white-space:nowrap">${fmtMatDate(s.maturity)}</td><td style="padding:3px 10px;text-align:right;color:#6dd4a0;font-weight:600">${fmt2(s.bid)}</td><td style="padding:3px 10px;text-align:right;color:#4da3e8;font-weight:600">${fmt2(s.ask)}</td></tr>`).join('')||'<tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>');
   // Announcement: auction schedules + outstanding (next auction highlighted)
@@ -2282,12 +2303,7 @@ function renderExtras(d){
   const e=document.getElementById(id);
   if(!e)return;
  if(id==="mm-close"){
-  // Money Market: override via mmDate, else auto based on 5PM SL cutoff
-  if(ov(d.mmDate)){e.innerHTML="Closing: "+escHtml(ov(d.mmDate));return;}
-  let today=new Date(slNow_cd.getUTCFullYear(),slNow_cd.getUTCMonth(),slNow_cd.getUTCDate());
-  let mmDate;
-  if(!_isSLFXWork(today)){mmDate=slWorkDay(0);}else{mmDate=slNow_cd.getUTCHours()>=17?slWorkDay(0):slWorkDay(1);}
-  e.innerHTML="Closing: "+fmtOrd(mmDate);
+  e.innerHTML="Closing: "+getMoneyMarketCloseLabel(d);
  }else if(id==="secondary-close"){
   // T-Bill Secondary: override via secondaryDate, else fall back to closingDate auto
   const sc=ov(d.secondaryDate)?escHtml(ov(d.secondaryDate)):cdEl;
