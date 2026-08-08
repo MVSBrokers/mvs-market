@@ -2307,10 +2307,10 @@
     },
     {
      "month": "JULY",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 348.6,
+     "sales": 0,
+     "netYtd": 904.9999999999999,
+     "reserve": 6591
     },
     {
      "month": "AUGUST",
@@ -2348,12 +2348,12 @@
      "reserve": null
     }
    ],
-   "totalPurchase": 982.3999999999999,
+   "totalPurchase": 1331,
    "totalSales": 426.00000000000006,
-   "netForYear": 556.3999999999999
+   "netForYear": 904.9999999999999
   }
  ],
- "fxInterventionLastReserve": 6450,
+ "fxInterventionLastReserve": 6591,
  "fxSummary": [
   {
    "tenor": "Spot",
@@ -2570,7 +2570,8 @@
    "10 Jul",
    "17 Jul",
    "24 Jul",
-   "31 Jul"
+   "31 Jul",
+   "6 Aug"
   ],
   "values": [
    143617,
@@ -2590,7 +2591,8 @@
    168895,
    176561,
    182386,
-   188822
+   188822,
+   192858
   ]
  },
  "cbsl": {
@@ -2910,6 +2912,11 @@
    "month": "June",
    "value": "6,450 Mn",
    "show": true
+  },
+  {
+   "month": "July",
+   "value": "6,591 Mn",
+   "show": true
   }
  ],
  "inflation": [
@@ -2966,9 +2973,9 @@
   "yoy": "-2.95%"
  },
  "remittances": {
-  "apr": "847.00 Mn",
-  "may": "695 Mn",
-  "yoy": "-17.96%"
+  "apr": "695 Mn",
+  "may": "777.6 Mn",
+  "yoy": "11.88%"
  },
  "gdpGrowth": [
   {
@@ -6408,7 +6415,7 @@
   "Total Amount Accepted: Rs. 140.0 Billion",
   "Auction Date: 05 August 2026"
  ],
- "date": "2026-08-07",
+ "date": "2026-08-08",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
