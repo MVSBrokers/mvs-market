@@ -475,6 +475,28 @@ canvas{max-width:100%!important}
           </table>
         </div>
       </div>
+      <!-- Secondary Market Closing Yields — moved inside the Treasury Bill box (was previously
+           its own separate panel further down) so it sits alongside the other T-Bill sub-sections. -->
+      <div style="border-top:1px solid #1a3050;padding-top:10px;margin-top:10px" data-sec="secondary">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px">
+          <span style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase">Secondary Market Closing Yields</span>
+          <span class="close-date" id="secondary-close"></span>
+        </div>
+        <div style="max-height:320px;overflow-y:auto">
+          <table style="font-size:10px;border-collapse:collapse;white-space:nowrap">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Maturity Date</th>
+                <th style="text-align:right;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Bid (%)</th>
+                <th style="text-align:right;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Ask (%)</th>
+              </tr>
+            </thead>
+            <tbody id="dyn-secondary">
+              <tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
     <div class="panel">
       <div class="panel-title" data-sec="tbonds">Treasury Bond Yield(%)<span class="close-date" id="tbond-close"></span></div>
@@ -489,29 +511,7 @@ canvas{max-width:100%!important}
     </div>
   </div>
 
-
-  <div class="full-grid">
-  <div class="panel">
-    <div class="panel-title" data-sec="secondary">T-Bill Secondary Market Closing Yields<span class="close-date" id="secondary-close"></span></div>
-    <div style="max-height:320px;overflow-y:auto">
-      <table style="font-size:10px;border-collapse:collapse;white-space:nowrap">
-        <thead>
-          <tr>
-            <th style="text-align:left;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Maturity Date</th>
-            <th style="text-align:right;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Bid (%)</th>
-            <th style="text-align:right;padding:4px 10px;color:#7fa3c8;border-bottom:2px solid #1a3050;background:#091525">Ask (%)</th>
-          </tr>
-        </thead>
-        <tbody id="dyn-secondary">
-          <tr><td colspan="3" style="text-align:center;color:#5a7a9a;font-style:italic;padding:12px">Not published yet</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  </div>
-
-  </div>
-
+</div>
   <!-- PAGE: FX -->
   <div class="page" id="page-fx">
 
