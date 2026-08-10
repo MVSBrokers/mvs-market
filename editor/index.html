@@ -354,6 +354,45 @@ function extractDateFromText(text){
 //   2. Fetching the actual linked document and scanning its content for a date (best-effort —
 //      many servers, especially government file APIs, block cross-origin fetches via CORS, in
 //      which case this step silently fails and the field is simply left for manual entry)
+// Lazy-loaded PDF.js — needed because a plain fetch().text() on a PDF returns its raw
+// (almost always compressed) bytes decoded as text, which does NOT contain the readable date
+// string even when the fetch itself succeeds. Real text extraction is required for PDF links.
+let _pdfJsLoadPromise=null;
+function loadPdfJsLib(){
+  if(window.pdfjsLib)return Promise.resolve();
+  if(_pdfJsLoadPromise)return _pdfJsLoadPromise;
+  // Two CDN sources for the same verified-working version, in case one is unreachable for a
+  // given user/network — cdnjs first, falling back to jsDelivr automatically on failure.
+  const SOURCES=[
+    {js:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js',worker:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js'},
+    {js:'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.min.js',worker:'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.6.347/build/pdf.worker.min.js'}
+  ];
+  const tryLoad=i=>new Promise((resolve,reject)=>{
+    if(i>=SOURCES.length){reject(new Error('Could not load the PDF library from any source.'));return;}
+    const src=SOURCES[i];
+    const s=document.createElement('script');
+    s.src=src.js;
+    s.onload=()=>{
+      try{window.pdfjsLib.GlobalWorkerOptions.workerSrc=src.worker;resolve();}
+      catch(e){reject(e);}
+    };
+    s.onerror=()=>{tryLoad(i+1).then(resolve,reject);};
+    document.head.appendChild(s);
+  });
+  _pdfJsLoadPromise=tryLoad(0);
+  return _pdfJsLoadPromise;
+}
+async function extractPdfText(arrayBuffer){
+  await loadPdfJsLib();
+  const pdf=await window.pdfjsLib.getDocument({data:arrayBuffer}).promise;
+  let text='';
+  for(let p=1;p<=pdf.numPages;p++){
+    const page=await pdf.getPage(p);
+    const content=await page.getTextContent();
+    text+=content.items.map(it=>it.str).join(' ')+'\n';
+  }
+  return text;
+}
 async function autoFillBondtxnDate(){
   const lk=document.getElementById('bondtxn-link');
   const dt=document.getElementById('bondtxn-link-date');
@@ -370,8 +409,18 @@ async function autoFillBondtxnDate(){
   try{
     const res=await fetch(url,{mode:'cors'});
     if(!res.ok)throw new Error('fetch not ok');
-    const text=await res.text();
+    const buf=await res.arrayBuffer();
     if(dt.value&&dt.value.trim())return; // user may have typed one in while we were waiting
+    const bytes=new Uint8Array(buf.slice(0,5));
+    const isPdf=(bytes[0]===0x25&&bytes[1]===0x50&&bytes[2]===0x44&&bytes[3]===0x46); // "%PDF"
+    let text;
+    if(isPdf){
+      if(stEl)stEl.textContent='Reading the PDF…';
+      text=await extractPdfText(buf);
+    }else{
+      text=new TextDecoder('utf-8',{fatal:false}).decode(buf);
+    }
+    if(dt.value&&dt.value.trim())return;
     const found=extractDateFromText(text);
     if(found){
       dt.value=found;
@@ -780,20 +829,15 @@ function renderSections(){
       body='<div class="ed-sub"><div class="ed-sub-t">"More details" link for Next T-Bond Auction (optional)</div><input id="bondauc-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'More details\' button under Next T-Bond Auction that opens this" value="'+escAttr(LOADED.bondAucLink||'')+'"></div>'
         + (LOADED.bondAuctions!=null?`<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div>${renderNode(LOADED.bondAuctions,'bondAuctions')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondAuctions</div><span class="muted">No data in this workbook.</span></div>');
     } else if(sec.id==='bondtransxn'){
-      body='<div class="ed-sub"><div class="ed-sub-t">"Trade Summary" link (optional)</div><input id="bondtxn-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'Trade Summary\' button next to the chart title that opens this" value="'+escAttr(LOADED.bondTransVolLink||'')+'" onchange="autoFillBondtxnDate()" onblur="autoFillBondtxnDate()"></div>'
+      body='<div class="ed-sub"><div class="ed-sub-t">Upload the "Outright Treasury bond transaction volumes" report (.xls)</div>'
+        + '<div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Reads the CBSL-style report .xls directly in-browser (no OCR needed — it\'s real structured data, no data leaves your device) and replaces the rows below with the ISIN/Maturity/Remaining years/Amount table, plus the report\'s "on DD Month YYYY" date.</div>'
+        + '<input type="file" accept=".xls,.xlsx" id="bondtxn-xls-input" style="display:none" onchange="handleBondTxnXlsUpload(this)">'
+        + '<button class="btn-ghost" onclick="document.getElementById(\'bondtxn-xls-input\').click()">📄 Upload Report (.xls)</button>'
+        + '<div id="bondtxn-xls-status" style="font-size:11px;color:#7fa3c8;margin-top:8px"></div>'
+        + '</div>'
+        + '<div class="ed-sub"><div class="ed-sub-t">"Trade Summary" link (optional)</div><input id="bondtxn-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'Trade Summary\' button next to the chart title that opens this" value="'+escAttr(LOADED.bondTransVolLink||'')+'" onchange="autoFillBondtxnDate()" onblur="autoFillBondtxnDate()"></div>'
         + '<div class="ed-sub"><div class="ed-sub-t">"Trade Summary" date (shown on the button — auto-detected from the link when possible, or set/override it manually here; it does NOT have to match the panel\'s own live "Closing:" date)</div><input id="bondtxn-link-date" class="ed" style="width:100%" placeholder="e.g. 17th July 2026" value="'+escAttr(LOADED.bondTransVolLinkDate||'')+'"><div id="bondtxn-link-date-status" style="font-size:11px;color:#7fa3c8;margin-top:4px"></div></div>'
         + (LOADED.bondTransVol!=null?`<div class="ed-sub"><div class="ed-sub-t">bondTransVol</div>${renderNode(LOADED.bondTransVol,'bondTransVol')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">bondTransVol</div><span class="muted">No data in this workbook.</span></div>');
-    } else if(sec.id==='fxsummary'){
-      body='<div class="ed-sub"><div class="ed-sub-t">Auto-fill from this morning\'s FX summary screenshot</div>'
-        + '<div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Reads the "Summary Report of All Foreign Exchange Transactions" screenshot in-browser (no data leaves your device) and fills in the Volume / Weighted Average fields below, plus the report\'s "as at" date (see the FX Volume date field under Report Dates). OCR on a tight table isn\'t perfect — always check the numbers below before publishing, especially the S+1/S+2/S+3 rows, which occasionally get misread badly enough to be skipped entirely.</div>'
-        + '<input type="file" accept="image/*" id="fxsum-img-input" style="display:none" onchange="handleFxSummaryImage(this)">'
-        + '<button class="btn-ghost" onclick="document.getElementById(\'fxsum-img-input\').click()">📷 Upload Screenshot</button>'
-        + '<div id="fxsum-img-status" style="font-size:11px;color:#7fa3c8;margin-top:8px"></div>'
-        + '</div>'
-        + sec.keys.map(k=>{
-            if(LOADED[k]==null)return `<div class="ed-sub"><div class="ed-sub-t">${k}</div><span class="muted">No data in this workbook.</span></div>`;
-            return `<div class="ed-sub"><div class="ed-sub-t">${k}</div>${renderNode(LOADED[k],k)}</div>`;
-          }).join('');
     } else {
       body=sec.keys.map(k=>{
         if(LOADED[k]==null)return `<div class="ed-sub"><div class="ed-sub-t">${k}</div><span class="muted">No data in this workbook.</span></div>`;
@@ -842,126 +886,90 @@ function _arrKeysOf(obj){return Object.keys(obj).filter(k=>Array.isArray(obj[k])
 function rowDelP(path,i){applyEdits();const obj=getByPath(LOADED,path);if(obj&&typeof obj==='object'){_arrKeysOf(obj).forEach(k=>{if(i>=0&&i<obj[k].length)obj[k].splice(i,1);});saveLocal();renderSections();}}
 function rowAddP(path){applyEdits();const obj=getByPath(LOADED,path);if(obj&&typeof obj==='object'){_arrKeysOf(obj).forEach(k=>obj[k].push(''));saveLocal();renderSections();}}
 
-// ── FX Summary screenshot auto-fill (client-side OCR, no server/API key — Tesseract.js is
-//    lazy-loaded only when the button is actually used, so it doesn't slow down normal page
-//    loads). Reads the "Summary Report of All Foreign Exchange Transactions" screenshot, matches
-//    each row to a known tenor label (SPOT/TOM/CASH/S+1/S+2/S+3/1W.../5Y/Sub Total/Grand Total),
-//    and fills in LOADED.fxSummary's volume/wa fields. Always leaves the result for the user to
-//    review in the normal editable table before publishing — never auto-publishes.
-let _tesseractLoadPromise=null;
-function loadTesseractLib(){
-  if(window.Tesseract)return Promise.resolve();
-  if(_tesseractLoadPromise)return _tesseractLoadPromise;
-  _tesseractLoadPromise=new Promise((resolve,reject)=>{
-    const s=document.createElement('script');
-    s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
-    s.onload=()=>resolve();
-    s.onerror=()=>reject(new Error('Could not load the OCR library — check your internet connection.'));
-    document.head.appendChild(s);
-  });
-  return _tesseractLoadPromise;
+// ── Outright Treasury Bond Transaction Volumes .xls upload (real structured data — no OCR
+//    needed, so far more reliable than the FX screenshot flow). Reads the CBSL-style report
+//    ("Outright Treasury bond transaction volumes on DD Month YYYY" + ISIN/Maturity/Remaining
+//    years/Amount table) and replaces both bondTransVol.date and .rows in one go — this is a
+//    self-contained daily snapshot, unlike fxSummary's row-by-row merge.
+function _fixCentury(yr){
+  // Treasury bond maturities are always in the 2000s+. Excel's own ambiguous 2-digit-year
+  // interpretation (or an occasional mistyped 4-digit year in the source file) can sometimes
+  // produce a 19xx date instead of 20xx — correct it rather than silently propagating a
+  // century-off maturity date into the dashboard.
+  return (yr<2000)?yr+100:yr;
 }
-// Canonical tenor labels, in the order they appear on the report. Matching is case-insensitive
-// and ignores spacing around "+" (the report sometimes renders "S+1" as "S +1").
-const FX_SUMMARY_TENOR_ALIASES=[
-  ['SPOT','Spot'],['TOM','Tom'],['CASH','Cash'],
-  ['S+1','S+1'],['S+2','S+2'],['S+3','S+3'],
-  ['1W','1W'],['2W','2W'],['3W','3W'],
-  ['1M','1M'],['2M','2M'],['3M','3M'],['4M','4M'],['5M','5M'],['6M','6M'],['7M','7M'],['8M','8M'],['9M','9M'],['10M','10M'],['11M','11M'],
-  ['1Y','1Y'],['18M','18M'],['2Y','2Y'],['3Y','3Y'],['4Y','4Y'],['5Y','5Y']
-];
-function _fxNormLabel(raw){
-  return String(raw||'').replace(/\s+/g,' ').replace(/\s*\+\s*/g,'+').trim();
-}
-// Corrects OCR misreads specific to this report's font, verified against real Tesseract output:
-// - "+" in "S+1/S+2/S+3" is often misread as "4" (e.g. "S+2" -> "S42") — recovered when the
-//   trailing digit survived. "S+1" sometimes loses the digit entirely (e.g. "S#") — that case
-//   can't be reliably recovered, so it's left unmatched rather than guessed.
-// - A leading "1" (as in 1W/1M/1Y) is often misread as a capital I or lowercase L (e.g. "1W" ->
-//   "IW" or "LW").
-function _fxNormTenorCode(labelUp){
-  let s=labelUp;
-  s=s.replace(/^S4(\d)$/,'S+$1');
-  s=s.replace(/^S#(\d)$/,'S+$1');
-  s=s.replace(/^[IL]([WMY])$/,'1$1');
-  return s;
-}
-function parseFxSummaryOcrText(text){
-  const lines=String(text||'').split(/\r?\n/);
-  const rows=[]; // {tenor, volume, wa}
-  let subTotalSeen=0;
-  for(const raw of lines){
-    const line=_fxNormLabel(raw);
-    if(!line)continue;
-    // pull out up to two decimal numbers from the line, and whatever's left is the label
-    const nums=(line.match(/[\d,]+\.\d+/g)||[]).map(n=>parseFloat(n.replace(/,/g,'')));
-    if(!nums.length)continue; // blank row (e.g. "TOM" with no trades that day) — nothing to fill
-    const labelPart=line.replace(/[\d,]+\.\d+/g,'').trim();
-    if(!labelPart)continue;
-    const labelUp=labelPart.toUpperCase();
-    let tenor=null;
-    if(/^SUB\s*TOTAL/.test(labelUp)){
-      subTotalSeen++;
-      tenor=subTotalSeen===1?'Sub Total':'Sub Total (Forwards)';
-    }else if(/^GRAND\s*TOTAL/.test(labelUp)){
-      tenor='GRAND TOTAL VOLUME';
-    }else{
-      const normUp=_fxNormTenorCode(labelUp);
-      const hit=FX_SUMMARY_TENOR_ALIASES.find(([code])=>normUp===code||normUp.startsWith(code+' ')||normUp===code.replace('+',' +'));
-      if(hit)tenor=hit[1];
+function parseBondTxnXls(wb){
+  const sheetName=wb.SheetNames[0];
+  const ws=wb.Sheets[sheetName];
+  if(!ws)return null;
+  let _mr=0,_mc=0;for(const k in ws){if(k[0]==='!')continue;const c=XLSX.utils.decode_cell(k);if(c.r>_mr)_mr=c.r;if(c.c>_mc)_mc=c.c;}
+  ws['!ref']=XLSX.utils.encode_range({s:{r:0,c:0},e:{r:_mr,c:_mc}});
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});
+  const MON3=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+  const toIso=(yr,moIdx,day)=>_fixCentury(yr)+'-'+String(moIdx+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+
+  let isoDate='';
+  for(const raw of rows){
+    const r=(raw||[]).filter(v=>v!=null); // compact — this report can have a leading blank column
+    const t=r&&r[0]!=null?String(r[0]):'';
+    const m=t.match(/on\s+(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/i);
+    if(m){
+      const mi=MON3.indexOf(m[2].toLowerCase().slice(0,3));
+      if(mi>=0)isoDate=toIso(parseInt(m[3],10),mi,parseInt(m[1],10));
+      break;
     }
-    if(!tenor)continue; // unrecognized line (report header, page footer, etc.) — skip rather than guess
-    rows.push({tenor,volume:nums[0]!=null?nums[0]:null,wa:nums.length>1?nums[1]:null});
   }
-  return rows;
+
+  const btvRows=[];
+  for(const raw of rows){
+    const r=(raw||[]).filter(v=>v!=null); // compact — same leading-blank-column tolerance as above
+    const isin=r&&r[0];
+    if(!isin||typeof isin!=='string')continue;
+    const isinTrim=isin.trim();
+    if(!isinTrim||/^(isin|total)$/i.test(isinTrim))continue; // skip header/total rows
+    if(!/^[A-Z0-9]{10,14}$/i.test(isinTrim))continue; // not ISIN-shaped (e.g. the title row itself) — skip rather than guess
+    const matRaw=r[1];
+    let matISO='';
+    if(matRaw instanceof Date&&!isNaN(matRaw.getTime())){
+      matISO=toIso(matRaw.getFullYear(),matRaw.getMonth(),matRaw.getDate());
+    }else if(matRaw){
+      const ms=String(matRaw).trim();
+      const tm=ms.match(/^(\d{1,2})[-\s]([A-Za-z]{3,})[-\s](\d{2,4})/);
+      if(tm){
+        const mi=MON3.indexOf(tm[2].toLowerCase().slice(0,3));
+        if(mi>=0){let yr=parseInt(tm[3],10);if(tm[3].length===2)yr=2000+yr;matISO=toIso(yr,mi,parseInt(tm[1],10));}
+      }
+      if(!matISO)matISO=ms;
+    }
+    const numOf=v=>{if(typeof v==='number')return v;const n=parseFloat(String(v||'').replace(/,/g,''));return isNaN(n)?null:n;};
+    btvRows.push({isin:isinTrim,maturity:matISO,remYears:numOf(r[2]),amount:numOf(r[3]),show:true});
+  }
+  return {date:isoDate,rows:btvRows};
 }
-// The report's title line reads "...as at DD-MM-YYYY" — pull that out and format it to match
-// what the fxVolDate field (and thus the dashboard's title badge + notification) expects.
-function parseFxSummaryOcrDate(text){
-  const s=String(text||'');
-  const m=s.match(/as\s*at\s*(\d{1,2})[\-\/.](\d{1,2})[\-\/.](\d{4})/i);
-  if(!m)return null;
-  const day=parseInt(m[1],10),mon=parseInt(m[2],10)-1,yr=parseInt(m[3],10);
-  const dt=new Date(yr,mon,day);
-  if(isNaN(dt.getTime()))return null;
-  return fmtOrdPlain(dt);
-}
-async function handleFxSummaryImage(input){
+async function handleBondTxnXlsUpload(input){
   const file=input.files&&input.files[0];
   if(!file)return;
-  const st=document.getElementById('fxsum-img-status');
-  if(st){st.style.color='#c8a84b';st.textContent='Loading OCR engine…';}
+  const st=document.getElementById('bondtxn-xls-status');
+  if(st){st.style.color='#c8a84b';st.textContent='Reading '+file.name+'…';}
   try{
-    await loadTesseractLib();
-    if(st)st.textContent='Reading '+file.name+'… this can take 10–20 seconds.';
-    const {data}=await window.Tesseract.recognize(file,'eng');
-    const parsed=parseFxSummaryOcrText(data.text);
-    const ocrDate=parseFxSummaryOcrDate(data.text);
-    if(!parsed.length&&!ocrDate){
-      if(st){st.style.color='#ff8a78';st.textContent='Could not read any rows from that image — try a clearer/straighter screenshot, or fill in the fields manually below.';}
+    const buf=await file.arrayBuffer();
+    const wb=XLSX.read(new Uint8Array(buf),{type:'array',cellDates:true});
+    const parsed=parseBondTxnXls(wb);
+    if(!parsed||!parsed.rows.length){
+      if(st){st.style.color='#ff8a78';st.textContent='Could not find any ISIN rows in that file — check it\'s the right report format.';}
       input.value='';
       return;
     }
     applyEdits();
-    if(!Array.isArray(LOADED.fxSummary))LOADED.fxSummary=[];
-    let filled=0,added=0;
-    parsed.forEach(p=>{
-      const existing=LOADED.fxSummary.find(r=>r&&_fxNormLabel(r.tenor).toUpperCase()===p.tenor.toUpperCase());
-      if(existing){existing.volume=p.volume;existing.wa=p.wa;filled++;}
-      else{LOADED.fxSummary.push({tenor:p.tenor,volume:p.volume,wa:p.wa});added++;}
-    });
-    if(ocrDate)LOADED.fxVolDate=ocrDate;
+    LOADED.bondTransVol={date:parsed.date||(LOADED.bondTransVol&&LOADED.bondTransVol.date)||'',rows:parsed.rows};
     saveLocal();renderSections();
-    const el=document.getElementById('fxsum-img-status');
+    const el=document.getElementById('bondtxn-xls-status');
     if(el){
-      const parts=[];
-      if(filled||added)parts.push('Filled '+filled+' row'+(filled===1?'':'s')+(added?' and added '+added+' new row'+(added===1?'':'s'):''));
-      if(ocrDate)parts.push('date set to '+ocrDate);
       el.style.color='#6dd4a0';
-      el.textContent=(parts.join(' — ')||'Read the image')+' — please check the numbers below before publishing.';
+      el.textContent='Loaded '+parsed.rows.length+' row'+(parsed.rows.length===1?'':'s')+(parsed.date?' — date set to '+parsed.date:' — no date found in the report title, previous date kept')+'. Please check the table below before publishing.';
     }
   }catch(e){
-    if(st){st.style.color='#ff8a78';st.textContent='OCR failed: '+(e&&e.message?e.message:'unknown error')+' — try again, or fill in the fields manually below.';}
+    if(st){st.style.color='#ff8a78';st.textContent='Could not read that file: '+(e&&e.message?e.message:'unknown error')+' — check it\'s a valid .xls/.xlsx.';}
   }finally{
     input.value='';
   }
