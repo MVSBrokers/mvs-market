@@ -443,6 +443,17 @@ canvas{max-width:100%!important}
   <!-- GOVT SECURITIES SECTION -->
   <div class="full-grid">
     <div class="panel">
+      <div class="panel-title" data-sec="tbonds">Treasury Bond Yield(%)<span class="close-date" id="tbond-close"></span></div>
+      <canvas id="yieldChart" style="max-height:280px;margin-bottom:10px"></canvas>
+      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span> → <span style="color:#ff8a78">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
+      <div style="overflow-x:auto;max-width:100%">
+        <table class="bond-freeze" style="font-size:9px">
+          <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
+          <tbody id="bondRows"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel">
       <div class="panel-title pt-row" data-sec="tbillcurve"><span>Treasury Bill</span><span class="mini-gran" id="tbill-gran-btns">
         <button class="mg-btn" id="tbill-btn-3m" onclick="selectTbillTenure('3m',this)" style="color:#4da3e8;border-color:#4da3e8">3M</button>
         <button class="mg-btn" id="tbill-btn-6m" onclick="selectTbillTenure('6m',this)" style="color:#c8a84b;border-color:#c8a84b">6M</button>
@@ -496,17 +507,6 @@ canvas{max-width:100%!important}
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-title" data-sec="tbonds">Treasury Bond Yield(%)<span class="close-date" id="tbond-close"></span></div>
-      <canvas id="yieldChart" style="max-height:280px;margin-bottom:10px"></canvas>
-      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Heat-map per maturity: <span style="color:#7ee0a8">low</span> → <span style="color:#ff8a78">high</span> yield · <span style="color:#7ee0a8">▴ up</span> / <span style="color:#ff8a78">▾ down</span> vs prev day</div>
-      <div style="overflow-x:auto;max-width:100%">
-        <table class="bond-freeze" style="font-size:9px">
-          <thead><tr id="bondHeaderRow"><th>Bond</th></tr></thead>
-          <tbody id="bondRows"></tbody>
-        </table>
       </div>
     </div>
   </div>
@@ -1284,13 +1284,6 @@ const MSG_CUTOFF_SECTIONS={
       if(Array.isArray(labels)&&labels.length)return String(labels[labels.length-1]);
       return null;
     }
-  },
-  'Volume of Foreign Exchange Market':{
-    hour:8.5,
-    date:d=>{
-      const dt=slOpeningDay(); // same T-2/T-1 working-day rule already used for the Opening Report date
-      return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
-    }
   }
 };
 // Non-cutoff sections that still have a genuine "related data date" worth showing in their
@@ -1304,6 +1297,12 @@ const MSG_DATE_SECTIONS={
     // which is a separate, independent field that only labels the "Trade Summary" button and can
     // hold a different date entirely.
     const dt=d&&d.bondTransVol&&d.bondTransVol.date&&String(d.bondTransVol.date).trim();
+    return dt||null;
+  },
+  'Volume of Foreign Exchange Market':d=>{
+    // No longer cutoff-gated (publishes/notifies immediately) — but still shows the panel's own
+    // "as at" date, same fxVolDate field already used for its title badge (see line ~2338).
+    const dt=d&&d.fxVolDate&&String(d.fxVolDate).trim();
     return dt||null;
   }
 };
@@ -1350,6 +1349,14 @@ const MSG_SECTION_COMPARATORS={
     const oldRows=(oldObj.bondTransVol&&oldObj.bondTransVol.rows)||null;
     const newRows=(newObj.bondTransVol&&newObj.bondTransVol.rows)||null;
     return JSON.stringify(oldRows)!==JSON.stringify(newRows);
+  },
+  'Volume of Foreign Exchange Market':(oldObj,newObj)=>{
+    // The opposite case from the comparator above: here we want to IGNORE plain data corrections
+    // (e.g. fixing a typo'd volume on the same day's report) and only notify when it's genuinely
+    // a new day's report — i.e. fxVolDate itself changed to a new, non-empty value.
+    const oldDate=oldObj.fxVolDate!=null?String(oldObj.fxVolDate).trim():'';
+    const newDate=newObj.fxVolDate!=null?String(newObj.fxVolDate).trim():'';
+    return newDate!==''&&newDate!==oldDate;
   }
 };
 
