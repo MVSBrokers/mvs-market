@@ -6447,8 +6447,8 @@
  "newsLink": "https://www.treasury.gov.lk/api/file/468c1a9d-a547-481f-8279-daebed3e2db4",
  "billAucLink": "https://www.treasury.gov.lk/api/file/eec81e18-8b14-43f2-ad6c-d11e38f11bc1",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/795b922f-67f8-44b2-b281-8f631dfa082d",
- "bondTransVolLinkDate": "10th August 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/ac5e5150-42a1-44fe-8684-73130e5b849c",
+ "bondTransVolLinkDate": "11th August 2026",
  "hidden": {
   "tbills": true
  },
@@ -6480,6 +6480,7 @@
    "Reserve (USD Mn)"
   ]
  },
+ "mutedNotif": {},
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-08-12",
@@ -8817,9 +8818,9 @@
     },
     "spot": {
      "open": "335.05/ 335.20",
-     "close": "334.50/ 334.60",
+     "close": "335.50/ 335.60",
      "low": "334.55",
-     "high": "334.95"
+     "high": "335.95"
     },
     "crossRates": [
      {
@@ -9006,6 +9007,5 @@
    "day": "2026-08-12",
    "values": {}
   }
- },
- "mutedNotif": {}
+ }
 }
