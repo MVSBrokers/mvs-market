@@ -1780,9 +1780,9 @@
  },
  "spot": {
   "open": "335.05/ 335.20",
-  "close": "334.50/ 334.60",
+  "close": "335.50/ 335.60",
   "low": "334.55",
-  "high": "334.95"
+  "high": "335.95"
  },
  "crossRates": [
   {
@@ -2380,57 +2380,57 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 64.25,
-   "wa": 335.2033
+   "volume": 75.75,
+   "wa": 334.787
   },
   {
    "tenor": "TOM",
-   "volume": 3.5,
-   "wa": 335.1621
+   "volume": 13,
+   "wa": 334.6296
   },
   {
    "tenor": "CASH",
-   "volume": 23.9,
-   "wa": 335.1657
+   "volume": 33.6,
+   "wa": 334.7936
   },
   {
    "tenor": "Sub Total",
-   "volume": 91.65,
+   "volume": 122.35,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 12.5,
-   "wa": 335.5924
+   "volume": 1.75,
+   "wa": 335.2414
   },
   {
    "tenor": "2W",
-   "volume": 3,
-   "wa": 335.984
+   "volume": 6.5,
+   "wa": 335.5142
+  },
+  {
+   "tenor": "3W",
+   "volume": 1,
+   "wa": 335.79
   },
   {
    "tenor": "1M",
-   "volume": 5,
-   "wa": 336.8295
+   "volume": 30,
+   "wa": 336.2746
   },
   {
    "tenor": "3M",
-   "volume": 0.16,
-   "wa": 340.3
-  },
-  {
-   "tenor": "6M",
-   "volume": 5,
-   "wa": 343.94
+   "volume": 9,
+   "wa": 338.8439
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 25.66,
+   "volume": 48.25,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 117.31,
+   "volume": 170.6,
    "wa": null
   }
  ],
@@ -6423,7 +6423,7 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "334.50/ 334.60",
+  "usdlkr": "335.50/ 335.60",
   "liqDir": "decreased",
   "liqDelta": 2.33
  },
@@ -6479,10 +6479,6 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "cutoffOverride": {},
- "mutedNotif": {
-  "USD/LKR Foreign Exchange": true
  },
  "cutoffSnapshot": {
   "Money & Repo Market": {
