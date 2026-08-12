@@ -1319,6 +1319,14 @@ const MSG_DATE_SECTIONS={
     // "as at" date, same fxVolDate field already used for its title badge (see line ~2338).
     const dt=d&&d.fxVolDate&&String(d.fxVolDate).trim();
     return dt||null;
+  },
+  'Government Securities Secondary Market Trade Summary':d=>{
+    // Same bondTransVolLinkDate field already used for the "Trade Summary" button's own badge
+    // (see line ~1849) — this is deliberately a separate, independently-set date from the
+    // Outright Treasury Bond Transaction Volumes panel above, since the linked document can
+    // refer to a different date than the panel's own live chart data.
+    const dt=d&&d.bondTransVolLinkDate&&String(d.bondTransVolLinkDate).trim();
+    return dt||null;
   }
 };
 // Is the current SL time at or after the section's own cutoff hour (fractional, e.g. 8.5 = 8:30 AM)?
