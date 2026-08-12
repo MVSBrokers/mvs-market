@@ -9006,5 +9006,8 @@
    "day": "2026-08-12",
    "values": {}
   }
+ },
+ "mutedNotif": {
+  "USD/LKR Foreign Exchange": true
  }
 }
