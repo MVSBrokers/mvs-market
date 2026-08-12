@@ -390,6 +390,7 @@ canvas{max-width:100%!important}
   <!-- MONEY MARKET HEADER -->
   
   <div class="grid-2x2">
+    <div class="panel"><div class="panel-title pt-row" data-sec="liquidity"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
     <div class="panel" id="mm-panel">
       <div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
       <div data-sec-self="mmrates">
@@ -420,7 +421,6 @@ canvas{max-width:100%!important}
         <div id="dyn-repoOMO"></div>
       </div>
     </div>
-    <div class="panel"><div class="panel-title pt-row" data-sec="liquidity"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
   </div>
 
   <div class="grid-2x2">
