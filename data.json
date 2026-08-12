@@ -6480,6 +6480,18 @@
    "Reserve (USD Mn)"
   ]
  },
+ "cutoffOverride": {
+  "Money & Repo Market": true,
+  "Money & Repo Market — Repo Auctions": true,
+  "Treasury Bill": true,
+  "Treasury Bond Yield (%)": true,
+  "USD/LKR Foreign Exchange": true,
+  "Value Dates": true,
+  "CBSL Holdings of Government Securities": true
+ },
+ "mutedNotif": {
+  "USD/LKR Foreign Exchange": true
+ },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-08-12",
@@ -8817,9 +8829,9 @@
     },
     "spot": {
      "open": "335.05/ 335.20",
-     "close": "335.50/ 335.60",
+     "close": "334.50/ 334.60",
      "low": "334.55",
-     "high": "335.95"
+     "high": "334.95"
     },
     "crossRates": [
      {
@@ -9006,14 +9018,5 @@
    "day": "2026-08-12",
    "values": {}
   }
- },
- "cutoffOverride": {
-  "Money & Repo Market": true,
-  "Money & Repo Market — Repo Auctions": true,
-  "Treasury Bill": true,
-  "Treasury Bond Yield (%)": true,
-  "USD/LKR Foreign Exchange": true,
-  "Value Dates": true,
-  "CBSL Holdings of Government Securities": true
  }
 }
