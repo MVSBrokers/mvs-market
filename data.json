@@ -1443,48 +1443,83 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-08-12",
+  "date": "2026-08-13",
   "rows": [
    {
-    "isin": "LKB00428B156",
-    "maturity": "2028-02-15",
-    "remYears": 1.52876712328767,
-    "amount": 151.686,
+    "isin": "LKB00428J159",
+    "maturity": "2028-10-15",
+    "remYears": 2.175342466,
+    "amount": 1883,
     "show": true
    },
    {
     "isin": "LKB00529F152",
     "maturity": "2029-06-15",
-    "remYears": 2.86027397260274,
-    "amount": 214.464,
+    "remYears": 2.84109589,
+    "amount": 87.372,
+    "show": true
+   },
+   {
+    "isin": "LKB00629I154",
+    "maturity": "2029-09-15",
+    "remYears": 3.093150685,
+    "amount": 424,
+    "show": true
+   },
+   {
+    "isin": "LKB00529L150",
+    "maturity": "2029-12-15",
+    "remYears": 3.342465753,
+    "amount": 1000,
+    "show": true
+   },
+   {
+    "isin": "LKB01530E152",
+    "maturity": "2030-05-15",
+    "remYears": 3.756164384,
+    "amount": 666.088272,
+    "show": true
+   },
+   {
+    "isin": "LKB00530G018",
+    "maturity": "2030-07-01",
+    "remYears": 3.884931507,
+    "amount": 31.086,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.98904109589041,
-    "amount": 466.96,
+    "remYears": 3.969863014,
+    "amount": 50,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.19452054794521,
-    "amount": 650,
+    "remYears": 4.175342466,
+    "amount": 400,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.49315068493151,
-    "amount": 950,
+    "remYears": 4.473972603,
+    "amount": 1400,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 8.1972602739726,
-    "amount": 517.494,
+    "remYears": 8.178082192,
+    "amount": 2750,
+    "show": true
+   },
+   {
+    "isin": "LKB01237G019",
+    "maturity": "2037-07-01",
+    "remYears": 10.89041096,
+    "amount": 637.327694,
     "show": true
    }
   ]
