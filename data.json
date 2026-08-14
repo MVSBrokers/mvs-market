@@ -18,24 +18,24 @@
  ],
  "callMarket": {
   "min": 8.7,
-  "max": 8.8,
-  "wa": 8.78,
-  "vol": 24.37
+  "max": 8.85,
+  "wa": 8.8,
+  "vol": 46.46
  },
  "repoMarket": {
   "min": 8.78,
   "max": 8.9,
-  "wa": 8.82,
-  "vol": 32.35
+  "wa": 8.84,
+  "vol": 87.04
  },
  "windows": {
   "sdf": {
-   "cur": 103.79,
-   "prev": 139.51
+   "cur": 107.49,
+   "prev": 103.79
   },
   "slf": {
-   "cur": 0.48,
-   "prev": 0
+   "cur": 0.05,
+   "prev": 0.48
   }
  },
  "liquidity": {
@@ -189,7 +189,8 @@
    "10 Aug",
    "11 Aug",
    "12 Aug",
-   "13 Aug"
+   "13 Aug",
+   "14 Aug"
   ],
   "values": [
    128.14,
@@ -341,50 +342,51 @@
    196.36,
    194.03,
    249.51,
-   230.91
+   230.91,
+   190.69
   ],
-  "current": 230.91,
-  "previous": 249.51
+  "current": 190.69,
+  "previous": 230.91
  },
  "repoOvernight": [
   {
-   "date": "13 Aug 2026",
-   "repoOffered": 120,
+   "date": "14 Aug 2026",
+   "repoOffered": 100,
    "reverseRepoOffered": null,
-   "received": 108,
-   "accepted": 108,
-   "minRate": 8.63,
-   "maxRate": 8.7,
-   "waYield": 8.64,
+   "received": 63,
+   "accepted": 63,
+   "minRate": 8.65,
+   "maxRate": 8.75,
+   "waYield": 8.74,
    "show": true
   }
  ],
  "repoOMO": [
   {
-   "auction": "13 Aug 2026",
-   "settlement": "13 Aug 2026",
-   "repoOffered": 20,
-   "reverseOffered": 0,
-   "received": 20,
-   "accepted": 20,
-   "minRate": 8.68,
-   "maxRate": 8.75,
-   "waYield": 8.73,
-   "maturity": "19 Aug 2026",
-   "tenure": 6,
-   "show": true
-  },
-  {
-   "auction": "13 Aug 2026",
+   "auction": "14 Aug 2026",
    "settlement": "14 Aug 2026",
    "repoOffered": 20,
    "reverseOffered": 0,
    "received": 20,
    "accepted": 20,
+   "minRate": 8.75,
+   "maxRate": 8.75,
+   "waYield": 8.75,
+   "maturity": "19 Aug 2026",
+   "tenure": 5,
+   "show": true
+  },
+  {
+   "auction": "14 Aug 2026",
+   "settlement": "17 Aug 2026",
+   "repoOffered": 20,
+   "reverseOffered": 0,
+   "received": 40,
+   "accepted": 20,
    "minRate": 9,
-   "maxRate": 9.02,
-   "waYield": 9.01,
-   "maturity": "28 Aug 2026",
+   "maxRate": 9,
+   "waYield": 9,
+   "maturity": "31 Aug 2026",
    "tenure": 14,
    "show": true
   }
@@ -2784,7 +2786,8 @@
    "10 Aug",
    "11 Aug",
    "12 Aug",
-   "13 Aug"
+   "13 Aug",
+   "14 Aug"
   ],
   "values": [
    2508.92,
@@ -2927,6 +2930,7 @@
    2498.12,
    2498.12,
    2498.12,
+   2492.62,
    2492.62,
    2492.62,
    2492.62,
@@ -6511,7 +6515,7 @@
  "execSummary": {
   "usdlkr": "332.80/ 332.90",
   "liqDir": "decreased",
-  "liqDelta": 18.6
+  "liqDelta": 40.22
  },
  "marketNews": [
   "Treasury Bill Auction Results",
