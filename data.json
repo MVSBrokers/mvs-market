@@ -2424,52 +2424,57 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 49.25,
-   "wa": 334.3344
+   "volume": 45.15,
+   "wa": 333.5952
   },
   {
    "tenor": "TOM",
-   "volume": 2,
-   "wa": 334.21
+   "volume": 23,
+   "wa": 333.4209
   },
   {
    "tenor": "CASH",
-   "volume": 3,
-   "wa": 334.25
+   "volume": 23.4,
+   "wa": 333.55
   },
   {
    "tenor": "Sub Total",
-   "volume": 54.25,
+   "volume": 91.55,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 3,
-   "wa": 334.75
+   "volume": 12,
+   "wa": 333.83
   },
   {
    "tenor": "2W",
-   "volume": 4,
-   "wa": 335.025
+   "volume": 2.39,
+   "wa": 334.3
   },
   {
    "tenor": "1M",
    "volume": 4,
-   "wa": 335.6825
+   "wa": 334.94
+  },
+  {
+   "tenor": "2M",
+   "volume": 8,
+   "wa": 335.76
   },
   {
    "tenor": "3M",
-   "volume": 7,
-   "wa": 338.4486
+   "volume": 9,
+   "wa": 337.57
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 18,
+   "volume": 35.39,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 72.25,
+   "volume": 126.94,
    "wa": null
   }
  ],
@@ -6553,24 +6558,24 @@
    "values": {
     "callMarket": {
      "min": 8.7,
-     "max": 8.82,
-     "wa": 8.79,
-     "vol": 14.33
+     "max": 8.8,
+     "wa": 8.78,
+     "vol": 24.37
     },
     "repoMarket": {
      "min": 8.78,
-     "max": 8.96,
-     "wa": 8.84,
-     "vol": 53.56
+     "max": 8.9,
+     "wa": 8.82,
+     "vol": 32.35
     },
     "windows": {
      "sdf": {
-      "cur": 139.51,
-      "prev": 94.16
+      "cur": 103.79,
+      "prev": 139.51
      },
      "slf": {
-      "cur": 0,
-      "prev": 0.13
+      "cur": 0.48,
+      "prev": 0
      }
     },
     "liquidity": {
@@ -6723,7 +6728,8 @@
       "7 Aug",
       "10 Aug",
       "11 Aug",
-      "12 Aug"
+      "12 Aug",
+      "13 Aug"
      ],
      "values": [
       128.14,
@@ -6874,10 +6880,11 @@
       216.81,
       196.36,
       194.03,
-      249.51
+      249.51,
+      230.91
      ],
-     "current": 249.51,
-     "previous": 194.03
+     "current": 230.91,
+     "previous": 249.51
     }
    }
   },
@@ -6886,14 +6893,14 @@
    "values": {
     "repoOvernight": [
      {
-      "date": "12 Aug 2026",
-      "repoOffered": 100,
+      "date": "13 Aug 2026",
+      "repoOffered": 120,
       "reverseRepoOffered": null,
-      "received": 156,
-      "accepted": 100,
-      "minRate": 8.68,
+      "received": 108,
+      "accepted": 108,
+      "minRate": 8.63,
       "maxRate": 8.7,
-      "waYield": 8.7,
+      "waYield": 8.64,
       "show": true
      }
     ],
