@@ -175,7 +175,7 @@ function val(id){
 let LOADED=null;
 let PUBLISHED=null;
 const SECTIONS=[
- {id:'dates',title:'Report Dates (auto-filled on import · edit any to correct)',keys:['openingDate','closingDate','secondaryDate','fxVolDate'],group:'General'},
+ {id:'dates',title:'Report Dates (auto-filled on import · edit any to correct)',keys:['openingDate','closingDate','mmDate','secondaryDate','fxVolDate','bonds'],group:'General'},
  {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews','newsLink'],group:'General'},
  {id:'mmrates',title:'Money Market & Repo Rates',keys:['callMarket','repoMarket'],group:'Money Market'},
  {id:'windows',title:'Standing Facilities (SDF / SLF)',keys:['windows'],group:'Money Market'},
@@ -194,7 +194,7 @@ const SECTIONS=[
  {id:'tbillcurve',title:'T-Bill Yield Curve (series)',keys:['tbillCurve'],group:'Fixed Income'},
  {id:'tbonds',title:'Treasury Bonds (daily rates)',keys:['bonds'],group:'Fixed Income'},
  {id:'secondary',title:'T-Bond Secondary Yields',keys:['bondSecondary'],group:'Fixed Income'},
- {id:'bondtransxn',title:'T-Bond Outright Transaction Volumes',keys:['bondTransVol'],group:'Fixed Income'},
+ {id:'bondtransxn',title:'T-Bond Outright Transaction Volumes',keys:['bondTransVol','bondTransVolLink','bondTransVolLinkDate'],group:'Fixed Income'},
  {id:'cbsl',title:'CBSL Holdings of Govt Securities',keys:['cbsl','cbslHoldings'],group:'Macro Economy'},
  {id:'foreign',title:'Foreign Holdings of Govt Securities',keys:['foreign'],group:'Macro Economy'},
  {id:'reserves',title:'Foreign Currency Reserves',keys:['reserves'],group:'Macro Economy'},
