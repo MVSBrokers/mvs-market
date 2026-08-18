@@ -3049,7 +3049,7 @@
  "gdpGrowth": [
   {
    "period": "2026 - Q1",
-   "growth": 5.4,
+   "growth": 5.1,
    "show": true
   },
   {
@@ -6600,6 +6600,9 @@
    "Reserve (USD Mn)"
   ]
  },
+ "mutedNotif": {
+  "Quarterly Real GDP Growth": true
+ },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-08-18",
@@ -9178,8 +9181,5 @@
    "day": "2026-08-18",
    "values": {}
   }
- },
- "mutedNotif": {
-  "Quarterly Real GDP Growth": true
  }
 }
