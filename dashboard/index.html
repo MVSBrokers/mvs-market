@@ -1372,6 +1372,14 @@ const MSG_SECTION_COMPARATORS={
     const oldRows=(oldObj.bondTransVol&&oldObj.bondTransVol.rows)||null;
     const newRows=(newObj.bondTransVol&&newObj.bondTransVol.rows)||null;
     return JSON.stringify(oldRows)!==JSON.stringify(newRows);
+  },
+  'Volume of Foreign Exchange Market':(oldObj,newObj)=>{
+    // The opposite case from the comparator above: here we want to IGNORE plain data corrections
+    // (e.g. fixing a typo'd volume on the same day's report) and only notify when it's genuinely
+    // a new day's report — i.e. fxVolDate itself changed to a new, non-empty value.
+    const oldDate=oldObj.fxVolDate!=null?String(oldObj.fxVolDate).trim():'';
+    const newDate=newObj.fxVolDate!=null?String(newObj.fxVolDate).trim():'';
+    return newDate!==''&&newDate!==oldDate;
   }
 };
 
