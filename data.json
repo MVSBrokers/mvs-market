@@ -18,20 +18,20 @@
  ],
  "callMarket": {
   "min": 8.75,
-  "max": 8.84,
+  "max": 8.85,
   "wa": 8.79,
-  "vol": 22
+  "vol": 42.43
  },
  "repoMarket": {
   "min": 8.78,
   "max": 8.9,
   "wa": 8.83,
-  "vol": 95.52
+  "vol": 87.94
  },
  "windows": {
   "sdf": {
-   "cur": 98.45,
-   "prev": 111.35
+   "cur": 78.98,
+   "prev": 98.45
   },
   "slf": {
    "cur": 0,
@@ -192,7 +192,8 @@
    "13 Aug",
    "14 Aug",
    "17 Aug",
-   "18 Aug"
+   "18 Aug",
+   "19 Aug"
   ],
   "values": [
    128.14,
@@ -347,19 +348,20 @@
    230.91,
    190.69,
    161.35,
-   142.85
+   142.85,
+   168.98
   ],
-  "current": 142.85,
-  "previous": 161.35
+  "current": 168.98,
+  "previous": 142.85
  },
  "repoOvernight": [
   {
-   "date": "18 Aug 2026",
-   "repoOffered": 70,
+   "date": "19 Aug 2026",
+   "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 44,
-   "accepted": 44,
-   "minRate": 8.7,
+   "received": 63,
+   "accepted": 60,
+   "minRate": 8.72,
    "maxRate": 8.75,
    "waYield": 8.75,
    "show": true
@@ -367,17 +369,31 @@
  ],
  "repoOMO": [
   {
-   "auction": "18 Aug 2026",
+   "auction": "19 Aug 2026",
    "settlement": "19 Aug 2026",
+   "repoOffered": 40,
+   "reverseOffered": 0,
+   "received": 30,
+   "accepted": 30,
+   "minRate": 8.72,
+   "maxRate": 8.72,
+   "waYield": 8.72,
+   "maturity": "25 Aug 2026",
+   "tenure": 6,
+   "show": true
+  },
+  {
+   "auction": "19 Aug 2026",
+   "settlement": "20 Aug 2026",
    "repoOffered": 20,
    "reverseOffered": 0,
-   "received": 20,
+   "received": 22,
    "accepted": 20,
-   "minRate": 8.98,
-   "maxRate": 9,
-   "waYield": 8.99,
-   "maturity": "2 Sep 2026",
-   "tenure": 14,
+   "minRate": 9.25,
+   "maxRate": 9.25,
+   "waYield": 9.25,
+   "maturity": "18 Sep 2026",
+   "tenure": 29,
    "show": true
   }
  ],
@@ -2786,7 +2802,8 @@
    "13 Aug",
    "14 Aug",
    "17 Aug",
-   "18 Aug"
+   "18 Aug",
+   "19 Aug"
   ],
   "values": [
    2508.92,
@@ -2929,6 +2946,7 @@
    2498.12,
    2498.12,
    2498.12,
+   2492.62,
    2492.62,
    2492.62,
    2492.62,
@@ -6549,8 +6567,8 @@
  ],
  "execSummary": {
   "usdlkr": "331.10/ 331.20",
-  "liqDir": "decreased",
-  "liqDelta": 18.5
+  "liqDir": "increased",
+  "liqDelta": 26.13
  },
  "marketNews": [
   "Treasury Bill Auction Results",
