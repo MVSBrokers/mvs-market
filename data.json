@@ -6648,5 +6648,9 @@
    "Reserve (USD Mn)"
   ]
  },
- "cutoffSnapshot": {}
+ "cutoffSnapshot": {},
+ "mutedNotif": {
+  "Tourism": true,
+  "Remittances": true
+ }
 }
