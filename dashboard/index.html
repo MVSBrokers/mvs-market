@@ -1230,6 +1230,12 @@ function toOrdinalDate(raw){
   if(day==null){m=str.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/);if(m){day=+m[1];monIdx=+m[2]-1;}} // 26.05.2026
   if(day==null){m=str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(m){day=+m[2];monIdx=+m[1]-1;}} // 7/17/2026 (US style, editor's own format)
   if(day==null){m=str.match(/^(\d{1,2})\s+([A-Za-z]{3,})/);if(m){const mi=MON.indexOf(m[2].slice(0,3).toLowerCase());if(mi>=0){day=+m[1];monIdx=mi;}}} // "17 Jul"
+  // Several date fields (fxVolDate, mmDate, bondTransVolLinkDate, etc.) are stored pre-formatted
+  // in this exact ordinal style already (editor placeholder: "e.g. 7th July 2026") — the pattern
+  // above requires a space between the day number and the month, but an ordinal suffix ("th"/
+  // "st"/"nd"/"rd") sits directly against the digits with no space, so it never matched and this
+  // silently fell through to null, dropping the date from the notification entirely.
+  if(day==null){m=str.match(/^(\d{1,2})(?:st|nd|rd|th)\s+([A-Za-z]{3,})/i);if(m){const mi=MON.indexOf(m[2].slice(0,3).toLowerCase());if(mi>=0){day=+m[1];monIdx=mi;}}} // "18th August 2026"
   if(day==null||monIdx==null||monIdx<0||monIdx>11||day<1||day>31)return null;
   const suffix=(day%10===1&&day!==11)?'st':(day%10===2&&day!==12)?'nd':(day%10===3&&day!==13)?'rd':'th';
   return day+suffix+' '+MONFULL[monIdx];
@@ -1372,14 +1378,6 @@ const MSG_SECTION_COMPARATORS={
     const oldRows=(oldObj.bondTransVol&&oldObj.bondTransVol.rows)||null;
     const newRows=(newObj.bondTransVol&&newObj.bondTransVol.rows)||null;
     return JSON.stringify(oldRows)!==JSON.stringify(newRows);
-  },
-  'Volume of Foreign Exchange Market':(oldObj,newObj)=>{
-    // The opposite case from the comparator above: here we want to IGNORE plain data corrections
-    // (e.g. fixing a typo'd volume on the same day's report) and only notify when it's genuinely
-    // a new day's report — i.e. fxVolDate itself changed to a new, non-empty value.
-    const oldDate=oldObj.fxVolDate!=null?String(oldObj.fxVolDate).trim():'';
-    const newDate=newObj.fxVolDate!=null?String(newObj.fxVolDate).trim():'';
-    return newDate!==''&&newDate!==oldDate;
   }
 };
 
