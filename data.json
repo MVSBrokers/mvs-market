@@ -3039,9 +3039,9 @@
   }
  ],
  "tourism": {
-  "apr": "151.1 Mn",
-  "may": "285.5 Mn",
-  "yoy": "45.46%"
+  "apr": "155.70 Mn",
+  "may": "151.1 Mn",
+  "yoy": "-2.95%"
  },
  "remittances": {
   "apr": "695 Mn",
@@ -6618,7 +6618,8 @@
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/43227ccb-d857-4394-a3c9-008274373d99",
  "bondTransVolLinkDate": "20th August 2026",
  "hidden": {
-  "tbills": true
+  "tbills": true,
+  "tourism": true
  },
  "headers": {
   "bond": [
@@ -6648,9 +6649,9 @@
    "Reserve (USD Mn)"
   ]
  },
- "cutoffSnapshot": {},
  "mutedNotif": {
   "Tourism": true,
   "Remittances": true
- }
+ },
+ "cutoffSnapshot": {}
 }
