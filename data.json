@@ -6619,7 +6619,8 @@
  "bondTransVolLinkDate": "21th August 2026",
  "hidden": {
   "tbills": true,
-  "tourism": true
+  "tourism": true,
+  "remittances": true
  },
  "headers": {
   "bond": [
