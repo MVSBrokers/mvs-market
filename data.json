@@ -3006,13 +3006,13 @@
   {
    "metric": "NCPI Year-on-Year (YoY %)",
    "apr": "6.50%",
-   "may": "",
+   "may": "7.20%",
    "show": true
   },
   {
    "metric": "NCPI Month-on-Month (MoM %)",
    "apr": "1.60%",
-   "may": "",
+   "may": "0.50%",
    "show": true
   }
  ],
@@ -3039,9 +3039,9 @@
   }
  ],
  "tourism": {
-  "apr": "155.70 Mn",
-  "may": "151.1 Mn",
-  "yoy": "-2.95%"
+  "apr": "151.1 Mn",
+  "may": "285.5 Mn",
+  "yoy": "45.46%"
  },
  "remittances": {
   "apr": "695 Mn",
@@ -6618,9 +6618,7 @@
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/8169a6c0-3368-4abc-8027-ee5165fbf85f",
  "bondTransVolLinkDate": "21th August 2026",
  "hidden": {
-  "tbills": true,
-  "tourism": true,
-  "remittances": true
+  "tbills": true
  },
  "headers": {
   "bond": [
@@ -6649,10 +6647,6 @@
    "Month",
    "Reserve (USD Mn)"
   ]
- },
- "mutedNotif": {
-  "Tourism": true,
-  "Remittances": true
  },
  "cutoffSnapshot": {
   "Money & Repo Market": {
