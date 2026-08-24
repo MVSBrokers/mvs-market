@@ -30,11 +30,11 @@
  },
  "windows": {
   "sdf": {
-   "cur": 68.51,
-   "prev": 71.45
+   "cur": 90.68,
+   "prev": 68.51
   },
   "slf": {
-   "cur": 0,
+   "cur": 0.27,
    "prev": 0
   }
  },
@@ -195,7 +195,8 @@
    "18 Aug",
    "19 Aug",
    "20 Aug",
-   "21 Aug"
+   "21 Aug",
+   "24 Aug"
   ],
   "values": [
    128.14,
@@ -353,19 +354,20 @@
    142.85,
    168.98,
    130.25,
-   78.51
+   78.51,
+   123.21
   ],
-  "current": 78.51,
-  "previous": 130.25
+  "current": 123.21,
+  "previous": 78.51
  },
  "repoOvernight": [
   {
-   "date": "21 Aug 2026",
-   "repoOffered": 40,
+   "date": "24 Aug 2026",
+   "repoOffered": 50,
    "reverseRepoOffered": null,
-   "received": 10,
-   "accepted": 10,
-   "minRate": 8.75,
+   "received": 33,
+   "accepted": 33,
+   "minRate": 8.74,
    "maxRate": 8.75,
    "waYield": 8.75,
    "show": true
@@ -373,30 +375,16 @@
  ],
  "repoOMO": [
   {
-   "auction": "21 Aug 2026",
-   "settlement": "21 Aug 2026",
-   "repoOffered": 20,
+   "auction": "24 Aug 2026",
+   "settlement": "25 Aug 2026",
+   "repoOffered": 30,
    "reverseOffered": 0,
-   "received": 0,
-   "accepted": 0,
-   "minRate": 0,
-   "maxRate": 0,
-   "waYield": 0,
-   "maturity": "25 Aug 2026",
-   "tenure": 4,
-   "show": true
-  },
-  {
-   "auction": "21 Aug 2026",
-   "settlement": "24 Aug 2026",
-   "repoOffered": 10,
-   "reverseOffered": 0,
-   "received": 12,
-   "accepted": 10,
+   "received": 33,
+   "accepted": 30,
    "minRate": 9.19,
    "maxRate": 9.19,
    "waYield": 9.19,
-   "maturity": "23 Sep 2026",
+   "maturity": "24 Sep 2026",
    "tenure": 30,
    "show": true
   }
@@ -413,7 +401,7 @@
   "rows": [
    {
     "bond": "15.12.2026",
-    "eoy": "",
+    "eoy": null,
     "eom": "9.95/10.1",
     "values": [
      "9.5/9.7",
@@ -426,7 +414,7 @@
    },
    {
     "bond": "15.09.2027",
-    "eoy": "",
+    "eoy": null,
     "eom": "10.15/10.3",
     "values": [
      "9.7/9.9",
@@ -439,7 +427,7 @@
    },
    {
     "bond": "15.12.2028",
-    "eoy": "",
+    "eoy": null,
     "eom": "10.7/10.85",
     "values": [
      "10.15/10.3",
@@ -452,7 +440,7 @@
    },
    {
     "bond": "15.12.2029",
-    "eoy": "",
+    "eoy": null,
     "eom": "11.2/11.45",
     "values": [
      "10.55/10.65",
@@ -465,7 +453,7 @@
    },
    {
     "bond": "01.08.2030",
-    "eoy": "",
+    "eoy": null,
     "eom": "11.4/11.42",
     "values": [
      "10.65/10.8",
@@ -478,8 +466,8 @@
    },
    {
     "bond": "01.02.2031",
-    "eoy": "",
-    "eom": "",
+    "eoy": null,
+    "eom": null,
     "values": [
      "10.85/10.95",
      "10.9/11",
@@ -491,7 +479,7 @@
    },
    {
     "bond": "15.12.2032",
-    "eoy": "",
+    "eoy": null,
     "eom": "12.05/12.3",
     "values": [
      "11.3/11.35",
@@ -504,7 +492,7 @@
    },
    {
     "bond": "01.11.2033",
-    "eoy": "",
+    "eoy": null,
     "eom": "12.15/12.35",
     "values": [
      "11.4/11.55",
@@ -517,8 +505,8 @@
    },
    {
     "bond": "15.06.2034",
-    "eoy": "",
-    "eom": "",
+    "eoy": null,
+    "eom": null,
     "values": [
      "11.6/11.65",
      "11.75/11.85",
@@ -530,7 +518,7 @@
    },
    {
     "bond": "15.10.2034",
-    "eoy": "",
+    "eoy": null,
     "eom": "12.2/12.4",
     "values": [
      "11.7/11.8",
@@ -543,7 +531,7 @@
    },
    {
     "bond": "15.03.2035",
-    "eoy": "",
+    "eoy": null,
     "eom": "12.65/12.8",
     "values": [
      "11.85/12.1",
@@ -556,7 +544,7 @@
    },
    {
     "bond": "15.08.2036",
-    "eoy": "",
+    "eoy": null,
     "eom": "12.6/12.8",
     "values": [
      "12.05/12.2",
@@ -569,7 +557,7 @@
    },
    {
     "bond": "01.07.2037",
-    "eoy": "",
+    "eoy": null,
     "eom": "12.75/12.85",
     "values": [
      "12.1/12.2",
@@ -893,554 +881,572 @@
  "bondSecondary": [
   {
    "maturity": "8/28/2026 12:00:00 AM",
-   "bid": 9.05,
-   "ask": 9.2,
+   "bid": 8.7,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "8/28/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.2,
+   "bid": 8.7,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "8/28/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.2,
+   "bid": 8.7,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "9/4/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.2,
+   "bid": 8.7,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "9/4/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.2,
+   "bid": 8.7,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "9/4/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.2,
+   "bid": 8.7,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "9/11/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.2,
+   "bid": 8.75,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "9/11/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.2,
+   "bid": 8.75,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "9/11/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.2,
+   "bid": 8.75,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "9/18/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.2,
+   "bid": 8.75,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "9/18/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
+   "bid": 8.75,
+   "ask": 8.9,
    "show": true
   },
   {
    "maturity": "9/18/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
+   "bid": 8.75,
+   "ask": 8.9,
    "show": true
   },
   {
    "maturity": "9/25/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
+   "bid": 8.75,
+   "ask": 8.9,
    "show": true
   },
   {
    "maturity": "9/25/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
+   "bid": 8.75,
+   "ask": 8.9,
    "show": true
   },
   {
    "maturity": "9/25/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
+   "bid": 8.75,
+   "ask": 8.9,
    "show": true
   },
   {
    "maturity": "10/2/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/2/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/2/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/9/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/9/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/16/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/16/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/16/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/23/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/23/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/23/2026 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.15,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/30/2026 12:00:00 AM",
-   "bid": 9.05,
-   "ask": 9.15,
+   "bid": 8.85,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/30/2026 12:00:00 AM",
-   "bid": 9.05,
-   "ask": 9.15,
+   "bid": 8.85,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "10/30/2026 12:00:00 AM",
-   "bid": 9.05,
-   "ask": 9.15,
+   "bid": 8.85,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "11/6/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.12,
+   "bid": 8.9,
+   "ask": 8.97,
    "show": true
   },
   {
    "maturity": "11/6/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.12,
+   "bid": 8.9,
+   "ask": 8.97,
    "show": true
   },
   {
    "maturity": "11/6/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.12,
+   "bid": 8.9,
+   "ask": 8.97,
    "show": true
   },
   {
    "maturity": "11/13/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.12,
+   "bid": 8.9,
+   "ask": 8.97,
    "show": true
   },
   {
    "maturity": "11/13/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.12,
+   "bid": 8.9,
+   "ask": 8.97,
    "show": true
   },
   {
    "maturity": "11/13/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.12,
+   "bid": 8.9,
+   "ask": 8.97,
    "show": true
   },
   {
    "maturity": "11/20/2026 12:00:00 AM",
-   "bid": 9.05,
-   "ask": 9.15,
+   "bid": 8.9,
+   "ask": 9,
    "show": true
   },
   {
    "maturity": "11/20/2026 12:00:00 AM",
-   "bid": 9.05,
-   "ask": 9.15,
+   "bid": 8.9,
+   "ask": 9,
    "show": true
   },
   {
    "maturity": "11/20/2026 12:00:00 AM",
-   "bid": 9.05,
-   "ask": 9.15,
+   "bid": 8.9,
+   "ask": 9,
    "show": true
   },
   {
    "maturity": "11/27/2026 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.2,
+   "bid": 8.95,
+   "ask": 9.05,
    "show": true
   },
   {
    "maturity": "11/27/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "11/27/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "12/4/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "12/4/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "12/11/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "12/11/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "12/18/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "12/18/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "12/25/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "12/25/2026 12:00:00 AM",
+   "bid": 8.95,
+   "ask": 9.05,
+   "show": true
+  },
+  {
+   "maturity": "1/1/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/1/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/8/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/8/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/15/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/15/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/22/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/22/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/29/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "1/29/2027 12:00:00 AM",
+   "bid": 9,
+   "ask": 9.1,
+   "show": true
+  },
+  {
+   "maturity": "2/5/2027 12:00:00 AM",
    "bid": 9.1,
-   "ask": 9.2,
-   "show": true
-  },
-  {
-   "maturity": "12/4/2026 12:00:00 AM",
-   "bid": 9.15,
    "ask": 9.25,
-   "show": true
-  },
-  {
-   "maturity": "12/4/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
-   "show": true
-  },
-  {
-   "maturity": "12/11/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
-   "show": true
-  },
-  {
-   "maturity": "12/11/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
-   "show": true
-  },
-  {
-   "maturity": "12/18/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
-   "show": true
-  },
-  {
-   "maturity": "12/18/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
-   "show": true
-  },
-  {
-   "maturity": "12/25/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
-   "show": true
-  },
-  {
-   "maturity": "12/25/2026 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.25,
-   "show": true
-  },
-  {
-   "maturity": "1/1/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/1/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/8/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/8/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/15/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/15/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/22/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/22/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/29/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
-   "show": true
-  },
-  {
-   "maturity": "1/29/2027 12:00:00 AM",
-   "bid": 9.2,
-   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "2/5/2027 12:00:00 AM",
-   "bid": 9.3,
-   "ask": 9.45,
-   "show": true
-  },
-  {
-   "maturity": "2/5/2027 12:00:00 AM",
-   "bid": 9.3,
-   "ask": 9.45,
+   "bid": 9.1,
+   "ask": 9.25,
    "show": true
   },
   {
    "maturity": "2/12/2027 12:00:00 AM",
-   "bid": 9.35,
-   "ask": 9.5,
+   "bid": 9.15,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "2/12/2027 12:00:00 AM",
-   "bid": 9.35,
-   "ask": 9.5,
+   "bid": 9.15,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "2/19/2027 12:00:00 AM",
-   "bid": 9.35,
-   "ask": 9.5,
+   "bid": 9.15,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "2/19/2027 12:00:00 AM",
-   "bid": 9.35,
-   "ask": 9.5,
+   "bid": 9.15,
+   "ask": 9.3,
+   "show": true
+  },
+  {
+   "maturity": "2/26/2027 12:00:00 AM",
+   "bid": 9.15,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "2/26/2027 12:00:00 AM",
    "bid": 9.35,
-   "ask": 9.5,
+   "ask": 9.45,
    "show": true
   },
   {
    "maturity": "2/12/2027 12:00:00 AM",
    "bid": 9.35,
-   "ask": 9.5,
+   "ask": 9.45,
    "show": true
   },
   {
    "maturity": "2/19/2027 12:00:00 AM",
    "bid": 9.4,
-   "ask": 9.55,
+   "ask": 9.5,
    "show": true
   },
   {
    "maturity": "2/26/2027 12:00:00 AM",
-   "bid": 9.45,
-   "ask": 9.6,
+   "bid": 9.4,
+   "ask": 9.5,
    "show": true
   },
   {
    "maturity": "3/5/2027 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.65,
+   "bid": 9.45,
+   "ask": 9.55,
    "show": true
   },
   {
    "maturity": "3/12/2027 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.65,
+   "bid": 9.45,
+   "ask": 9.55,
    "show": true
   },
   {
    "maturity": "3/19/2027 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.65,
+   "bid": 9.45,
+   "ask": 9.55,
    "show": true
   },
   {
    "maturity": "3/26/2027 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.65,
+   "bid": 9.45,
+   "ask": 9.55,
    "show": true
   },
   {
    "maturity": "4/2/2027 12:00:00 AM",
-   "bid": 9.55,
-   "ask": 9.7,
+   "bid": 9.5,
+   "ask": 9.6,
    "show": true
   },
   {
    "maturity": "4/16/2027 12:00:00 AM",
-   "bid": 9.55,
-   "ask": 9.7,
+   "bid": 9.5,
+   "ask": 9.6,
    "show": true
   },
   {
    "maturity": "4/23/2027 12:00:00 AM",
-   "bid": 9.55,
-   "ask": 9.7,
+   "bid": 9.5,
+   "ask": 9.6,
    "show": true
   },
   {
    "maturity": "4/30/2027 12:00:00 AM",
-   "bid": 9.55,
-   "ask": 9.7,
+   "bid": 9.5,
+   "ask": 9.6,
    "show": true
   },
   {
    "maturity": "5/7/2027 12:00:00 AM",
-   "bid": 9.6,
-   "ask": 9.75,
+   "bid": 9.55,
+   "ask": 9.65,
    "show": true
   },
   {
    "maturity": "5/14/2027 12:00:00 AM",
-   "bid": 9.6,
-   "ask": 9.75,
+   "bid": 9.55,
+   "ask": 9.65,
    "show": true
   },
   {
    "maturity": "5/21/2027 12:00:00 AM",
-   "bid": 9.6,
-   "ask": 9.75,
+   "bid": 9.55,
+   "ask": 9.65,
    "show": true
   },
   {
    "maturity": "5/28/2027 12:00:00 AM",
-   "bid": 9.6,
-   "ask": 9.75,
+   "bid": 9.55,
+   "ask": 9.65,
    "show": true
   },
   {
    "maturity": "6/4/2027 12:00:00 AM",
-   "bid": 9.65,
-   "ask": 9.8,
+   "bid": 9.6,
+   "ask": 9.7,
    "show": true
   },
   {
    "maturity": "6/11/2027 12:00:00 AM",
-   "bid": 9.65,
-   "ask": 9.8,
+   "bid": 9.6,
+   "ask": 9.7,
    "show": true
   },
   {
    "maturity": "6/18/2027 12:00:00 AM",
-   "bid": 9.65,
-   "ask": 9.8,
+   "bid": 9.6,
+   "ask": 9.7,
    "show": true
   },
   {
    "maturity": "6/25/2027 12:00:00 AM",
-   "bid": 9.65,
-   "ask": 9.8,
+   "bid": 9.6,
+   "ask": 9.7,
    "show": true
   },
   {
    "maturity": "7/2/2027 12:00:00 AM",
-   "bid": 9.7,
-   "ask": 9.85,
+   "bid": 9.65,
+   "ask": 9.75,
    "show": true
   },
   {
    "maturity": "7/9/2027 12:00:00 AM",
-   "bid": 9.7,
-   "ask": 9.85,
+   "bid": 9.65,
+   "ask": 9.75,
    "show": true
   },
   {
    "maturity": "7/16/2027 12:00:00 AM",
-   "bid": 9.7,
-   "ask": 9.85,
+   "bid": 9.65,
+   "ask": 9.75,
    "show": true
   },
   {
    "maturity": "7/23/2027 12:00:00 AM",
-   "bid": 9.7,
-   "ask": 9.85,
+   "bid": 9.65,
+   "ask": 9.75,
    "show": true
   },
   {
    "maturity": "7/30/2027 12:00:00 AM",
-   "bid": 9.7,
-   "ask": 9.85,
+   "bid": 9.65,
+   "ask": 9.75,
    "show": true
   },
   {
    "maturity": "8/6/2027 12:00:00 AM",
    "bid": 9.7,
-   "ask": 9.9,
+   "ask": 9.8,
    "show": true
   },
   {
    "maturity": "8/13/2027 12:00:00 AM",
    "bid": 9.7,
-   "ask": 9.9,
+   "ask": 9.8,
    "show": true
   },
   {
    "maturity": "8/20/2027 12:00:00 AM",
    "bid": 9.75,
-   "ask": 9.95,
+   "ask": 9.85,
+   "show": true
+  },
+  {
+   "maturity": "8/27/2027 12:00:00 AM",
+   "bid": 9.75,
+   "ask": 9.9,
    "show": true
   }
  ],
@@ -2818,7 +2824,8 @@
    "18 Aug",
    "19 Aug",
    "20 Aug",
-   "21 Aug"
+   "21 Aug",
+   "24 Aug"
   ],
   "values": [
    2508.92,
@@ -2961,6 +2968,7 @@
    2498.12,
    2498.12,
    2498.12,
+   2492.62,
    2492.62,
    2492.62,
    2492.62,
@@ -6620,19 +6628,20 @@
  ],
  "execSummary": {
   "usdlkr": "328.95/ 329.05",
-  "liqDir": "decreased",
-  "liqDelta": 51.74
+  "liqDir": "increased",
+  "liqDelta": 44.7
  },
  "marketNews": [
   "Treasury Bill Auction Results",
   "------------------------------------------------------------",
-  "91-Day (LKA09126K209): 9.22%",
-  "182-Day (LKA18227B195): 9.60%",
-  "364-Day (LKA36427H204): 9.91%",
+  "91-Day (LKA09126K274): 9.06%",
+  "182-Day (LKA18227B260): 9.44%",
+  "364-Day (LKA36427H279): 9.89%",
   "------------------------------------------------------------",
-  "Total Amount Issued: Rs. 140.0 Billion",
-  "Total Amount Accepted: Rs. 140.0 Billion",
-  "Auction Date: 19 August 2026"
+  "Total Amount Issued: Rs. 120.0 Billion",
+  "Total Amount Accepted: Rs. 120.0 Billion",
+  "Auction Date: 24 August 2026",
+  "Settlement Date: 28 August 2026"
  ],
  "date": "2026-08-24",
  "openingDate": "",
@@ -6640,7 +6649,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/6f4d63e7-2371-4f5e-bbbd-37454ccabe0b",
+ "newsLink": "",
  "billAucLink": "https://www.treasury.gov.lk/api/file/c43adde1-a465-48a4-9683-c6e3ba74c20a",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/209f4255-d28b-48f7-ac16-4f66087308bc",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/8169a6c0-3368-4abc-8027-ee5165fbf85f",
