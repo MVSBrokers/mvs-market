@@ -1287,16 +1287,129 @@ function analyzeFreshness(wb,XLSX,nowOverride){
   }
   const mmLiqDate=_liqDateCol>=0?latestDate(mm,_liqDateCol):null;
   daily('Money Market & Liquidity','SL',mmLiqDate,'liquidity');
-  const fx=S(find('fx')||'');daily('USD/LKR & FX Spot','SL',latestDate(fx,0),'usdlkr');
-  const fi=S(find('fixedincome')||'');{let last=mmLiqDate||latestDate(fi,10);daily('Daily Bond / Yield Rates','SL',last,'bonds');}
+  // Money Market & Repo Rates and Standing Facilities (SDF/SLF) live on the same sheet as
+  // Liquidity, with no date column of their own — they're published together, so Liquidity's
+  // date is a reliable proxy for whether they're current too.
+  daily('Money Market & Repo Rates','SL',mmLiqDate,'mmrates');
+  daily('Standing Facilities (SDF/SLF)','SL',mmLiqDate,'windows');
+  // Repo Overnight / OMO auctions each have their own date column, found the same way the
+  // real import locates their header row (position shifts as the sheet grows).
+  {const hdrIdx=mm.findIndex(r=>r&&r.some(c=>c!=null&&/repo\s*\/\s*reverse\s*repo\s*auction/i.test(String(c))));
+   daily('Repo / Reverse Repo Auction (Overnight)','SL',hdrIdx>=0?latestDate(mm,0,hdrIdx+1):null,'repoOvernight');}
+  {const hdrIdx=mm.findIndex(r=>r&&r.some(c=>c!=null&&/OMO.*Term\s*Repo/i.test(String(c))));
+   daily('OMO - Term Repo / Reverse Repo Transactions','SL',hdrIdx>=0?latestDate(mm,0,hdrIdx+1):null,'repoOMO');}
+  const fx=S(find('fx')||'');const usdlkrDate=latestDate(fx,0);daily('USD/LKR & FX Spot','SL',usdlkrDate,'usdlkr');
+  // FX Swaps / Spot Overview / Cross-Currency Rates are single-row lookups on the same FX sheet
+  // with no date column of their own — they move with the day's USD/LKR rate.
+  daily('FX Swaps','SL',usdlkrDate,'fxswaps');
+  daily('FX Spot Overview','SL',usdlkrDate,'spot');
+  daily('Cross-Currency Rates','SL',usdlkrDate,'cross');
+  const fi=S(find('fixedincome')||'');const bondsDate=mmLiqDate||latestDate(fi,10);{daily('Daily Bond / Yield Rates','SL',bondsDate,'bonds');}
+  // T-Bill Yield Curve has its own date column (separate from the weekly auction results below).
+  daily('T-Bill Yield Curve (series)','SL',latestDate(fi,10),'tbillcurve');
+  // T-Bond Secondary Yields is a maturity-keyed table (no date column) on the same Fixed Income
+  // sheet — published alongside the daily bond rates.
+  daily('T-Bond Secondary Yields','SL',bondsDate,'secondary');
   const gl=S(find('globalmarket')||'');daily('US 10Y Treasury','SL',latestDate(gl,0),'global10y');daily('Gold (XAU/USD)','SL',latestDate(gl,13),'gold');daily('Crude Oil (WTI / Brent)','SL',latestDate(gl,3),'brent');daily('Murban Crude Oil','SL',latestDate(gl,7),'murban');daily('US Dollar Index (DXY)','SL',latestDate(gl,10),'dxy');
+  // WTI shares its date column with Brent (same sheet columns 3-5: date, WTI value, Brent value).
+  daily('WTI Crude Oil','SL',latestDate(gl,3),'wti');
   const mc=S(find('macroeconomy')||'');weekly('Foreign Holdings of Govt Securities','SL',latestDate(mc,0),'foreign');
+  // CBSL Holdings has its own date column too, published on the same weekly cadence as Foreign
+  // Holdings of Govt Securities (both come from CBSL's weekly government securities data).
+  weekly('CBSL Holdings of Govt Securities','SL',latestDate(mc,3),'cbsl');
   // T-Bill Auction Details: weekly, updated Wednesday after 4 PM SL (auction results day)
   weeklyDay('T-Bill Auction Details','tbillauction',latestDate(fi,20),3,16);
-  const monthLbl=(mc[1]&&mc[1][11])?String(mc[1][11]).trim():'';
-  out.push({label:'Reserves · Inflation · Tourism · Remittances',cadence:'Monthly',cal:'SL',secId:'reserves',status:'info',msg:'Monthly series — latest column: '+(monthLbl||'n/a')+'. Update when the new month is released.'});
+  // Monthly macro series each have their own actual header/data source on the Macro Economy
+  // sheet — Reserves' month name is the row data itself (cols 6/7); Inflation has its own header
+  // at row 1 col 11; Tourism and Remittances share the same column layout (17-19, different
+  // rows) so they share the same header col 18. Split into one card per section (each with its
+  // own secId) instead of one bundled card reusing a single column, so each is checked against
+  // its own real data and links to the right place to fix it. Kept conservative (not flagged
+  // "stale" until 2+ months behind) since these often have a natural one-month reporting lag
+  // that isn't actually a problem.
+  let resMonthLbl='';for(let i=mc.length-1;i>=2;i--){if(mc[i][6]!=null){resMonthLbl=String(mc[i][6]).trim();break;}}
+  const infMonthLbl=(mc[1]&&mc[1][11])?String(mc[1][11]).trim():'';
+  const trMonthLbl=(mc[1]&&mc[1][18])?String(mc[1][18]).trim():'';
+  const monthlyCheck=(label,secId,monthLbl)=>{
+    if(!monthLbl){out.push({label,cadence:'Monthly',cal:'SL',secId,status:'info',msg:'No month label found on the Macro Economy sheet.'});return;}
+    const m=monthLbl.match(/([A-Za-z]{3,})\D{0,3}(\d{4})/);
+    if(!m){out.push({label,cadence:'Monthly',cal:'SL',secId,status:'info',msg:'Latest column: '+monthLbl+'.'});return;}
+    const mi=MON3.indexOf(m[1].toLowerCase().slice(0,3));
+    if(mi<0){out.push({label,cadence:'Monthly',cal:'SL',secId,status:'info',msg:'Latest column: '+monthLbl+'.'});return;}
+    const latestD=new Date(parseInt(m[2],10),mi,1),curD=new Date(now.getFullYear(),now.getMonth(),1);
+    const behind=(curD.getFullYear()-latestD.getFullYear())*12+(curD.getMonth()-latestD.getMonth());
+    if(behind<=1){out.push({label,cadence:'Monthly',cal:'SL',secId,status:'ok',msg:'Up to date — latest column: '+monthLbl+'.'});}
+    else{out.push({label,cadence:'Monthly',cal:'SL',secId,status:behind>=3?'stale':'pending',msg:(behind>=3?'NOT updated — ':'New month may be available — ')+'latest column: '+monthLbl+' ('+behind+' months behind).'});}
+  };
+  monthlyCheck('Foreign Currency Reserves','reserves',resMonthLbl);
+  monthlyCheck('Inflation (CCPI / NCPI)','inflation',infMonthLbl);
+  monthlyCheck('Tourism','tourism',trMonthLbl);
+  monthlyCheck('Remittances','remittances',trMonthLbl);
+  // Manual-only date fields (never auto-parsed from Excel — set by hand in the editor). These
+  // can't be judged "stale" against a working-day calendar the way Excel-sourced data can, so
+  // they're shown as informational: how old is the date currently set, if any.
+  const manualDateInfo=(label,secId,rawDate,cadenceLabel)=>{
+    if(!rawDate){out.push({label,cadence:cadenceLabel,cal:'—',secId,status:'missing',msg:'No date set yet — this is set manually in the editor, not read from Excel.'});return;}
+    const d=xlDate(rawDate)||parseDM(rawDate);
+    if(!d){out.push({label,cadence:cadenceLabel,cal:'—',secId,status:'info',msg:'Date set to: '+String(rawDate)+' (manual field — not auto-checked).'});return;}
+    const days=Math.round((todayUTC-d)/86400000);
+    out.push({label,cadence:cadenceLabel,cal:'—',secId,status:days>3?'pending':'ok',msg:(days>3?'Set to '+fmt(d)+' ('+days+' days ago) — worth checking it\'s still current.':'Set to '+fmt(d)+' ('+(days<=0?'today':days+' day'+(days===1?'':'s')+' ago')+').')});
+  };
+  manualDateInfo('FX Market Summary','fxsummary',typeof LOADED!=='undefined'&&LOADED&&LOADED.fxVolDate,'Manual date');
+  manualDateInfo('T-Bond Outright Transaction Volumes','bondtransxn',typeof LOADED!=='undefined'&&LOADED&&LOADED.bondTransVol&&LOADED.bondTransVol.date,'Manual date');
+  // Value Dates has its own per-tenor date column on the Opening Report sheet.
+  {const orp=S(find('opening')||'');daily('Value Dates','SL',latestDate(orp,5),'valuedates');}
+  // Event-driven schedule sections (auctions, meeting dates) don't update on any fixed calendar
+  // — flag only when a listed date has already passed without a newer entry.
+  const eventCheck=(label,secId,rows,dateCol,labelCol)=>{
+    let passed=[];
+    for(let i=2;i<rows.length;i++){
+      const v=rows[i]&&rows[i][dateCol];if(v==null)continue;
+      const d=xlDate(v)||parseDM(v);
+      if(d&&d<todayUTC)passed.push(labelCol!=null&&rows[i][labelCol]!=null?String(rows[i][labelCol]).trim():fmt(d));
+    }
+    out.push({label,cadence:'Fixed / Special',cal:'—',secId,status:passed.length?'pending':'info',msg:passed.length?('A scheduled date has passed — check for an update: '+passed.slice(-3).join(', ')):'Event-driven — update only when a new decision or date occurs.'});
+  };
+  // OPR and SRR are historical logs of rate changes, not schedules of upcoming events — every
+  // entry's date is inherently in the past the moment it's recorded, so "a date has passed"
+  // doesn't apply the way it does for an auction schedule. These just show how long ago the
+  // latest recorded change was, for the person's own judgment on whether it's still current.
+  const latestEntryInfo=(label,secId,latestD)=>{
+    if(!latestD){out.push({label,cadence:'Fixed / Special',cal:'—',secId,status:'info',msg:'No entries found. Event-driven — update only when a new decision occurs.'});return;}
+    const days=Math.round((todayUTC-latestD)/86400000);
+    out.push({label,cadence:'Fixed / Special',cal:'—',secId,status:'info',msg:'Latest recorded change: '+fmt(latestD)+' ('+(days<=0?'today':days+' day'+(days===1?'':'s')+' ago')+'). Event-driven — update only when a new decision occurs.'});
+  };
+  // OPR's date column (0) is reused further down the same Money Market sheet by the Repo
+  // Overnight / OMO auction sub-tables at different row offsets — scanning past OPR's own rows
+  // would wrongly pick up their dates too, so this stops at the same boundary the real import
+  // uses: the first row whose column 0 isn't a "DD.MM.YYYY" string.
+  {let oprLatest=null;
+   for(let i=2;i<mm.length;i++){
+     const raw=mm[i][0];
+     if(typeof raw!=='string'||!/^\d{1,2}\.\d{1,2}\.\d{4}$/.test(raw.trim()))break;
+     const p=raw.trim().split('.');const d=new Date(+p[2],+p[1]-1,+p[0]);
+     if(!isNaN(d.getTime())&&(!oprLatest||d>oprLatest))oprLatest=d;
+   }
+   latestEntryInfo('Policy Rate (OPR) History','opr',oprLatest);}
+  latestEntryInfo('Statutory Reserve Requirement (SRR)','srr',latestDate(mc,13));
+  eventCheck('FOMC Decisions','fomc',gl,16,null);
   const an=S(find('announcement')||'');let passed=[];for(let i=2;i<an.length;i++){const v=an[i]&&an[i][1];if(v){const m=String(v).match(/^(\d{1,2})(?:-\d{1,2})?[.\-/](\d{1,2})[.\-/](\d{4})/);if(m){const dt=new Date(Date.UTC(+m[3],+m[2]-1,+m[1]));if(dt<todayUTC)passed.push(String(an[i][0]).trim());}}}
   out.push({label:'OPR · SRR · FOMC · Key Dates',cadence:'Fixed / Special',cal:'—',secId:'keydates',status:passed.length?'pending':'info',msg:passed.length?('A scheduled date has passed — update: '+passed.join(', ')):'Event-driven — update only when a new policy decision or date occurs.'});
+  eventCheck('T-Bill Auction Schedule','billauc',an,3,null);
+  eventCheck('T-Bond Auction Schedule','bondauc',an,8,null);
+  // Outstanding-securities lists: "freshness" here means something different — flag if any listed
+  // maturity has already passed (should have rolled off the list) rather than "needs new data".
+  const expiryCheck=(label,secId,rows,maturityCol)=>{
+    let expired=[];
+    for(let i=2;i<rows.length;i++){
+      const v=rows[i]&&rows[i][maturityCol];if(v==null)continue;
+      const d=xlDate(v);
+      if(d&&d<todayUTC)expired.push(fmt(d));
+    }
+    out.push({label,cadence:'As maturities roll off',cal:'—',secId,status:expired.length?'stale':'ok',msg:expired.length?('Contains '+expired.length+' already-matured entr'+(expired.length===1?'y':'ies')+' ('+expired.slice(0,3).join(', ')+(expired.length>3?', …':'')+') — remove or update.'):'No expired entries currently listed.'});
+  };
+  expiryCheck('T-Bill Outstanding','tbillout',an,13);
+  expiryCheck('T-Bond Outstanding','tbondout',an,17);
   return out;
 }
 // Compare the uploaded data's latest date to today (recomputed every render, incl. on refresh)
