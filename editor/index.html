@@ -178,7 +178,7 @@ const SECTIONS=[
  {id:'dates',title:'Report Dates (auto-filled on import · edit any to correct)',keys:['openingDate','closingDate','mmDate','secondaryDate','fxVolDate','bonds'],group:'General'},
  {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews','newsLink'],group:'General'},
  {id:'mmrates',title:'Money Market & Repo Rates',keys:['callMarket','repoMarket'],group:'Money Market'},
- {id:'windows',title:'Standing Facilities (SDF / SLF)',keys:['windows','netOutstandingLT'],group:'Money Market'},
+ {id:'windows',title:'Standing Facilities (SDF / SLF)',keys:['windows'],group:'Money Market'},
  {id:'opr',title:'Policy Rate (OPR) History',keys:['opr'],group:'Money Market'},
  {id:'liquidity',title:'Market Liquidity',keys:['liquidity'],group:'Money Market'},
  {id:'repoOvernight',title:'Repo / Reverse Repo Auction (Overnight)',keys:['repoOvernight'],group:'Money Market'},
@@ -752,16 +752,7 @@ function renderSections(){
     // Individual per-section cutoff buttons have been replaced by the single "Cutoff Override —
     // all sections" button at the top of the page (see cutoff-master-box).
     let body;
-    if(sec.id==='windows'){
-      const W=LOADED.windows||{};
-      body='<div class="ed-sub"><div class="ed-sub-t">windows (SDF / SLF — auto-filled on import)</div>'
-        + (LOADED.windows!=null?renderNode(LOADED.windows,'windows'):'<span class="muted">No data in this workbook.</span>')
-        + '</div>'
-        + '<div class="ed-sub"><div class="ed-sub-t">Net Outstanding Long Term (Rs.Bn)</div>'
-        + '<div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Manual — not read from Excel, since this depends on your own netting judgment across the long-term repo maturity schedule. Preserved across future Excel re-imports, same as the date fields.</div>'
-        + inp('netOutstandingLT',LOADED.netOutstandingLT!=null?LOADED.netOutstandingLT:'','num').replace('<input ','<input placeholder="e.g. 210.00" style="min-width:140px" ')
-        + '</div>';
-    } else if(sec.id==='results'){
+    if(sec.id==='results'){
       const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:(LOADED.marketNews?[String(LOADED.marketNews)]:[]);
       body=`<div class="ed-sub"><div class="ed-sub-t">Latest results — write a paragraph (leave a blank line for spacing). Shown as a paragraph on the dashboard's Announcements tab.</div><textarea id="news-box" class="ed-news" rows="9" placeholder="Write your latest results / commentary here…&#10;&#10;Leave a blank line to start a new paragraph.">${escHtml(cur.join('\n'))}</textarea>
         <div style="margin-top:12px"><div class="ed-sub-t">"More details" link (optional)</div><input id="news-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a 'More details' button that opens this" value="${escAttr(LOADED.newsLink||'')}"></div></div>`;
@@ -1559,7 +1550,7 @@ if (!Array.isArray(o.marketNews)) {
 o.date=new Date().toISOString().slice(0,10);
   // Report dates — leave blank so dashboard auto-uses SL working days
   // Preserve any manual topic-date overrides across re-import (blank = auto on dashboard)
-  const _keepDates=['openingDate','closingDate','mmDate','fxVolDate','secondaryDate','netOutstandingLT'];
+  const _keepDates=['openingDate','closingDate','mmDate','fxVolDate','secondaryDate'];
   _keepDates.forEach(k=>{if(!o[k]&&LOADED&&LOADED[k])o[k]=LOADED[k];});
   o.openingDate=o.openingDate||"";o.closingDate=o.closingDate||"";o.mmDate=o.mmDate||"";o.fxVolDate=o.fxVolDate||"";o.secondaryDate=o.secondaryDate||"";
   return o;
