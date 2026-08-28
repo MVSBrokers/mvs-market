@@ -2464,57 +2464,47 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 45.45,
-   "wa": 329.0037
+   "volume": 45,
+   "wa": 328.6088
   },
   {
    "tenor": "TOM",
-   "volume": 8.95,
-   "wa": 328.9203
+   "volume": 5.25,
+   "wa": 328.4938
   },
   {
    "tenor": "CASH",
-   "volume": 14,
-   "wa": 328.8618
+   "volume": 24.4,
+   "wa": 328.4186
   },
   {
    "tenor": "Sub Total",
-   "volume": 68.4,
+   "volume": 74.65,
    "wa": null
   },
   {
-   "tenor": "1W",
-   "volume": 0.45,
-   "wa": 329.44
-  },
-  {
-   "tenor": "2W",
-   "volume": 0.5,
-   "wa": 329.4
-  },
-  {
    "tenor": "1M",
-   "volume": 12.4,
-   "wa": 330.4117
+   "volume": 7.5,
+   "wa": 329.856
   },
   {
    "tenor": "2M",
-   "volume": 0.1,
-   "wa": 331.5
+   "volume": 1,
+   "wa": 330.54
   },
   {
    "tenor": "3M",
-   "volume": 15,
-   "wa": 332.99
+   "volume": 5,
+   "wa": 332.438
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 28.45,
+   "volume": 13.5,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 96.85,
+   "volume": 88.15,
    "wa": null
   }
  ],
@@ -5277,12 +5267,12 @@
   },
   {
    "label": "Next T-Bill Auction Day",
-   "date": "2026-08-24",
+   "date": "2026-09-02",
    "show": true
   },
   {
    "label": "Next T-Bond Auction Day",
-   "date": "2026-08-25",
+   "date": "2026-09-11",
    "show": true
   },
   {
