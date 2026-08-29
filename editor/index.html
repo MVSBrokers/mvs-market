@@ -179,7 +179,7 @@ const SECTIONS=[
  {id:'results',title:'Latest Results (free-text market announcements)',keys:['marketNews','newsLink'],group:'General'},
  {id:'mmrates',title:'Money Market & Repo Rates',keys:['callMarket','repoMarket'],group:'Money Market'},
  {id:'windows',title:'Standing Facilities (SDF / SLF)',keys:['windows'],group:'Money Market'},
- {id:'netliquidity',title:'Net Market Liquidity',keys:['netOutstandingLT'],group:'Money Market'},
+ {id:'netliquidity',title:'Net Market Liquidity',keys:['netOutstandingLT','netMarketLiquidity'],group:'Money Market'},
  {id:'opr',title:'Policy Rate (OPR) History',keys:['opr'],group:'Money Market'},
  {id:'liquidity',title:'Market Liquidity',keys:['liquidity'],group:'Money Market'},
  {id:'repoOvernight',title:'Repo / Reverse Repo Auction (Overnight)',keys:['repoOvernight'],group:'Money Market'},
@@ -755,8 +755,12 @@ function renderSections(){
     let body;
     if(sec.id==='netliquidity'){
       body='<div class="ed-sub"><div class="ed-sub-t">Net Outstanding Long Term (Rs.Bn)</div>'
-        + '<div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Manual — not read from Excel, since this depends on your own netting judgment across the long-term repo maturity schedule. Preserved across future Excel re-imports, same as the date fields. Combined with the existing Net Market Liquidity figure (Money & Repo Market section) and shown together on the dashboard, below the Market Liquidity chart.</div>'
+        + '<div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Manual — not read from Excel. Preserved across future Excel re-imports, same as the date fields.</div>'
         + inp('netOutstandingLT',LOADED.netOutstandingLT!=null?LOADED.netOutstandingLT:'','num').replace('<input ','<input placeholder="e.g. 210.00" style="min-width:140px" ')
+        + '</div>'
+        + '<div class="ed-sub"><div class="ed-sub-t">Net Market Liquidity (Rs.Bn)</div>'
+        + '<div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">Manual — also not read from Excel, entered independently of the Market Liquidity chart (which stays sourced from Excel as before). Preserved across future Excel re-imports. Shown together with Net Outstanding Long Term on the dashboard, below the Market Liquidity chart.</div>'
+        + inp('netMarketLiquidity',LOADED.netMarketLiquidity!=null?LOADED.netMarketLiquidity:'','num').replace('<input ','<input placeholder="e.g. 333.21" style="min-width:140px" ')
         + '</div>';
     } else if(sec.id==='results'){
       const cur=Array.isArray(LOADED.marketNews)?LOADED.marketNews:(LOADED.marketNews?[String(LOADED.marketNews)]:[]);
@@ -1556,7 +1560,7 @@ if (!Array.isArray(o.marketNews)) {
 o.date=new Date().toISOString().slice(0,10);
   // Report dates — leave blank so dashboard auto-uses SL working days
   // Preserve any manual topic-date overrides across re-import (blank = auto on dashboard)
-  const _keepDates=['openingDate','closingDate','mmDate','fxVolDate','secondaryDate','netOutstandingLT'];
+  const _keepDates=['openingDate','closingDate','mmDate','fxVolDate','secondaryDate','netOutstandingLT','netMarketLiquidity'];
   _keepDates.forEach(k=>{if(!o[k]&&LOADED&&LOADED[k])o[k]=LOADED[k];});
   o.openingDate=o.openingDate||"";o.closingDate=o.closingDate||"";o.mmDate=o.mmDate||"";o.fxVolDate=o.fxVolDate||"";o.secondaryDate=o.secondaryDate||"";
   return o;
