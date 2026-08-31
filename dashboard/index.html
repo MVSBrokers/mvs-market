@@ -390,7 +390,12 @@ canvas{max-width:100%!important}
   <!-- MONEY MARKET HEADER -->
   
   <div class="grid-2x2">
-    <div class="panel"><div class="panel-title pt-row" data-sec="liquidity"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div></div>
+    <div class="panel"><div class="panel-title pt-row" data-sec="liquidity"><span>Market Liquidity (Rs.Bn)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('liq',7,this)" title="Last 7 working days">W</button><button class="mg-btn" onclick="setChartGran('liq',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('liq','all',this)" title="Full year (all data)">Y</button></span></div><canvas id="liqChart" style="max-height:200px"></canvas><div class="chart-stat-bar" id="liqStat"></div><div class="mini-tbl" id="liqTbl"></div>
+      <div class="cmp-card" style="margin-top:10px">
+        <div class="cmp-col"><div class="cmp-label">Net Outstanding Long Term</div><div class="cmp-value" id="netLtVal">—<span class="cmp-unit">Bn</span></div></div>
+        <div class="cmp-col"><div class="cmp-label">Net Market Liquidity</div><div class="cmp-value" style="color:#c8a84b" id="netMktLiqVal">—<span class="cmp-unit">Bn</span></div></div>
+      </div>
+    </div>
     <div class="panel" id="mm-panel">
       <div class="panel-title">Money &amp; Repo Market<span class="close-date" id="mm-close"></span></div>
       <div data-sec-self="mmrates">
@@ -2327,7 +2332,8 @@ function renderExtras(d){
   {const w=d.windows||{},lq=d.liquidity||{};
    set('dyn-op-cbsl',`<tr><td>Standing Deposit Facility (SDF)</td><td style="text-align:right">${fmt2(w.sdf&&w.sdf.cur)}</td><td style="text-align:right">${fmt2(w.sdf&&w.sdf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
      `<tr><td>Standing Lending Facility (SLF)</td><td style="text-align:right">${fmt2(w.slf&&w.slf.cur)}</td><td style="text-align:right">${fmt2(w.slf&&w.slf.prev)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
-     `<tr><td style="font-weight:700">Net Market Liquidity</td><td style="color:#c8a84b;font-weight:700;text-align:right">${fmt2(lq.current)}</td><td style="text-align:right">${fmt2(lq.previous)}</td><td colspan="2" style="color:#6dd4a0;font-weight:700;text-align:right">CBSL Holdings: ${fmt2(d.cbslHoldings)} Bn</td></tr>`);}
+     `<tr><td>Net Outstanding Long Term</td><td style="text-align:right">${fmt2(d.netOutstandingLT)}</td><td style="text-align:right">—</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>`+
+     `<tr><td style="font-weight:700">Net Market Liquidity</td><td style="color:#c8a84b;font-weight:700;text-align:right">${fmt2(d.netMarketLiquidity)}</td><td style="text-align:right">—</td><td colspan="2" style="color:#6dd4a0;font-weight:700;text-align:right">CBSL Holdings: ${fmt2(d.cbslHoldings)} Bn</td></tr>`);}
   {const c=d.callMarket||{},r=d.repoMarket||{};
    set('dyn-op-mm',`<tr><td>Call Money</td><td>${fmt2(c.max)}</td><td>${fmt2(c.min)}</td><td style="color:#c8a84b">${fmt2(c.wa)}</td><td>${fmt2(c.vol)}</td></tr>`+
      `<tr><td>Repo</td><td>${fmt2(r.max)}</td><td>${fmt2(r.min)}</td><td style="color:#c8a84b">${fmt2(r.wa)}</td><td>${fmt2(r.vol)}</td></tr>`);}
@@ -2415,6 +2421,10 @@ function buildCharts(d){
   charts.liq=new Chart(document.getElementById("liqChart"),{type:"line",data:{labels:liqAg.labels,datasets:[{label:"Rs.Bn",data:pick(d.liquidity?.values||[],liqAg.idx),borderColor:"#c8a84b",backgroundColor:"rgba(200,168,75,0.2)",tension:0.35,pointRadius:0,pointHoverRadius:5,borderWidth:2,fill:true}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:xt,grid:{color:gc}}}}});
   renderStatBar("liqStat",pick(d.liquidity?.values||[],liqAg.idx).map(v=>{const n=parseFloat(v);return isNaN(n)?null:n;}),liqAg.labels,"Rs.Bn",2);
   recentTable("liqTbl",d.liquidity?.labels||[],d.liquidity?.values||[],"Rs.Bn",2);
+  {const ltEl=document.getElementById('netLtVal'),mlEl=document.getElementById('netMktLiqVal');
+   const fv=v=>{if(v==null||v==='')return '—';const n=parseFloat(v);return isNaN(n)?'—':n.toFixed(2);};
+   if(ltEl)ltEl.innerHTML=fv(d.netOutstandingLT)+'<span class="cmp-unit">Bn</span>';
+   if(mlEl)mlEl.innerHTML=fv(d.netMarketLiquidity)+'<span class="cmp-unit">Bn</span>';}
   // renderStatBar is now global (defined before render)
   // ──────────────────────────────────────────────────────────
   destroyChart("cbsl");
