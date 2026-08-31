@@ -854,7 +854,7 @@ function renderSections(){
         return `<div class="ed-sub"><div class="ed-sub-t">${k}</div>${renderNode(LOADED[k],k)}</div>`;
       }).join('');
     }
-    const presentEff=sec.id==='results'?true:present;
+    const presentEff=(sec.id==='results'||sec.id==='netliquidity')?true:present;
     return groupHdr+`<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
       <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
         <div><div class="st">${sec.title}${hid?' <span class="hid-tag">hidden on dashboard</span>':''}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
