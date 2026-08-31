@@ -17,25 +17,25 @@
   }
  ],
  "callMarket": {
-  "min": 8.75,
+  "min": 8.8,
   "max": 8.88,
-  "wa": 8.84,
-  "vol": 44.35
+  "wa": 8.85,
+  "vol": 40.22
  },
  "repoMarket": {
-  "min": 8.86,
-  "max": 9.05,
-  "wa": 8.9,
-  "vol": 98.48
+  "min": 8.88,
+  "max": 8.95,
+  "wa": 8.91,
+  "vol": 85.93
  },
  "windows": {
   "sdf": {
-   "cur": 83.82,
-   "prev": 117.87
+   "cur": 82.77,
+   "prev": 83.82
   },
   "slf": {
-   "cur": 0.19,
-   "prev": 0
+   "cur": 0.44,
+   "prev": 0.19
   }
  },
  "liquidity": {
@@ -198,7 +198,8 @@
    "21 Aug",
    "24 Aug",
    "25 Aug",
-   "28 Aug"
+   "28 Aug",
+   "31 Aug"
   ],
   "values": [
    128.14,
@@ -359,28 +360,29 @@
    78.51,
    123.21,
    182.87,
-   113.13
+   113.13,
+   132.33
   ],
-  "current": 113.13,
-  "previous": 182.87
+  "current": 132.33,
+  "previous": 113.13
  },
  "repoOvernight": [
   {
-   "date": "28 Aug 2026",
+   "date": "31 Aug 2026",
    "repoOffered": 40,
    "reverseRepoOffered": null,
-   "received": 20,
-   "accepted": 20,
-   "minRate": 8.72,
+   "received": 52,
+   "accepted": 40,
+   "minRate": 8.73,
    "maxRate": 8.75,
-   "waYield": 8.74,
+   "waYield": 8.75,
    "show": true
   }
  ],
  "repoOMO": [
   {
-   "auction": "28 Aug 2026",
-   "settlement": "28 Aug 2026",
+   "auction": "31 Aug 2026",
+   "settlement": "31 Aug 2026",
    "repoOffered": 20,
    "reverseOffered": 0,
    "received": 10,
@@ -389,20 +391,20 @@
    "maxRate": 8.75,
    "waYield": 8.75,
    "maturity": "2 Sep 2026",
-   "tenure": 5,
+   "tenure": 2,
    "show": true
   },
   {
-   "auction": "28 Aug 2026",
-   "settlement": "31 Aug 2026",
+   "auction": "31 Aug 2026",
+   "settlement": "1 Sep 2026",
    "repoOffered": 20,
    "reverseOffered": 0,
-   "received": 29,
+   "received": 35,
    "accepted": 20,
    "minRate": 9.18,
    "maxRate": 9.19,
    "waYield": 9.19,
-   "maturity": "30 Sep 2026",
+   "maturity": "1 Oct 2026",
    "tenure": 30,
    "show": true
   }
@@ -1822,7 +1824,7 @@
    328.02,
    328.2
   ],
-  "close": "328.15/ 328.30"
+  "close": "328.20/ 328.40"
  },
  "fxSwaps": {
   "1w": {
@@ -1852,7 +1854,7 @@
  },
  "spot": {
   "open": "327.75/ 328.00",
-  "close": "328.15/ 328.30",
+  "close": "328.20/ 328.40",
   "low": "327.75",
   "high": "328.2"
  },
@@ -2830,7 +2832,8 @@
    "21 Aug",
    "24 Aug",
    "25 Aug",
-   "28 Aug"
+   "28 Aug",
+   "31 Aug"
   ],
   "values": [
    2508.92,
@@ -2973,6 +2976,7 @@
    2498.12,
    2498.12,
    2498.12,
+   2492.62,
    2492.62,
    2492.62,
    2492.62,
@@ -6670,9 +6674,9 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "328.15/ 328.30",
-  "liqDir": "decreased",
-  "liqDelta": 69.74
+  "usdlkr": "328.20/ 328.40",
+  "liqDir": "increased",
+  "liqDelta": 19.2
  },
  "marketNews": [
   "Treasury Bond Auction Results",
@@ -6685,8 +6689,8 @@
   "Auction Date: 25 August 2026"
  ],
  "date": "2026-08-31",
- "netOutstandingLT": 205,
- "netMarketLiquidity": 318.13,
+ "netOutstandingLT": null,
+ "netMarketLiquidity": null,
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
