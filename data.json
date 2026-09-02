@@ -806,23 +806,23 @@
    "maturities": [
     {
      "maturity": "3M",
-     "offered": null,
-     "accepted": null,
-     "yield": null,
+     "offered": 35000,
+     "accepted": 35000,
+     "yield": 100,
      "war": null
     },
     {
      "maturity": "6M",
-     "offered": null,
-     "accepted": null,
-     "yield": null,
+     "offered": 25000,
+     "accepted": 25000,
+     "yield": 100,
      "war": null
     },
     {
      "maturity": "12M",
-     "offered": null,
-     "accepted": null,
-     "yield": null,
+     "offered": 20000,
+     "accepted": 20000,
+     "yield": 100,
      "war": null
     }
    ]
