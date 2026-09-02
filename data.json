@@ -17,25 +17,25 @@
   }
  ],
  "callMarket": {
-  "min": 8.86,
+  "min": 8.7,
   "max": 8.9,
   "wa": 8.85,
-  "vol": 53.72
+  "vol": 50.5
  },
  "repoMarket": {
-  "min": 8.85,
+  "min": 8.86,
   "max": 8.95,
   "wa": 8.91,
-  "vol": 67.45
+  "vol": 61.68
  },
  "windows": {
   "sdf": {
-   "cur": 102.83,
-   "prev": 82.77
+   "cur": 87.43,
+   "prev": 102.83
   },
   "slf": {
-   "cur": 4.07,
-   "prev": 0.44
+   "cur": 0.38,
+   "prev": 4.07
   }
  },
  "liquidity": {
@@ -200,7 +200,8 @@
    "25 Aug",
    "28 Aug",
    "31 Aug",
-   "1 Sep"
+   "1 Sep",
+   "2 Sep"
   ],
   "values": [
    128.14,
@@ -363,51 +364,52 @@
    182.87,
    113.13,
    132.33,
-   138.76
+   138.76,
+   122.05
   ],
-  "current": 138.76,
-  "previous": 132.33
+  "current": 122.05,
+  "previous": 138.76
  },
  "repoOvernight": [
   {
-   "date": "1 Sep 2026",
-   "repoOffered": 40,
+   "date": "2 Sep 2026",
+   "repoOffered": 30,
    "reverseRepoOffered": null,
-   "received": 6,
-   "accepted": 6,
-   "minRate": 8.75,
-   "maxRate": 8.75,
-   "waYield": 8.75,
+   "received": 50,
+   "accepted": 30,
+   "minRate": 8.7,
+   "maxRate": 8.72,
+   "waYield": 8.71,
    "show": true
   }
  ],
  "repoOMO": [
   {
-   "auction": "1 Sep 2026",
-   "settlement": "1 Sep 2026",
+   "auction": "2 Sep 2026",
+   "settlement": "2 Sep 2026",
    "repoOffered": 40,
    "reverseOffered": 0,
-   "received": 35,
-   "accepted": 35,
+   "received": 5,
+   "accepted": 5,
    "minRate": 8.75,
    "maxRate": 8.75,
    "waYield": 8.75,
-   "maturity": "8 Sep 2026",
+   "maturity": "9 Sep 2026",
    "tenure": 7,
    "show": true
   },
   {
-   "auction": "1 Sep 2026",
-   "settlement": "2 Sep 2026",
+   "auction": "2 Sep 2026",
+   "settlement": "3 Sep 2026",
    "repoOffered": 10,
    "reverseOffered": 0,
-   "received": 23,
+   "received": 13,
    "accepted": 10,
-   "minRate": 9.15,
-   "maxRate": 9.15,
-   "waYield": 9.15,
+   "minRate": 9.14,
+   "maxRate": 9.14,
+   "waYield": 9.14,
    "maturity": "2 Oct 2026",
-   "tenure": 30,
+   "tenure": 29,
    "show": true
   }
  ],
@@ -440,8 +442,8 @@
     "eom": "9.5/9.6",
     "values": [
      "9.6/9.7",
-     "9.6/9.7",
      "9.5/9.7",
+     "9.5/9.6",
      "9.5/9.6",
      "9.5/9.6",
      "9.5/9.6"
@@ -452,12 +454,12 @@
     "eoy": "",
     "eom": "10.05/10.15",
     "values": [
-     "10.2/10.35",
      "10.2/10.3",
      "10.15/10.25",
      "10.1/10.25",
      "10.05/10.15",
-     "10.1/10.2"
+     "10.1/10.2",
+     "10.05/10.15"
     ]
    },
    {
@@ -465,12 +467,12 @@
     "eoy": "",
     "eom": "10.25/10.35",
     "values": [
-     "10.55/10.65",
      "10.45/10.55",
      "10.35/10.45",
      "10.25/10.35",
      "10.25/10.35",
-     "10.25/10.35"
+     "10.25/10.35",
+     "10.2/10.35"
     ]
    },
    {
@@ -479,11 +481,11 @@
     "eom": "10.45/10.5",
     "values": [
      "10.75/10.85",
-     "10.75/10.85",
      "10.5/10.6",
      "10.45/10.5",
      "10.45/10.5",
-     "10.42/10.45"
+     "10.42/10.45",
+     "10.47/10.55"
     ]
    },
    {
@@ -492,11 +494,11 @@
     "eom": "10.55/10.6",
     "values": [
      "10.85/10.95",
-     "10.85/10.95",
      "10.6/10.65",
      "10.55/10.6",
      "10.55/10.6",
-     "10.45/10.55"
+     "10.45/10.55",
+     "10.57/10.65"
     ]
    },
    {
@@ -504,12 +506,12 @@
     "eoy": "",
     "eom": "11/11.1",
     "values": [
-     "11.2/11.3",
      "11.15/11.25",
      "11.15/11.3",
      "11/11.15",
      "11/11.1",
-     "10.93/11"
+     "10.93/11",
+     "11/11.1"
     ]
    },
    {
@@ -517,12 +519,12 @@
     "eoy": "",
     "eom": "11.3/11.4",
     "values": [
-     "11.35/11.45",
      "11.4/11.45",
      "11.25/11.4",
      "11.3/11.4",
      "11.3/11.4",
-     "11.1/11.25"
+     "11.1/11.25",
+     "11.45/11.55"
     ]
    },
    {
@@ -530,12 +532,12 @@
     "eoy": "",
     "eom": "11.35/11.5",
     "values": [
-     "11.55/11.65",
      "11.5/11.6",
      "11.45/11.55",
      "11.4/11.5",
      "11.35/11.5",
-     "11.3/11.45"
+     "11.3/11.45",
+     "11.5/11.65"
     ]
    },
    {
@@ -543,12 +545,12 @@
     "eoy": "",
     "eom": "11.45/11.5",
     "values": [
-     "11.6/11.7",
      "11.65/11.75",
      "11.5/11.6",
      "11.5/11.55",
      "11.45/11.5",
-     "11.35/11.5"
+     "11.35/11.5",
+     "11.6/11.7"
     ]
    },
    {
@@ -556,12 +558,12 @@
     "eoy": "",
     "eom": "11.55/11.85",
     "values": [
-     "11.75/11.95",
      "11.7/11.9",
      "11.55/11.85",
      "11.55/11.85",
      "11.55/11.85",
-     "11.4/11.6"
+     "11.4/11.6",
+     "11.65/11.75"
     ]
    },
    {
@@ -569,12 +571,12 @@
     "eoy": "",
     "eom": "11.75/11.8",
     "values": [
-     "11.9/12",
      "11.95/12.05",
      "11.8/11.9",
      "11.8/11.85",
      "11.75/11.8",
-     "11.75/11.78"
+     "11.75/11.78",
+     "11.75/11.85"
     ]
    },
    {
@@ -582,12 +584,12 @@
     "eoy": "",
     "eom": "11.85/11.95",
     "values": [
-     "11.9/12.05",
      "11.95/12.05",
      "11.88/11.98",
      "11.85/11.95",
      "11.85/11.95",
-     "11.8/11.95"
+     "11.8/11.95",
+     "11.75/11.95"
     ]
    }
   ]
@@ -628,7 +630,8 @@
    "5 Aug",
    "12 Aug",
    "19 Aug",
-   "24 Aug"
+   "24 Aug",
+   "2 Sep"
   ],
   "m3": [
    7.74,
@@ -665,7 +668,8 @@
    9.77,
    9.44,
    9.22,
-   9.06
+   9.06,
+   8.96
   ],
   "m6": [
    8.27,
@@ -702,7 +706,8 @@
    9.99,
    9.78,
    9.6,
-   9.44
+   9.44,
+   9.27
   ],
   "m12": [
    8.45,
@@ -739,10 +744,18 @@
    10.19,
    10.01,
    9.91,
-   9.89
+   9.89,
+   9.81
   ]
  },
  "tbills": [
+  {
+   "date": "2 Sep",
+   "m3": 8.96,
+   "m6": 9.27,
+   "m12": 9.81,
+   "show": true
+  },
   {
    "date": "24 Aug",
    "m3": 9.06,
@@ -784,17 +797,36 @@
    "m6": 10.24,
    "m12": 10.2,
    "show": true
-  },
-  {
-   "date": "15 Jul",
-   "m3": 10.13,
-   "m6": 10.27,
-   "m12": 10.2,
-   "show": true
   }
  ],
  "tbillRef": {},
  "tbillAuction": [
+  {
+   "date": "2 Sep",
+   "maturities": [
+    {
+     "maturity": "3M",
+     "offered": null,
+     "accepted": null,
+     "yield": null,
+     "war": null
+    },
+    {
+     "maturity": "6M",
+     "offered": null,
+     "accepted": null,
+     "yield": null,
+     "war": null
+    },
+    {
+     "maturity": "12M",
+     "offered": null,
+     "accepted": null,
+     "yield": null,
+     "war": null
+    }
+   ]
+  },
   {
    "date": "24 Aug",
    "maturities": [
@@ -872,585 +904,577 @@
      "war": null
     }
    ]
-  },
-  {
-   "date": "5 Aug",
-   "maturities": [
-    {
-     "maturity": "3M",
-     "offered": 55000,
-     "accepted": 72807,
-     "yield": 132.37636363636364,
-     "war": null
-    },
-    {
-     "maturity": "6M",
-     "offered": 50000,
-     "accepted": 50000,
-     "yield": 100,
-     "war": null
-    },
-    {
-     "maturity": "12M",
-     "offered": 35000,
-     "accepted": 17193,
-     "yield": 49.12285714285714,
-     "war": null
-    }
-   ]
   }
  ],
  "bondSecondary": [
   {
    "maturity": "9/4/2026 12:00:00 AM",
    "bid": 8.7,
-   "ask": 8.85,
+   "ask": 8.8,
    "show": true
   },
   {
    "maturity": "9/4/2026 12:00:00 AM",
    "bid": 8.7,
-   "ask": 8.85,
+   "ask": 8.8,
    "show": true
   },
   {
    "maturity": "9/4/2026 12:00:00 AM",
    "bid": 8.7,
-   "ask": 8.85,
+   "ask": 8.8,
    "show": true
   },
   {
    "maturity": "9/11/2026 12:00:00 AM",
-   "bid": 8.75,
-   "ask": 8.85,
+   "bid": 8.7,
+   "ask": 8.8,
    "show": true
   },
   {
    "maturity": "9/11/2026 12:00:00 AM",
-   "bid": 8.75,
-   "ask": 8.85,
+   "bid": 8.7,
+   "ask": 8.8,
    "show": true
   },
   {
    "maturity": "9/11/2026 12:00:00 AM",
+   "bid": 8.7,
+   "ask": 8.8,
+   "show": true
+  },
+  {
+   "maturity": "9/18/2026 12:00:00 AM",
+   "bid": 8.7,
+   "ask": 8.8,
+   "show": true
+  },
+  {
+   "maturity": "9/18/2026 12:00:00 AM",
+   "bid": 8.7,
+   "ask": 8.8,
+   "show": true
+  },
+  {
+   "maturity": "9/18/2026 12:00:00 AM",
+   "bid": 8.7,
+   "ask": 8.8,
+   "show": true
+  },
+  {
+   "maturity": "9/25/2026 12:00:00 AM",
+   "bid": 8.7,
+   "ask": 8.8,
+   "show": true
+  },
+  {
+   "maturity": "9/25/2026 12:00:00 AM",
+   "bid": 8.7,
+   "ask": 8.8,
+   "show": true
+  },
+  {
+   "maturity": "9/25/2026 12:00:00 AM",
+   "bid": 8.7,
+   "ask": 8.8,
+   "show": true
+  },
+  {
+   "maturity": "10/2/2026 12:00:00 AM",
    "bid": 8.75,
    "ask": 8.85,
    "show": true
   },
   {
-   "maturity": "9/18/2026 12:00:00 AM",
+   "maturity": "10/2/2026 12:00:00 AM",
    "bid": 8.75,
    "ask": 8.85,
    "show": true
   },
   {
-   "maturity": "9/18/2026 12:00:00 AM",
-   "bid": 8.75,
-   "ask": 8.9,
-   "show": true
-  },
-  {
-   "maturity": "9/18/2026 12:00:00 AM",
-   "bid": 8.75,
-   "ask": 8.9,
-   "show": true
-  },
-  {
-   "maturity": "9/25/2026 12:00:00 AM",
-   "bid": 8.75,
-   "ask": 8.9,
-   "show": true
-  },
-  {
-   "maturity": "9/25/2026 12:00:00 AM",
-   "bid": 8.75,
-   "ask": 8.9,
-   "show": true
-  },
-  {
-   "maturity": "9/25/2026 12:00:00 AM",
-   "bid": 8.75,
-   "ask": 8.9,
-   "show": true
-  },
-  {
    "maturity": "10/2/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/2/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/2/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
+   "bid": 8.75,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "10/9/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
+   "bid": 8.75,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "10/9/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
+   "bid": 8.75,
+   "ask": 8.85,
    "show": true
   },
   {
    "maturity": "10/16/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/16/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/16/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/23/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/23/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/23/2026 12:00:00 AM",
-   "bid": 8.8,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/30/2026 12:00:00 AM",
-   "bid": 8.85,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/30/2026 12:00:00 AM",
-   "bid": 8.85,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "10/30/2026 12:00:00 AM",
-   "bid": 8.85,
-   "ask": 8.95,
-   "show": true
-  },
-  {
-   "maturity": "11/6/2026 12:00:00 AM",
-   "bid": 8.9,
-   "ask": 8.97,
-   "show": true
-  },
-  {
-   "maturity": "11/6/2026 12:00:00 AM",
-   "bid": 8.9,
-   "ask": 8.97,
-   "show": true
-  },
-  {
-   "maturity": "11/6/2026 12:00:00 AM",
-   "bid": 8.9,
-   "ask": 8.97,
-   "show": true
-  },
-  {
-   "maturity": "11/13/2026 12:00:00 AM",
-   "bid": 8.9,
-   "ask": 8.97,
-   "show": true
-  },
-  {
-   "maturity": "11/13/2026 12:00:00 AM",
-   "bid": 8.9,
-   "ask": 8.97,
-   "show": true
-  },
-  {
-   "maturity": "11/13/2026 12:00:00 AM",
-   "bid": 8.9,
-   "ask": 8.97,
-   "show": true
-  },
-  {
-   "maturity": "11/20/2026 12:00:00 AM",
    "bid": 8.9,
    "ask": 9,
    "show": true
   },
   {
-   "maturity": "11/20/2026 12:00:00 AM",
+   "maturity": "10/16/2026 12:00:00 AM",
    "bid": 8.9,
    "ask": 9,
    "show": true
   },
   {
-   "maturity": "11/20/2026 12:00:00 AM",
+   "maturity": "10/16/2026 12:00:00 AM",
    "bid": 8.9,
    "ask": 9,
    "show": true
   },
   {
-   "maturity": "11/27/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
+   "maturity": "10/23/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.85,
+   "show": true
+  },
+  {
+   "maturity": "10/23/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.85,
+   "show": true
+  },
+  {
+   "maturity": "10/23/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.85,
+   "show": true
+  },
+  {
+   "maturity": "10/30/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.85,
+   "show": true
+  },
+  {
+   "maturity": "10/30/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.85,
+   "show": true
+  },
+  {
+   "maturity": "10/30/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.85,
+   "show": true
+  },
+  {
+   "maturity": "11/6/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/6/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/6/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/13/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/13/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/13/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/20/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/20/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/20/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
    "show": true
   },
   {
    "maturity": "11/27/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
+   "bid": 8.8,
+   "ask": 8.9,
    "show": true
   },
   {
    "maturity": "11/27/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
+   "bid": 8.8,
+   "ask": 8.9,
+   "show": true
+  },
+  {
+   "maturity": "11/27/2026 12:00:00 AM",
+   "bid": 8.8,
+   "ask": 8.9,
    "show": true
   },
   {
    "maturity": "12/4/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
+   "bid": 8.8,
+   "ask": 8.95,
    "show": true
   },
   {
    "maturity": "12/4/2026 12:00:00 AM",
-   "bid": 8.95,
+   "bid": 8.8,
+   "ask": 8.95,
+   "show": true
+  },
+  {
+   "maturity": "12/4/2026 12:00:00 AM",
+   "bid": 8.85,
+   "ask": 9,
+   "show": true
+  },
+  {
+   "maturity": "12/11/2026 12:00:00 AM",
+   "bid": 8.9,
    "ask": 9.05,
    "show": true
   },
   {
    "maturity": "12/11/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
-   "show": true
-  },
-  {
-   "maturity": "12/11/2026 12:00:00 AM",
-   "bid": 8.95,
+   "bid": 8.9,
    "ask": 9.05,
    "show": true
   },
   {
    "maturity": "12/18/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
+   "bid": 9,
+   "ask": 9.1,
    "show": true
   },
   {
    "maturity": "12/18/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
+   "bid": 9,
+   "ask": 9.1,
    "show": true
   },
   {
    "maturity": "12/25/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
+   "bid": 9.05,
+   "ask": 9.15,
    "show": true
   },
   {
    "maturity": "12/25/2026 12:00:00 AM",
-   "bid": 8.95,
-   "ask": 9.05,
+   "bid": 9.1,
+   "ask": 9.2,
    "show": true
   },
   {
    "maturity": "1/1/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/1/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/8/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/8/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/15/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/15/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/22/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/22/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/29/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "1/29/2027 12:00:00 AM",
-   "bid": 9,
-   "ask": 9.1,
+   "bid": 9.2,
+   "ask": 9.3,
    "show": true
   },
   {
    "maturity": "2/5/2027 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.25,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/5/2027 12:00:00 AM",
-   "bid": 9.1,
-   "ask": 9.25,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/12/2027 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.3,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/12/2027 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.3,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/19/2027 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.3,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/19/2027 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.3,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/26/2027 12:00:00 AM",
-   "bid": 9.15,
-   "ask": 9.3,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/26/2027 12:00:00 AM",
-   "bid": 9.35,
-   "ask": 9.45,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/12/2027 12:00:00 AM",
-   "bid": 9.35,
-   "ask": 9.45,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/19/2027 12:00:00 AM",
-   "bid": 9.4,
-   "ask": 9.5,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "2/26/2027 12:00:00 AM",
-   "bid": 9.4,
-   "ask": 9.5,
+   "bid": 9.2,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "3/5/2027 12:00:00 AM",
-   "bid": 9.45,
-   "ask": 9.55,
+   "bid": 9.25,
+   "ask": 9.35,
+   "show": true
+  },
+  {
+   "maturity": "3/5/2027 12:00:00 AM",
+   "bid": 9.25,
+   "ask": 9.35,
    "show": true
   },
   {
    "maturity": "3/12/2027 12:00:00 AM",
-   "bid": 9.45,
-   "ask": 9.55,
+   "bid": 9.3,
+   "ask": 9.4,
    "show": true
   },
   {
    "maturity": "3/19/2027 12:00:00 AM",
-   "bid": 9.45,
-   "ask": 9.55,
+   "bid": 9.3,
+   "ask": 9.4,
    "show": true
   },
   {
    "maturity": "3/26/2027 12:00:00 AM",
+   "bid": 9.3,
+   "ask": 9.4,
+   "show": true
+  },
+  {
+   "maturity": "4/2/2027 12:00:00 AM",
+   "bid": 9.35,
+   "ask": 9.45,
+   "show": true
+  },
+  {
+   "maturity": "4/16/2027 12:00:00 AM",
+   "bid": 9.4,
+   "ask": 9.5,
+   "show": true
+  },
+  {
+   "maturity": "4/23/2027 12:00:00 AM",
    "bid": 9.45,
    "ask": 9.55,
    "show": true
   },
   {
-   "maturity": "4/2/2027 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.6,
-   "show": true
-  },
-  {
-   "maturity": "4/16/2027 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.6,
-   "show": true
-  },
-  {
-   "maturity": "4/23/2027 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.6,
-   "show": true
-  },
-  {
    "maturity": "4/30/2027 12:00:00 AM",
-   "bid": 9.5,
-   "ask": 9.6,
+   "bid": 9.45,
+   "ask": 9.55,
    "show": true
   },
   {
    "maturity": "5/7/2027 12:00:00 AM",
-   "bid": 9.55,
-   "ask": 9.65,
+   "bid": 9.5,
+   "ask": 9.6,
    "show": true
   },
   {
    "maturity": "5/14/2027 12:00:00 AM",
-   "bid": 9.55,
-   "ask": 9.65,
+   "bid": 9.5,
+   "ask": 9.6,
    "show": true
   },
   {
    "maturity": "5/21/2027 12:00:00 AM",
-   "bid": 9.55,
-   "ask": 9.65,
+   "bid": 9.5,
+   "ask": 9.6,
    "show": true
   },
   {
    "maturity": "5/28/2027 12:00:00 AM",
+   "bid": 9.5,
+   "ask": 9.6,
+   "show": true
+  },
+  {
+   "maturity": "6/4/2027 12:00:00 AM",
    "bid": 9.55,
    "ask": 9.65,
    "show": true
   },
   {
-   "maturity": "6/4/2027 12:00:00 AM",
-   "bid": 9.6,
-   "ask": 9.7,
-   "show": true
-  },
-  {
    "maturity": "6/11/2027 12:00:00 AM",
-   "bid": 9.6,
-   "ask": 9.7,
+   "bid": 9.55,
+   "ask": 9.65,
    "show": true
   },
   {
    "maturity": "6/18/2027 12:00:00 AM",
-   "bid": 9.6,
-   "ask": 9.7,
+   "bid": 9.55,
+   "ask": 9.65,
    "show": true
   },
   {
    "maturity": "6/25/2027 12:00:00 AM",
+   "bid": 9.55,
+   "ask": 9.65,
+   "show": true
+  },
+  {
+   "maturity": "7/2/2027 12:00:00 AM",
    "bid": 9.6,
    "ask": 9.7,
    "show": true
   },
   {
-   "maturity": "7/2/2027 12:00:00 AM",
-   "bid": 9.65,
-   "ask": 9.75,
-   "show": true
-  },
-  {
    "maturity": "7/9/2027 12:00:00 AM",
-   "bid": 9.65,
-   "ask": 9.75,
+   "bid": 9.6,
+   "ask": 9.7,
    "show": true
   },
   {
    "maturity": "7/16/2027 12:00:00 AM",
-   "bid": 9.65,
-   "ask": 9.75,
+   "bid": 9.6,
+   "ask": 9.7,
    "show": true
   },
   {
    "maturity": "7/23/2027 12:00:00 AM",
-   "bid": 9.65,
-   "ask": 9.75,
+   "bid": 9.6,
+   "ask": 9.7,
    "show": true
   },
   {
    "maturity": "7/30/2027 12:00:00 AM",
+   "bid": 9.6,
+   "ask": 9.7,
+   "show": true
+  },
+  {
+   "maturity": "8/6/2027 12:00:00 AM",
    "bid": 9.65,
    "ask": 9.75,
    "show": true
   },
   {
-   "maturity": "8/6/2027 12:00:00 AM",
-   "bid": 9.7,
-   "ask": 9.8,
-   "show": true
-  },
-  {
    "maturity": "8/13/2027 12:00:00 AM",
-   "bid": 9.7,
-   "ask": 9.8,
+   "bid": 9.65,
+   "ask": 9.75,
    "show": true
   },
   {
    "maturity": "8/20/2027 12:00:00 AM",
-   "bid": 9.75,
-   "ask": 9.85,
+   "bid": 9.7,
+   "ask": 9.8,
    "show": true
   },
   {
    "maturity": "8/27/2027 12:00:00 AM",
-   "bid": 9.75,
-   "ask": 9.9,
+   "bid": 9.7,
+   "ask": 9.8,
+   "show": true
+  },
+  {
+   "maturity": "9/3/2027 12:00:00 AM",
+   "bid": 9.7,
+   "ask": 9.8,
    "show": true
   }
  ],
@@ -1663,7 +1687,8 @@
    "25 Aug",
    "28 Aug",
    "31 Aug",
-   "1 Sep"
+   "1 Sep",
+   "2 Sep"
   ],
   "values": [
    309.9809,
@@ -1826,77 +1851,78 @@
    328.59,
    328.02,
    328.2,
-   328.05
+   328.05,
+   328.47
   ],
-  "close": "328.00/ 328.10"
+  "close": "328.25/ 328.50"
  },
  "fxSwaps": {
   "1w": {
    "sell": 4.25,
-   "buy": 4.6
+   "buy": 4.75
   },
   "1m": {
    "sell": 4.1,
-   "buy": 4.6
+   "buy": 4.75
   },
   "2m": {
-   "sell": 4.1,
-   "buy": 4.6
+   "sell": 4.15,
+   "buy": 4.75
   },
   "3m": {
    "sell": 4.15,
-   "buy": 4.6
+   "buy": 4.75
   },
   "6m": {
-   "sell": 4.1,
-   "buy": 4.6
+   "sell": 4,
+   "buy": 4.75
   },
   "1y": {
-   "sell": 4.1,
+   "sell": 4,
    "buy": 4.75
   }
  },
  "spot": {
-  "open": "328.05/ 328.35",
-  "close": "328.00/ 328.10",
-  "low": "327.9",
-  "high": "328.25"
+  "open": "327.95/ 328.25",
+  "close": "328.25/ 328.50",
+  "low": "328.25",
+  "high": "329.55"
  },
  "crossRates": [
   {
    "pair": "Japanese Yen",
-   "buy": 1.9591,
-   "sell": 2.1062,
+   "buy": 1.9653,
+   "sell": 2.1129,
    "show": true
   },
   {
    "pair": "British Pound Sterling",
-   "buy": 434.4972,
-   "sell": 450.418,
+   "buy": 433.9385,
+   "sell": 449.8388,
    "show": true
   },
   {
    "pair": "Euro",
-   "buy": 371.3757,
-   "sell": 386.5766,
+   "buy": 371.1408,
+   "sell": 386.3321,
    "show": true
   },
   {
    "pair": "Australian Dollar",
-   "buy": 228.3008,
-   "sell": 240.4104,
+   "buy": 227.8199,
+   "sell": 239.904,
    "show": true
   },
   {
    "pair": "Singapore Dollar",
-   "buy": 247.702,
-   "sell": 264.6783,
+   "buy": 247.9041,
+   "sell": 264.8943,
    "show": true
   },
   {
    "pair": "Chinese Yuan",
-   "buy": 44.508,
-   "sell": 50.2667,
+   "buy": 44.5712,
+   "sell": 50.3381,
    "show": true
   }
  ],
@@ -2823,7 +2849,8 @@
    "25 Aug",
    "28 Aug",
    "31 Aug",
-   "1 Sep"
+   "1 Sep",
+   "2 Sep"
   ],
   "values": [
    2508.92,
@@ -2966,6 +2993,7 @@
    2498.12,
    2498.12,
    2498.12,
+   2492.62,
    2492.62,
    2492.62,
    2492.62,
@@ -3316,7 +3344,8 @@
    "25 Aug",
    "28 Aug",
    "31 Aug",
-   "1 Sep"
+   "1 Sep",
+   "2 Sep"
   ],
   "values": [
    4.19,
@@ -3488,7 +3517,8 @@
    4.687,
    4.724,
    4.718,
-   4.789
+   4.789,
+   4.812
   ]
  },
  "wti": {
@@ -3667,7 +3697,8 @@
    "25 Aug",
    "28 Aug",
    "31 Aug",
-   "1 Sep"
+   "1 Sep",
+   "2 Sep"
   ],
   "values": [
    56.94,
@@ -3844,7 +3875,8 @@
    82.38,
    83.44,
    86.24,
-   87.99
+   87.99,
+   90.15
   ]
  },
  "brent": {
@@ -4023,7 +4055,8 @@
    "25 Aug",
    "28 Aug",
    "31 Aug",
-   "1 Sep"
+   "1 Sep",
+   "2 Sep"
   ],
   "values": [
    60.75,
@@ -4200,7 +4233,8 @@
    87.84,
    88.28,
    91.12,
-   92.13
+   92.13,
+   94.85
   ]
  },
  "murban": {
@@ -4373,7 +4407,8 @@
    "24 Aug",
    "27 Aug",
    "28 Aug",
-   "31 Aug"
+   "31 Aug",
+   "1 Sep"
   ],
   "values": [
    61.19,
@@ -4544,7 +4579,8 @@
    94.72,
    92.03,
    95.75,
-   98.45
+   98.45,
+   106.15
   ]
  },
  "dxy": {
@@ -4724,7 +4760,8 @@
    "25 Aug",
    "28 Aug",
    "31 Aug",
-   "1 Sep"
+   "1 Sep",
+   "2 Sep"
   ],
   "values": [
    98.42,
@@ -4902,7 +4939,8 @@
    98.98,
    99.65,
    99.53,
-   99.59
+   99.59,
+   99.82
   ]
  },
  "gold": {
@@ -5084,7 +5122,8 @@
    "25 Aug",
    "28 Aug",
    "31 Aug",
-   "1 Sep"
+   "1 Sep",
+   "2 Sep"
   ],
   "values": [
    4348.35,
@@ -5264,7 +5303,8 @@
    4630.68,
    4475.46,
    4435.45,
-   4372.88
+   4372.88,
+   4308.8
   ]
  },
  "fomc": [
@@ -6754,9 +6794,9 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "328.00/ 328.10",
-  "liqDir": "increased",
-  "liqDelta": 6.43
+  "usdlkr": "328.25/ 328.50",
+  "liqDir": "decreased",
+  "liqDelta": 16.71
  },
  "marketNews": [
   "Treasury Bill Auction Results",
