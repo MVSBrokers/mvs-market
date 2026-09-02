@@ -6810,8 +6810,8 @@
   "Auction Date: 02 September 2026"
  ],
  "date": "2026-09-02",
- "netOutstandingLT": 190,
- "netMarketLiquidity": 328.76,
+ "netOutstandingLT": null,
+ "netMarketLiquidity": null,
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
