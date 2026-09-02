@@ -6810,8 +6810,6 @@
   "Auction Date: 02 September 2026"
  ],
  "date": "2026-09-02",
- "netOutstandingLT": null,
- "netMarketLiquidity": null,
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
@@ -6853,5 +6851,7 @@
    "Reserve (USD Mn)"
   ]
  },
+ "netOutstandingLT": null,
+ "netMarketLiquidity": null,
  "cutoffSnapshot": {}
 }
