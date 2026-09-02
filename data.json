@@ -6851,7 +6851,7 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": null,
- "netMarketLiquidity": null,
+ "netOutstandingLT": 180,
+ "netMarketLiquidity": 302.05,
  "cutoffSnapshot": {}
 }
