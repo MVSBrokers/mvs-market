@@ -2484,47 +2484,57 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 21.95,
-   "wa": 328.0538
+   "volume": 27,
+   "wa": 328.589
   },
   {
    "tenor": "CASH",
-   "volume": 18.2,
-   "wa": 328.0884
+   "volume": 16,
+   "wa": 328.6823
   },
   {
    "tenor": "Sub Total",
-   "volume": 40.15,
+   "volume": 43,
    "wa": null
-  },
-  {
-   "tenor": "S+1",
-   "volume": 5,
-   "wa": 328.3275
   },
   {
    "tenor": "1W",
    "volume": 1,
-   "wa": 328.345
+   "wa": 328.65
   },
   {
    "tenor": "2W",
-   "volume": 1,
-   "wa": 328.55
+   "volume": 5,
+   "wa": 328.965
+  },
+  {
+   "tenor": "3W",
+   "volume": 1.3,
+   "wa": 329.4962
   },
   {
    "tenor": "1M",
-   "volume": 1.5,
-   "wa": 329.2267
+   "volume": 16.4,
+   "wa": 330.2652
+  },
+  {
+   "tenor": "2M",
+   "volume": 0.4,
+   "wa": 331.16
+  },
+  {
+   "tenor": "3M",
+   "volume": 0.75,
+   "wa": 333.42
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 8.5,
+   "volume": 24.85,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 48.65,
+   "volume": 67.85,
    "wa": null
   }
  ],
@@ -6810,6 +6820,8 @@
   "Auction Date: 02 September 2026"
  ],
  "date": "2026-09-03",
+ "netOutstandingLT": 180,
+ "netMarketLiquidity": 302.05,
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
@@ -6851,8 +6863,6 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": 180,
- "netMarketLiquidity": 302.05,
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-03",
