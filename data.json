@@ -9457,5 +9457,14 @@
    "day": "2026-09-04",
    "values": {}
   }
+ },
+ "cutoffOverride": {
+  "Money & Repo Market": true,
+  "Money & Repo Market — Repo Auctions": true,
+  "Treasury Bill": true,
+  "Treasury Bond Yield (%)": true,
+  "USD/LKR Foreign Exchange": true,
+  "Value Dates": true,
+  "CBSL Holdings of Government Securities": true
  }
 }
