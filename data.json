@@ -6809,6 +6809,8 @@
   "Auction Date: 02 September 2026"
  ],
  "date": "2026-09-04",
+ "netOutstandingLT": 190,
+ "netMarketLiquidity": 305.09,
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
@@ -6850,8 +6852,6 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": 190,
- "netMarketLiquidity": 305.09,
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-04",
