@@ -2375,7 +2375,28 @@ function renderExtras(d){
    // Value Dates heading = slValueDay(): before 4 PM → today(T), after 4 PM → next working day
    const vdt=document.getElementById("vd-title");
    if(vdt)vdt.innerHTML="Value Dates"+'<span class="close-date">'+fmtOrd(slValueDay())+"</span>";}
-  set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false).map(v=>{
+  // "Cash" (today) and "Tom" (tomorrow) tenor rows: hide each one entirely only when its own
+  // actual calendar day is a genuine US Fed *holiday falling on a weekday*. A plain Saturday/
+  // Sunday must NOT hide the row — that case is already handled by calcValueDate's own
+  // skip-forward logic (via _isBothWork), which rolls the displayed date to the next working
+  // day instead of hiding anything.
+  function _isUSHolidayWeekday(dt){
+    if(dt.getDay()===0||dt.getDay()===6)return false; // weekend -> not a "holiday hide" case, just skips forward
+    return US_FED_HOL_SET.has(_isoD(dt));
+  }
+  const _vdAnchor=slValueDay();
+  const _vdRawToday=_vdAnchor;
+  const _vdRawTomorrow=new Date(_vdAnchor.getFullYear(),_vdAnchor.getMonth(),_vdAnchor.getDate()+1);
+  const _cashIsUSHoliday=_isUSHolidayWeekday(_vdRawToday);
+  const _tomIsUSHoliday=_isUSHolidayWeekday(_vdRawTomorrow);
+  set('dyn-op-vd',(d.valueDates||[]).filter(v=>v.show!==false)
+    .filter(v=>{
+      const t=String(v.tenor||'').trim();
+      if(_cashIsUSHoliday && /^(cash|today)/i.test(t))return false;
+      if(_tomIsUSHoliday && /^tom/i.test(t))return false;
+      return true;
+    })
+    .map(v=>{
     const autoDate=calcValueDate(v.tenor);
     const dateStr=(v.date!=null&&String(v.date).trim()!=='')?escHtml(v.date):(autoDate?fmtValueDate(autoDate):'');
     const nodStr=(v.nod!=null&&String(v.nod).trim()!=='')?escHtml(v.nod):(autoDate?String(calcNOD(v.tenor)):'');
