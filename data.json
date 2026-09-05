@@ -2435,10 +2435,10 @@
     },
     {
      "month": "AUGUST",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 579,
+     "sales": 0,
+     "netYtd": 1484,
+     "reserve": 6600
     },
     {
      "month": "SEPTEMBER",
@@ -2469,12 +2469,12 @@
      "reserve": null
     }
    ],
-   "totalPurchase": 1331,
+   "totalPurchase": 1910,
    "totalSales": 426.00000000000006,
-   "netForYear": 904.9999999999999
+   "netForYear": 1484
   }
  ],
- "fxInterventionLastReserve": 6591,
+ "fxInterventionLastReserve": 6600,
  "fxSummary": [
   {
    "tenor": "SPOT",
@@ -2660,7 +2660,8 @@
    "6 Aug",
    "14 Aug",
    "21 Aug",
-   "28 Aug"
+   "28 Aug",
+   "4 Sep"
   ],
   "values": [
    143617,
@@ -2684,7 +2685,8 @@
    192858,
    194208,
    202505,
-   210564
+   210564,
+   210654
   ]
  },
  "cbsl": {
@@ -6836,9 +6838,7 @@
   "Total Amount Accepted: Rs. 80.0 Billion",
   "Auction Date: 02 September 2026"
  ],
- "date": "2026-09-04",
- "netOutstandingLT": null,
- "netMarketLiquidity": null,
+ "date": "2026-09-05",
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
@@ -6880,5 +6880,7 @@
    "Reserve (USD Mn)"
   ]
  },
+ "netOutstandingLT": null,
+ "netMarketLiquidity": null,
  "cutoffSnapshot": {}
 }
