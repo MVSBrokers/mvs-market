@@ -6989,25 +6989,25 @@
    "day": "2026-09-07",
    "values": {
     "callMarket": {
-     "min": 8.75,
-     "max": 8.91,
+     "min": 8.82,
+     "max": 8.9,
      "wa": 8.86,
-     "vol": 53.06
+     "vol": 51.52
     },
     "repoMarket": {
-     "min": 8.85,
-     "max": 9.02,
-     "wa": 8.92,
-     "vol": 60.02
+     "min": 8.9,
+     "max": 8.97,
+     "wa": 8.93,
+     "vol": 59.86
     },
     "windows": {
      "sdf": {
-      "cur": 60.07,
-      "prev": 77.65
+      "cur": 63.59,
+      "prev": 60.07
      },
      "slf": {
-      "cur": 0.77,
-      "prev": 0.76
+      "cur": 2.45,
+      "prev": 0.77
      }
     },
     "liquidity": {
@@ -7175,7 +7175,8 @@
       "1 Sep",
       "2 Sep",
       "3 Sep",
-      "4 Sep"
+      "4 Sep",
+      "7 Sep"
      ],
      "values": [
       128.14,
@@ -7341,10 +7342,11 @@
       138.76,
       122.05,
       115.09,
-      110.3
+      110.3,
+      93.64
      ],
-     "current": 110.3,
-     "previous": 115.09
+     "current": 93.64,
+     "previous": 110.3
     }
    }
   },
@@ -7353,30 +7355,30 @@
    "values": {
     "repoOvernight": [
      {
-      "date": "4 Sep 2026",
-      "repoOffered": 30,
+      "date": "7 Sep 2026",
+      "repoOffered": 40,
       "reverseRepoOffered": null,
-      "received": 28,
-      "accepted": 28,
-      "minRate": 8.7,
-      "maxRate": 8.74,
-      "waYield": 8.7,
+      "received": 22,
+      "accepted": 22,
+      "minRate": 8.72,
+      "maxRate": 8.75,
+      "waYield": 8.73,
       "show": true
      }
     ],
     "repoOMO": [
      {
-      "auction": "4 Sep 2026",
-      "settlement": "4 Sep 2026",
-      "repoOffered": 30,
+      "auction": "7 Sep 2026",
+      "settlement": "7 Sep 2026",
+      "repoOffered": 10,
       "reverseOffered": 0,
-      "received": 24,
-      "accepted": 24,
+      "received": 10,
+      "accepted": 10,
       "minRate": 8.75,
       "maxRate": 8.75,
       "waYield": 8.75,
       "maturity": "9 Sep 2026",
-      "tenure": 5,
+      "tenure": 2,
       "show": true
      }
     ]
