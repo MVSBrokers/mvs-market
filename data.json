@@ -1920,6 +1920,148 @@
    "show": true
   }
  ],
+ "fxIntraday": [
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 327.75,
+   "time": "09:01",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 327.75,
+   "time": "09:22",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 327.75,
+   "time": "09:23",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 327.75,
+   "time": "09:47",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 327.75,
+   "time": "09:47",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 327.75,
+   "time": "09:47",
+   "show": true
+  },
+  {
+   "tenor": "CASH",
+   "amount": 3,
+   "rate": 327.67,
+   "time": "10:40",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 327.75,
+   "time": "10:53",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 327.78,
+   "time": "11:12",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 327.75,
+   "time": "11:21",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 327.78,
+   "time": "11:45",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.75,
+   "rate": 327.8,
+   "time": "12:12",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 327.82,
+   "time": "12:24",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 327.85,
+   "time": "12:37",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 327.85,
+   "time": "12:37",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328,
+   "time": "13:05",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.03,
+   "time": "13:19",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.04,
+   "time": "13:19",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.05,
+   "time": "13:34",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.2,
+   "time": "14:43",
+   "show": true
+  }
+ ],
  "fxIntervention": [
   {
    "year": 2021,
