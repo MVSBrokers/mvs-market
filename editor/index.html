@@ -187,6 +187,7 @@ const SECTIONS=[
  {id:'usdlkr',title:'USD/LKR Rate',keys:['usdlkr'],group:'Foreign Exchange'},
  {id:'fxswaps',title:'FX Swaps',keys:['fxSwaps'],group:'Foreign Exchange'},
  {id:'spot',title:'FX Spot Overview',keys:['spot'],group:'Foreign Exchange'},
+ {id:'fxintraday',title:'Intraday Spot/Cash Deals (rate movement chart)',keys:['fxIntraday'],group:'Foreign Exchange'},
  {id:'fxsummary',title:'FX Market Summary',keys:['fxSummary'],group:'Foreign Exchange'},
  {id:'valuedates',title:'Value Dates',keys:['valueDates'],group:'Foreign Exchange'},
  {id:'cross',title:'Cross-Currency Rates',keys:['crossRates'],group:'Foreign Exchange'},
@@ -1477,6 +1478,35 @@ function parseWorkbook(wb,XLSX){
     let cross=[];for(let i=2;i<fx.length;i++)if(fx[i][11]!=null)cross.push({pair:String(fx[i][11]).trim(),buy:num(fx[i][12]),sell:num(fx[i][13]),show:true});
     o.usdlkr={labels:L,values:V,close:spot.close||(V.length?V[V.length-1]:null)};
     o.fxSwaps=sw;o.spot=spot;o.crossRates=cross;
+    // Intraday Spot/Cash deals (rate movement through the day) — dynamic header search for
+    // "TENOR" since its row position can shift as more transactions get logged, same reasoning
+    // as the Money Market Liquidity date-column search elsewhere in this file. This is what the
+    // Opening/Closing/Lowest/Highest spot stats above are themselves derived from.
+    let fxIntraday=[];
+    {
+      let hdrRow=-1,tenorCol=-1;
+      for(let i=0;i<Math.min(fx.length,25)&&hdrRow<0;i++){
+        const r=fx[i]||[];
+        for(let j=0;j<r.length;j++){if(r[j]!=null&&/^TENOR$/i.test(String(r[j]).trim())){hdrRow=i;tenorCol=j;break;}}
+      }
+      if(hdrRow>=0){
+        for(let i=hdrRow+1;i<fx.length;i++){
+          const r=fx[i]||[];
+          const tenor=r[tenorCol];
+          if(tenor==null||String(tenor).trim()==='')continue;
+          const amount=r[tenorCol+1],rate=r[tenorCol+2],timeRaw=r[tenorCol+3];
+          let timeStr=null;
+          if(timeRaw instanceof Date&&!isNaN(timeRaw.getTime())){
+            timeStr=String(timeRaw.getHours()).padStart(2,'0')+':'+String(timeRaw.getMinutes()).padStart(2,'0');
+          }else if(timeRaw!=null){
+            const tm=String(timeRaw).trim().match(/^(\d{1,2}):(\d{2})/);
+            if(tm)timeStr=tm[1].padStart(2,'0')+':'+tm[2];
+          }
+          fxIntraday.push({tenor:String(tenor).trim(),amount:num(amount),rate:num(rate),time:timeStr,show:true});
+        }
+      }
+    }
+    o.fxIntraday=fxIntraday;
     // CBSL FX Market Intervention — repeats once per year in cols P-T (15-19): a "MONTH" header
     // row with the year label directly above it, then 12 monthly rows, then a "TOTAL" row.
     let fxi=[];
