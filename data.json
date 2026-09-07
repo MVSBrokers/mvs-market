@@ -1472,122 +1472,45 @@
   "date": "2026-09-04",
   "rows": [
    {
-    "isin": "LKB01528E016",
-    "maturity": "2028-05-01",
-    "remYears": 1.65753424657534,
-    "amount": 750,
+    "isin": "LKB00428B156",
+    "maturity": "2028-02-15",
+    "remYears": 1.52876712328767,
+    "amount": 151.686,
     "show": true
    },
    {
-    "isin": "LKB00428J159",
-    "maturity": "2028-10-15",
-    "remYears": 2.11506849315069,
-    "amount": 1400,
-    "show": true
-   },
-   {
-    "isin": "LKB00528L152",
-    "maturity": "2028-12-15",
-    "remYears": 2.28219178082192,
-    "amount": 1900,
-    "show": true
-   },
-   {
-    "isin": "LKB00529L150",
-    "maturity": "2029-12-15",
-    "remYears": 3.28219178082192,
-    "amount": 400,
-    "show": true
-   },
-   {
-    "isin": "LKB00530C017",
-    "maturity": "2030-03-01",
-    "remYears": 3.49041095890411,
-    "amount": 100,
+    "isin": "LKB00529F152",
+    "maturity": "2029-06-15",
+    "remYears": 2.86027397260274,
+    "amount": 214.464,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.90958904109589,
-    "amount": 200,
+    "remYears": 3.98904109589041,
+    "amount": 466.96,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.11506849315068,
-    "amount": 550,
+    "remYears": 4.19452054794521,
+    "amount": 650,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.41369863013699,
-    "amount": 1525,
-    "show": true
-   },
-   {
-    "isin": "LKB01231C151",
-    "maturity": "2031-03-15",
-    "remYears": 4.52876712328767,
-    "amount": 800,
-    "show": true
-   },
-   {
-    "isin": "LKB01031L016",
-    "maturity": "2031-12-01",
-    "remYears": 5.24383561643836,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB02032J017",
-    "maturity": "2032-10-01",
-    "remYears": 6.07945205479452,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB00832L158",
-    "maturity": "2032-12-15",
-    "remYears": 6.28493150684931,
-    "amount": 1100,
-    "show": true
-   },
-   {
-    "isin": "LKB01533A154",
-    "maturity": "2033-01-15",
-    "remYears": 6.36986301369863,
-    "amount": 1350,
-    "show": true
-   },
-   {
-    "isin": "LKB02033F013",
-    "maturity": "2033-06-01",
-    "remYears": 6.74520547945205,
-    "amount": 1300,
-    "show": true
-   },
-   {
-    "isin": "LKB02033K013",
-    "maturity": "2033-11-01",
-    "remYears": 7.16438356164384,
-    "amount": 1000,
+    "remYears": 4.49315068493151,
+    "amount": 950,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 8.11780821917808,
-    "amount": 1725,
-    "show": true
-   },
-   {
-    "isin": "LKB01136H151",
-    "maturity": "2036-08-15",
-    "remYears": 9.95342465753425,
-    "amount": 1100,
+    "remYears": 8.1972602739726,
+    "amount": 517.494,
     "show": true
    }
   ]
@@ -1999,143 +1922,164 @@
  ],
  "fxIntraday": [
   {
-   "tenor": "SPOT",
+   "tenor": "CASH",
    "amount": 1,
-   "rate": 327.75,
-   "time": "09:01",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 327.75,
-   "time": "09:22",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 0.5,
-   "rate": 327.75,
-   "time": "09:23",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 327.75,
-   "time": "09:47",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 0.5,
-   "rate": 327.75,
-   "time": "09:47",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 327.75,
-   "time": "09:47",
+   "rate": 328.15,
+   "time": "09:11",
    "show": true
   },
   {
    "tenor": "CASH",
-   "amount": 3,
-   "rate": 327.67,
-   "time": "10:40",
+   "amount": 1,
+   "rate": 328.15,
+   "time": "09:11",
    "show": true
   },
   {
-   "tenor": "SPOT",
+   "tenor": "CASH",
+   "amount": 1,
+   "rate": 328.15,
+   "time": "09:14",
+   "show": true
+  },
+  {
+   "tenor": "CASH",
    "amount": 0.5,
-   "rate": 327.75,
-   "time": "10:53",
+   "rate": 328.17,
+   "time": "09:49",
    "show": true
   },
   {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 327.78,
-   "time": "11:12",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 0.5,
-   "rate": 327.75,
-   "time": "11:21",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 0.5,
-   "rate": 327.78,
-   "time": "11:45",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 0.75,
-   "rate": 327.8,
-   "time": "12:12",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 327.82,
-   "time": "12:24",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 327.85,
-   "time": "12:37",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 327.85,
-   "time": "12:37",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 328,
-   "time": "13:05",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 328.03,
-   "time": "13:19",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 328.04,
-   "time": "13:19",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 328.05,
-   "time": "13:34",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
+   "tenor": "CASH",
    "amount": 1,
    "rate": 328.2,
-   "time": "14:43",
+   "time": "11:32",
+   "show": true
+  },
+  {
+   "tenor": "CASH",
+   "amount": 1,
+   "rate": 328.2,
+   "time": "11:38",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.26,
+   "time": "14:54",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.27,
+   "time": "14:07",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.25,
+   "rate": 328.3,
+   "time": "08:57",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.3,
+   "time": "08:58",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 328.3,
+   "time": "09:40",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 328.35,
+   "time": "11:58",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 328.35,
+   "time": "12:53",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.25,
+   "rate": 328.35,
+   "time": "13:42",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 2,
+   "rate": 328.37,
+   "time": "09:46",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 328.38,
+   "time": "14:08",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 328.38,
+   "time": "14:08",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.38,
+   "time": "14:08",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 2,
+   "rate": 328.39,
+   "time": "12:07",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.25,
+   "rate": 328.4,
+   "time": "11:26",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.25,
+   "rate": 328.4,
+   "time": "11:26",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 328.4,
+   "time": "11:33",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 328.4,
+   "time": "11:39",
    "show": true
   }
  ],
