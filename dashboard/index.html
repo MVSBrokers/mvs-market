@@ -541,6 +541,8 @@ canvas{max-width:100%!important}
         </tbody>
       </table>
       <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Market Overview (Spot)<span class="close-date" id="fxov-close" style="text-transform:none;font-weight:400"></span></div>
+      <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Intraday SPOT rate movement</div>
+      <canvas id="fxIntradayChart" style="max-height:150px;margin-bottom:8px"></canvas>
       <table style="font-size:12px">
         <tbody id="dyn-spot"></tbody>
       </table>
@@ -2446,6 +2448,37 @@ function buildCharts(d){
    const fv=v=>{if(v==null||v==='')return '—';const n=parseFloat(v);return isNaN(n)?'—':n.toFixed(2);};
    if(ltEl)ltEl.innerHTML=fv(d.netOutstandingLT)+'<span class="cmp-unit">Bn</span>';
    if(mlEl)mlEl.innerHTML=fv(d.netMarketLiquidity)+'<span class="cmp-unit">Bn</span>';}
+  // Intraday SPOT rate movement (CASH intentionally excluded — SPOT only).
+  destroyChart("fxIntraday");
+  {
+    const rows=(d.fxIntraday||[]).filter(r=>r&&r.show!==false&&r.time&&r.rate!=null&&/spot/i.test(r.tenor));
+    const toMin=t=>{const m=String(t).match(/^(\d{1,2}):(\d{2})/);return m?(+m[1]*60+ +m[2]):null;};
+    const fmtMin=m=>{const h=Math.floor(m/60),mm=Math.round(m%60);return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0');};
+    const spotPts=rows.map(r=>({x:toMin(r.time),y:r.rate})).filter(p=>p.x!=null).sort((a,b)=>a.x-b.x);
+    const canvas=document.getElementById("fxIntradayChart");
+    if(canvas&&spotPts.length){
+      canvas.style.display='';
+      charts.fxIntraday=new Chart(canvas,{
+        type:'line',
+        data:{datasets:[
+          {label:'SPOT',data:spotPts,borderColor:'#4da3e8',backgroundColor:'rgba(77,163,232,0.15)',tension:0.25,pointRadius:2,pointHoverRadius:5,borderWidth:2,fill:true,showLine:true}
+        ]},
+        options:{
+          responsive:true,maintainAspectRatio:true,
+          plugins:{
+            legend:{display:false},
+            tooltip:{callbacks:{title:items=>items.length?fmtMin(items[0].parsed.x):'',label:item=>item.dataset.label+': '+item.parsed.y.toFixed(4)}}
+          },
+          scales:{
+            x:{type:'linear',ticks:{color:tc,font:{size:8},callback:v=>fmtMin(v),maxTicksLimit:8},grid:{color:gc}},
+            y:{ticks:{color:tc,font:tf},grid:{color:gc}}
+          }
+        }
+      });
+    }else if(canvas){
+      canvas.style.display='none'; // nothing to plot yet — hide rather than show an empty frame
+    }
+  }
   // renderStatBar is now global (defined before render)
   // ──────────────────────────────────────────────────────────
   destroyChart("cbsl");
