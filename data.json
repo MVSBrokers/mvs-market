@@ -2531,7 +2531,7 @@
      "purchase": 579,
      "sales": 0,
      "netYtd": 1484,
-     "reserve": null
+     "reserve": 6905
     },
     {
      "month": "SEPTEMBER",
@@ -2567,51 +2567,66 @@
    "netForYear": 1484
   }
  ],
- "fxInterventionLastReserve": 6600,
+ "fxInterventionLastReserve": 6905,
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 19.5,
-   "wa": 328.3421
+   "volume": 40.5,
+   "wa": 328.21
   },
   {
-   "tenor": "CASH",
-   "volume": 24,
-   "wa": 328.1631
+   "tenor": "TOM",
+   "volume": 18.5,
+   "wa": 328.1777
   },
   {
    "tenor": "Sub Total",
-   "volume": 43.5,
+   "volume": 59,
    "wa": null
   },
   {
-   "tenor": "S+1",
-   "volume": 5.5,
-   "wa": 328.3455
+   "tenor": "2W",
+   "volume": 3,
+   "wa": 328.8
   },
   {
-   "tenor": "2W",
-   "volume": 14,
-   "wa": 328.9471
+   "tenor": "3W",
+   "volume": 3,
+   "wa": 329.2
   },
   {
    "tenor": "1M",
-   "volume": 17.5,
-   "wa": 329.6081
+   "volume": 23.25,
+   "wa": 329.5699
   },
   {
-   "tenor": "2M",
-   "volume": 2.7,
-   "wa": 331.0706
+   "tenor": "3M",
+   "volume": 3,
+   "wa": 332.29
+  },
+  {
+   "tenor": "4M",
+   "volume": 1,
+   "wa": 333.3
+  },
+  {
+   "tenor": "5M",
+   "volume": 1,
+   "wa": 334.74
+  },
+  {
+   "tenor": "6M",
+   "volume": 25,
+   "wa": 335.98
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 39.7,
+   "volume": 59.25,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 83.2,
+   "volume": 118.25,
    "wa": null
   }
  ],
@@ -3136,6 +3151,11 @@
   {
    "month": "July",
    "value": "6,600 Mn",
+   "show": true
+  },
+  {
+   "month": "August",
+   "value": "6,905 Mn",
    "show": true
   }
  ],
@@ -6941,8 +6961,6 @@
   "Auction Date: 02 September 2026"
  ],
  "date": "2026-09-08",
- "netOutstandingLT": null,
- "netMarketLiquidity": null,
  "openingDate": "",
  "closingDate": "",
  "mmDate": "",
@@ -6984,6 +7002,8 @@
    "Reserve (USD Mn)"
   ]
  },
+ "netOutstandingLT": null,
+ "netMarketLiquidity": null,
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-08",
