@@ -540,7 +540,7 @@ canvas{max-width:100%!important}
           <tr><td>1 Year</td><td id="sw1ys">—</td><td id="sw1yb">—</td></tr>
         </tbody>
       </table>
-      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px">Market Overview (Spot)<span class="close-date" id="fxov-close" style="text-transform:none;font-weight:400"></span></div>
+      <div style="font-size:10px;font-weight:700;color:#c8a84b;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px;border-top:1px solid #1a3050;padding-top:10px" data-sec="fxintraday">Market Overview (Spot)<span class="close-date" id="fxov-close" style="text-transform:none;font-weight:400"></span></div>
       <div style="font-size:8px;color:#7a93b4;margin-bottom:4px">Intraday SPOT rate movement</div>
       <canvas id="fxIntradayChart" style="max-height:150px;margin-bottom:8px"></canvas>
       <table style="font-size:12px">
@@ -1190,6 +1190,7 @@ const HOLDBACK_FIX_VERSION_KEY='mvs_holdback_fix_version';
 // Label -> list of top-level data.json keys that belong to that section (matches this app's actual schema).
 const MSG_SECTION_MAP={
   'Volume of Foreign Exchange Market':['fxSummary'],
+  'Intraday Spot Rate':['fxIntraday'],
   'Outright Treasury Bond Transaction Volumes (Rs.Mn)':['bondTransVol'],
   'Government Securities Secondary Market Trade Summary':['bondTransVolLink','bondTransVolLinkDate'],
   'Money & Repo Market':['callMarket','repoMarket','windows','liquidity'],
@@ -1292,6 +1293,13 @@ const MSG_CUTOFF_SECTIONS={
     }
   },
   'Treasury Bond Yield (%)':{
+    hour:16,
+    date:d=>{
+      const dt=slWorkDay(0); // today's SL working day — closing data, gated by the 4PM cutoff
+      return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+    }
+  },
+  'Intraday Spot Rate':{
     hour:16,
     date:d=>{
       const dt=slWorkDay(0); // today's SL working day — closing data, gated by the 4PM cutoff
@@ -1711,6 +1719,7 @@ const SECTION_NAV={
   'Treasury Bill':{page:'page-fi',sel:'[data-sec="tbillcurve"]'},
   'Treasury Bond Yield (%)':{page:'page-fi',sel:'[data-sec="tbonds"]'},
   'USD/LKR Foreign Exchange':{page:'page-fx',sel:'#fx-usdlkr-banner'},
+  'Intraday Spot Rate':{page:'page-fx',sel:'[data-sec="fxintraday"]'},
   'CBSL FX Market Intervention':{page:'page-fx',sel:'#fxi-panel'},
   'Foreign Currency Reserves':{page:'page-macro',sel:'[data-sec="reserves"]'},
   'Inflation (CCPI vs NCPI)':{page:'page-macro',sel:'[data-sec="inflation"]'},
@@ -2455,6 +2464,10 @@ function buildCharts(d){
     const toMin=t=>{const m=String(t).match(/^(\d{1,2}):(\d{2})/);return m?(+m[1]*60+ +m[2]):null;};
     const fmtMin=m=>{const h=Math.floor(m/60),mm=Math.round(m%60);return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0');};
     const spotPts=rows.map(r=>({x:toMin(r.time),y:r.rate})).filter(p=>p.x!=null).sort((a,b)=>a.x-b.x);
+    // X-axis limited to the actual trading range — first deal's time to last deal's time —
+    // rather than Chart.js auto-padding beyond it (e.g. rounding out to a full hour on each end).
+    const xMin=spotPts.length?spotPts[0].x:undefined;
+    const xMax=spotPts.length?spotPts[spotPts.length-1].x:undefined;
     const canvas=document.getElementById("fxIntradayChart");
     if(canvas&&spotPts.length){
       canvas.style.display='';
@@ -2470,7 +2483,7 @@ function buildCharts(d){
             tooltip:{callbacks:{title:items=>items.length?fmtMin(items[0].parsed.x):'',label:item=>item.dataset.label+': '+item.parsed.y.toFixed(4)}}
           },
           scales:{
-            x:{type:'linear',ticks:{color:tc,font:{size:8},callback:v=>fmtMin(v),maxTicksLimit:8},grid:{color:gc}},
+            x:{type:'linear',min:xMin,max:xMax,ticks:{color:tc,font:{size:8},callback:v=>fmtMin(v),maxTicksLimit:8},grid:{color:gc}},
             y:{ticks:{color:tc,font:tf},grid:{color:gc}}
           }
         }
