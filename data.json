@@ -6982,7 +6982,6 @@
  "hidden": {
   "tbills": true,
   "tbillauction": true,
-  "tbillcurve": true,
   "tbonds": true,
   "fxswaps": true,
   "secondary": true
