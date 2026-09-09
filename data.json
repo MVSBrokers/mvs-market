@@ -7031,8 +7031,7 @@
  "hidden": {
   "tbills": true,
   "tbonds": true,
-  "fxswaps": true,
-  "secondary": true
+  "fxswaps": true
  },
  "headers": {
   "bond": [
