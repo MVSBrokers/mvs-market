@@ -6981,7 +6981,6 @@
  "bondTransVolLinkDate": "8th September 2026",
  "hidden": {
   "tbills": true,
-  "tbillauction": true,
   "tbonds": true,
   "fxswaps": true,
   "secondary": true
