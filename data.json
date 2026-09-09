@@ -7029,8 +7029,7 @@
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/6ee6ab8e-2c12-4366-a1ea-90c09d900efa",
  "bondTransVolLinkDate": "8th September 2026",
  "hidden": {
-  "tbills": true,
-  "fxswaps": true
+  "tbills": true
  },
  "headers": {
   "bond": [
