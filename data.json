@@ -6984,7 +6984,8 @@
   "tbillauction": true,
   "tbillcurve": true,
   "tbonds": true,
-  "fxswaps": true
+  "fxswaps": true,
+  "secondary": true
  },
  "headers": {
   "bond": [
