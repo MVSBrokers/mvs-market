@@ -7016,6 +7016,10 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
+ "mutedNotif": {
+  "Treasury Bill": true,
+  "Treasury Bond Yield (%)": true
+ },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-09",
@@ -9630,8 +9634,5 @@
    "day": "2026-09-09",
    "values": {}
   }
- },
- "mutedNotif": {
-  "Treasury Bill": true
  }
 }
