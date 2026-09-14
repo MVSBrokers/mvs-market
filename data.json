@@ -7261,7 +7261,7 @@
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "https://www.treasury.gov.lk/api/file/03893452-45c4-492e-88a2-def411e19f54",
- "billAucLink": "",
+ "billAucLink": "https://www.treasury.gov.lk/api/file/2c1bb057-7ba2-4f7b-ae72-a08b77666362",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/fbdb33ee-5cbe-4805-9063-db5bc6716e37",
  "bondTransVolLinkDate": "11th September 2026",
@@ -8715,20 +8715,6 @@
     ],
     "tbondOut": [
      {
-      "maturity": "2026-07-15",
-      "isin": "LKJ00226G155",
-      "series": "01.00%2026A",
-      "face": 52517,
-      "show": true
-     },
-     {
-      "maturity": "2026-08-01",
-      "isin": "LKB01026H014",
-      "series": "11.50%2026A",
-      "face": 244501.66,
-      "show": true
-     },
-     {
       "maturity": "2026-12-15",
       "isin": "LKB00326L151",
       "series": "11.25%2026A",
@@ -8970,7 +8956,7 @@
       "maturity": "2030-05-15",
       "isin": "LKB01530E152",
       "series": "11.00%2030A",
-      "face": 253173.36,
+      "face": 253023.36,
       "show": true
      },
      {
@@ -9005,7 +8991,7 @@
       "maturity": "2030-10-15",
       "isin": "LKB00730J158",
       "series": "11.00%2030B",
-      "face": 184255,
+      "face": 310755,
       "show": true
      },
      {
@@ -9017,9 +9003,9 @@
      },
      {
       "maturity": "2031-02-01",
-      "isin": "LKK00531B017",
+      "isin": "LKB00531B017",
       "series": "11.60%2031A",
-      "face": null,
+      "face": 99000,
       "show": true
      },
      {
@@ -9201,14 +9187,14 @@
       "maturity": "2034-10-15",
       "isin": "LKB00934J156",
       "series": "11.70%2034A",
-      "face": null,
+      "face": 143000,
       "show": true
      },
      {
       "maturity": "2035-03-15",
       "isin": "LKB02035C155",
       "series": "11.50%2035A",
-      "face": 252565,
+      "face": 269065,
       "show": true
      },
      {
@@ -9257,7 +9243,7 @@
       "maturity": "2036-08-15",
       "isin": "LKB01136H151",
       "series": "10.85%2036A",
-      "face": 123620,
+      "face": 178620,
       "show": true
      },
      {
@@ -9278,7 +9264,7 @@
       "maturity": "2037-07-01",
       "isin": "LKB01237G019",
       "series": "10.75%2037A",
-      "face": 216963,
+      "face": 282963,
       "show": true
      },
      {
