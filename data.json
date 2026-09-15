@@ -2053,6 +2053,27 @@
    "rate": 330.6,
    "time": "14:30",
    "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 330.8,
+   "time": "16:19",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 330.8,
+   "time": "16:16",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 330.7,
+   "time": "15:13",
+   "show": true
   }
  ],
  "fxIntervention": [
