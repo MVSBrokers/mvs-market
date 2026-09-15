@@ -7306,6 +7306,29 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
+ "tbondAucResult": {
+  "date": "11th September 2026",
+  "rows": [
+   {
+    "tenor": "01.08.2030",
+    "waYield": 10.83,
+    "issueAmt": 70000,
+    "acceptAmt": 70000
+   },
+   {
+    "tenor": "15.10.2034",
+    "waYield": 11.96,
+    "issueAmt": 50000,
+    "acceptAmt": 50000
+   },
+   {
+    "tenor": "01.07.2037",
+    "waYield": 12.08,
+    "issueAmt": 30000,
+    "acceptAmt": 30000
+   }
+  ]
+ },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-15",
