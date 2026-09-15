@@ -195,6 +195,7 @@ const SECTIONS=[
  {id:'tbillauction',title:'T-Bill Auction Details',keys:['tbillAuction'],group:'Fixed Income'},
  {id:'tbillcurve',title:'T-Bill Yield Curve (series)',keys:['tbillCurve'],group:'Fixed Income'},
  {id:'tbonds',title:'Treasury Bonds (daily rates)',keys:['bonds'],group:'Fixed Income'},
+ {id:'tbondaucresult',title:'Last T-Bond Auction Result',keys:['tbondAucResult'],group:'Fixed Income'},
  {id:'secondary',title:'T-Bond Secondary Yields',keys:['bondSecondary'],group:'Fixed Income'},
  {id:'bondtransxn',title:'T-Bond Outright Transaction Volumes',keys:['bondTransVol','bondTransVolLink','bondTransVolLinkDate'],group:'Fixed Income'},
  {id:'cbsl',title:'CBSL Holdings of Govt Securities',keys:['cbsl','cbslHoldings'],group:'Macro Economy'},
@@ -833,6 +834,28 @@ function renderSections(){
       h+='</tbody></table></div>';
       h+='<button type="button" class="row-add" onclick="bondAddRow()">+ Add maturity (row)</button> <button type="button" class="row-add" onclick="bondAddCol()">+ Add date (column)</button></div>';
       body=h;
+    } else if(sec.id==='tbondaucresult'){
+      const t=(LOADED.tbondAucResult&&typeof LOADED.tbondAucResult==='object')?LOADED.tbondAucResult:{};
+      const trows=Array.isArray(t.rows)?t.rows:[];
+      let h='<div class="ed-sub"><div class="ed-sub-t">Manual — not read from Excel. Shown as a small summary card on the dashboard, directly below the Treasury Bond Yield table. Preserved across future Excel re-imports, same as the date fields.</div>'
+        + '<div class="ed-sub-t" style="margin-top:8px">Auction date</div>'+inp('tbondAucResult.date',t.date!=null?t.date:'','str').replace('<input ','<input placeholder="e.g. 18th August 2026" style="min-width:170px" ')
+        + '</div>';
+      h+='<div class="ed-sub"><div class="ed-sub-t">Bonds auctioned — one row per bond (several bonds can be auctioned on the same date)</div>';
+      if(trows.length){
+        h+='<div class="ed-scroll" data-sk="tbondAucResult.rows"><table class="ed-tbl"><thead><tr><th>Bond / Tenor</th><th>W.A. Yield (%)</th><th>Issue Amount (Rs.Mn)</th><th>Accepted Amount (Rs.Mn)</th><th></th></tr></thead><tbody>';
+        trows.forEach((r,i)=>{
+          h+='<tr><td>'+inp('tbondAucResult.rows.'+i+'.tenor',r.tenor!=null?r.tenor:'','str').replace('<input ','<input placeholder="e.g. 15.06.2032" style="min-width:150px" ')+'</td>'
+            +'<td>'+inp('tbondAucResult.rows.'+i+'.waYield',r.waYield!=null?r.waYield:'','num').replace('<input ','<input placeholder="e.g. 12.35" style="min-width:100px" ')+'</td>'
+            +'<td>'+inp('tbondAucResult.rows.'+i+'.issueAmt',r.issueAmt!=null?r.issueAmt:'','num').replace('<input ','<input placeholder="e.g. 5000" style="min-width:110px" ')+'</td>'
+            +'<td>'+inp('tbondAucResult.rows.'+i+'.acceptAmt',r.acceptAmt!=null?r.acceptAmt:'','num').replace('<input ','<input placeholder="e.g. 4800" style="min-width:110px" ')+'</td>'
+            +'<td><button type="button" class="row-del" onclick="rowDel(\'tbondAucResult.rows\','+i+')" title="Delete this row">✕</button></td></tr>';
+        });
+        h+='</tbody></table></div>';
+      }else{
+        h+='<div style="font-size:11px;color:#7fa3c8;margin-bottom:8px">No bonds added yet.</div>';
+      }
+      h+='<button type="button" class="row-add" onclick="tbondAucAddRow()">+ Add bond</button></div>';
+      body=h;
     } else if(sec.id==='billauc'){
       body='<div class="ed-sub"><div class="ed-sub-t">"More details" link for Next T-Bill Auction (optional)</div><input id="billauc-link" class="ed" style="width:100%" placeholder="https://…  — the dashboard shows a \'More details\' button under Next T-Bill Auction that opens this" value="'+escAttr(LOADED.billAucLink||'')+'"></div>'
         + (LOADED.billAuctions!=null?`<div class="ed-sub"><div class="ed-sub-t">billAuctions</div>${renderNode(LOADED.billAuctions,'billAuctions')}</div>`:'<div class="ed-sub"><div class="ed-sub-t">billAuctions</div><span class="muted">No data in this workbook.</span></div>');
@@ -855,7 +878,7 @@ function renderSections(){
         return `<div class="ed-sub"><div class="ed-sub-t">${k}</div>${renderNode(LOADED[k],k)}</div>`;
       }).join('');
     }
-    const presentEff=(sec.id==='results'||sec.id==='netliquidity')?true:present;
+    const presentEff=(sec.id==='results'||sec.id==='netliquidity'||sec.id==='tbondaucresult')?true:present;
     return groupHdr+`<div class="sec${hid?' is-hidden':''}" id="sec-${sec.id}">
       <div class="sec-head" onclick="document.getElementById('sec-${sec.id}').classList.toggle('open')">
         <div><div class="st">${sec.title}${hid?' <span class="hid-tag">hidden on dashboard</span>':''}</div><div class="meta">${pts} data point${pts===1?'':'s'} · keys: ${sec.keys.join(', ')}</div></div>
@@ -892,6 +915,8 @@ function rowAdd(path){applyEdits();const arr=getByPath(LOADED,path);if(Array.isA
 function bondAddRow(){applyEdits();if(!LOADED.bonds||typeof LOADED.bonds!=='object')LOADED.bonds={headers:[],rows:[]};if(!Array.isArray(LOADED.bonds.rows))LOADED.bonds.rows=[];const n=(Array.isArray(LOADED.bonds.headers)?LOADED.bonds.headers:[]).length;LOADED.bonds.rows.push({bond:'',eoy:'',eom:'',values:new Array(n).fill('')});saveLocal();renderSections();}
 function bondAddCol(){applyEdits();if(!LOADED.bonds||typeof LOADED.bonds!=='object')LOADED.bonds={headers:[],rows:[]};if(!Array.isArray(LOADED.bonds.headers))LOADED.bonds.headers=[];LOADED.bonds.headers.push('New date');(LOADED.bonds.rows||[]).forEach(r=>{if(!Array.isArray(r.values))r.values=[];r.values.push('');});saveLocal();renderSections();}
 function bondDelCol(j){applyEdits();if(!LOADED.bonds||!Array.isArray(LOADED.bonds.headers))return;LOADED.bonds.headers.splice(j,1);(LOADED.bonds.rows||[]).forEach(r=>{if(Array.isArray(r.values))r.values.splice(j,1);});saveLocal();renderSections();}
+// Last T-Bond Auction Result: add a bond row (several bonds can be auctioned on the same date)
+function tbondAucAddRow(){applyEdits();if(!LOADED.tbondAucResult||typeof LOADED.tbondAucResult!=='object')LOADED.tbondAucResult={};if(!Array.isArray(LOADED.tbondAucResult.rows))LOADED.tbondAucResult.rows=[];LOADED.tbondAucResult.rows.push({tenor:'',waYield:'',issueAmt:'',acceptAmt:''});saveLocal();renderSections();}
 // Parallel-array (series) tables: keep every column array the same length
 function _arrKeysOf(obj){return Object.keys(obj).filter(k=>Array.isArray(obj[k])&&obj[k].every(x=>x===null||typeof x!=='object'));}
 function rowDelP(path,i){applyEdits();const obj=getByPath(LOADED,path);if(obj&&typeof obj==='object'){_arrKeysOf(obj).forEach(k=>{if(i>=0&&i<obj[k].length)obj[k].splice(i,1);});saveLocal();renderSections();}}
@@ -1590,7 +1615,7 @@ if (!Array.isArray(o.marketNews)) {
 o.date=new Date().toISOString().slice(0,10);
   // Report dates — leave blank so dashboard auto-uses SL working days
   // Preserve any manual topic-date overrides across re-import (blank = auto on dashboard)
-  const _keepDates=['openingDate','closingDate','mmDate','fxVolDate','secondaryDate','netOutstandingLT','netMarketLiquidity'];
+  const _keepDates=['openingDate','closingDate','mmDate','fxVolDate','secondaryDate','netOutstandingLT','netMarketLiquidity','tbondAucResult'];
   _keepDates.forEach(k=>{if(!o[k]&&LOADED&&LOADED[k])o[k]=LOADED[k];});
   o.openingDate=o.openingDate||"";o.closingDate=o.closingDate||"";o.mmDate=o.mmDate||"";o.fxVolDate=o.fxVolDate||"";o.secondaryDate=o.secondaryDate||"";
   return o;
