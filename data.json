@@ -7193,8 +7193,8 @@
  "newsLink": "https://www.treasury.gov.lk/api/file/03893452-45c4-492e-88a2-def411e19f54",
  "billAucLink": "https://www.treasury.gov.lk/api/file/2c1bb057-7ba2-4f7b-ae72-a08b77666362",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/fbdb33ee-5cbe-4805-9063-db5bc6716e37",
- "bondTransVolLinkDate": "11th September 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/54aae012-4041-4968-a4d8-6d6b72f93df1",
+ "bondTransVolLinkDate": "14th September 2026",
  "hidden": {
   "tbills": true,
   "tbillcurve": true
