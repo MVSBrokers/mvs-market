@@ -460,6 +460,7 @@ canvas{max-width:100%!important}
           <tbody id="bondRows"></tbody>
         </table>
       </div>
+      <div id="latest-tbond-aucresult" class="latest-card" style="margin-top:10px">—</div>
     </div>
     <div class="panel">
       <div class="panel-title pt-row" data-sec="tbillcurve"><span>Treasury Bill</span><span class="mini-gran" id="tbill-gran-btns">
@@ -2337,6 +2338,27 @@ function renderExtras(d){
    };
    {const e=document.getElementById('latest-tbill-mat');if(e)e.innerHTML=matCardMulti('Next T-Bill Maturities (3M · 6M · 12M)',nextMats(d.tbillOut,3),false);}
    {const e=document.getElementById('latest-tbond-mat');if(e)e.innerHTML=matCardMulti('Next T-Bond Maturity',nextMats(d.tbondOut,1),true);}
+   // Last T-Bond Auction Result — small manual summary card, shown right below the Treasury
+   // Bond Yield table on the Fixed Income page (not derived from the daily yield table above it).
+   {const e=document.getElementById('latest-tbond-aucresult');
+    if(e){
+      const ar=d.tbondAucResult;
+      const arows=(ar&&Array.isArray(ar.rows))?ar.rows.filter(r=>r&&r.waYield!=null&&String(r.waYield).trim()!==''):[];
+      if(arows.length){
+        let html='<div class="lc-h">Last T-Bond Auction Result</div>';
+        if(ar.date)html+='<div class="lc-row"><span class="lc-k">Auction Date</span><span class="lc-v">'+escHtml(String(ar.date))+'</span></div>';
+        arows.forEach(r=>{
+          html+='<div style="padding:7px 0;border-bottom:1px solid #14243d">'
+            +'<div class="lc-row" style="border:none;padding:1px 0"><span class="lc-k">'+(r.tenor?escHtml(String(r.tenor)):'Bond')+'</span><span class="lc-v" style="color:#c8a84b;font-weight:700">'+fmt2(r.waYield)+'%</span></div>';
+          if(r.issueAmt!=null&&String(r.issueAmt).trim()!=='')html+='<div class="lc-row" style="border:none;padding:1px 0"><span class="lc-k">Issue Amount</span><span class="lc-v">Rs. '+fmt2(r.issueAmt)+' Mn</span></div>';
+          if(r.acceptAmt!=null&&String(r.acceptAmt).trim()!=='')html+='<div class="lc-row" style="border:none;padding:1px 0"><span class="lc-k">Accepted Amount</span><span class="lc-v">Rs. '+fmt2(r.acceptAmt)+' Mn</span></div>';
+          html+='</div>';
+        });
+        e.innerHTML=html;
+      }else{
+        e.innerHTML='<div class="lc-h">Last T-Bond Auction Result</div><div class="lc-none">Not published yet</div>';
+      }
+    }}
   }
 
   // ── Opening Report mirror tables ──
