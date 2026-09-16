@@ -1862,7 +1862,7 @@
    329.18,
    330.8
   ],
-  "close": "329.70/ 330.90"
+  "close": "330.70/ 330.90"
  },
  "fxSwaps": {
   "1w": {
@@ -7272,7 +7272,7 @@
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "https://www.treasury.gov.lk/api/file/03893452-45c4-492e-88a2-def411e19f54",
- "billAucLink": "https://www.treasury.gov.lk/api/file/2c1bb057-7ba2-4f7b-ae72-a08b77666362",
+ "billAucLink": "",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/590a6c58-107b-4861-b3ff-2a4525f8ad32",
  "bondTransVolLinkDate": "15th September 2026",
@@ -7310,7 +7310,6 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
- "cutoffOverride": {},
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-16",
