@@ -7310,6 +7310,15 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
+ "cutoffOverride": {
+  "Money & Repo Market": true,
+  "Money & Repo Market — Repo Auctions": true,
+  "Treasury Bill": true,
+  "Treasury Bond Yield (%)": true,
+  "USD/LKR Foreign Exchange": true,
+  "Value Dates": true,
+  "CBSL Holdings of Government Securities": true
+ },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-16",
@@ -9739,7 +9748,7 @@
       328.5,
       328.65,
       329.18,
-      330.7
+      330.8
      ],
      "close": "329.70/ 330.90"
     },
@@ -9934,14 +9943,5 @@
    "day": "2026-09-16",
    "values": {}
   }
- },
- "cutoffOverride": {
-  "Money & Repo Market": true,
-  "Money & Repo Market — Repo Auctions": true,
-  "Treasury Bill": true,
-  "Treasury Bond Yield (%)": true,
-  "USD/LKR Foreign Exchange": true,
-  "Value Dates": true,
-  "CBSL Holdings of Government Securities": true
  }
 }
