@@ -7274,8 +7274,8 @@
  "newsLink": "https://www.treasury.gov.lk/api/file/03893452-45c4-492e-88a2-def411e19f54",
  "billAucLink": "https://www.treasury.gov.lk/api/file/2c1bb057-7ba2-4f7b-ae72-a08b77666362",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/54aae012-4041-4968-a4d8-6d6b72f93df1",
- "bondTransVolLinkDate": "14th September 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/590a6c58-107b-4861-b3ff-2a4525f8ad32",
+ "bondTransVolLinkDate": "15th September 2026",
  "hidden": {
   "tbills": true,
   "tbillcurve": true
@@ -7310,15 +7310,7 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
- "cutoffOverride": {
-  "Money & Repo Market": true,
-  "Money & Repo Market — Repo Auctions": true,
-  "Treasury Bill": true,
-  "Treasury Bond Yield (%)": true,
-  "USD/LKR Foreign Exchange": true,
-  "Value Dates": true,
-  "CBSL Holdings of Government Securities": true
- },
+ "cutoffOverride": {},
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-16",
@@ -9754,7 +9746,7 @@
     },
     "spot": {
      "open": "329.00/ 329.50",
-     "close": "329.70/ 330.90",
+     "close": "330.70/ 330.90",
      "low": "329.6",
      "high": "330.8"
     },
