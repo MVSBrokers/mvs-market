@@ -19,23 +19,23 @@
  "callMarket": {
   "min": 8.8,
   "max": 8.93,
-  "wa": 8.89,
-  "vol": 44.94
+  "wa": 8.9,
+  "vol": 41.86
  },
  "repoMarket": {
-  "min": 8.9,
-  "max": 9,
-  "wa": 8.95,
-  "vol": 83.15
+  "min": 8.92,
+  "max": 8.99,
+  "wa": 8.96,
+  "vol": 86.39
  },
  "windows": {
   "sdf": {
-   "cur": 52.09,
-   "prev": 88.59
+   "cur": 58.89,
+   "prev": 52.09
   },
   "slf": {
-   "cur": 0,
-   "prev": 1.04
+   "cur": 0.55,
+   "prev": 0
   }
  },
  "liquidity": {
@@ -211,7 +211,8 @@
    "11 Sep",
    "14 Sep",
    "15 Sep",
-   "16 Sep"
+   "16 Sep",
+   "17 Sep"
   ],
   "values": [
    128.14,
@@ -385,18 +386,19 @@
    116.11,
    131.4,
    92.55,
-   146.44
+   146.44,
+   107.84
   ],
-  "current": 146.44,
-  "previous": 92.55
+  "current": 107.84,
+  "previous": 146.44
  },
  "repoOvernight": [
   {
-   "date": "16 Sep 2026",
-   "repoOffered": 60,
+   "date": "17 Sep 2026",
+   "repoOffered": 50,
    "reverseRepoOffered": null,
-   "received": 59,
-   "accepted": 59,
+   "received": 50,
+   "accepted": 50,
    "minRate": 8.68,
    "maxRate": 8.75,
    "waYield": 8.71,
@@ -405,16 +407,30 @@
  ],
  "repoOMO": [
   {
-   "auction": "16 Sep 2026",
-   "settlement": "23 Sep 2026",
-   "repoOffered": 50,
+   "auction": "17 Sep 2026",
+   "settlement": "18 Sep 2026",
+   "repoOffered": 20,
    "reverseOffered": 0,
-   "received": 35,
-   "accepted": 35,
-   "minRate": 8.75,
-   "maxRate": 8.75,
-   "waYield": 8.75,
-   "maturity": "23 Sep 2026",
+   "received": 21,
+   "accepted": 20,
+   "minRate": 9.19,
+   "maxRate": 9.19,
+   "waYield": 9.19,
+   "maturity": "16 Oct 2026",
+   "tenure": 28,
+   "show": true
+  },
+  {
+   "auction": "17 Sep 2026",
+   "settlement": "17 Sep 2026",
+   "repoOffered": 20,
+   "reverseOffered": 0,
+   "received": 0,
+   "accepted": 0,
+   "minRate": 0,
+   "maxRate": 0,
+   "waYield": 0,
+   "maturity": "24 Sep 2026",
    "tenure": 7,
    "show": true
   }
@@ -530,7 +546,7 @@
      "11.70/11.80",
      "11.90/12.05",
      "12/12.2",
-     "11.9/11.05"
+     "11.9/12.05"
     ]
    },
    {
@@ -1496,129 +1512,45 @@
   "date": "2026-09-16",
   "rows": [
    {
-    "isin": "LKB00527I150",
-    "maturity": "2027-09-15",
-    "remYears": 0.997260273972603,
-    "amount": 256,
+    "isin": "LKB00428B156",
+    "maturity": "2028-02-15",
+    "remYears": 1.52876712328767,
+    "amount": 151.686,
     "show": true
    },
    {
-    "isin": "LKB01028C151",
-    "maturity": "2028-03-15",
-    "remYears": 1.4958904109589,
-    "amount": 1750,
-    "show": true
-   },
-   {
-    "isin": "LKB01528I017",
-    "maturity": "2028-09-01",
-    "remYears": 1.96164383561644,
-    "amount": 750,
-    "show": true
-   },
-   {
-    "isin": "LKB00428J159",
-    "maturity": "2028-10-15",
-    "remYears": 2.08219178082192,
-    "amount": 201,
-    "show": true
-   },
-   {
-    "isin": "LKB00528L152",
-    "maturity": "2028-12-15",
-    "remYears": 2.24931506849315,
-    "amount": 250,
-    "show": true
-   },
-   {
-    "isin": "LKB00629I154",
-    "maturity": "2029-09-15",
-    "remYears": 3,
-    "amount": 250,
-    "show": true
-   },
-   {
-    "isin": "LKB00529L150",
-    "maturity": "2029-12-15",
-    "remYears": 3.24931506849315,
-    "amount": 304,
-    "show": true
-   },
-   {
-    "isin": "LKB01530E152",
-    "maturity": "2030-05-15",
-    "remYears": 3.66301369863014,
-    "amount": 750,
-    "show": true
-   },
-   {
-    "isin": "LKB00530G018",
-    "maturity": "2030-07-01",
-    "remYears": 3.79178082191781,
-    "amount": 750,
+    "isin": "LKB00529F152",
+    "maturity": "2029-06-15",
+    "remYears": 2.86027397260274,
+    "amount": 214.464,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.87671232876712,
-    "amount": 5600,
+    "remYears": 3.98904109589041,
+    "amount": 466.96,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.08219178082192,
-    "amount": 1350,
+    "remYears": 4.19452054794521,
+    "amount": 650,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.38082191780822,
-    "amount": 250,
-    "show": true
-   },
-   {
-    "isin": "LKB01031L016",
-    "maturity": "2031-12-01",
-    "remYears": 5.21095890410959,
-    "amount": 400,
-    "show": true
-   },
-   {
-    "isin": "LKB02033K013",
-    "maturity": "2033-11-01",
-    "remYears": 7.13150684931507,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB00934F154",
-    "maturity": "2034-06-15",
-    "remYears": 7.75068493150685,
-    "amount": 3400,
-    "show": true
-   },
-   {
-    "isin": "LKB01534I155",
-    "maturity": "2034-09-15",
-    "remYears": 8.0027397260274,
-    "amount": 1000,
+    "remYears": 4.49315068493151,
+    "amount": 950,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 8.08493150684932,
-    "amount": 1600,
-    "show": true
-   },
-   {
-    "isin": "LKB01136H151",
-    "maturity": "2036-08-15",
-    "remYears": 9.92054794520548,
-    "amount": 400,
+    "remYears": 8.1972602739726,
+    "amount": 517.494,
     "show": true
    }
   ]
@@ -7363,8 +7295,8 @@
  ],
  "execSummary": {
   "usdlkr": "331.65/ 331.85",
-  "liqDir": "increased",
-  "liqDelta": 53.89
+  "liqDir": "decreased",
+  "liqDelta": 38.6
  },
  "marketNews": [
   "Treasury Bill Auction Results",
