@@ -18,24 +18,24 @@
  ],
  "callMarket": {
   "min": 8.86,
-  "max": 8.96,
+  "max": 8.95,
   "wa": 8.91,
-  "vol": 46.43
+  "vol": 43.75
  },
  "repoMarket": {
   "min": 8.92,
-  "max": 9.02,
+  "max": 9.03,
   "wa": 8.96,
-  "vol": 75.94
+  "vol": 84.79
  },
  "windows": {
   "sdf": {
-   "cur": 94.41,
-   "prev": 58.89
+   "cur": 56.72,
+   "prev": 94.41
   },
   "slf": {
-   "cur": 0.12,
-   "prev": 0.55
+   "cur": 0,
+   "prev": 0.12
   }
  },
  "liquidity": {
@@ -213,7 +213,8 @@
    "15 Sep",
    "16 Sep",
    "17 Sep",
-   "18 Sep"
+   "18 Sep",
+   "21 Sep"
   ],
   "values": [
    128.14,
@@ -389,19 +390,20 @@
    92.55,
    146.44,
    107.84,
-   124.79
+   124.79,
+   145.72
   ],
-  "current": 124.79,
-  "previous": 107.84
+  "current": 145.72,
+  "previous": 124.79
  },
  "repoOvernight": [
   {
-   "date": "18 Sep 2026",
-   "repoOffered": 60,
+   "date": "21 Sep 2026",
+   "repoOffered": 70,
    "reverseRepoOffered": null,
-   "received": 30,
-   "accepted": 30,
-   "minRate": 8.73,
+   "received": 59,
+   "accepted": 59,
+   "minRate": 8.75,
    "maxRate": 8.75,
    "waYield": 8.75,
    "show": true
@@ -409,16 +411,16 @@
  ],
  "repoOMO": [
   {
-   "auction": "18 Sep 2026",
-   "settlement": "18 Sep 2026",
+   "auction": "21 Sep 2026",
+   "settlement": "21 Sep 2026",
    "repoOffered": 30,
    "reverseOffered": 0,
-   "received": 0,
-   "accepted": 0,
-   "minRate": 0,
-   "maxRate": 0,
-   "waYield": 0,
-   "maturity": "25 Sep 2026",
+   "received": 30,
+   "accepted": 30,
+   "minRate": 8.74,
+   "maxRate": 8.74,
+   "waYield": 8.74,
+   "maturity": "28 Sep 2026",
    "tenure": 7,
    "show": true
   }
@@ -7310,7 +7312,7 @@
  "execSummary": {
   "usdlkr": "330.70/ 331.85",
   "liqDir": "increased",
-  "liqDelta": 16.95
+  "liqDelta": 20.93
  },
  "marketNews": [
   "Treasury Bill Auction Results",
