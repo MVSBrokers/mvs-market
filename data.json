@@ -7326,6 +7326,8 @@
   "Auction Date: 16 September 2026"
  ],
  "date": "2026-09-22",
+ "netOutstandingLT": 245,
+ "netMarketLiquidity": 360.72,
  "tbondAucResult": {
   "date": "11th September 2026",
   "rows": [
@@ -7357,8 +7359,8 @@
  "newsLink": "https://www.treasury.gov.lk/api/file/00caadb6-c059-439a-b922-f4c7f68f55ce",
  "billAucLink": "https://www.treasury.gov.lk/api/file/a5a85339-90ef-43ab-b409-f1dcc96ad94e",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/dc0a19a2-ba42-42ad-a062-2a60db5bdf67",
- "bondTransVolLinkDate": "18th September 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/f752d921-b0a6-4e41-8c2d-7d330d10f324",
+ "bondTransVolLinkDate": "21st September 2026",
  "hidden": {
   "tbills": true
  },
@@ -7390,9 +7392,6 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": 245,
- "netMarketLiquidity": 360.72,
- "cutoffOverride": {},
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-22",
