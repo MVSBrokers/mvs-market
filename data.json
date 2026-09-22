@@ -7390,8 +7390,8 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": null,
- "netMarketLiquidity": null,
+ "netOutstandingLT": 245,
+ "netMarketLiquidity": 360.72,
  "cutoffOverride": {
   "Money & Repo Market": true,
   "Money & Repo Market — Repo Auctions": true,
@@ -9852,11 +9852,11 @@
       331,
       330.8
      ],
-     "close": "330.70/ 331.85"
+     "close": "330.70/ 330.85"
     },
     "spot": {
      "open": "330.80/ 331.30",
-     "close": "330.70/ 331.85",
+     "close": "330.70/ 330.85",
      "low": "330.75",
      "high": "331"
     },
