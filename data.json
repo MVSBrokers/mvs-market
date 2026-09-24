@@ -2845,42 +2845,47 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 46.75,
-   "wa": 329.8867
+   "volume": 36.75,
+   "wa": 329.0158
+  },
+  {
+   "tenor": "TOM",
+   "volume": 20,
+   "wa": 329.425
   },
   {
    "tenor": "CASH",
-   "volume": 28.75,
-   "wa": 330.3779
+   "volume": 6.45,
+   "wa": 328.9357
   },
   {
    "tenor": "Sub Total",
-   "volume": 75.5,
+   "volume": 63.2,
    "wa": null
   },
   {
    "tenor": "1W",
-   "volume": 10.5,
-   "wa": 331.022
+   "volume": 10,
+   "wa": 330.023
   },
   {
-   "tenor": "2W",
-   "volume": 1,
-   "wa": 331.406
+   "tenor": "1M",
+   "volume": 17,
+   "wa": 330.6029
   },
   {
    "tenor": "3M",
-   "volume": 4,
-   "wa": 334.0775
+   "volume": 0.1,
+   "wa": 333.3
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 15.5,
+   "volume": 27.1,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 91,
+   "volume": 90.3,
    "wa": null
   }
  ],
