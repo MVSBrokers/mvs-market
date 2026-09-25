@@ -19,23 +19,23 @@
  "callMarket": {
   "min": 8.85,
   "max": 9,
-  "wa": 8.93,
-  "vol": 45.99
+  "wa": 8.96,
+  "vol": 12.4
  },
  "repoMarket": {
   "min": 8.95,
-  "max": 9.03,
-  "wa": 8.99,
-  "vol": 69.32
+  "max": 9.05,
+  "wa": 9,
+  "vol": 74.45
  },
  "windows": {
   "sdf": {
-   "cur": 68.06,
-   "prev": 90.1
+   "cur": 90.42,
+   "prev": 68.06
   },
   "slf": {
    "cur": 0,
-   "prev": 1.73
+   "prev": 0
   }
  },
  "liquidity": {
@@ -217,7 +217,8 @@
    "21 Sep",
    "22 Sep",
    "23 Sep",
-   "24 Sep"
+   "24 Sep",
+   "25 Sep"
   ],
   "values": [
    128.14,
@@ -397,51 +398,38 @@
    145.72,
    94.09,
    148.87,
-   111.06
+   111.06,
+   137.92
   ],
-  "current": 111.06,
-  "previous": 148.87
+  "current": 137.92,
+  "previous": 111.06
  },
  "repoOvernight": [
   {
-   "date": "24 Sep 2026",
-   "repoOffered": 40,
+   "date": "25 Sep 2026",
+   "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 33,
-   "accepted": 33,
-   "minRate": 8.72,
+   "received": 18,
+   "accepted": 18,
+   "minRate": 8.71,
    "maxRate": 8.75,
-   "waYield": 8.74,
+   "waYield": 8.72,
    "show": true
   }
  ],
  "repoOMO": [
   {
-   "auction": "24 Sep 2026",
-   "settlement": "24 Sep 2026",
+   "auction": "25 Sep 2026",
+   "settlement": "25 Sep 2026",
    "repoOffered": 30,
    "reverseOffered": 0,
-   "received": 10,
-   "accepted": 10,
-   "minRate": 8.75,
+   "received": 30,
+   "accepted": 30,
+   "minRate": 8.74,
    "maxRate": 8.75,
-   "waYield": 8.75,
-   "maturity": "1 Oct 2026",
+   "waYield": 8.74,
+   "maturity": "2 Oct 2026",
    "tenure": 7,
-   "show": true
-  },
-  {
-   "auction": "24 Sep 2026",
-   "settlement": "25 Sep 2026",
-   "repoOffered": 40,
-   "reverseOffered": 0,
-   "received": 71,
-   "accepted": 40,
-   "minRate": 9.15,
-   "maxRate": 9.15,
-   "waYield": 9.15,
-   "maturity": "23 Oct 2026",
-   "tenure": 28,
    "show": true
   }
  ],
@@ -1914,7 +1902,7 @@
    330.35,
    330.45
   ],
-  "close": "330.40/ 330.50"
+  "close": "330.40/ 330.55"
  },
  "fxSwaps": {
   "1w": {
@@ -1944,7 +1932,7 @@
  },
  "spot": {
   "open": "330.30/ 330.60",
-  "close": "330.40/ 330.50",
+  "close": "330.40/ 330.55",
   "low": "330.1",
   "high": "330.45"
  },
@@ -7351,9 +7339,9 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "330.40/ 330.50",
-  "liqDir": "decreased",
-  "liqDelta": 37.81
+  "usdlkr": "330.40/ 330.55",
+  "liqDir": "increased",
+  "liqDelta": 26.86
  },
  "marketNews": [
   "Treasury Bill Auction Results",
