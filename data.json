@@ -1912,7 +1912,7 @@
    329.5,
    329.65,
    330.35,
-   330.4
+   330.45
   ],
   "close": "330.40/ 330.50"
  },
@@ -1946,7 +1946,7 @@
   "open": "330.30/ 330.60",
   "close": "330.40/ 330.50",
   "low": "330.1",
-  "high": "330.4"
+  "high": "330.45"
  },
  "crossRates": [
   {
@@ -2076,6 +2076,13 @@
    "amount": 0.5,
    "rate": 330.4,
    "time": "15:38",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 330.45,
+   "time": "16:04",
    "show": true
   }
  ],
@@ -7361,8 +7368,6 @@
   "Settlement Date: 25 September 2026"
  ],
  "date": "2026-09-25",
- "netOutstandingLT": null,
- "netMarketLiquidity": null,
  "tbondAucResult": {
   "date": "11th September 2026",
   "rows": [
@@ -7427,6 +7432,8 @@
    "Reserve (USD Mn)"
   ]
  },
+ "netOutstandingLT": null,
+ "netMarketLiquidity": null,
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-25",
