@@ -7358,6 +7358,8 @@
   "Settlement Date: 25 September 2026"
  ],
  "date": "2026-09-28",
+ "netOutstandingLT": 263,
+ "netMarketLiquidity": 370.92,
  "tbondAucResult": {
   "date": "11th September 2026",
   "rows": [
@@ -7422,8 +7424,6 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": 263,
- "netMarketLiquidity": 370.92,
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-28",
