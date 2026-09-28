@@ -2632,47 +2632,47 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 11.5,
-   "wa": 330.3522
+   "volume": 17.5,
+   "wa": 330.2643
   },
   {
    "tenor": "TOM",
-   "volume": 0.5,
-   "wa": 330.45
+   "volume": 4,
+   "wa": 330.2765
   },
   {
    "tenor": "CASH",
-   "volume": 20.3,
-   "wa": 330.2894
+   "volume": 18.75,
+   "wa": 330.1045
   },
   {
    "tenor": "Sub Total",
-   "volume": 32.3,
+   "volume": 40.25,
    "wa": null
   },
   {
-   "tenor": "1W",
-   "volume": 5,
-   "wa": 330.895
-  },
-  {
    "tenor": "1M",
-   "volume": 7.5,
-   "wa": 331.7073
+   "volume": 11,
+   "wa": 331.63
   },
   {
-   "tenor": "5M",
+   "tenor": "2M",
    "volume": 1,
-   "wa": 336.9425
+   "wa": 333.6
+  },
+  {
+   "tenor": "3M",
+   "volume": 0.5,
+   "wa": 334.4
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 13.5,
+   "volume": 12.5,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 45.8,
+   "volume": 52.75,
    "wa": null
   }
  ],
@@ -7422,8 +7422,8 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": null,
- "netMarketLiquidity": null,
+ "netOutstandingLT": 263,
+ "netMarketLiquidity": 370.92,
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-28",
