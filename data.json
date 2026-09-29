@@ -7455,8 +7455,8 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": null,
- "netMarketLiquidity": null,
+ "netOutstandingLT": 238,
+ "netMarketLiquidity": 389.35,
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-09-29",
