@@ -7504,16 +7504,16 @@
  "marketNews": [
   "Treasury Bill Auction Results",
   "------------------------------------------------------------",
-  "91-Day (LKA09126L256): 9.20%",
-  "182-Day (LKA18227C268): 9.37%",
-  "364-Day (LKA36427I244): 9.93%",
+  "91-Day (LKA09127A018): 9.25%",
+  "182-Day (LKA18227D027): 9.41%",
+  "364-Day (LKA36427J010): 9.95%",
   "------------------------------------------------------------",
-  "Total Amount Issued: Rs. 60.0 Billion",
-  "Total Amount Accepted: Rs. 60.0 Billion",
-  "Auction Date: 23 September 2026",
-  "Settlement Date: 25 September 2026"
+  "Total Amount Issued: Rs. 80.0 Billion",
+  "Total Amount Accepted: Rs. 80.0 Billion",
+  "Auction Date: 30 September 2026",
+  "Settlement Date: 02 October 2026"
  ],
- "date": "2026-09-29",
+ "date": "2026-09-30",
  "netOutstandingLT": 238,
  "netMarketLiquidity": 389.35,
  "tbondAucResult": {
@@ -7544,7 +7544,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/739da94c-b06f-4bf1-9bfd-0c7c328337c9",
+ "newsLink": "https://www.treasury.gov.lk/api/file/f7751984-e88d-481b-90e7-961af99d3c36",
  "billAucLink": "https://www.treasury.gov.lk/api/file/bafd75d6-5dd1-4aea-aef0-5a4660225edb",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/0f3f9c4d-e3a1-4c4b-8d0a-d4a7e3fd241b",
