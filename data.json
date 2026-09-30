@@ -1520,66 +1520,45 @@
   "date": "2026-09-29",
   "rows": [
    {
-    "isin": "LKB00628A153",
-    "maturity": "2028-01-15",
-    "remYears": 1.2958904109589,
-    "amount": 8.017,
+    "isin": "LKB00428B156",
+    "maturity": "2028-02-15",
+    "remYears": 1.52876712328767,
+    "amount": 151.686,
     "show": true
    },
    {
-    "isin": "LKB00529L150",
-    "maturity": "2029-12-15",
-    "remYears": 3.21369863013699,
-    "amount": 8.734,
+    "isin": "LKB00529F152",
+    "maturity": "2029-06-15",
+    "remYears": 2.86027397260274,
+    "amount": 214.464,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.84109589041096,
-    "amount": 400,
+    "remYears": 3.98904109589041,
+    "amount": 466.96,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.04657534246575,
-    "amount": 700,
+    "remYears": 4.19452054794521,
+    "amount": 650,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.34520547945205,
-    "amount": 1100,
-    "show": true
-   },
-   {
-    "isin": "LKB00832L158",
-    "maturity": "2032-12-15",
-    "remYears": 6.21643835616438,
-    "amount": 600,
-    "show": true
-   },
-   {
-    "isin": "LKB01533A154",
-    "maturity": "2033-01-15",
-    "remYears": 6.3013698630137,
-    "amount": 40,
+    "remYears": 4.49315068493151,
+    "amount": 950,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 8.04931506849315,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB02035C155",
-    "maturity": "2035-03-15",
-    "remYears": 8.46301369863014,
-    "amount": 56,
+    "remYears": 8.1972602739726,
+    "amount": 517.494,
     "show": true
    }
   ]
@@ -7591,8 +7570,8 @@
   "Settlement Date: 02 October 2026"
  ],
  "date": "2026-09-30",
- "netOutstandingLT": 238,
- "netMarketLiquidity": 389.35,
+ "netOutstandingLT": 215,
+ "netMarketLiquidity": 338.66,
  "tbondAucResult": {
   "date": "11th September 2026",
   "rows": [
