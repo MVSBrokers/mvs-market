@@ -3423,26 +3423,26 @@
  "inflation": [
   {
    "metric": "CCPI Year-on-Year (YoY %)",
-   "apr": "7.30%",
+   "apr": "8.0%",
    "may": "8.0%",
    "show": true
   },
   {
    "metric": "CCPI Month-on-Month (MoM %)",
-   "apr": "0.20%",
-   "may": "0.30%",
+   "apr": "0.30%",
+   "may": "0.10%",
    "show": true
   },
   {
    "metric": "NCPI Year-on-Year (YoY %)",
-   "apr": "7.20%",
-   "may": "8.10%",
+   "apr": "8.10%",
+   "may": "",
    "show": true
   },
   {
    "metric": "NCPI Month-on-Month (MoM %)",
-   "apr": "0.50%",
-   "may": "0.20%",
+   "apr": "0.20%",
+   "may": "",
    "show": true
   }
  ],
@@ -7621,8 +7621,8 @@
   ],
   "inflation": [
    "Index / Metric",
-   "July",
-   "August"
+   "August",
+   "September"
   ],
   "tourism": [
    "Tourism (USD)",
