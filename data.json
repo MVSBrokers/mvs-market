@@ -7629,7 +7629,6 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
- "cutoffOverride": {},
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-10-05",
@@ -10126,7 +10125,7 @@
     "spot": {
      "open": "330.60/ 330.80",
      "close": "330.60/ 330.65",
-     "low": "330.6",
+     "low": "330.59",
      "high": "330.65"
     },
     "crossRates": [
