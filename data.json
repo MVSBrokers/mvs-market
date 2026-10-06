@@ -2600,37 +2600,42 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 29,
-   "wa": 330.6009
+   "volume": 8.25,
+   "wa": 330.6209
+  },
+  {
+   "tenor": "TOM",
+   "volume": 1,
+   "wa": 330.57
   },
   {
    "tenor": "CASH",
-   "volume": 22.3,
-   "wa": 330.4405
+   "volume": 13.5,
+   "wa": 330.5015
   },
   {
    "tenor": "Sub Total",
-   "volume": 51.3,
+   "volume": 22.75,
    "wa": null
   },
   {
-   "tenor": "2W",
-   "volume": 4,
-   "wa": 331.225
+   "tenor": "1W",
+   "volume": 5,
+   "wa": 331.0225
   },
   {
    "tenor": "1M",
-   "volume": 20,
-   "wa": 332.0856
+   "volume": 7.75,
+   "wa": 332.032
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 24,
+   "volume": 12.75,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 75.3,
+   "volume": 35.5,
    "wa": null
   }
  ],
@@ -7402,6 +7407,8 @@
   "Settlement Date: 02 October 2026"
  ],
  "date": "2026-10-06",
+ "netOutstandingLT": 242,
+ "netMarketLiquidity": 384.45,
  "tbondAucResult": {
   "date": "11th September 2026",
   "rows": [
@@ -7433,8 +7440,8 @@
  "newsLink": "https://www.treasury.gov.lk/api/file/f7751984-e88d-481b-90e7-961af99d3c36",
  "billAucLink": "https://www.treasury.gov.lk/api/file/52567e62-cdbc-45b9-b8bb-c0218dd50a81",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/8700d55b-2977-4ae3-a6f8-227d945104a1",
- "bondTransVolLinkDate": "2nd October 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/0032a4ec-8d91-4e36-b30d-f1f6264baef0",
+ "bondTransVolLinkDate": "5th October 2026",
  "hidden": {
   "tbills": true
  },
@@ -7466,8 +7473,6 @@
    "Reserve (USD Mn)"
   ]
  },
- "netOutstandingLT": 242,
- "netMarketLiquidity": 384.45,
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-10-06",
