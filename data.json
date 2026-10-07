@@ -1496,52 +1496,45 @@
   "date": "2026-10-06",
   "rows": [
    {
-    "isin": "LKB00428J159",
-    "maturity": "2028-10-15",
-    "remYears": 2.02739726027397,
-    "amount": 750,
+    "isin": "LKB00428B156",
+    "maturity": "2028-02-15",
+    "remYears": 1.52876712328767,
+    "amount": 151.686,
+    "show": true
+   },
+   {
+    "isin": "LKB00529F152",
+    "maturity": "2029-06-15",
+    "remYears": 2.86027397260274,
+    "amount": 214.464,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.82191780821918,
-    "amount": 300,
+    "remYears": 3.98904109589041,
+    "amount": 466.96,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.02739726027397,
-    "amount": 300,
+    "remYears": 4.19452054794521,
+    "amount": 650,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.32602739726027,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB00832L158",
-    "maturity": "2032-12-15",
-    "remYears": 6.1972602739726,
-    "amount": 250,
-    "show": true
-   },
-   {
-    "isin": "LKB00934F154",
-    "maturity": "2034-06-15",
-    "remYears": 7.6958904109589,
-    "amount": 300,
+    "remYears": 4.49315068493151,
+    "amount": 950,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 8.03013698630137,
-    "amount": 2200,
+    "remYears": 8.1972602739726,
+    "amount": 517.494,
     "show": true
    }
   ]
@@ -7519,7 +7512,7 @@
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "https://www.treasury.gov.lk/api/file/f7751984-e88d-481b-90e7-961af99d3c36",
- "billAucLink": "https://www.treasury.gov.lk/api/file/52567e62-cdbc-45b9-b8bb-c0218dd50a81",
+ "billAucLink": "",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/5d59d289-3d78-4da2-973a-24dd75f54274",
  "bondTransVolLinkDate": "6th October 2026",
