@@ -1519,48 +1519,62 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-10-07",
+  "date": "2026-10-08",
   "rows": [
    {
-    "isin": "LKB00428B156",
-    "maturity": "2028-02-15",
-    "remYears": 1.52876712328767,
-    "amount": 151.686,
-    "show": true
-   },
-   {
-    "isin": "LKB00529F152",
-    "maturity": "2029-06-15",
-    "remYears": 2.86027397260274,
-    "amount": 214.464,
+    "isin": "LKB00428J159",
+    "maturity": "2028-10-15",
+    "remYears": 2.02191780821918,
+    "amount": 250,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.98904109589041,
-    "amount": 466.96,
+    "remYears": 3.81643835616438,
+    "amount": 100,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.19452054794521,
-    "amount": 650,
+    "remYears": 4.02191780821918,
+    "amount": 600,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.49315068493151,
-    "amount": 950,
+    "remYears": 4.32054794520548,
+    "amount": 850,
+    "show": true
+   },
+   {
+    "isin": "LKB00832L158",
+    "maturity": "2032-12-15",
+    "remYears": 6.19178082191781,
+    "amount": 100,
+    "show": true
+   },
+   {
+    "isin": "LKB01533A154",
+    "maturity": "2033-01-15",
+    "remYears": 6.27671232876712,
+    "amount": 100,
+    "show": true
+   },
+   {
+    "isin": "LKB00934F154",
+    "maturity": "2034-06-15",
+    "remYears": 7.69041095890411,
+    "amount": 500,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 8.1972602739726,
-    "amount": 517.494,
+    "remYears": 8.02465753424658,
+    "amount": 1200,
     "show": true
    }
   ]
@@ -7646,8 +7660,8 @@
  "newsLink": "",
  "billAucLink": "",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/f47e6fbf-4d4c-4d2d-b338-2f9d5b0950e4",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/25f22c93-c886-4c46-9e29-14826b575e62",
- "bondTransVolLinkDate": "7th October 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/d4e472d7-dbde-44c2-bace-066b68a7bbdf",
+ "bondTransVolLinkDate": "8th October 2026",
  "hidden": {
   "tbills": true
  },
