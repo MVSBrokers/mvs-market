@@ -7645,7 +7645,7 @@
  "secondaryDate": "",
  "newsLink": "",
  "billAucLink": "",
- "bondAucLink": "",
+ "bondAucLink": "https://www.treasury.gov.lk/api/file/f47e6fbf-4d4c-4d2d-b338-2f9d5b0950e4",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/25f22c93-c886-4c46-9e29-14826b575e62",
  "bondTransVolLinkDate": "7th October 2026",
  "hidden": {
