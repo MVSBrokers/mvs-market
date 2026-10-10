@@ -7746,7 +7746,7 @@
   "liqDelta": 16.93
  },
  "marketNews": [],
- "date": "2026-10-09",
+ "date": "2026-10-10",
  "tbondAucResult": {
   "date": "11th September 2026",
   "rows": [
@@ -7802,9 +7802,9 @@
   ],
   "remit": [
    "Remittances (USD)",
-   "July-2026",
    "August-2026",
-   "M-o-M Change (July)"
+   "September-2026",
+   "M-o-M Change (August)"
   ],
   "reserves": [
    "Month",
