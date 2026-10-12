@@ -1938,7 +1938,7 @@
    331,
    330.9
   ],
-  "close": "330.85/ 331.95"
+  "close": "330.85/ 330.95"
  },
  "fxSwaps": {
   "1w": {
@@ -2871,25 +2871,20 @@
    ],
    "totalPurchase": 1995,
    "totalSales": 446.80000000000007,
-   "netForYear": 1484
+   "netForYear": 1548.2
   }
  ],
  "fxInterventionLastReserve": 6851,
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 32.25,
-   "wa": 330.9617
-  },
-  {
-   "tenor": "TOM",
-   "volume": 11.5,
-   "wa": 330.8298
+   "volume": 44.5,
+   "wa": 330.8514
   },
   {
    "tenor": "CASH",
-   "volume": 10.85,
-   "wa": 330.7566
+   "volume": 10.1,
+   "wa": 330.634
   },
   {
    "tenor": "Sub Total",
@@ -2898,27 +2893,32 @@
   },
   {
    "tenor": "2W",
-   "volume": 3.5,
-   "wa": 331.7488
+   "volume": 4,
+   "wa": 331.4288
+  },
+  {
+   "tenor": "3W",
+   "volume": 3,
+   "wa": 331.6967
   },
   {
    "tenor": "1M",
-   "volume": 3,
-   "wa": 332.4817
+   "volume": 5,
+   "wa": 332
   },
   {
    "tenor": "2M",
-   "volume": 10,
-   "wa": 333.7369
+   "volume": 5,
+   "wa": 333.575
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 16.5,
+   "volume": 17,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 71.1,
+   "volume": 71.6,
    "wa": null
   }
  ],
@@ -7815,15 +7815,6 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
- "cutoffOverride": {
-  "Money & Repo Market": true,
-  "Money & Repo Market — Repo Auctions": true,
-  "Treasury Bill": true,
-  "Treasury Bond Yield (%)": true,
-  "USD/LKR Foreign Exchange": true,
-  "Value Dates": true,
-  "CBSL Holdings of Government Securities": true
- },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-10-12",
@@ -10335,7 +10326,7 @@
     },
     "spot": {
      "open": "330.85/ 331.00",
-     "close": "330.85/ 331.95",
+     "close": "330.85/ 330.95",
      "low": "330.75",
      "high": "330.9"
     },
