@@ -7778,7 +7778,7 @@
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "",
- "billAucLink": "",
+ "billAucLink": "https://www.treasury.gov.lk/api/file/fabbe57a-fda3-4bf1-872d-830797971423",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/f47e6fbf-4d4c-4d2d-b338-2f9d5b0950e4",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/d0ac2dfc-1636-478f-9a77-d086304d183f",
  "bondTransVolLinkDate": "9th October 2026",
