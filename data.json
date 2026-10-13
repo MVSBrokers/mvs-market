@@ -7613,7 +7613,18 @@
   "liqDir": "increased",
   "liqDelta": 34.82
  },
- "marketNews": [],
+ "marketNews": [
+  "Treasury Bond Auction Results",
+  "------------------------------------------------------------",
+  "15 Sep 2029 (LKB00629I154): 11.00%",
+  "01 Dec 2031 (LKB01031L016): 11.67%",
+  "15 Aug 2036 (LKB01136H151): 12.33%",
+  "------------------------------------------------------------",
+  "Total Amount Issued: Rs. 100.0 Billion",
+  "Total Amount Accepted: Rs. 80.693 Billion",
+  "Auction Date: 13 October 2026",
+  "Settlement Date: 15 October 2026"
+ ],
  "date": "2026-10-13",
  "tbondAucResult": {
   "date": "11th September 2026",
@@ -7643,7 +7654,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "",
+ "newsLink": "https://www.treasury.gov.lk/api/file/9bbd0c45-de62-4129-80c4-1e2a72ee7f58",
  "billAucLink": "https://www.treasury.gov.lk/api/file/fabbe57a-fda3-4bf1-872d-830797971423",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/f47e6fbf-4d4c-4d2d-b338-2f9d5b0950e4",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/7ceedc2b-de87-449b-b0a4-5c827b701d44",
