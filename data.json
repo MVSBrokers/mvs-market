@@ -7613,7 +7613,17 @@
   "liqDir": "increased",
   "liqDelta": 34.82
  },
- "marketNews": [],
+ "marketNews": [
+  "Treasury Bond Auction Results",
+  "------------------------------------------------------------",
+  "01 Aug 2030 (LKB00530H016): 10.83%",
+  "15 Oct 2034 (LKB00934J156): 11.96%",
+  "01 Jul 2037 (LKB01237G019): 12.08%",
+  "------------------------------------------------------------",
+  "Total Amount Issued: Rs. 150.0 Billion",
+  "Total Amount Accepted: Rs. 150.0 Billion",
+  "Auction Date: 11 September 2026"
+ ],
  "date": "2026-10-13",
  "tbondAucResult": {
   "date": "11th September 2026",
