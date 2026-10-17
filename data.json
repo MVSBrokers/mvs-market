@@ -2929,7 +2929,8 @@
    "18 Sep",
    "25 Sep",
    "2 Oct",
-   "9 Oct"
+   "9 Oct",
+   "16 Oct"
   ],
   "values": [
    143617,
@@ -2959,7 +2960,8 @@
    206102,
    196933,
    198754,
-   201996
+   201996,
+   202360
   ]
  },
  "cbsl": {
@@ -3441,9 +3443,9 @@
   }
  ],
  "tourism": {
-  "apr": "285.5 Mn",
-  "may": "264.4 Mn",
-  "yoy": "-7.39%"
+  "apr": "264.4 Mn",
+  "may": "185.6 Mn",
+  "yoy": "-42.46%"
  },
  "remittances": {
   "apr": "748.6 Mn",
@@ -7697,7 +7699,7 @@
   "Auction Date: 13 October 2026",
   "Settlement Date: 15 October 2026"
  ],
- "date": "2026-10-16",
+ "date": "2026-10-17",
  "tbondAucResult": {
   "date": "13th October 2026",
   "rows": [
