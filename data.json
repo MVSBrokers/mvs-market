@@ -7791,7 +7791,8 @@
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/c5a27a94-7fc4-45c6-8545-17eb85d8eb38",
  "bondTransVolLinkDate": "16th October 2026",
  "hidden": {
-  "tbills": true
+  "tbills": true,
+  "mmrates": true
  },
  "headers": {
   "bond": [
