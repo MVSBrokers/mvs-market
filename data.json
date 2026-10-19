@@ -2748,47 +2748,67 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 13.25,
-   "wa": 331.286
+   "volume": 17.75,
+   "wa": 331.2761
+  },
+  {
+   "tenor": "TOM",
+   "volume": 2.65,
+   "wa": 331.3049
   },
   {
    "tenor": "CASH",
-   "volume": 30.05,
-   "wa": 331.1215
+   "volume": 19.5,
+   "wa": 331.1585
   },
   {
    "tenor": "Sub Total",
-   "volume": 43.3,
+   "volume": 39.9,
    "wa": null
   },
   {
+   "tenor": "S+2",
+   "volume": 6,
+   "wa": 331.3
+  },
+  {
    "tenor": "1W",
-   "volume": 1.5,
-   "wa": 331.6067
+   "volume": 9,
+   "wa": 331.7039
   },
   {
    "tenor": "2W",
-   "volume": 24,
-   "wa": 331.8194
+   "volume": 16.5,
+   "wa": 331.8521
   },
   {
    "tenor": "1M",
-   "volume": 6,
-   "wa": 332.6746
+   "volume": 16,
+   "wa": 332.6798
   },
   {
    "tenor": "2M",
-   "volume": 4,
-   "wa": 334.135
+   "volume": 3,
+   "wa": 333.87
+  },
+  {
+   "tenor": "3M",
+   "volume": 0.17,
+   "wa": 336.45
+  },
+  {
+   "tenor": "4M",
+   "volume": 1.5,
+   "wa": 336.78
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 35.5,
+   "volume": 52.17,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 78.8,
+   "volume": 92.07,
    "wa": null
   }
  ],
@@ -7768,15 +7788,6 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
- "cutoffOverride": {
-  "Money & Repo Market": true,
-  "Money & Repo Market — Repo Auctions": true,
-  "Treasury Bill": true,
-  "Treasury Bond Yield (%)": true,
-  "USD/LKR Foreign Exchange": true,
-  "Value Dates": true,
-  "CBSL Holdings of Government Securities": true
- },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-10-19",
@@ -7795,7 +7806,7 @@
     },
     "windows": {
      "sdf": {
-      "cur": null,
+      "cur": 113.88,
       "prev": 79.09
      },
      "slf": {
@@ -7997,7 +8008,8 @@
       "12 Oct",
       "13 Oct",
       "14 Oct",
-      "15 Oct"
+      "15 Oct",
+      "16 Oct"
      ],
      "values": [
       128.14,
@@ -8192,10 +8204,11 @@
       168.96,
       115.83,
       132.13,
-      105.57
+      105.57,
+      123.88
      ],
-     "current": 105.57,
-     "previous": 132.13
+     "current": 123.88,
+     "previous": 105.57
     }
    }
   },
