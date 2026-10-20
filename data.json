@@ -2667,67 +2667,42 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 17.75,
-   "wa": 331.2761
-  },
-  {
-   "tenor": "TOM",
-   "volume": 2.65,
-   "wa": 331.3049
+   "volume": 6.25,
+   "wa": 331.5372
   },
   {
    "tenor": "CASH",
-   "volume": 19.5,
-   "wa": 331.1585
+   "volume": 16.5,
+   "wa": 331.4741
   },
   {
    "tenor": "Sub Total",
-   "volume": 39.9,
+   "volume": 22.75,
    "wa": null
   },
   {
-   "tenor": "S+2",
-   "volume": 6,
-   "wa": 331.3
-  },
-  {
    "tenor": "1W",
-   "volume": 9,
-   "wa": 331.7039
-  },
-  {
-   "tenor": "2W",
-   "volume": 16.5,
-   "wa": 331.8521
+   "volume": 4,
+   "wa": 331.965
   },
   {
    "tenor": "1M",
-   "volume": 16,
-   "wa": 332.6798
-  },
-  {
-   "tenor": "2M",
-   "volume": 3,
-   "wa": 333.87
+   "volume": 4.5,
+   "wa": 333.0411
   },
   {
    "tenor": "3M",
-   "volume": 0.17,
-   "wa": 336.45
-  },
-  {
-   "tenor": "4M",
-   "volume": 1.5,
-   "wa": 336.78
+   "volume": 2,
+   "wa": 335.63
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 52.17,
+   "volume": 10.5,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 92.07,
+   "volume": 33.25,
    "wa": null
   }
  ],
@@ -7721,38 +7696,29 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
- "cutoffOverride": {
-  "Money & Repo Market": true,
-  "Money & Repo Market — Repo Auctions": true,
-  "Treasury Bill": true,
-  "Treasury Bond Yield (%)": true,
-  "USD/LKR Foreign Exchange": true,
-  "Value Dates": true,
-  "CBSL Holdings of Government Securities": true
- },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-10-20",
    "values": {
     "callMarket": {
-     "min": 8.95,
+     "min": 8.96,
      "max": 9.02,
      "wa": 8.99,
-     "vol": 25.85
+     "vol": 29.23
     },
     "repoMarket": {
      "min": 9.02,
      "max": 9.07,
-     "wa": 9.04,
-     "vol": 85.27
+     "wa": 9.05,
+     "vol": 84.16
     },
     "windows": {
      "sdf": {
-      "cur": null,
+      "cur": 87.21,
       "prev": 113.88
      },
      "slf": {
-      "cur": null,
+      "cur": 0.01,
       "prev": 0
      }
     },
@@ -7951,7 +7917,8 @@
       "13 Oct",
       "14 Oct",
       "15 Oct",
-      "16 Oct"
+      "16 Oct",
+      "19 Oct"
      ],
      "values": [
       128.14,
@@ -8147,10 +8114,11 @@
       115.83,
       132.13,
       105.57,
-      123.88
+      123.88,
+      125.4
      ],
-     "current": 123.88,
-     "previous": 105.57
+     "current": 125.4,
+     "previous": 123.88
     }
    }
   },
@@ -8159,33 +8127,18 @@
    "values": {
     "repoOvernight": [
      {
-      "date": "16 Oct 2026",
+      "date": "19 Oct 2026",
       "repoOffered": 50,
       "reverseRepoOffered": null,
-      "received": 10,
-      "accepted": 10,
+      "received": 38,
+      "accepted": 38,
       "minRate": 8.75,
       "maxRate": 8.75,
       "waYield": 8.75,
       "show": true
      }
     ],
-    "repoOMO": [
-     {
-      "auction": "16 Oct 2026",
-      "settlement": "16 Oct 2026",
-      "repoOffered": 10,
-      "reverseOffered": 0,
-      "received": 0,
-      "accepted": 0,
-      "minRate": 0,
-      "maxRate": 0,
-      "waYield": 0,
-      "maturity": "23 Oct 2026",
-      "tenure": 7,
-      "show": true
-     }
-    ]
+    "repoOMO": []
    }
   },
   "Treasury Bill": {
