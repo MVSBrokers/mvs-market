@@ -17,25 +17,25 @@
   }
  ],
  "callMarket": {
-  "min": 8.96,
-  "max": 9.02,
+  "min": 8.99,
+  "max": 9.05,
   "wa": 9,
-  "vol": 61.38
+  "vol": 61.94
  },
  "repoMarket": {
-  "min": 9.02,
+  "min": 9,
   "max": 9.07,
   "wa": 9.05,
-  "vol": 77.85
+  "vol": 76.63
  },
  "windows": {
   "sdf": {
-   "cur": 65.77,
-   "prev": 78.3
+   "cur": 72.8,
+   "prev": 65.77
   },
   "slf": {
-   "cur": 0.14,
-   "prev": 0.01
+   "cur": 1.82,
+   "prev": 0.14
   }
  },
  "liquidity": {
@@ -236,7 +236,8 @@
    "16 Oct",
    "19 Oct",
    "20 Oct",
-   "21 Oct"
+   "21 Oct",
+   "22 Oct"
   ],
   "values": [
    128.14,
@@ -435,25 +436,41 @@
    123.88,
    125.4,
    128.29,
-   98.13
+   98.13,
+   99.98
   ],
-  "current": 98.13,
-  "previous": 128.29
+  "current": 99.98,
+  "previous": 98.13
  },
  "repoOvernight": [
   {
-   "date": "21 Oct 2026",
-   "repoOffered": 50,
+   "date": "22 Oct 2026",
+   "repoOffered": 40,
    "reverseRepoOffered": null,
-   "received": 32,
-   "accepted": 32,
+   "received": 29,
+   "accepted": 29,
    "minRate": 8.75,
    "maxRate": 8.75,
    "waYield": 8.75,
    "show": true
   }
  ],
- "repoOMO": [],
+ "repoOMO": [
+  {
+   "auction": "22 Oct 2026",
+   "settlement": "23 Oct 2026",
+   "repoOffered": 50,
+   "reverseOffered": 0,
+   "received": 60,
+   "accepted": 50,
+   "minRate": 9.28,
+   "maxRate": 9.28,
+   "waYield": 9.28,
+   "maturity": "23 Nov 2026",
+   "tenure": 31,
+   "show": true
+  }
+ ],
  "bonds": {
   "headers": [
    "Day 1",
@@ -7612,8 +7629,8 @@
  ],
  "execSummary": {
   "usdlkr": "332.25/ 332.40",
-  "liqDir": "decreased",
-  "liqDelta": 30.16
+  "liqDir": "increased",
+  "liqDelta": 1.85
  },
  "marketNews": [
   "Treasury Bond Auction Results",
