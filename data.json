@@ -7728,16 +7728,13 @@
   "liqDelta": 13.92
  },
  "marketNews": [
-  "Treasury Bond Auction Results",
-  "------------------------------------------------------------",
-  "15 Sep 2029 (LKB00629I154): 11.00%",
-  "01 Dec 2031 (LKB01031L016): 11.67%",
-  "15 Aug 2036 (LKB01136H151): 12.33%",
-  "------------------------------------------------------------",
-  "Total Amount Issued: Rs. 100.0 Billion",
-  "Total Amount Accepted: Rs. 80.693 Billion",
-  "Auction Date: 13 October 2026",
-  "Settlement Date: 15 October 2026"
+  "📰 DOMESTIC DOLLAR BOND AUCTION - 23 OCTOBER 2026",
+  "",
+  "• Public Debt Management Office announced the results of the Domestic Dollar Bond Auction held on 23 October 2026.",
+  "• The Issuer decided not to accept any bids received under the auction.",
+  "• Therefore, no bonds were issued through this auction.",
+  "",
+  "📅 Date: 23 October 2026"
  ],
  "date": "2026-10-26",
  "tbondAucResult": {
@@ -7768,7 +7765,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/9bbd0c45-de62-4129-80c4-1e2a72ee7f58",
+ "newsLink": "https://www.treasury.gov.lk/api/file/65e87c5d-ac72-41c2-8282-6a7ae7108b28",
  "billAucLink": "",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/0c74364d-e58e-4afe-9ba0-46b0c4f51ed4",
