@@ -18,23 +18,23 @@
  ],
  "callMarket": {
   "min": 9,
-  "max": 9.03,
+  "max": 9.05,
   "wa": 9.02,
-  "vol": 39.96
+  "vol": 37.57
  },
  "repoMarket": {
   "min": 9.02,
-  "max": 9.08,
-  "wa": 9.07,
-  "vol": 59.55
+  "max": 9.1,
+  "wa": 9.08,
+  "vol": 55.45
  },
  "windows": {
   "sdf": {
-   "cur": null,
+   "cur": 84.15,
    "prev": 93.75
   },
   "slf": {
-   "cur": null,
+   "cur": 5.6,
    "prev": 0
   }
  },
@@ -240,7 +240,8 @@
    "22 Oct",
    "23 Oct",
    "26 Oct",
-   "27 Oct"
+   "27 Oct",
+   "28 Oct"
   ],
   "values": [
    128.14,
@@ -443,18 +444,19 @@
    99.98,
    113.9,
    107.77,
-   120.5
+   120.5,
+   118.55
   ],
-  "current": 120.5,
-  "previous": 107.77
+  "current": 118.55,
+  "previous": 120.5
  },
  "repoOvernight": [
   {
-   "date": "27 Oct 2026",
+   "date": "28 Oct 2026",
    "repoOffered": 40,
    "reverseRepoOffered": null,
-   "received": 27,
-   "accepted": 27,
+   "received": 40,
+   "accepted": 40,
    "minRate": 8.75,
    "maxRate": 8.75,
    "waYield": 8.75,
@@ -7771,8 +7773,8 @@
  ],
  "execSummary": {
   "usdlkr": "332.50/ 332.55",
-  "liqDir": "increased",
-  "liqDelta": 12.73
+  "liqDir": "decreased",
+  "liqDelta": 1.95
  },
  "marketNews": [
   "📰 DOMESTIC DOLLAR BOND AUCTION - 23 OCTOBER 2026",
@@ -7813,7 +7815,7 @@
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "https://www.treasury.gov.lk/api/file/65e87c5d-ac72-41c2-8282-6a7ae7108b28",
- "billAucLink": "https://www.treasury.gov.lk/api/file/e4c6d2ad-3bc8-4d9b-a413-224cf547809c",
+ "billAucLink": "",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/8fe73f9c-c33c-458d-a8b3-9d59cfbaa29f",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/df46b7d1-e8fa-449b-a572-2990cf6d8d0a",
  "bondTransVolLinkDate": "27th October 2026",
@@ -7868,12 +7870,12 @@
     },
     "windows": {
      "sdf": {
-      "cur": 93.75,
-      "prev": 76.64
+      "cur": null,
+      "prev": 93.75
      },
      "slf": {
-      "cur": 0,
-      "prev": 0.61
+      "cur": null,
+      "prev": 0
      }
     },
     "liquidity": {
