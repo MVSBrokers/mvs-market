@@ -1567,48 +1567,69 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-10-27",
+  "date": "2026-10-28",
   "rows": [
    {
     "isin": "LKB00428B156",
     "maturity": "2028-02-15",
-    "remYears": 1.52876712328767,
-    "amount": 151.686,
-    "show": true
-   },
-   {
-    "isin": "LKB00529F152",
-    "maturity": "2029-06-15",
-    "remYears": 2.86027397260274,
-    "amount": 214.464,
+    "remYears": 1.301369863,
+    "amount": 100,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.98904109589041,
-    "amount": 466.96,
+    "remYears": 3.761643836,
+    "amount": 250,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.19452054794521,
-    "amount": 650,
+    "remYears": 3.967123288,
+    "amount": 250,
     "show": true
    },
    {
-    "isin": "LKB00531B017",
-    "maturity": "2031-02-01",
-    "remYears": 4.49315068493151,
-    "amount": 950,
+    "isin": "LKB01031L016",
+    "maturity": "2031-12-01",
+    "remYears": 5.095890411,
+    "amount": 500,
+    "show": true
+   },
+   {
+    "isin": "LKB00832L158",
+    "maturity": "2032-12-15",
+    "remYears": 6.136986301,
+    "amount": 100,
+    "show": true
+   },
+   {
+    "isin": "LKB02033F013",
+    "maturity": "2033-06-01",
+    "remYears": 6.597260274,
+    "amount": 30,
+    "show": true
+   },
+   {
+    "isin": "LKB02033K013",
+    "maturity": "2033-11-01",
+    "remYears": 7.016438356,
+    "amount": 2187,
+    "show": true
+   },
+   {
+    "isin": "LKB00934F154",
+    "maturity": "2034-06-15",
+    "remYears": 7.635616438,
+    "amount": 50,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 8.1972602739726,
-    "amount": 517.494,
+    "remYears": 7.969863014,
+    "amount": 550,
     "show": true
    }
   ]
@@ -7859,7 +7880,7 @@
  "secondaryDate": "",
  "newsLink": "https://www.federalreserve.gov/monetarypolicy/files/monetary20261028a1.pdf",
  "billAucLink": "",
- "bondAucLink": "https://www.treasury.gov.lk/api/file/8fe73f9c-c33c-458d-a8b3-9d59cfbaa29f",
+ "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/d97d4e56-8cc7-4fce-bb07-ab04153ef23e",
  "bondTransVolLinkDate": "28th October 2026",
  "hidden": {
