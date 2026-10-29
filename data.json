@@ -7777,13 +7777,20 @@
   "liqDelta": 1.95
  },
  "marketNews": [
-  "📰 DOMESTIC DOLLAR BOND AUCTION - 23 OCTOBER 2026",
+  "📰 US FEDERAL RESERVE HOLDS INTEREST RATES STEADY",
   "",
-  "• Public Debt Management Office announced the results of the Domestic Dollar Bond Auction held on 23 October 2026.",
-  "• The Issuer decided not to accept any bids received under the auction.",
-  "• Therefore, no bonds were issued through this auction.",
+  "• The Federal Open Market Committee (FOMC) kept the federal funds rate unchanged at 3.75% - 4.00%.",
+  "• The Fed stated that the US economy continues to expand strongly, with resilient domestic spending and robust capital investment.",
+  "• Inflation remains elevated and policymakers require more information before deciding on future policy changes.",
+  "• Two FOMC members dissented, preferring a 25-basis-point rate hike.",
   "",
-  "📅 Date: 23 October 2026"
+  "📊 Key Figures",
+  "- Federal Funds Rate: 3.75% - 4.00%",
+  "- Interest Rate on Reserve Balances: 3.90%",
+  "- Primary Credit Rate: 4.00%",
+  "- FOMC Vote: 10 - 2",
+  "",
+  "📅 Date: 28 October 2026"
  ],
  "date": "2026-10-29",
  "tbondAucResult": {
@@ -7814,7 +7821,7 @@
  "mmDate": "",
  "fxVolDate": "",
  "secondaryDate": "",
- "newsLink": "https://www.treasury.gov.lk/api/file/65e87c5d-ac72-41c2-8282-6a7ae7108b28",
+ "newsLink": "",
  "billAucLink": "",
  "bondAucLink": "https://www.treasury.gov.lk/api/file/8fe73f9c-c33c-458d-a8b3-9d59cfbaa29f",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/df46b7d1-e8fa-449b-a572-2990cf6d8d0a",
