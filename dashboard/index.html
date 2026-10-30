@@ -241,6 +241,16 @@ canvas{max-width:100%!important}
 .mini-tbl tr:last-child td{border-bottom:none}
 .mini-tbl tr:first-child td{color:#fff;font-weight:700}
 .mini-tbl .chg-up{color:#6dd4a0}.mini-tbl .chg-dn{color:#ff8a78}
+.sofr-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.sofr-card{background:#091525;border:1px solid #1a3050;border-radius:8px;padding:10px 12px;border-top:3px solid var(--sc,#4da3e8);min-width:0}
+.sofr-card .sc-lbl{font-size:10px;color:#7fa3c8;letter-spacing:.4px;text-transform:uppercase;font-weight:600}
+.sofr-card .sc-val{font-size:22px;font-weight:800;color:#fff;margin-top:3px}
+.sofr-card .sc-val span{font-size:12px;color:#7fa3c8;font-weight:600;margin-left:2px}
+.sofr-card .sc-chg{margin-top:4px;font-size:11px;font-weight:700}
+.sofr-card .sc-chg.up{color:#6dd4a0}.sofr-card .sc-chg.down{color:#ff8a78}.sofr-card .sc-chg.flat{color:#7fa3c8}
+.sofr-card .sc-prev{font-size:10px;color:#5a7a9a;margin-top:2px}
+.sofr-asof{margin-top:10px;font-size:11px;color:#c8a84b;font-weight:700}
+@media(max-width:700px){.sofr-cards{grid-template-columns:repeat(2,1fr)}}
 .np{color:#5a7a9a;font-size:11px;font-style:italic;padding:10px;text-align:center;border:1px dashed #1a3050;border-radius:6px;margin-top:6px}
 .event-strip{position:sticky;top:0;z-index:500;display:none;flex-wrap:nowrap;align-items:center;gap:8px;overflow-x:auto;background:linear-gradient(90deg,#0d1e38,#0a1628);border:1px solid #c8a84b;border-radius:8px;margin-top:12px;padding:8px 12px;box-shadow:0 4px 14px rgba(0,0,0,0.35)}
 .bond-freeze td:nth-child(1),.bond-freeze th:nth-child(1),.bond-freeze td:nth-child(2),.bond-freeze th:nth-child(2),.bond-freeze td:nth-child(3),.bond-freeze th:nth-child(3){position:sticky;z-index:2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -636,6 +646,16 @@ canvas{max-width:100%!important}
   <!-- PAGE: GLOBAL MARKET -->
   <div class="page" id="page-global">
     
+    <!-- SOFR: overnight vs 30/90/180-day averages (first section on Global Market) -->
+    <div class="panel full-width" id="sofr-panel" style="margin-bottom:14px">
+      <div class="panel-title pt-row" data-sec="sofr"><span>SOFR Rate Trend: Overnight vs 30, 90 &amp; 180-Day Averages (%)</span><span class="mini-gran"><button class="mg-btn" onclick="setChartGran('sofr',7,this)" title="Last 7 data points">W</button><button class="mg-btn" onclick="setChartGran('sofr',30,this)" title="Last 30 data points">M</button><button class="mg-btn active" onclick="setChartGran('sofr','all',this)" title="All uploaded data">Y</button></span></div>
+      <canvas id="sofrChart" style="height:300px;max-height:300px"></canvas>
+      <div class="sofr-asof" id="sofrAsOf"></div>
+      <div class="sofr-cards" id="sofrCards"></div>
+      <div class="mini-tbl" id="sofrTbl" style="max-height:190px"></div>
+      <div class="rpt-note" id="sofrNote">Source: Federal Reserve Bank of New York (SOFR and SOFR Averages). Published each US business day for the previous day's trades.</div>
+    </div>
+
     <!-- US bond rate + Fed rate -->
     <div class="grid-2x2">
       <div class="panel">
@@ -820,7 +840,24 @@ function _addWorkDays(d,n,checker){let x=new Date(d);let c=0;const dir=n>=0?1:-1
 function _spotDate(today){return _addWorkDays(today,2,_isBothWork);}
 // modified-following: add calendar period, if it lands on non-working day roll forward;
 // if that rolls into the next month, roll backward instead (standard FX/IRS convention)
+// End-end rule: if the Spot date is the LAST working day of its month (both SL and US open),
+// every month/year tenor (1M, 2M, 3M … 1Y) rolls to the LAST working day of its target month,
+// not to the same calendar day. If Spot is not the month's last working day, normal
+// modified-following applies.
+function _lastWorkDayOfMonth(y,m){
+  let x=new Date(y,m+1,0);
+  while(!_isBothWork(x))x.setDate(x.getDate()-1);
+  return x;
+}
+function _isMonthEndWorkDay(d){
+  const last=_lastWorkDayOfMonth(d.getFullYear(),d.getMonth());
+  return d.getFullYear()===last.getFullYear()&&d.getMonth()===last.getMonth()&&d.getDate()===last.getDate();
+}
 function _addMonthsMF(spot,months){
+  if(_isMonthEndWorkDay(spot)){
+    const t=new Date(spot.getFullYear(),spot.getMonth()+months,1);
+    return _lastWorkDayOfMonth(t.getFullYear(),t.getMonth());
+  }
   const tgt=new Date(spot.getFullYear(),spot.getMonth()+months,spot.getDate());
   let x=new Date(tgt);
   if(_isBothWork(x))return x;
@@ -947,7 +984,7 @@ function fmtMatDate(s){
   if(!isNaN(d.getTime())){const p=n=>String(n).padStart(2,'0');return p(d.getDate())+'.'+p(d.getMonth()+1)+'.'+d.getFullYear();}
   return t;
 }
-let GRANS={liq:"all",cbsl:"all",fh:"all",fx:"all",tbill:"all",g10:"all"};  // per-chart: number of last data points to show, or "all"
+let GRANS={liq:"all",cbsl:"all",fh:"all",fx:"all",tbill:"all",g10:"all",sofr:"all"};  // per-chart: number of last data points to show, or "all"
 let lastData=null;       // most recent dataset, for re-render on interval change
 
 // Tooltips: show the value when the cursor is near any point (no need to hit it exactly)
@@ -1212,6 +1249,7 @@ const MSG_SECTION_MAP={
   'CBSL Holdings of Government Securities':['cbsl','cbslHoldings'],
   'Foreign Holdings of Government Securities':['foreign'],
   'US Fed Rate — FOMC Decisions':['fomc'],
+  'SOFR (Overnight & Averages)':['sofr'],
   'Latest Results':['marketNews'],
   'Value Dates':['valueDates']
 };
@@ -1328,6 +1366,13 @@ const MSG_CUTOFF_SECTIONS={
 // here, a section's notification just shows the raw publish timestamp (when the editor happened
 // to hit publish) instead of the date the underlying data actually refers to.
 const MSG_DATE_SECTIONS={
+  'SOFR (Overnight & Averages)':d=>{
+    // The "as of" date of the newest SOFR row (data.json: sofr.labels, ISO dates) — i.e. the
+    // date the uploaded rate actually belongs to, not when it was published.
+    const s=d.sofr;
+    if(s&&Array.isArray(s.labels)&&s.labels.length)return String(s.labels[s.labels.length-1]);
+    return null;
+  },
   'Outright Treasury Bond Transaction Volumes (Rs.Mn)':d=>{
     // The panel's own "Closing:" badge date — d.bondTransVol.date — is what's actually visible
     // next to this section's title (e.g. "5th August 2026"). Deliberately NOT bondTransVolLinkDate,
@@ -1732,6 +1777,7 @@ const SECTION_NAV={
   'CBSL Holdings of Government Securities':{page:'page-macro',sel:'[data-sec="cbsl"]'},
   'Foreign Holdings of Government Securities':{page:'page-macro',sel:'[data-sec="foreign"]'},
   'US Fed Rate — FOMC Decisions':{page:'page-global',sel:'[data-sec="fomc"]'},
+  'SOFR (Overnight & Averages)':{page:'page-global',sel:'#sofr-panel'},
   'Latest Results':{page:'page-news',sel:'[data-sec="results"]'},
   'Value Dates':{page:'page-open',sel:'#vd-title'}
 };
@@ -2622,6 +2668,59 @@ function buildCharts(d){
   if(yCol>=0)yDS.push({label:"Previous ("+(autoLabels[yCol]||yBHead[yCol])+")",data:yestD,borderColor:"#4da3e8",backgroundColor:"transparent",tension:0.3,pointRadius:2.5,pointHoverRadius:6,pointBackgroundColor:"#4da3e8",borderWidth:2,borderDash:[6,4],fill:false});
   yDS.push({label:"Latest ("+(tCol>=0?(autoLabels[tCol]||yBHead[tCol]):"")+")",data:todayD,backgroundColor:"rgba(200,168,75,0.14)",tension:0.3,pointRadius:3.5,pointHoverRadius:7,pointBackgroundColor:"#c8a84b",pointBorderColor:"#fff",pointBorderWidth:1,borderColor:"#c8a84b",borderWidth:3,fill:true});
   charts.yield=new Chart(document.getElementById("yieldChart"),{type:"line",data:{labels:yLabels,datasets:yDS},options:{responsive:true,maintainAspectRatio:true,aspectRatio:1.7,plugins:{legend:{display:true,labels:{color:tc,font:{size:10},boxWidth:18,usePointStyle:false,padding:12}}},scales:{y:{ticks:{color:tc,font:tf},grid:{color:gc}},x:{ticks:{color:tc,font:{size:8},maxRotation:45,minRotation:30},grid:{color:gc}}}}});
+
+  // ── SOFR: overnight vs 30/90/180-day averages + latest data (data.json key: sofr) ──
+  (function(){
+    const el=document.getElementById("sofrChart");if(!el)return;
+    destroyChart("sofr");
+    const sf=d.sofr||{};
+    const S=[
+      {k:"overnight",alt:"values",name:"Overnight",color:"#eaf2fb",w:2.4,dec:2},
+      {k:"avg30",name:"30-day avg",color:"#4da3e8",w:2,dec:3},
+      {k:"avg90",name:"90-day avg",color:"#6dd4a0",w:2,dec:3},
+      {k:"avg180",name:"180-day avg",color:"#e08a3c",w:2,dec:3}
+    ];
+    const labsAll=sf.labels||[];
+    const num=v=>{const n=parseFloat(v);return isNaN(n)?null:n;};
+    const colAll=S.map(s=>(sf[s.k]||(s.alt?sf[s.alt]:null)||[]).map(num));
+    const asOf=document.getElementById("sofrAsOf"),cards=document.getElementById("sofrCards"),tbl=document.getElementById("sofrTbl");
+    if(!labsAll.length||!colAll[0].some(v=>v!=null)){
+      if(asOf)asOf.textContent="";
+      if(cards)cards.innerHTML='<div class="np" style="grid-column:1/-1">Awaiting data upload.</div>';
+      if(tbl)tbl.innerHTML="";
+      return;
+    }
+    const MONS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const lbl=(raw)=>{const m=String(raw).match(/^(\d{4})-(\d{2})-(\d{2})/);return m?(MONS[+m[2]-1]+" "+(+m[3])):String(raw);};
+    const lblFull=(raw)=>{const m=String(raw).match(/^(\d{4})-(\d{2})-(\d{2})/);return m?((+m[3])+" "+MONS[+m[2]-1]+" "+m[1]):String(raw);};
+    const ag=aggregateIdx(labsAll,GRANS.sofr);
+    const cols=colAll.map(c=>pick(c,ag.idx));
+    const all=[].concat(...cols).filter(v=>v!=null);
+    charts.sofr=new Chart(el,{type:"line",
+      data:{labels:ag.labels.map(lbl),datasets:S.map((s,i)=>({label:s.name,data:cols[i],borderColor:s.color,backgroundColor:s.color,tension:0.15,pointRadius:0,pointHoverRadius:4,borderWidth:s.w,spanGaps:true,fill:false}))},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
+        plugins:{datalabels:{display:false},legend:{display:true,labels:{color:tc,font:{size:11},usePointStyle:true,pointStyle:"line",boxWidth:26}},
+          tooltip:{callbacks:{title:items=>items.length?lblFull(ag.labels[items[0].dataIndex]):"",label:c=>c.dataset.label+": "+(c.parsed.y!=null?c.parsed.y.toFixed(c.datasetIndex===0?2:3)+"%":"—")}}},
+        scales:{y:{ticks:{color:tc,font:tf,callback:v=>(+v).toFixed(2)},grid:{color:gc},title:{display:true,text:"%",color:tc,font:tf},min:all.length?Math.floor((Math.min(...all)-0.03)*20)/20:undefined,max:all.length?Math.ceil((Math.max(...all)+0.03)*20)/20:undefined},x:{ticks:xt,grid:{color:gc}}}}});
+    // Latest data: always the newest published row (independent of the W/M/Y zoom)
+    const last=(a)=>{for(let i=a.length-1;i>=0;i--)if(a[i]!=null)return i;return -1;};
+    const li=last(colAll[0]);
+    if(asOf)asOf.textContent="Latest data: "+lblFull(labsAll[li]);
+    if(cards)cards.innerHTML=S.map((s,i)=>{
+      const c=colAll[i];const ci=last(c);if(ci<0)return "";
+      let pi=-1;for(let k=ci-1;k>=0;k--){if(c[k]!=null){pi=k;break;}}
+      const cur=c[ci],prev=pi>=0?c[pi]:null;
+      const diff=prev!=null?+(cur-prev).toFixed(5):null;
+      const cls=diff==null||diff===0?"flat":diff>0?"up":"down";
+      const arr=diff==null||diff===0?"▸":diff>0?"▲":"▼";
+      const bp=diff==null?"—":(arr+" "+Math.abs(diff*100).toFixed(1)+" bp");
+      return `<div class="sofr-card" style="--sc:${s.color}"><div class="sc-lbl">${escHtml(i===0?"SOFR (Overnight)":s.name.replace("avg","average"))}</div><div class="sc-val">${cur.toFixed(s.dec)}<span>%</span></div><div class="sc-chg ${cls}">${bp}</div><div class="sc-prev">${prev!=null?("Prev ("+escHtml(lbl(labsAll[pi]))+"): "+prev.toFixed(s.dec)+"%"):"&nbsp;"}</div></div>`;
+    }).join("");
+    if(tbl){
+      const rows=[];for(let i=labsAll.length-1;i>=0&&rows.length<10;i--){if(colAll[0][i]!=null||colAll[1][i]!=null)rows.push(i);}
+      tbl.innerHTML='<table><thead><tr><th style="text-align:left">Date</th><th>SOFR</th><th>30-day</th><th>90-day</th><th>180-day</th></tr></thead><tbody>'+rows.map(i=>"<tr><td>"+escHtml(lblFull(labsAll[i]))+"</td>"+S.map((s,k)=>"<td>"+(colAll[k][i]!=null?colAll[k][i].toFixed(s.dec):"—")+"</td>").join("")+"</tr>").join("")+"</tbody></table>";
+    }
+  })();
 
   // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
   destroyChart("g10");
