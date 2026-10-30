@@ -208,6 +208,7 @@ const SECTIONS=[
  {id:'gdp',title:'Quarterly Real GDP Growth',keys:['gdpGrowth'],group:'Macro Economy'},
  {id:'bop',title:'Balance of Payment',keys:['bop'],group:'Macro Economy'},
  {id:'debtgdp',title:'Debt to GDP',keys:['debtGdp'],group:'Macro Economy'},
+ {id:'sofr',title:'SOFR (Overnight &amp; 30/90/180-day Averages)',keys:['sofr'],group:'Global Markets'},
  {id:'global10y',title:'US 10Y Treasury',keys:['global10y'],group:'Global Markets'},
  {id:'gold',title:'Gold (XAU/USD)',keys:['gold'],group:'Global Markets'},
  {id:'brent',title:'Brent Crude Oil',keys:['brent'],group:'Global Markets'},
@@ -247,6 +248,7 @@ const NOTIF_TOGGLE_SECTIONS={
   cbsl:'CBSL Holdings of Government Securities',
   foreign:'Foreign Holdings of Government Securities',
   fomc:'US Fed Rate — FOMC Decisions',
+  sofr:'SOFR (Overnight & Averages)',
   valuedates:'Value Dates',
   fxIntervention:'CBSL FX Market Intervention'
 };
@@ -807,7 +809,7 @@ function countPoints(secKey){
   const v=LOADED[secKey];
   if(v==null)return 0;
   if(Array.isArray(v))return v.length;
-  if(typeof v==='object'){if(Array.isArray(v.values))return v.values.length;return Object.keys(v).length;}
+  if(typeof v==='object'){if(Array.isArray(v.values))return v.values.length;if(Array.isArray(v.labels))return v.labels.length;return Object.keys(v).length;}
   return 1;
 }
 function renderSections(){
@@ -1432,7 +1434,12 @@ function analyzeFreshness(wb,XLSX,nowOverride){
   // T-Bond Secondary Yields is a maturity-keyed table (no date column) on the same Fixed Income
   // sheet — published alongside the daily bond rates.
   daily('T-Bond Secondary Yields','SL',bondsDate,'secondary');
-  const gl=S(find('globalmarket')||'');daily('US 10Y Treasury','SL',latestDate(gl,0),'global10y');daily('Gold (XAU/USD)','SL',latestDate(gl,13),'gold');daily('Crude Oil (WTI / Brent)','SL',latestDate(gl,3),'brent');daily('Murban Crude Oil','SL',latestDate(gl,7),'murban');daily('US Dollar Index (DXY)','SL',latestDate(gl,10),'dxy');
+  const gl=S(find('globalmarket')||'');daily('US 10Y Treasury','SL',latestDate(gl,0),'global10y');daily('Gold (XAU/USD)','SL',latestDate(gl,13),'gold');daily('Crude Oil (WTI / Brent)','SL',latestDate(gl,3),'brent');daily('Murban Crude Oil','SL',latestDate(gl,7),'murban');
+  {let hc=-1,hr=-1;for(let i=0;i<gl.length&&hr<0;i++){const r=gl[i]||[];for(let c=1;c<r.length;c++){if(typeof r[c]==='string'&&/^sofr$/i.test(r[c].trim())&&typeof r[c-1]==='string'&&/^date$/i.test(r[c-1].trim())){hr=i;hc=c-1;break;}}}
+   const last=hr>=0?latestDate(gl,hc,hr+1):null,exp=lastWork(usTodayUTC,'US');
+   if(!last){out.push({label:'SOFR',cadence:'Daily',cal:'US',secId:'sofr',status:'missing',msg:'No SOFR rows found on the Global Market sheet (header: Date | SOFR | 30 day | 90 day | 180 day).',latestRaw:null});}
+   else{const gap=last>=exp?0:wdBetween(last,exp,'US');   // SOFR for day D is published the morning of D+1 (US), so a 1-day lag is normal
+     out.push({label:'SOFR',cadence:'Daily',cal:'US',secId:'sofr',status:gap<=1?'ok':(gap===2?'pending':'stale'),msg:gap<=1?'Up to date — latest '+fmt(last)+' (SOFR is published the next US business day).':(gap===2?'Latest '+fmt(last)+' — the next SOFR print is due.':'NOT updated — latest '+fmt(last)+', expected '+fmt(exp)+' or the day before.'),latestRaw:iso(last)});}}daily('US Dollar Index (DXY)','SL',latestDate(gl,10),'dxy');
   // WTI shares its date column with Brent (same sheet columns 3-5: date, WTI value, Brent value).
   daily('WTI Crude Oil','SL',latestDate(gl,3),'wti');
   // Foreign Holdings and T-Bill Auction Details are weekly, not daily — kept in this check
@@ -1683,7 +1690,19 @@ function parseWorkbook(wb,XLSX){
     const ser=(dc,vc)=>{let L=[],V=[];for(let i=2;i<gl.length;i++)if(gl[i][dc]!=null&&gl[i][vc]!=null){L.push(lbl(gl[i][dc]));V.push(num(gl[i][vc]));}return{labels:L,values:V};};
     // Column layout: 10y(0,1) | WTI/Brent(3,4,5) | Murban(7,8) | DXY(10,11) | Gold/XAU(13,14) | FOMC(16,17,18)
     o.global10y=ser(0,1);o.wti=ser(3,4);o.brent=ser(3,5);o.murban=ser(7,8);o.dxy=ser(10,11);o.gold=ser(13,14);
-    let fomc=[];for(let i=2;i<gl.length;i++)if(gl[i][16]!=null)fomc.push({date:String(gl[i][16]).trim(),range:String(gl[i][17]).trim(),repo:pct(gl[i][18]),rrepo:'',show:true});o.fomc=fomc;
+    let fomc=[];for(let i=2;i<gl.length;i++){const c=gl[i]&&gl[i][16];
+      if(c==null){if(fomc.length)break;continue;}            // blank row ends the FOMC table
+      if(c instanceof Date||typeof c==='number'||/^date$/i.test(String(c).trim())){if(fomc.length)break;continue;}  // SOFR header/dates sit in the same column — never read them as FOMC rows
+      fomc.push({date:String(c).trim(),range:String(gl[i][17]).trim(),repo:pct(gl[i][18]),rrepo:'',show:true});}o.fomc=fomc;
+    // SOFR block: header row  Date | SOFR | 30 day | 90 day | 180 day  anywhere on the Global Market sheet; one row per US business day beneath it.
+    {let hr=-1,hc=-1;
+     for(let i=0;i<gl.length&&hr<0;i++){const r=gl[i]||[];for(let c=1;c<r.length;c++){if(typeof r[c]==='string'&&/^sofr$/i.test(r[c].trim())&&typeof r[c-1]==='string'&&/^date$/i.test(r[c-1].trim())){hr=i;hc=c-1;break;}}}
+     if(hr>=0){const m=new Map();
+       for(let i=hr+1;i<gl.length;i++){const r=gl[i]||[];const dt=xlDate(r[hc]);if(!dt){if(r[hc]==null)break;continue;}
+         const ov=num(r[hc+1]);if(ov==null)continue;
+         m.set(dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,'0')+"-"+String(dt.getDate()).padStart(2,'0'),[ov,num(r[hc+2]),num(r[hc+3]),num(r[hc+4])]);}
+       if(m.size){const ds=[...m.keys()].sort();const col=k=>ds.map(d=>{const v=m.get(d)[k];return v==null?null:+v.toFixed(5);});
+         o.sofr={labels:ds,overnight:col(0),avg30:col(1),avg90:col(2),avg180:col(3)};}}}
   }
   const an=S(find('announcement')||'');
   if(an.length){try{
