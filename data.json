@@ -6194,6 +6194,20 @@
    "repo": "4.0%",
    "rrepo": "",
    "show": true
+  },
+  {
+   "date": "Date",
+   "range": "SOFR",
+   "repo": "30.0%",
+   "rrepo": "",
+   "show": true
+  },
+  {
+   "date": "Tue Sep 29 2026 23:59:28 GMT+0530 (India Standard Time)",
+   "range": "3.9",
+   "repo": "3.75%",
+   "rrepo": "",
+   "show": true
   }
  ],
  "keyDates": [
@@ -7860,8 +7874,8 @@
  "newsLink": "https://www.federalreserve.gov/monetarypolicy/files/monetary20261028a1.pdf",
  "billAucLink": "",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/d97d4e56-8cc7-4fce-bb07-ab04153ef23e",
- "bondTransVolLinkDate": "28th October 2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/33f0b656-c1cd-469a-a2b4-51120cc3c0be",
+ "bondTransVolLinkDate": "29th October 2026",
  "hidden": {
   "tbills": true
  },
