@@ -1567,48 +1567,69 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-10-28",
+  "date": "2026-10-29",
   "rows": [
-   {
-    "isin": "LKB00428B156",
-    "maturity": "2028-02-15",
-    "remYears": 1.52876712328767,
-    "amount": 151.686,
-    "show": true
-   },
-   {
-    "isin": "LKB00529F152",
-    "maturity": "2029-06-15",
-    "remYears": 2.86027397260274,
-    "amount": 214.464,
-    "show": true
-   },
-   {
-    "isin": "LKB00530H016",
-    "maturity": "2030-08-01",
-    "remYears": 3.98904109589041,
-    "amount": 466.96,
-    "show": true
-   },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.19452054794521,
-    "amount": 650,
+    "remYears": 3.96438356164384,
+    "amount": 3155,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.49315068493151,
-    "amount": 950,
+    "remYears": 4.26301369863014,
+    "amount": 100,
     "show": true
    },
    {
-    "isin": "LKB00934J156",
-    "maturity": "2034-10-15",
-    "remYears": 8.1972602739726,
-    "amount": 517.494,
+    "isin": "LKB01231C151",
+    "maturity": "2031-03-15",
+    "remYears": 4.37808219178082,
+    "amount": 1951,
+    "show": true
+   },
+   {
+    "isin": "LKB01031L016",
+    "maturity": "2031-12-01",
+    "remYears": 5.09315068493151,
+    "amount": 100,
+    "show": true
+   },
+   {
+    "isin": "LKB02033K013",
+    "maturity": "2033-11-01",
+    "remYears": 7.01369863013699,
+    "amount": 1000,
+    "show": true
+   },
+   {
+    "isin": "LKB00934F154",
+    "maturity": "2034-06-15",
+    "remYears": 7.63287671232877,
+    "amount": 1451,
+    "show": true
+   },
+   {
+    "isin": "LKB01534I155",
+    "maturity": "2034-09-15",
+    "remYears": 7.88493150684932,
+    "amount": 650,
+    "show": true
+   },
+   {
+    "isin": "LKB02035C155",
+    "maturity": "2035-03-15",
+    "remYears": 8.38082191780822,
+    "amount": 1028,
+    "show": true
+   },
+   {
+    "isin": "LKB01035F159",
+    "maturity": "2035-06-15",
+    "remYears": 8.63287671232877,
+    "amount": 500,
     "show": true
    }
   ]
