@@ -6549,7 +6549,7 @@
    "auction": "2026-11-04",
    "settle": "2026-11-06",
    "tenor": "91 Days, 182 Days, 364 Days",
-   "amount": "TBD",
+   "amount": 90,
    "show": true
   },
   {
@@ -8053,7 +8053,7 @@
  "fxVolDate": "",
  "secondaryDate": "",
  "newsLink": "https://www.federalreserve.gov/monetarypolicy/files/monetary20261028a1.pdf",
- "billAucLink": "",
+ "billAucLink": "https://www.treasury.gov.lk/api/file/f80805f2-1a4c-4b53-9631-499dfaa112b1",
  "bondAucLink": "",
  "bondTransVolLink": "https://www.treasury.gov.lk/api/file/33f0b656-c1cd-469a-a2b4-51120cc3c0be",
  "bondTransVolLinkDate": "29th October 2026",
