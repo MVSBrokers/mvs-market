@@ -18,24 +18,24 @@
  ],
  "callMarket": {
   "min": 9,
-  "max": 9.1,
-  "wa": 9.05,
-  "vol": 24.19
+  "max": 9.06,
+  "wa": 9.04,
+  "vol": 16.88
  },
  "repoMarket": {
-  "min": 9.07,
+  "min": 9.05,
   "max": 9.12,
   "wa": 9.11,
-  "vol": 96.76
+  "vol": 86.83
  },
  "windows": {
   "sdf": {
-   "cur": 160.04,
-   "prev": 121.03
+   "cur": 126.69,
+   "prev": 160.04
   },
   "slf": {
-   "cur": 2.12,
-   "prev": 0.05
+   "cur": 0.01,
+   "prev": 2.12
   }
  },
  "liquidity": {
@@ -244,7 +244,8 @@
    "28 Oct",
    "29 Oct",
    "30 Oct",
-   "2 Nov"
+   "2 Nov",
+   "3 Nov"
   ],
   "values": [
    128.14,
@@ -451,15 +452,16 @@
    118.55,
    116.34,
    131.68,
-   169.92
+   169.92,
+   138.68
   ],
-  "current": 169.92,
-  "previous": 131.68
+  "current": 138.68,
+  "previous": 169.92
  },
  "repoOvernight": [
   {
-   "date": "2 Nov 2026",
-   "repoOffered": 80,
+   "date": "3 Nov 2026",
+   "repoOffered": 2,
    "reverseRepoOffered": null,
    "received": 12,
    "accepted": 12,
@@ -471,17 +473,17 @@
  ],
  "repoOMO": [
   {
-   "auction": "2 Nov 2026",
-   "settlement": "3 Nov 2026",
-   "repoOffered": 40,
+   "auction": "3 Nov 2026",
+   "settlement": "4 Nov 2026",
+   "repoOffered": 30,
    "reverseOffered": 0,
-   "received": 46,
-   "accepted": 40,
-   "minRate": 9.23,
-   "maxRate": 9.25,
-   "waYield": 9.24,
-   "maturity": "3 Dec 2026",
-   "tenure": 30,
+   "received": 12,
+   "accepted": 12,
+   "minRate": 9.22,
+   "maxRate": 9.26,
+   "waYield": null,
+   "maturity": "",
+   "tenure": null,
    "show": true
   }
  ],
@@ -8054,8 +8056,8 @@
  ],
  "execSummary": {
   "usdlkr": "332.65/ 332.70",
-  "liqDir": "increased",
-  "liqDelta": 38.24
+  "liqDir": "decreased",
+  "liqDelta": 31.24
  },
  "marketNews": [
   "📰 US FEDERAL RESERVE HOLDS INTEREST RATES STEADY",
