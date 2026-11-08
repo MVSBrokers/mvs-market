@@ -8169,7 +8169,7 @@
   "",
   "📅 Date: 28 October 2026"
  ],
- "date": "2026-11-06",
+ "date": "2026-11-08",
  "tbondAucResult": {
   "date": "29th October 2026",
   "rows": [
@@ -8225,9 +8225,9 @@
   ],
   "remit": [
    "Remittances (USD)",
-   "August-2026",
    "September-2026",
-   "M-o-M Change (August)"
+   "October-2026",
+   "M-o-M Change (September)"
   ],
   "reserves": [
    "Month",
