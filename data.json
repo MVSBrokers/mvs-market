@@ -2851,10 +2851,10 @@
     },
     {
      "month": "OCTOBER",
-     "purchase": null,
-     "sales": null,
-     "netYtd": null,
-     "reserve": null
+     "purchase": 191.3,
+     "sales": 0,
+     "netYtd": 1739.5,
+     "reserve": 7042.3
     },
     {
      "month": "NOVEMBER",
@@ -2871,12 +2871,12 @@
      "reserve": null
     }
    ],
-   "totalPurchase": 1995,
+   "totalPurchase": 2186.3,
    "totalSales": 446.80000000000007,
-   "netForYear": 1548.2
+   "netForYear": 1739.5
   }
  ],
- "fxInterventionLastReserve": 6851,
+ "fxInterventionLastReserve": 7042.3,
  "fxSummary": [
   {
    "tenor": "SPOT",
@@ -3061,7 +3061,8 @@
    "9 Oct",
    "16 Oct",
    "23 Oct",
-   "30 Oct"
+   "30 Oct",
+   "6 Nov"
   ],
   "values": [
    143617,
@@ -3094,7 +3095,8 @@
    201996,
    202360,
    199542,
-   190937
+   190937,
+   184862
   ]
  },
  "cbsl": {
@@ -3555,6 +3557,11 @@
    "month": "September",
    "value": "6,867Mn",
    "show": true
+  },
+  {
+   "month": "October",
+   "value": "7,086Mn",
+   "show": true
   }
  ],
  "inflation": [
@@ -3611,8 +3618,8 @@
   "yoy": "-42.46%"
  },
  "remittances": {
-  "apr": "748.6 Mn",
-  "may": "734.4",
+  "apr": "734.4",
+  "may": "735.6",
   "yoy": "-1.89%"
  },
  "gdpGrowth": [
@@ -8219,9 +8226,9 @@
   ],
   "tourism": [
    "Tourism (USD)",
-   "July-2026",
    "August-2026",
-   "M-o-M Change (July)"
+   "September-2026",
+   "M-o-M Change (August)"
   ],
   "remit": [
    "Remittances (USD)",
