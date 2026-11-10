@@ -471,7 +471,7 @@
  "repoOvernight": [
   {
    "date": "10 Nov 2026",
-   "repoOffered": 2,
+   "repoOffered": 50,
    "reverseRepoOffered": null,
    "received": 47,
    "accepted": 47,
@@ -484,13 +484,13 @@
  "repoOMO": [
   {
    "auction": "10 Nov 2026",
-   "settlement": "27 Apr 1900",
-   "repoOffered": 8,
-   "reverseOffered": 1.48,
-   "received": 9,
-   "accepted": 1195,
-   "minRate": 2492.62,
-   "maxRate": 50,
+   "settlement": "10 Nov 2026",
+   "repoOffered": 20,
+   "reverseOffered": 0,
+   "received": 0,
+   "accepted": 0,
+   "minRate": 0,
+   "maxRate": 0,
    "waYield": null,
    "maturity": "",
    "tenure": null,
@@ -556,7 +556,7 @@
      "10.8/10.95",
      "10.9/11",
      "10.9/11",
-     "10.85/11.95"
+     "10.85/10.95"
     ]
    },
    {
