@@ -1602,178 +1602,45 @@
   "date": "2026-11-09",
   "rows": [
    {
-    "isin": "LKB00527I150",
-    "maturity": "2027-09-15",
-    "remYears": 0.849315068493151,
-    "amount": 150,
-    "show": true
-   },
-   {
     "isin": "LKB00428B156",
     "maturity": "2028-02-15",
-    "remYears": 1.26849315068493,
-    "amount": 260.897,
-    "show": true
-   },
-   {
-    "isin": "LKB01028C151",
-    "maturity": "2028-03-15",
-    "remYears": 1.34794520547945,
-    "amount": 1200,
-    "show": true
-   },
-   {
-    "isin": "LKB01628G019",
-    "maturity": "2028-07-01",
-    "remYears": 1.64383561643836,
-    "amount": 450,
+    "remYears": 1.52876712328767,
+    "amount": 151.686,
     "show": true
    },
    {
     "isin": "LKB00529F152",
     "maturity": "2029-06-15",
-    "remYears": 2.6,
-    "amount": 147.722,
-    "show": true
-   },
-   {
-    "isin": "LKB00629I154",
-    "maturity": "2029-09-15",
-    "remYears": 2.85205479452055,
-    "amount": 2300,
-    "show": true
-   },
-   {
-    "isin": "LKB00529J154",
-    "maturity": "2029-10-15",
-    "remYears": 2.93424657534247,
-    "amount": 300,
-    "show": true
-   },
-   {
-    "isin": "LKB00529L150",
-    "maturity": "2029-12-15",
-    "remYears": 3.1013698630137,
-    "amount": 1100,
-    "show": true
-   },
-   {
-    "isin": "LKB00530C017",
-    "maturity": "2030-03-01",
-    "remYears": 3.30958904109589,
-    "amount": 1150,
-    "show": true
-   },
-   {
-    "isin": "LKB01530E152",
-    "maturity": "2030-05-15",
-    "remYears": 3.51506849315069,
-    "amount": 1650,
-    "show": true
-   },
-   {
-    "isin": "LKB00530G018",
-    "maturity": "2030-07-01",
-    "remYears": 3.64383561643836,
-    "amount": 500,
+    "remYears": 2.86027397260274,
+    "amount": 214.464,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.72876712328767,
-    "amount": 1750,
+    "remYears": 3.98904109589041,
+    "amount": 466.96,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 3.93424657534247,
-    "amount": 3950,
+    "remYears": 4.19452054794521,
+    "amount": 650,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.23287671232877,
-    "amount": 3500,
-    "show": true
-   },
-   {
-    "isin": "LKB01031L016",
-    "maturity": "2031-12-01",
-    "remYears": 5.06301369863014,
-    "amount": 2850,
-    "show": true
-   },
-   {
-    "isin": "LKB00832L158",
-    "maturity": "2032-12-15",
-    "remYears": 6.1041095890411,
-    "amount": 6650,
-    "show": true
-   },
-   {
-    "isin": "LKB01533A154",
-    "maturity": "2033-01-15",
-    "remYears": 6.18904109589041,
-    "amount": 718.84101,
-    "show": true
-   },
-   {
-    "isin": "LKB02033F013",
-    "maturity": "2033-06-01",
-    "remYears": 6.56438356164384,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB02033K013",
-    "maturity": "2033-11-01",
-    "remYears": 6.98356164383562,
-    "amount": 600,
-    "show": true
-   },
-   {
-    "isin": "LKB00934F154",
-    "maturity": "2034-06-15",
-    "remYears": 7.6027397260274,
-    "amount": 259,
-    "show": true
-   },
-   {
-    "isin": "LKB01534I155",
-    "maturity": "2034-09-15",
-    "remYears": 7.85479452054795,
-    "amount": 350,
+    "remYears": 4.49315068493151,
+    "amount": 950,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 7.93698630136986,
-    "amount": 3422.975807,
-    "show": true
-   },
-   {
-    "isin": "LKB02035C155",
-    "maturity": "2035-03-15",
-    "remYears": 8.35068493150685,
-    "amount": 300,
-    "show": true
-   },
-   {
-    "isin": "LKB01035F159",
-    "maturity": "2035-06-15",
-    "remYears": 8.6027397260274,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB01136H151",
-    "maturity": "2036-08-15",
-    "remYears": 9.77260273972603,
-    "amount": 1450,
+    "remYears": 8.1972602739726,
+    "amount": 517.494,
     "show": true
    }
   ]
@@ -3010,57 +2877,37 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 45,
-   "wa": 332.5603
-  },
-  {
-   "tenor": "TOM",
-   "volume": 3.5,
-   "wa": 332.5114
+   "volume": 37.5,
+   "wa": 332.5588
   },
   {
    "tenor": "CASH",
-   "volume": 21.75,
-   "wa": 332.4246
+   "volume": 10.5,
+   "wa": 332.4233
   },
   {
    "tenor": "Sub Total",
-   "volume": 70.25,
+   "volume": 48,
    "wa": null
-  },
-  {
-   "tenor": "S+2",
-   "volume": 1,
-   "wa": 332.63
   },
   {
    "tenor": "2W",
    "volume": 1,
-   "wa": 333.225
+   "wa": 333.14
   },
   {
    "tenor": "1M",
-   "volume": 6,
-   "wa": 333.9933
-  },
-  {
-   "tenor": "2M",
-   "volume": 0.5,
-   "wa": 334.61
-  },
-  {
-   "tenor": "3M",
-   "volume": 1,
-   "wa": 336.75
+   "volume": 14,
+   "wa": 334.0211
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 9.5,
+   "volume": 15,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 79.75,
+   "volume": 63,
    "wa": null
   }
  ],
