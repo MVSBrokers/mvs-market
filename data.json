@@ -483,8 +483,22 @@
  ],
  "repoOMO": [
   {
-   "auction": "10 Nov 2026",
-   "settlement": "10 Nov 2026",
+   "auction": "11 Nov 2026",
+   "settlement": "11 Nov 2026",
+   "repoOffered": 20,
+   "reverseOffered": 0,
+   "received": 0,
+   "accepted": 0,
+   "minRate": 0,
+   "maxRate": 0,
+   "waYield": null,
+   "maturity": "",
+   "tenure": null,
+   "show": true
+  },
+  {
+   "auction": "11 Nov 2026",
+   "settlement": "12 Nov 2026",
    "repoOffered": 20,
    "reverseOffered": 0,
    "received": 0,
@@ -512,12 +526,12 @@
     "eoy": "",
     "eom": "9.35/9.45",
     "values": [
-     "9.35/9.45",
      "9.3/9.4",
      "9.2/9.35",
      "9.2/9.38",
      "9.2/9.4",
-     "9.2/9.4"
+     "9.2/9.4",
+     "9.25/9.35"
     ]
    },
    {
@@ -525,12 +539,12 @@
     "eoy": "",
     "eom": "9.8/10.25",
     "values": [
-     "10.25/10.5",
      "9.95/10.15",
      "9.9/10.05",
      "9.9/10.05",
      "9.9/10.05",
-     "9.9/10.05"
+     "9.9/10.05",
+     "9.75/10"
     ]
    },
    {
@@ -538,12 +552,12 @@
     "eoy": "",
     "eom": "10.65/10.9",
     "values": [
-     "10.9/11.1",
      "10.7/10.95",
      "10.5/10.65",
      "10.5/10.65",
      "10.5/10.65",
-     "10.5/10.75"
+     "10.5/10.75",
+     "10.55/10.65"
     ]
    },
    {
@@ -551,12 +565,12 @@
     "eoy": "",
     "eom": "11.15/11.25",
     "values": [
-     "11.1/11.35",
      "11.2/11.3",
      "10.8/10.95",
      "10.9/11",
      "10.9/11",
-     "10.85/10.95"
+     "10.85/10.95",
+     "10.8/10.9"
     ]
    },
    {
@@ -564,12 +578,12 @@
     "eoy": "",
     "eom": "11.55/11.65",
     "values": [
-     "11.5/11.6",
      "11.45/11.55",
      "10.95/11.05",
      "11/11.1",
      "11.1/11.2",
-     "11.02/11.05"
+     "11.02/11.05",
+     "11.03/11.08"
     ]
    },
    {
@@ -577,12 +591,12 @@
     "eoy": "",
     "eom": "11.7/11.8",
     "values": [
-     "11.65/11.75",
      "11.55/11.75",
      "11.05/11.15",
      "11.1/11.2",
      "11.15/11.25",
-     "11.1/11.12"
+     "11.1/11.12",
+     "11.1/11.15"
     ]
    },
    {
@@ -590,12 +604,12 @@
     "eoy": "",
     "eom": "12/12.2",
     "values": [
-     "12.05/12.3",
      "12/12.05",
      "11.5/11.6",
      "11.55/11.65",
      "11.65/11.75",
-     "11.5/11.6"
+     "11.5/11.6",
+     "11.52/11.6"
     ]
    },
    {
@@ -604,11 +618,11 @@
     "eom": "12.3/12.6",
     "values": [
      "12.3/12.4",
-     "12.3/12.4",
      "11.9/12",
      "11.8/12",
      "11.92/12",
-     "11.75/11.85"
+     "11.75/11.85",
+     "11.75/11.8"
     ]
    },
    {
@@ -616,12 +630,12 @@
     "eoy": "",
     "eom": "12.4/12.65",
     "values": [
-     "12.45/12.55",
      "12.35/12.45",
      "11.95/12",
      "11.95/12.05",
      "12.05/12.1",
-     "11.8/11.95"
+     "11.8/11.95",
+     "11.8/12"
     ]
    },
    {
@@ -629,12 +643,12 @@
     "eoy": "",
     "eom": "12.6/12.65",
     "values": [
-     "12.5/12.55",
      "12.4/12.48",
      "11.95/12.1",
      "12.05/12.1",
      "12.08/12.13",
-     "11.95/12"
+     "11.95/12",
+     "11.92/12"
     ]
    },
    {
@@ -642,12 +656,12 @@
     "eoy": "",
     "eom": "12.7/12.95",
     "values": [
-     "12.6/12.7",
      "12.55/12.65",
      "12/12.15",
      "12.05/12.2",
      "12.2/12.4",
-     "12/12.15"
+     "12/12.15",
+     "11.95/12.05"
     ]
    },
    {
@@ -655,12 +669,12 @@
     "eoy": "",
     "eom": "12.85/12.95",
     "values": [
-     "12.8/12.85",
      "12.7/12.75",
      "12.1/12.25",
      "12.3/12.4",
      "12.35/12.5",
-     "12.1/12.25"
+     "12.1/12.25",
+     "12.05/12.15"
     ]
    },
    {
@@ -668,12 +682,12 @@
     "eoy": "",
     "eom": "12.85/12.95",
     "values": [
-     "12.85/13",
      "12.75/12.9",
      "12.1/12.3",
      "12.35/12.45",
      "12.4/12.55",
-     "12.25/12.5"
+     "12.25/12.5",
+     "12.1/12.25"
     ]
    }
   ]
@@ -724,7 +738,8 @@
    "14 Oct",
    "21 Oct",
    "28 Oct",
-   "4 Nov"
+   "4 Nov",
+   "11 Nov"
   ],
   "m3": [
    7.74,
@@ -771,6 +786,7 @@
    9.3,
    9.32,
    9.34,
+   9.35,
    9.35
   ],
   "m6": [
@@ -818,7 +834,8 @@
    9.44,
    9.44,
    9.44,
-   9.44
+   9.44,
+   9.43
   ],
   "m12": [
    8.45,
@@ -865,10 +882,18 @@
    9.95,
    9.95,
    9.95,
+   9.95,
    9.95
   ]
  },
  "tbills": [
+  {
+   "date": "11 Nov",
+   "m3": 9.35,
+   "m6": 9.43,
+   "m12": 9.95,
+   "show": true
+  },
   {
    "date": "4 Nov",
    "m3": 9.35,
@@ -910,17 +935,36 @@
    "m6": 9.41,
    "m12": 9.95,
    "show": true
-  },
-  {
-   "date": "23 Sep",
-   "m3": 9.2,
-   "m6": 9.37,
-   "m12": 9.93,
-   "show": true
   }
  ],
  "tbillRef": {},
  "tbillAuction": [
+  {
+   "date": "11 Nov",
+   "maturities": [
+    {
+     "maturity": "3M",
+     "offered": 40000,
+     "accepted": 54085,
+     "yield": 135.2125,
+     "war": null
+    },
+    {
+     "maturity": "6M",
+     "offered": 30000,
+     "accepted": 11102,
+     "yield": 37.00666666666667,
+     "war": null
+    },
+    {
+     "maturity": "12M",
+     "offered": 20000,
+     "accepted": 13875,
+     "yield": 69.375,
+     "war": null
+    }
+   ]
+  },
   {
    "date": "4 Nov",
    "maturities": [
@@ -995,32 +1039,6 @@
      "offered": 25000,
      "accepted": 31621,
      "yield": 126.484,
-     "war": null
-    }
-   ]
-  },
-  {
-   "date": "14 Oct",
-   "maturities": [
-    {
-     "maturity": "3M",
-     "offered": 40000,
-     "accepted": 40192,
-     "yield": 100.47999999999999,
-     "war": null
-    },
-    {
-     "maturity": "6M",
-     "offered": 30000,
-     "accepted": 8453,
-     "yield": 28.176666666666666,
-     "war": null
-    },
-    {
-     "maturity": "12M",
-     "offered": 20000,
-     "accepted": 17481,
-     "yield": 87.405,
      "war": null
     }
    ]
@@ -1590,122 +1608,45 @@
   "date": "2026-11-10",
   "rows": [
    {
-    "isin": "LKB00827A151",
-    "maturity": "2027-01-15",
-    "remYears": 0.180821917808219,
-    "amount": 48,
+    "isin": "LKB00428B156",
+    "maturity": "2028-02-15",
+    "remYears": 1.52876712328767,
+    "amount": 151.686,
     "show": true
    },
    {
-    "isin": "LKB00629I154",
-    "maturity": "2029-09-15",
-    "remYears": 2.84931506849315,
-    "amount": 2650,
-    "show": true
-   },
-   {
-    "isin": "LKB00529J154",
-    "maturity": "2029-10-15",
-    "remYears": 2.93150684931507,
-    "amount": 500,
-    "show": true
-   },
-   {
-    "isin": "LKB00530C017",
-    "maturity": "2030-03-01",
-    "remYears": 3.30684931506849,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB00530G018",
-    "maturity": "2030-07-01",
-    "remYears": 3.64109589041096,
-    "amount": 500,
+    "isin": "LKB00529F152",
+    "maturity": "2029-06-15",
+    "remYears": 2.86027397260274,
+    "amount": 214.464,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.72602739726027,
-    "amount": 700,
+    "remYears": 3.98904109589041,
+    "amount": 466.96,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 3.93150684931507,
-    "amount": 2270,
+    "remYears": 4.19452054794521,
+    "amount": 650,
     "show": true
    },
    {
     "isin": "LKB00531B017",
     "maturity": "2031-02-01",
-    "remYears": 4.23013698630137,
-    "amount": 300,
-    "show": true
-   },
-   {
-    "isin": "LKB01031L016",
-    "maturity": "2031-12-01",
-    "remYears": 5.06027397260274,
-    "amount": 550,
-    "show": true
-   },
-   {
-    "isin": "LKB00832L158",
-    "maturity": "2032-12-15",
-    "remYears": 6.1013698630137,
-    "amount": 600,
-    "show": true
-   },
-   {
-    "isin": "LKB01533A154",
-    "maturity": "2033-01-15",
-    "remYears": 6.18630136986301,
-    "amount": 200,
-    "show": true
-   },
-   {
-    "isin": "LKB02033F013",
-    "maturity": "2033-06-01",
-    "remYears": 6.56164383561644,
-    "amount": 250,
-    "show": true
-   },
-   {
-    "isin": "LKB02033K013",
-    "maturity": "2033-11-01",
-    "remYears": 6.98082191780822,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB00934F154",
-    "maturity": "2034-06-15",
-    "remYears": 7.6,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB01534I155",
-    "maturity": "2034-09-15",
-    "remYears": 7.85205479452055,
-    "amount": 100,
+    "remYears": 4.49315068493151,
+    "amount": 950,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 7.93424657534247,
-    "amount": 800,
-    "show": true
-   },
-   {
-    "isin": "LKB01136H151",
-    "maturity": "2036-08-15",
-    "remYears": 9.76986301369863,
-    "amount": 1150,
+    "remYears": 8.1972602739726,
+    "amount": 517.494,
     "show": true
    }
   ]
@@ -1922,7 +1863,8 @@
    "5 Nov",
    "6 Nov",
    "9 Nov",
-   "10 Nov"
+   "10 Nov",
+   "11 Nov"
   ],
   "values": [
    309.9809,
@@ -2135,9 +2077,10 @@
    332.5,
    332.55,
    332.57,
+   332.35,
    332.35
   ],
-  "close": "332.32/ 332.40"
+  "close": "332.35/ 332.40"
  },
  "fxSwaps": {
   "1w": {
@@ -2158,294 +2101,189 @@
   },
   "6m": {
    "sell": 4.3,
-   "buy": 4.7
+   "buy": 4.5
   },
   "1y": {
    "sell": 4.3,
-   "buy": 4.7
+   "buy": 4.65
   }
  },
  "spot": {
-  "open": "332.45/ 332.60",
-  "close": "332.32/ 332.40",
-  "low": "332.32",
-  "high": "332.5"
+  "open": "332.20/ 332.40",
+  "close": "332.35/ 332.40",
+  "low": "332.35",
+  "high": "332.38"
  },
  "crossRates": [
   {
    "pair": "Japanese Yen",
-   "buy": 2.006,
-   "sell": 2.1566,
+   "buy": 1.9955,
+   "sell": 2.1454,
    "show": true
   },
   {
    "pair": "British Pound Sterling",
-   "buy": 436.5365,
-   "sell": 452.532,
+   "buy": 433.1723,
+   "sell": 449.0445,
    "show": true
   },
   {
    "pair": "Euro",
-   "buy": 363.7979,
-   "sell": 378.6887,
+   "buy": 361.0972,
+   "sell": 375.8774,
    "show": true
   },
   {
    "pair": "Australian Dollar",
-   "buy": 222.8605,
-   "sell": 234.6816,
+   "buy": 221.4265,
+   "sell": 233.1715,
    "show": true
   },
   {
    "pair": "Singapore Dollar",
-   "buy": 249.6926,
-   "sell": 266.8054,
+   "buy": 248.8734,
+   "sell": 265.93,
    "show": true
   },
   {
    "pair": "Chinese Yuan",
-   "buy": 45.4335,
-   "sell": 51.312,
+   "buy": 45.438,
+   "sell": 51.317,
    "show": true
   }
  ],
  "fxIntraday": [
   {
-   "tenor": "SPOT",
-   "amount": 0.3,
-   "rate": 332.32,
-   "time": "11:57",
-   "show": true
-  },
-  {
-   "tenor": "CASH",
-   "amount": 0.75,
-   "rate": 332.33,
-   "time": "10:26",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
+   "tenor": "TOM",
    "amount": 1,
-   "rate": 332.35,
-   "time": "08:54",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "09:02",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 2,
-   "rate": 332.35,
-   "time": "09:02",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 0.25,
-   "rate": 332.35,
+   "rate": 332.3,
    "time": "09:14",
    "show": true
   },
   {
    "tenor": "SPOT",
-   "amount": 0.25,
+   "amount": 1,
    "rate": 332.35,
-   "time": "09:25",
+   "time": "09:12",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 332.35,
+   "time": "09:12",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 332.35,
+   "time": "09:12",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 332.35,
+   "time": "09:42",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 2,
    "rate": 332.35,
-   "time": "09:25",
+   "time": "10:05",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 2,
    "rate": 332.35,
-   "time": "09:36",
+   "time": "10:13",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 332.35,
+   "time": "11:00",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 0.5,
+   "rate": 332.35,
+   "time": "11:01",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 2,
    "rate": 332.35,
-   "time": "09:52",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "10:43",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "11:08",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "12:10",
+   "time": "12:37",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 2,
    "rate": 332.35,
-   "time": "12:23",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "12:23",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "12:23",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "12:54",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "12:54",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "13:18",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "13:18",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "13:18",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "14:10",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 2,
-   "rate": 332.35,
-   "time": "14:10",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 2,
-   "rate": 332.35,
-   "time": "14:10",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "14:33",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.35,
-   "time": "14:56",
+   "time": "13:06",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 0.25,
    "rate": 332.35,
-   "time": "14:56",
+   "time": "13:06",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 0.5,
    "rate": 332.35,
-   "time": "16:05",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 0.5,
-   "rate": 332.35,
-   "time": "16:05",
+   "time": "16:03",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 2,
-   "rate": 332.35,
-   "time": "16:00",
-   "show": true
-  },
-  {
-   "tenor": "SPOT",
-   "amount": 2,
-   "rate": 332.35,
-   "time": "16:00",
+   "rate": 332.36,
+   "time": "10:49",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 1,
-   "rate": 332.35,
-   "time": "15:37",
+   "rate": 332.38,
+   "time": "13:57",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 1,
+   "rate": 332.38,
+   "time": "15:38",
    "show": true
   },
   {
    "tenor": "SPOT",
    "amount": 0.5,
-   "rate": 332.4,
-   "time": "08:46",
+   "rate": 332.38,
+   "time": "15:38",
    "show": true
   },
   {
    "tenor": "SPOT",
-   "amount": 1,
-   "rate": 332.5,
-   "time": "08:49",
+   "amount": 2,
+   "rate": 332.38,
+   "time": "15:38",
+   "show": true
+  },
+  {
+   "tenor": "SPOT",
+   "amount": 2,
+   "rate": 332.38,
+   "time": "15:33",
    "show": true
   }
  ],
@@ -4055,7 +3893,8 @@
    "5 Nov",
    "6 Nov",
    "9 Nov",
-   "10 Nov"
+   "10 Nov",
+   "11 Nov"
   ],
   "values": [
    4.19,
@@ -4277,7 +4116,8 @@
    4.874,
    4.851,
    4.864,
-   4.934
+   4.934,
+   5.004
   ]
  },
  "wti": {
@@ -4506,7 +4346,8 @@
    "5 Nov",
    "6 Nov",
    "9 Nov",
-   "10 Nov"
+   "10 Nov",
+   "11 Nov"
   ],
   "values": [
    56.94,
@@ -4733,7 +4574,8 @@
    88.15,
    90.54,
    89.57,
-   84.56
+   84.56,
+   87.07
   ]
  },
  "brent": {
@@ -4962,7 +4804,8 @@
    "5 Nov",
    "6 Nov",
    "9 Nov",
-   "10 Nov"
+   "10 Nov",
+   "11 Nov"
   ],
   "values": [
    60.75,
@@ -5189,7 +5032,8 @@
    95.9,
    98.09,
    97.08,
-   89.83
+   89.83,
+   92.7
   ]
  },
  "murban": {
@@ -5411,7 +5255,8 @@
    "3 Nov",
    "4 Nov",
    "6 Nov",
-   "9 Nov"
+   "9 Nov",
+   "10 Nov"
   ],
   "values": [
    61.19,
@@ -5631,7 +5476,8 @@
    102.98,
    94.04,
    98.13,
-   94.12
+   94.12,
+   89.88
   ]
  },
  "dxy": {
@@ -5861,7 +5707,8 @@
    "5 Nov",
    "6 Nov",
    "9 Nov",
-   "10 Nov"
+   "10 Nov",
+   "11 Nov"
   ],
   "values": [
    98.42,
@@ -6089,7 +5936,8 @@
    101.46,
    102,
    101.89,
-   102
+   102,
+   102.82
   ]
  },
  "gold": {
@@ -6321,7 +6169,8 @@
    "5 Nov",
    "6 Nov",
    "9 Nov",
-   "10 Nov"
+   "10 Nov",
+   "11 Nov"
   ],
   "values": [
    4348.35,
@@ -6551,7 +6400,8 @@
    4128.46,
    4067.57,
    4093.36,
-   4055.61
+   4055.61,
+   4029.41
   ]
  },
  "fomc": [
@@ -8343,7 +8193,7 @@
   }
  ],
  "execSummary": {
-  "usdlkr": "332.32/ 332.40",
+  "usdlkr": "332.35/ 332.40",
   "liqDir": "decreased",
   "liqDelta": 13.92
  },
