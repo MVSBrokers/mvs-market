@@ -8282,6 +8282,7 @@
  "netMarketLiquidity": null,
  "cutoffSnapshot": {},
  "mutedNotif": {
-  "Volume of Foreign Exchange Market": true
+  "Volume of Foreign Exchange Market": true,
+  "Money & Repo Market": true
  }
 }
