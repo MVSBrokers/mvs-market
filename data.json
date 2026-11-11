@@ -8280,5 +8280,8 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
- "cutoffSnapshot": {}
+ "cutoffSnapshot": {},
+ "mutedNotif": {
+  "Volume of Foreign Exchange Market": true
+ }
 }
