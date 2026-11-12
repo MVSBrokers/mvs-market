@@ -613,7 +613,7 @@
      "11.65/11.75",
      "11.5/11.6",
      "11.52/11.6",
-     "10.5/11.6"
+     "11.5/11.6"
     ]
    },
    {
@@ -1609,7 +1609,7 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-11-10",
+  "date": "2026-11-11",
   "rows": [
    {
     "isin": "LKB00428B156",
@@ -8279,8 +8279,8 @@
  "newsLink": "https://www.federalreserve.gov/monetarypolicy/files/monetary20261028a1.pdf",
  "billAucLink": "",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/7378b489-6b42-4294-9e67-ef8beee278ff",
- "bondTransVolLinkDate": "10th November  2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/f6319f71-6b4c-4c9c-861b-6bb30218a390",
+ "bondTransVolLinkDate": "11th November  2026",
  "hidden": {
   "tbills": true
  },
