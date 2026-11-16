@@ -18,12 +18,12 @@
  ],
  "callMarket": {
   "min": 9,
-  "max": 9.1,
+  "max": 9.3,
   "wa": 9.02,
-  "vol": 40.2
+  "vol": null
  },
  "repoMarket": {
-  "min": 9.13,
+  "min": 9.1,
   "max": 9.15,
   "wa": 9.14,
   "vol": 66.46
@@ -253,7 +253,8 @@
    "10 Nov",
    "11 Nov",
    "12 Nov",
-   "13 Nov"
+   "13 Nov",
+   "16 Nov"
   ],
   "values": [
    128.14,
@@ -469,19 +470,20 @@
    164.19,
    154.07,
    172,
-   245.39
+   245.39,
+   209.15
   ],
-  "current": 245.39,
-  "previous": 172
+  "current": 209.15,
+  "previous": 245.39
  },
  "repoOvernight": [
   {
-   "date": "13 Nov 2026",
-   "repoOffered": 120,
+   "date": "16 Nov 2026",
+   "repoOffered": 60,
    "reverseRepoOffered": null,
-   "received": 70,
-   "accepted": 70,
-   "minRate": 8.75,
+   "received": 78,
+   "accepted": 60,
+   "minRate": 8.73,
    "maxRate": 8.75,
    "waYield": 8.75,
    "show": true
@@ -489,9 +491,9 @@
  ],
  "repoOMO": [
   {
-   "auction": "13 Nov 2026",
-   "settlement": "13 Nov 2026",
-   "repoOffered": 30,
+   "auction": "16 Nov 2026",
+   "settlement": "16 Nov 2026",
+   "repoOffered": 40,
    "reverseOffered": 0,
    "received": 30,
    "accepted": 30,
@@ -503,14 +505,14 @@
    "show": true
   },
   {
-   "auction": "13 Nov 2026",
-   "settlement": "16 Nov 2026",
-   "repoOffered": 50,
+   "auction": "16 Nov 2026",
+   "settlement": "17 Nov 2026",
+   "repoOffered": 20,
    "reverseOffered": 0,
-   "received": 35,
-   "accepted": 35,
-   "minRate": 9.28,
-   "maxRate": 9.35,
+   "received": 10,
+   "accepted": 10,
+   "minRate": 9.27,
+   "maxRate": 9.29,
    "waYield": null,
    "maturity": "",
    "tenure": null,
@@ -1855,7 +1857,7 @@
    "11 Nov",
    "12 Nov",
    "13 Nov",
-   "14 Nov"
+   "16 Nov"
   ],
   "values": [
    309.9809,
@@ -3286,7 +3288,8 @@
    "10 Nov",
    "11 Nov",
    "12 Nov",
-   "13 Nov"
+   "13 Nov",
+   "16 Nov"
   ],
   "values": [
    2508.92,
@@ -3429,6 +3432,7 @@
    2498.12,
    2498.12,
    2498.12,
+   2492.62,
    2492.62,
    2492.62,
    2492.62,
@@ -8244,8 +8248,8 @@
  ],
  "execSummary": {
   "usdlkr": "332.75/ 332.82",
-  "liqDir": "increased",
-  "liqDelta": 73.39
+  "liqDir": "decreased",
+  "liqDelta": 36.24
  },
  "marketNews": [
   "📰 US FEDERAL RESERVE HOLDS INTEREST RATES STEADY",
