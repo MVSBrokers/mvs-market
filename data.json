@@ -30,11 +30,11 @@
  },
  "windows": {
   "sdf": {
-   "cur": null,
+   "cur": 146.53,
    "prev": 114.82
   },
   "slf": {
-   "cur": null,
+   "cur": 1.13,
    "prev": 0.03
   }
  },
@@ -252,7 +252,8 @@
    "9 Nov",
    "10 Nov",
    "11 Nov",
-   "12 Nov"
+   "12 Nov",
+   "13 Nov"
   ],
   "values": [
    128.14,
@@ -467,10 +468,11 @@
    178.11,
    164.19,
    154.07,
-   172
+   172,
+   245.39
   ],
-  "current": 172,
-  "previous": 154.07
+  "current": 245.39,
+  "previous": 172
  },
  "repoOvernight": [
   {
@@ -2849,47 +2851,47 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 23.75,
-   "wa": 332.3603
+   "volume": 14.05,
+   "wa": 332.6211
   },
   {
    "tenor": "TOM",
-   "volume": 3,
-   "wa": 332.3033
+   "volume": 1,
+   "wa": 332.57
+  },
+  {
+   "tenor": "CASH",
+   "volume": 28.25,
+   "wa": 332.4671
   },
   {
    "tenor": "Sub Total",
-   "volume": 26.75,
+   "volume": 43.3,
    "wa": null
   },
   {
-   "tenor": "1W",
-   "volume": 7,
-   "wa": 332.65
+   "tenor": "2W",
+   "volume": 5,
+   "wa": 333.165
   },
   {
-   "tenor": "2W",
-   "volume": 3,
-   "wa": 332.85
+   "tenor": "3W",
+   "volume": 1,
+   "wa": 333.7
   },
   {
    "tenor": "1M",
-   "volume": 8,
-   "wa": 333.7869
-  },
-  {
-   "tenor": "3M",
-   "volume": 7,
-   "wa": 336.61
+   "volume": 6,
+   "wa": 333.9683
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 25,
+   "volume": 12,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 51.75,
+   "volume": 55.3,
    "wa": null
   }
  ],
@@ -8236,7 +8238,7 @@
  "execSummary": {
   "usdlkr": "332.55/ 332.65",
   "liqDir": "increased",
-  "liqDelta": 17.93
+  "liqDelta": 73.39
  },
  "marketNews": [
   "📰 US FEDERAL RESERVE HOLDS INTEREST RATES STEADY",
@@ -8286,8 +8288,8 @@
  "newsLink": "https://www.federalreserve.gov/monetarypolicy/files/monetary20261028a1.pdf",
  "billAucLink": "",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/f6319f71-6b4c-4c9c-861b-6bb30218a390",
- "bondTransVolLinkDate": "12th November  2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/81f46301-61f6-410e-aa8a-fa85b710ac46",
+ "bondTransVolLinkDate": "13th November  2026",
  "hidden": {
   "tbills": true
  },
@@ -11153,14 +11155,5 @@
    "day": "2026-11-16",
    "values": {}
   }
- },
- "cutoffOverride": {
-  "Money & Repo Market": true,
-  "Money & Repo Market — Repo Auctions": true,
-  "Treasury Bill": true,
-  "Treasury Bond Yield (%)": true,
-  "USD/LKR Foreign Exchange": true,
-  "Value Dates": true,
-  "CBSL Holdings of Government Securities": true
  }
 }
