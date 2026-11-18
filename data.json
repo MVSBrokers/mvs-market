@@ -2803,37 +2803,47 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 13.25,
-   "wa": 332.7381
+   "volume": 20.25,
+   "wa": 332.7638
   },
   {
    "tenor": "TOM",
-   "volume": 1.5,
-   "wa": 332.6333
+   "volume": 1,
+   "wa": 332.82
   },
   {
    "tenor": "CASH",
-   "volume": 4.12,
-   "wa": 332.6501
+   "volume": 17,
+   "wa": 332.687
   },
   {
    "tenor": "Sub Total",
-   "volume": 18.87,
+   "volume": 38.25,
    "wa": null
   },
   {
    "tenor": "1M",
-   "volume": 2,
-   "wa": 334.25
+   "volume": 9,
+   "wa": 334.1567
+  },
+  {
+   "tenor": "2M",
+   "volume": 5,
+   "wa": 335.264
+  },
+  {
+   "tenor": "3M",
+   "volume": 7,
+   "wa": 336.5166
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 2,
+   "volume": 21,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 20.87,
+   "volume": 59.25,
    "wa": null
   }
  ],
@@ -8296,39 +8306,30 @@
  },
  "netOutstandingLT": null,
  "netMarketLiquidity": null,
- "cutoffOverride": {
-  "Money & Repo Market": true,
-  "Money & Repo Market — Repo Auctions": true,
-  "Treasury Bill": true,
-  "Treasury Bond Yield (%)": true,
-  "USD/LKR Foreign Exchange": true,
-  "Value Dates": true,
-  "CBSL Holdings of Government Securities": true
- },
  "cutoffSnapshot": {
   "Money & Repo Market": {
    "day": "2026-11-18",
    "values": {
     "callMarket": {
      "min": 9,
-     "max": 9.3,
+     "max": 9.04,
      "wa": 9.02,
-     "vol": 37.05
+     "vol": 30.15
     },
     "repoMarket": {
-     "min": 9.1,
+     "min": 9.13,
      "max": 9.15,
      "wa": 9.14,
-     "vol": 66.46
+     "vol": 80.01
     },
     "windows": {
      "sdf": {
-      "cur": 146.53,
-      "prev": 114.82
+      "cur": 104.79,
+      "prev": 146.53
      },
      "slf": {
-      "cur": 1.13,
-      "prev": 0.03
+      "cur": 0,
+      "prev": 1.13
      }
     },
     "liquidity": {
@@ -8547,7 +8548,8 @@
       "11 Nov",
       "12 Nov",
       "13 Nov",
-      "16 Nov"
+      "16 Nov",
+      "17 Nov"
      ],
      "values": [
       128.14,
@@ -8764,10 +8766,11 @@
       154.07,
       172,
       245.39,
-      209.15
+      209.15,
+      152.79
      ],
-     "current": 209.15,
-     "previous": 245.39
+     "current": 152.79,
+     "previous": 209.15
     }
    }
   },
@@ -8776,41 +8779,41 @@
    "values": {
     "repoOvernight": [
      {
-      "date": "16 Nov 2026",
+      "date": "17 Nov 2026",
       "repoOffered": 60,
       "reverseRepoOffered": null,
-      "received": 78,
-      "accepted": 60,
+      "received": 48,
+      "accepted": 48,
       "minRate": 8.73,
-      "maxRate": 8.75,
-      "waYield": 8.75,
+      "maxRate": 8.74,
+      "waYield": 8.73,
       "show": true
      }
     ],
     "repoOMO": [
      {
-      "auction": "16 Nov 2026",
-      "settlement": "16 Nov 2026",
-      "repoOffered": 40,
+      "auction": "17 Nov 2026",
+      "settlement": "17 Nov 2026",
+      "repoOffered": 20,
       "reverseOffered": 0,
-      "received": 30,
-      "accepted": 30,
-      "minRate": 8.75,
-      "maxRate": 8.75,
+      "received": 0,
+      "accepted": 0,
+      "minRate": 0,
+      "maxRate": 0,
       "waYield": null,
       "maturity": "",
       "tenure": null,
       "show": true
      },
      {
-      "auction": "16 Nov 2026",
-      "settlement": "17 Nov 2026",
-      "repoOffered": 20,
+      "auction": "17 Nov 2026",
+      "settlement": "18 Nov 2026",
+      "repoOffered": 10,
       "reverseOffered": 0,
       "received": 10,
       "accepted": 10,
-      "minRate": 9.27,
-      "maxRate": 9.29,
+      "minRate": 9.28,
+      "maxRate": 9.3,
       "waYield": null,
       "maturity": "",
       "tenure": null,
@@ -9139,7 +9142,7 @@
      "rows": [
       {
        "bond": "15.12.2026",
-       "eoy": null,
+       "eoy": "",
        "eom": "9.35/9.45",
        "values": [
         "9.2/9.4",
@@ -9152,7 +9155,7 @@
       },
       {
        "bond": "15.09.2027",
-       "eoy": null,
+       "eoy": "",
        "eom": "9.8/10.25",
        "values": [
         "9.9/10.05",
@@ -9165,7 +9168,7 @@
       },
       {
        "bond": "15.12.2028",
-       "eoy": null,
+       "eoy": "",
        "eom": "10.65/10.9",
        "values": [
         "10.5/10.75",
@@ -9178,7 +9181,7 @@
       },
       {
        "bond": "15.12.2029",
-       "eoy": null,
+       "eoy": "",
        "eom": "11.15/11.25",
        "values": [
         "10.85/10.95",
@@ -9191,7 +9194,7 @@
       },
       {
        "bond": "01.08.2030",
-       "eoy": null,
+       "eoy": "",
        "eom": "11.55/11.65",
        "values": [
         "11.02/11.05",
@@ -9204,7 +9207,7 @@
       },
       {
        "bond": "01.02.2031",
-       "eoy": null,
+       "eoy": "",
        "eom": "11.7/11.8",
        "values": [
         "11.1/11.12",
@@ -9217,7 +9220,7 @@
       },
       {
        "bond": "15.12.2032",
-       "eoy": null,
+       "eoy": "",
        "eom": "12/12.2",
        "values": [
         "11.5/11.6",
@@ -9230,7 +9233,7 @@
       },
       {
        "bond": "01.11.2033",
-       "eoy": null,
+       "eoy": "",
        "eom": "12.3/12.6",
        "values": [
         "11.75/11.85",
@@ -9243,7 +9246,7 @@
       },
       {
        "bond": "15.06.2034",
-       "eoy": null,
+       "eoy": "",
        "eom": "12.4/12.65",
        "values": [
         "11.8/11.95",
@@ -9256,7 +9259,7 @@
       },
       {
        "bond": "15.10.2034",
-       "eoy": null,
+       "eoy": "",
        "eom": "12.6/12.65",
        "values": [
         "11.95/12",
@@ -9269,7 +9272,7 @@
       },
       {
        "bond": "15.03.2035",
-       "eoy": null,
+       "eoy": "",
        "eom": "12.7/12.95",
        "values": [
         "12/12.15",
@@ -9282,7 +9285,7 @@
       },
       {
        "bond": "15.08.2036",
-       "eoy": null,
+       "eoy": "",
        "eom": "12.85/12.95",
        "values": [
         "12.1/12.25",
@@ -9295,7 +9298,7 @@
       },
       {
        "bond": "01.07.2037",
-       "eoy": null,
+       "eoy": "",
        "eom": "12.85/12.95",
        "values": [
         "12.25/12.5",
