@@ -1592,101 +1592,45 @@
   "date": "2026-11-17",
   "rows": [
    {
-    "isin": "LKB00629I154",
-    "maturity": "2029-09-15",
-    "remYears": 2.83013698630137,
-    "amount": 250,
+    "isin": "LKB00428B156",
+    "maturity": "2028-02-15",
+    "remYears": 1.52876712328767,
+    "amount": 151.686,
     "show": true
    },
    {
-    "isin": "LKB00530C017",
-    "maturity": "2030-03-01",
-    "remYears": 3.28767123287671,
-    "amount": 100,
-    "show": true
-   },
-   {
-    "isin": "LKB01530E152",
-    "maturity": "2030-05-15",
-    "remYears": 3.49315068493151,
-    "amount": 700,
-    "show": true
-   },
-   {
-    "isin": "LKB00530G018",
-    "maturity": "2030-07-01",
-    "remYears": 3.62191780821918,
-    "amount": 300,
+    "isin": "LKB00529F152",
+    "maturity": "2029-06-15",
+    "remYears": 2.86027397260274,
+    "amount": 214.464,
     "show": true
    },
    {
     "isin": "LKB00530H016",
     "maturity": "2030-08-01",
-    "remYears": 3.70684931506849,
-    "amount": 100,
+    "remYears": 3.98904109589041,
+    "amount": 466.96,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 3.91232876712329,
-    "amount": 200,
+    "remYears": 4.19452054794521,
+    "amount": 650,
     "show": true
    },
    {
-    "isin": "LKB02032J017",
-    "maturity": "2032-10-01",
-    "remYears": 5.87671232876712,
-    "amount": 1026,
-    "show": true
-   },
-   {
-    "isin": "LKB00832L158",
-    "maturity": "2032-12-15",
-    "remYears": 6.08219178082192,
-    "amount": 1350,
-    "show": true
-   },
-   {
-    "isin": "LKB01533A154",
-    "maturity": "2033-01-15",
-    "remYears": 6.16712328767123,
-    "amount": 300,
-    "show": true
-   },
-   {
-    "isin": "LKB02033F013",
-    "maturity": "2033-06-01",
-    "remYears": 6.54246575342466,
-    "amount": 9350,
-    "show": true
-   },
-   {
-    "isin": "LKB02033K013",
-    "maturity": "2033-11-01",
-    "remYears": 6.96164383561644,
-    "amount": 800,
+    "isin": "LKB00531B017",
+    "maturity": "2031-02-01",
+    "remYears": 4.49315068493151,
+    "amount": 950,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 7.91506849315068,
-    "amount": 3700,
-    "show": true
-   },
-   {
-    "isin": "LKB01136H151",
-    "maturity": "2036-08-15",
-    "remYears": 9.75068493150685,
-    "amount": 1000,
-    "show": true
-   },
-   {
-    "isin": "LKB01237G019",
-    "maturity": "2037-07-01",
-    "remYears": 10.627397260274,
-    "amount": 200,
+    "remYears": 8.1972602739726,
+    "amount": 517.494,
     "show": true
    }
   ]
@@ -2937,47 +2881,42 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 20.25,
-   "wa": 332.7638
+   "volume": 35.25,
+   "wa": 332.7616
   },
   {
    "tenor": "TOM",
-   "volume": 1,
-   "wa": 332.82
+   "volume": 2.2,
+   "wa": 332.6782
   },
   {
    "tenor": "CASH",
-   "volume": 17,
-   "wa": 332.687
+   "volume": 6,
+   "wa": 332.6408
   },
   {
    "tenor": "Sub Total",
-   "volume": 38.25,
+   "volume": 43.45,
    "wa": null
   },
   {
    "tenor": "1M",
-   "volume": 9,
-   "wa": 334.1567
-  },
-  {
-   "tenor": "2M",
-   "volume": 5,
-   "wa": 335.264
+   "volume": 20.1,
+   "wa": 334.1818
   },
   {
    "tenor": "3M",
-   "volume": 7,
-   "wa": 336.5166
+   "volume": 2.5,
+   "wa": 336.98
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 21,
+   "volume": 22.6,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 59.25,
+   "volume": 66.05,
    "wa": null
   }
  ],
