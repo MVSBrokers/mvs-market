@@ -1593,48 +1593,76 @@
   }
  ],
  "bondTransVol": {
-  "date": "2026-11-19",
+  "date": "2026-11-20",
   "rows": [
    {
-    "isin": "LKB00428B156",
-    "maturity": "2028-02-15",
-    "remYears": 1.52876712328767,
-    "amount": 151.686,
+    "isin": "LKB01027F156",
+    "maturity": "2027-06-15",
+    "remYears": 0.567123288,
+    "amount": 40,
     "show": true
    },
    {
-    "isin": "LKB00529F152",
-    "maturity": "2029-06-15",
-    "remYears": 2.86027397260274,
-    "amount": 214.464,
+    "isin": "LKB01028C151",
+    "maturity": "2028-03-15",
+    "remYears": 1.317808219,
+    "amount": 46.459125,
     "show": true
    },
    {
-    "isin": "LKB00530H016",
-    "maturity": "2030-08-01",
-    "remYears": 3.98904109589041,
-    "amount": 466.96,
+    "isin": "LKB00428J159",
+    "maturity": "2028-10-15",
+    "remYears": 1.904109589,
+    "amount": 35.098,
+    "show": true
+   },
+   {
+    "isin": "LKB00529L150",
+    "maturity": "2029-12-15",
+    "remYears": 3.071232877,
+    "amount": 750,
     "show": true
    },
    {
     "isin": "LKB00730J158",
     "maturity": "2030-10-15",
-    "remYears": 4.19452054794521,
-    "amount": 650,
+    "remYears": 3.904109589,
+    "amount": 533,
     "show": true
    },
    {
-    "isin": "LKB00531B017",
-    "maturity": "2031-02-01",
-    "remYears": 4.49315068493151,
-    "amount": 950,
+    "isin": "LKB01031L016",
+    "maturity": "2031-12-01",
+    "remYears": 5.032876712,
+    "amount": 50,
+    "show": true
+   },
+   {
+    "isin": "LKB00832L158",
+    "maturity": "2032-12-15",
+    "remYears": 6.073972603,
+    "amount": 300,
+    "show": true
+   },
+   {
+    "isin": "LKB01533A154",
+    "maturity": "2033-01-15",
+    "remYears": 6.15890411,
+    "amount": 550,
     "show": true
    },
    {
     "isin": "LKB00934J156",
     "maturity": "2034-10-15",
-    "remYears": 8.1972602739726,
-    "amount": 517.494,
+    "remYears": 7.906849315,
+    "amount": 150,
+    "show": true
+   },
+   {
+    "isin": "LKB01136H151",
+    "maturity": "2036-08-15",
+    "remYears": 9.742465753,
+    "amount": 550,
     "show": true
    }
   ]
@@ -8368,8 +8396,8 @@
  "newsLink": "https://www.cbsl.gov.lk/sites/default/files/cbslweb_documents/press/pr/press_20260930_Monetary_Policy_Review_No_6_2026_e_1993od.pdf",
  "billAucLink": "",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/e467d4bb-fbed-4a31-8cd3-eb72c726bf0a",
- "bondTransVolLinkDate": "19th November  2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/35c564ee-7dbe-400b-be79-bee18063444c",
+ "bondTransVolLinkDate": "20th November  2026",
  "hidden": {
   "tbills": true
  },
