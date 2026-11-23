@@ -1,11 +1,6 @@
 {
  "opr": [
   {
-   "date": "27.11.2024",
-   "rate": "8",
-   "show": true
-  },
-  {
    "date": "22.05.2025",
    "rate": "7.75",
    "show": true
@@ -13,6 +8,11 @@
   {
    "date": "26.05.2026",
    "rate": "8.75",
+   "show": true
+  },
+  {
+   "date": "20.11.2026",
+   "rate": "9",
    "show": true
   }
  ],
@@ -2840,52 +2840,47 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 59.25,
-   "wa": 332.8217
+   "volume": 27,
+   "wa": 332.5832
+  },
+  {
+   "tenor": "TOM",
+   "volume": 7,
+   "wa": 332.4857
   },
   {
    "tenor": "CASH",
-   "volume": 28.75,
-   "wa": 332.705
+   "volume": 11.75,
+   "wa": 332.4785
   },
   {
    "tenor": "Sub Total",
-   "volume": 88,
+   "volume": 45.75,
    "wa": null
   },
   {
    "tenor": "S+2",
    "volume": 6.5,
-   "wa": 332.8938
+   "wa": 332.7715
   },
   {
    "tenor": "2W",
-   "volume": 5,
-   "wa": 333.474
+   "volume": 1.5,
+   "wa": 333.27
   },
   {
    "tenor": "1M",
-   "volume": 11.5,
-   "wa": 334.1724
-  },
-  {
-   "tenor": "3M",
-   "volume": 1,
-   "wa": 336.84
-  },
-  {
-   "tenor": "4M",
-   "volume": 3,
-   "wa": 338.0533
+   "volume": 4.38,
+   "wa": 334.2234
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 27,
+   "volume": 12.38,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 115,
+   "volume": 58.13,
    "wa": null
   }
  ],
