@@ -6910,7 +6910,7 @@
    "auction": "2026-11-25",
    "settle": "2026-11-27",
    "tenor": "91 Days, 182 Days, 364 Days",
-   "amount": "TBD",
+   "amount": 80,
    "show": true
   }
  ],
