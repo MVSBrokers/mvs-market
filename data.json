@@ -2844,47 +2844,42 @@
  "fxSummary": [
   {
    "tenor": "SPOT",
-   "volume": 27,
-   "wa": 332.5832
+   "volume": 15.5,
+   "wa": 332.5516
   },
   {
    "tenor": "TOM",
-   "volume": 7,
-   "wa": 332.4857
+   "volume": 0.5,
+   "wa": 332.46
   },
   {
    "tenor": "CASH",
-   "volume": 11.75,
-   "wa": 332.4785
+   "volume": 3,
+   "wa": 332.41
   },
   {
    "tenor": "Sub Total",
-   "volume": 45.75,
+   "volume": 19,
    "wa": null
   },
   {
-   "tenor": "S+2",
-   "volume": 6.5,
-   "wa": 332.7715
-  },
-  {
-   "tenor": "2W",
-   "volume": 1.5,
-   "wa": 333.27
+   "tenor": "S+3",
+   "volume": 3.5,
+   "wa": 332.6757
   },
   {
    "tenor": "1M",
-   "volume": 4.38,
-   "wa": 334.2234
+   "volume": 1,
+   "wa": 334
   },
   {
    "tenor": "Sub Total (Forwards)",
-   "volume": 12.38,
+   "volume": 4.5,
    "wa": null
   },
   {
    "tenor": "Grand Total",
-   "volume": 58.13,
+   "volume": 23.5,
    "wa": null
   }
  ],
@@ -6912,6 +6907,62 @@
    "tenor": "91 Days, 182 Days, 364 Days",
    "amount": 80,
    "show": true
+  },
+  {
+   "auction": "2026-12-09",
+   "settle": "2026-12-11",
+   "tenor": "91 Days, 182 Days and 364 Days",
+   "amount": null,
+   "show": true
+  },
+  {
+   "auction": "2026-12-16",
+   "settle": "2026-12-18",
+   "tenor": "91 Days, 182 Days and 364 Days",
+   "amount": null,
+   "show": true
+  },
+  {
+   "auction": "2026-12-22",
+   "settle": "2026-12-28",
+   "tenor": "91 Days, 182 Days and 364 Days",
+   "amount": null,
+   "show": true
+  },
+  {
+   "auction": "2026-12-30",
+   "settle": "2027-01-01",
+   "tenor": "91 Days, 182 Days and 364 Days",
+   "amount": null,
+   "show": true
+  },
+  {
+   "auction": "2027-01-06",
+   "settle": "2027-01-08",
+   "tenor": "91 Days, 182 Days and 364 Days",
+   "amount": null,
+   "show": true
+  },
+  {
+   "auction": "2027-01-13",
+   "settle": "2027-01-18",
+   "tenor": "91 Days, 182 Days and 364 Days",
+   "amount": null,
+   "show": true
+  },
+  {
+   "auction": "2027-01-20",
+   "settle": "2027-01-25",
+   "tenor": "91 Days, 182 Days and 364 Days",
+   "amount": null,
+   "show": true
+  },
+  {
+   "auction": "2027-01-27",
+   "settle": "2027-01-29",
+   "tenor": "91 Days, 182 Days and 364 Days",
+   "amount": null,
+   "show": true
   }
  ],
  "bondAuctions": [
@@ -6969,6 +7020,13 @@
    "settle": "2026-12-15",
    "tenor": "3 Years, 6 Years, 8 Years, 12 Year",
    "amount": 240,
+   "show": true
+  },
+  {
+   "auction": "2027-01-12",
+   "settle": "2027-01-18",
+   "tenor": "4 Years, 8 Years, 12 Years",
+   "amount": 230,
    "show": true
   }
  ],
