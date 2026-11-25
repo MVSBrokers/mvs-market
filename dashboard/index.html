@@ -652,7 +652,6 @@ canvas{max-width:100%!important}
       <canvas id="sofrChart" style="height:300px;max-height:300px"></canvas>
       <div class="sofr-asof" id="sofrAsOf"></div>
       <div class="sofr-cards" id="sofrCards"></div>
-      <div class="mini-tbl" id="sofrTbl" style="max-height:190px"></div>
       <div class="rpt-note" id="sofrNote">Source: Federal Reserve Bank of New York (SOFR and SOFR Averages). Published each US business day for the previous day's trades.</div>
     </div>
 
@@ -837,7 +836,16 @@ function _isSLFXWork(d){if(d.getDay()===0||d.getDay()===6)return false;return !S
 function _isBothWork(d){return _isUSWork(d)&&_isSLFXWork(d);}  // both SL and US must be open for USD/LKR settlement
 function _addWorkDays(d,n,checker){let x=new Date(d);let c=0;const dir=n>=0?1:-1;n=Math.abs(n);
   while(c<n){x.setDate(x.getDate()+dir);if(checker(x))c++;}return x;}
-function _spotDate(today){return _addWorkDays(today,2,_isBothWork);}
+// Desk rule: if TOMORROW (the next calendar day after the Cash date) is a US Fed holiday on a weekday,
+// the Tom row is hidden and Spot is the next working day (T+1 working day, e.g. Cash Wed 25 Nov 2026,
+// Thanksgiving Thu 26 Nov -> Spot Fri 27 Nov). Otherwise Spot = Cash + 2 working days (both SL & US open).
+// Weekends never trigger this: Fri -> Mon is still Tom = Mon, Spot = Tue.
+function _spotFromAnchor(a){
+  const nx=new Date(a.getFullYear(),a.getMonth(),a.getDate()+1);
+  const usHolWeekday=nx.getDay()!==0&&nx.getDay()!==6&&US_FED_HOL_SET.has(_isoD(nx));
+  return _addWorkDays(a,usHolWeekday?1:2,_isBothWork);
+}
+function _spotDate(today){return _spotFromAnchor(today);}
 // modified-following: add calendar period, if it lands on non-working day roll forward;
 // if that rolls into the next month, roll backward instead (standard FX/IRS convention)
 // End-end rule: if the Spot date is the LAST working day of its month (both SL and US open),
@@ -877,7 +885,7 @@ function calcValueDate(tenorRaw){
   // SL working day; after 4 PM it's the next SL working day. Tom/Spot/forward tenors all
   // count forward from this single anchor so the whole table stays internally consistent.
   const anchor=slValueDay();
-  const spot=_addWorkDays(anchor,2,_isBothWork);
+  const spot=_spotFromAnchor(anchor);
   let result=null;
   if(/cash|^today/.test(t))result=anchor;
   else if(/^tom/.test(t))result=_addWorkDays(anchor,1,_isBothWork);
@@ -905,7 +913,7 @@ function calcNOD(tenorRaw){
   if(/cash|^today/.test(t)||/^tom/.test(t)||/^spot$/.test(t)){
     base=slValueDay();base.setHours(0,0,0,0);
   }else{
-    base=_addWorkDays(slValueDay(),2,_isBothWork);base.setHours(0,0,0,0);
+    base=_spotFromAnchor(slValueDay());base.setHours(0,0,0,0);
   }
   return Math.round((dd-base)/86400000);
 }
@@ -2683,11 +2691,10 @@ function buildCharts(d){
     const labsAll=sf.labels||[];
     const num=v=>{const n=parseFloat(v);return isNaN(n)?null:n;};
     const colAll=S.map(s=>(sf[s.k]||(s.alt?sf[s.alt]:null)||[]).map(num));
-    const asOf=document.getElementById("sofrAsOf"),cards=document.getElementById("sofrCards"),tbl=document.getElementById("sofrTbl");
+    const asOf=document.getElementById("sofrAsOf"),cards=document.getElementById("sofrCards");
     if(!labsAll.length||!colAll[0].some(v=>v!=null)){
       if(asOf)asOf.textContent="";
       if(cards)cards.innerHTML='<div class="np" style="grid-column:1/-1">Awaiting data upload.</div>';
-      if(tbl)tbl.innerHTML="";
       return;
     }
     const MONS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -2716,10 +2723,6 @@ function buildCharts(d){
       const bp=diff==null?"—":(arr+" "+Math.abs(diff*100).toFixed(1)+" bp");
       return `<div class="sofr-card" style="--sc:${s.color}"><div class="sc-lbl">${escHtml(i===0?"SOFR (Overnight)":s.name.replace("avg","average"))}</div><div class="sc-val">${cur.toFixed(s.dec)}<span>%</span></div><div class="sc-chg ${cls}">${bp}</div><div class="sc-prev">${prev!=null?("Prev ("+escHtml(lbl(labsAll[pi]))+"): "+prev.toFixed(s.dec)+"%"):"&nbsp;"}</div></div>`;
     }).join("");
-    if(tbl){
-      const rows=[];for(let i=labsAll.length-1;i>=0&&rows.length<10;i--){if(colAll[0][i]!=null||colAll[1][i]!=null)rows.push(i);}
-      tbl.innerHTML='<table><thead><tr><th style="text-align:left">Date</th><th>SOFR</th><th>30-day</th><th>90-day</th><th>180-day</th></tr></thead><tbody>'+rows.map(i=>"<tr><td>"+escHtml(lblFull(labsAll[i]))+"</td>"+S.map((s,k)=>"<td>"+(colAll[k][i]!=null?colAll[k][i].toFixed(s.dec):"—")+"</td>").join("")+"</tr>").join("")+"</tbody></table>";
-    }
   })();
 
   // ── NEW: Global Market — US 10Y Treasury Yield (aggregated by interval)
