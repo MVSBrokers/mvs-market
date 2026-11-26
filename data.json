@@ -17,25 +17,25 @@
   }
  ],
  "callMarket": {
-  "min": 9.25,
-  "max": 9.32,
+  "min": 9.28,
+  "max": 9.3,
   "wa": 9.29,
-  "vol": 47.53
+  "vol": 42.17
  },
  "repoMarket": {
-  "min": 9.39,
+  "min": 9.4,
   "max": 9.42,
   "wa": 9.4,
-  "vol": 85.85
+  "vol": 84.15
  },
  "windows": {
   "sdf": {
-   "cur": 102.81,
-   "prev": 128.71
+   "cur": 124.25,
+   "prev": 102.81
   },
   "slf": {
    "cur": 0,
-   "prev": 0.12
+   "prev": 0
   }
  },
  "liquidity": {
@@ -260,7 +260,8 @@
    "19 Nov",
    "20 Nov",
    "23 Nov",
-   "25 Nov"
+   "25 Nov",
+   "26 Nov"
   ],
   "values": [
    128.14,
@@ -483,40 +484,26 @@
    146.08,
    189.19,
    268.59,
-   182.81
+   182.81,
+   204.25
   ],
-  "current": 182.81,
-  "previous": 268.59
+  "current": 204.25,
+  "previous": 182.81
  },
  "repoOvernight": [
   {
-   "date": "25 Nov 2026",
+   "date": "26 Nov 2026",
    "repoOffered": 80,
    "reverseRepoOffered": null,
-   "received": 86,
+   "received": 120,
    "accepted": 80,
    "minRate": 8.97,
    "maxRate": 9,
-   "waYield": 9,
+   "waYield": 8.99,
    "show": true
   }
  ],
- "repoOMO": [
-  {
-   "auction": "25 Nov 2026",
-   "settlement": "25 Nov 2026",
-   "repoOffered": 40,
-   "reverseOffered": 0,
-   "received": 0,
-   "accepted": 0,
-   "minRate": 0,
-   "maxRate": 0,
-   "waYield": null,
-   "maturity": "",
-   "tenure": null,
-   "show": true
-  }
- ],
+ "repoOMO": [],
  "bonds": {
   "headers": [
    "Day 1",
@@ -8244,8 +8231,8 @@
  ],
  "execSummary": {
   "usdlkr": "332.95/ 333.05",
-  "liqDir": "decreased",
-  "liqDelta": 85.78
+  "liqDir": "increased",
+  "liqDelta": 21.44
  },
  "marketNews": [
   "📰 CBSL INCREASES POLICY RATE BY 25 BASIS POINTS",
