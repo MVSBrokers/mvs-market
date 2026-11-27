@@ -6729,11 +6729,6 @@
    "show": true
   },
   {
-   "label": "Next Monetary Policy Day",
-   "date": "2026-12-08",
-   "show": true
-  },
-  {
    "label": "Next FOMC Meeting Day",
    "date": "2026-12-08",
    "show": true
@@ -8278,8 +8273,8 @@
  "newsLink": "https://www.cbsl.gov.lk/sites/default/files/cbslweb_documents/press/pr/press_20260930_Monetary_Policy_Review_No_6_2026_e_1993od.pdf",
  "billAucLink": "",
  "bondAucLink": "",
- "bondTransVolLink": "https://www.treasury.gov.lk/api/file/3eb3970d-25e6-44dc-9737-9d62d4168a86",
- "bondTransVolLinkDate": "25th November  2026",
+ "bondTransVolLink": "https://www.treasury.gov.lk/api/file/23e05070-9cd8-4c56-9378-42b597ea185e",
+ "bondTransVolLinkDate": "26th November  2026",
  "hidden": {
   "tbills": true
  },
